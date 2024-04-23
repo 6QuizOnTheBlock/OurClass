@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        includeBuild("build-logic")
     }
 }
 dependencyResolutionManagement {
@@ -26,4 +27,3 @@ include(":data")
 include(":core:ui")
 include(":core:model")
 include(":core:designsystem")
-include(":build-logic:convention")
