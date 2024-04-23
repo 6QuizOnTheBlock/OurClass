@@ -1,0 +1,45 @@
+---
+spring:
+  config:
+    activate:
+      on-profile: db-dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(BK5guqCyFgcXz9XYMj6Ih6kXS/4ruxW1RVYIUxX1KXRFMmrja/o4MSck/tEjIzvhUGvAQPlX8Upj1TScOYre4LVrulpuc2AlanWUEpCRmJ1Bv6aJniivvQ==)
+    username: ENC(MYQ3aT1VJAbQINjDNwI63SdAy0klZQNS)
+    password: ENC(hubtzmA3yjR5UR4QidrFMhpzpZC3r4/q)
+  data:
+    mongodb:
+      host: ENC(RlbaApSBGOY9aZpoa/Q+8uahT22Cg02g)
+      port: ENC(HwQDnCJWUUC+uws46h5EQA==)
+      database: ENC(cSzOXYx2Vpfz+c7GMEPdLg==)
+      username: ENC(AmV/z9JTFSh4og1r4s4nKL4gwCOotshL)
+      password: ENC(V0DO82Nf0nvfjfFyQwzRfXABg1qBF3rGAwmGQacDLGA=)
+      authentication-database: ENC(z33qIA0NJs/P0DdjUma0gA==)
+    redis:
+      host: ENC(tCytoj2btfmkEuW78BEnFZAa1DZdT8lp)
+      port: ENC(knTIBM9PALqlEPofKSdVTQ==)
+      password: ENC(5tNR7TfRtIj69kmaPS/JC7P9oqwfW/ooTu9MD/GK6E4=)
+---
+spring:
+  config:
+    activate:
+      on-profile: db-prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(Y+5AD5d380frx9HYUEyichTve4p/yUn8NtmNW2/4NQJogsrnIXUgBTuHn/lMNbovctNVRjti0p+gkyEJwPMgMHwCGgaopQ5oLZjMiQf0MUvvIKDqQywZ/Q==)
+    username: ENC(fVboFO5wpKzKNThGbtQLLkv2ziEk4Gra)
+    password: ENC(Kc3wHJBq99bC2b2BGILzyROMvdqxv6I+)
+  data:
+    mongodb:
+      host: ENC(UWHLjm0A12FTs4ZO6zEZ50x/C8q8tcHp)
+      port: ENC(hZDOVAQPdwQV4IcmgI4vrw==)
+      database: ENC(xZFJK/ae+pvLIA0sWntWBw==)
+      username: ENC(naBYQwC7jh6BkjGPvBxZvlnof82aw0ZP)
+      password: ENC(fZpGZe/l//EQWi3vdI4e923/k9oyfGFHzuHvUDUAHBI=)
+      authentication-database: ENC(U862aAGiOT9PZDT3e8nnHA==)
+    redis:
+      host: ENC(tCytoj2btfmkEuW78BEnFZAa1DZdT8lp)
+      port: ENC(knTIBM9PALqlEPofKSdVTQ==)
+      password: ENC(OjP5uzhau4FAOvF31CrSrfCCLxY6gRK9IELgunCEwBY=)
+---
