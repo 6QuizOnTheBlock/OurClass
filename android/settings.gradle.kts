@@ -21,3 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "ulban"
 include(":app")
+include(":domain")
+include(":data")
+include(":core:ui")
+include(":core:model")
+include(":core:designsystem")
