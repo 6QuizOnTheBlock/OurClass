@@ -2,10 +2,7 @@
 FROM openjdk:21
 
 # tzdata 패키지 설치 및 타임존 설정
-RUN apk add --no-cache tzdata \
-    && cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime \
-    && echo "Asia/Seoul" > /etc/timezone \
-    && apk del tzdata
+RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo Asia/Seoul > /etc/timezone
 
 # build가 되는 시점에 JAR_FILE이라는 변수 명에 build/libs/*.jar 선언
 # build/libs - gradle로 빌드했을 때 jar 파일이 생성되는 경로
