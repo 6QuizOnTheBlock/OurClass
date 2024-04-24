@@ -1,6 +1,7 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 
 class FeatureComposeConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
@@ -8,6 +9,7 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
             with(pluginManager) {
                 apply("sixkids.android.library")
                 apply("sixkids.android.library.compose")
+                apply("sixkids.android.hilt")
             }
 
             dependencies {

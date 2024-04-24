@@ -31,7 +31,7 @@ internal fun Project.configureKotlinAndroid(
         }
 
         kotlinOptions {
-            jvmTarget = Const.JAVA_VERSION.toString()
+            jvmTarget = Const.JDK_VERSION.toString()
         }
 
     }
