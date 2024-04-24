@@ -20,5 +20,13 @@ gradlePlugin {
             id="sixkids.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+        register("androidLibrary"){
+            id="sixkids.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidLibraryCompose"){
+            id="sixkids.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
     }
 }

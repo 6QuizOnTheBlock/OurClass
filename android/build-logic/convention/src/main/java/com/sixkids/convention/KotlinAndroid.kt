@@ -13,9 +13,6 @@ internal fun Project.configureKotlinAndroid(
         defaultConfig {
             minSdk = Const.MIN_SDK
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            vectorDrawables{
-                useSupportLibrary = true
-            }
         }
 
         buildTypes {
@@ -37,11 +34,6 @@ internal fun Project.configureKotlinAndroid(
             jvmTarget = Const.JAVA_VERSION.toString()
         }
 
-        packaging {
-            resources {
-                excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            }
-        }
     }
 }
 internal fun CommonExtension<*, *, *, *, *, *>.kotlinOptions(
