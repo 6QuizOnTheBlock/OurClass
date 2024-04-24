@@ -1,5 +1,5 @@
 # open jdk 21 버전의 환경을 구성
-FROM openjdk:21-alpine
+FROM openjdk:21
 
 # tzdata 패키지 설치 및 타임존 설정
 RUN apk add --no-cache tzdata \
