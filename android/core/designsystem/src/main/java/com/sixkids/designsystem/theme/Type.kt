@@ -1,4 +1,4 @@
-package com.sixkids.ulban.ui.theme
+package com.sixkids.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

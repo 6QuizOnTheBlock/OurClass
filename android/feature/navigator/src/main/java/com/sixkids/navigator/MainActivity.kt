@@ -1,4 +1,4 @@
-package com.sixkids.ulban
+package com.sixkids.navigator
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.sixkids.ulban.ui.theme.UlbanTheme
+import com.sixkids.designsystem.theme.UlbanTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
