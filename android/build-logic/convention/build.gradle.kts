@@ -32,5 +32,9 @@ gradlePlugin {
             id="sixkids.java.library"
             implementationClass = "JavaLibraryConventionPlugin"
         }
+        register("featureCompose"){
+            id="sixkids.android.feature.compose"
+            implementationClass = "FeatureComposeConventionPlugin"
+        }
     }
 }
