@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    context-path: /api
+---
+spring:
+  profiles:
+    group:
+      dev:
+        - db-dev
+      prod:
+        - db-prod
+    include:
+      - key
+      - db
