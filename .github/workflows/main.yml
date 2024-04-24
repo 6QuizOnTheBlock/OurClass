@@ -1,0 +1,35 @@
+name: sync gitlab
+
+on:
+  push:
+    branches:
+      - main
+      - AND_develop
+      - BE_develop
+
+jobs:
+  push-to-gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "차성원"
+          git config user.email "sungwon4728@naver.com"
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          git checkout ${{ github.ref_name }}
+          git pull origin ${{ github.ref_name }}
+          git checkout -b temp
+          git filter-branch --force --prune-empty --index-filter "git rm -rf --cached --ignore-unmatch .github" HEAD
+          git remote add gitlab https://oauth2:$GITLAB_TOKEN@lab.ssafy.com/s10-final/S10P31D107.git
+          git push gitlab temp:${{ github.ref_name }} --force
+          git checkout ${{ github.ref_name }}
+          git branch -D temp
