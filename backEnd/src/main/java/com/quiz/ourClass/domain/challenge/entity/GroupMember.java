@@ -17,5 +17,5 @@ public class GroupMember {
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
     @ManyToOne(fetch = FetchType.LAZY)
-    Group group;
+    ChallengeGroup challengeGroup;
 }

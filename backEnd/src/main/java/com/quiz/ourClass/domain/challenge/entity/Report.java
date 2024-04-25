@@ -15,7 +15,7 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @OneToOne(fetch = FetchType.LAZY)
-    Group group;
+    ChallengeGroup challengeGroup;
     String content;
     String file;
     LocalDateTime createTime;

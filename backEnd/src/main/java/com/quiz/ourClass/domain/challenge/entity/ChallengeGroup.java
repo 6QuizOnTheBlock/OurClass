@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-public class Group {
+public class ChallengeGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     @ManyToOne(fetch = FetchType.LAZY)
     Challenge challenge;
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "challengeGroup")
     List<GroupMember> groupMember;
     long leaderId;
     String name;
