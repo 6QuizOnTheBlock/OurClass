@@ -37,3 +37,17 @@ springdoc:
     tags-sorter: alpha            # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
     operations-sorter: alpha      # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
     display-request-duration: true
+
+#aws s3 bucket
+cloud:
+  aws:
+    s3:
+      bucket: ulvanbucket
+    credentials:
+      access-key: AKIAQSCG2TLXCKNPB5FO
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
