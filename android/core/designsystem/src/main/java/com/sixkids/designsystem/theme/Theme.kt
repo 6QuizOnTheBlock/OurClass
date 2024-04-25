@@ -1,4 +1,4 @@
-package com.sixkids.ulban.ui.theme
+package com.sixkids.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
