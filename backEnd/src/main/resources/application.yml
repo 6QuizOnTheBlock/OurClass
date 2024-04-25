@@ -16,6 +16,16 @@ spring:
     include:
       - key
       - db
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
+    show-sql: true
+
 #springdoc swagger
 springdoc:
   api-docs:
