@@ -87,13 +87,9 @@ fun RelayDetailAppBarPreview() {
                 )
             },
             title = "이어 달리기",
-            content = {
-                AppBarDetailInfo(
-                    title = "이어 달리기가\n진행 중입니다!",
-                    topDescription = "04.17 15:00~",
-                    bottomDescription = "현재 주자는 오하빈 학생입니다."
-                )
-            },
+            content = "이어 달리기가\n진행 중입니다!",
+            topDescription = "04.17 15:00~",
+            bottomDescription = "현재 주자는 오하빈 학생입니다.",
             color = Orange,
             onclick = { Log.d("확인", "클릭된 ") },
             expanded = !isScrolled
@@ -115,6 +111,54 @@ fun RelayDetailAppBarPreview() {
     }
 }
 
+
+@Composable
+fun RelayDetailWithProgressAppBarPreview() {
+    val listState = rememberLazyListState()
+    val isScrolled =
+        listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        UlbanDetailWithProgressAppBar(
+            modifier = Modifier
+                .fillMaxWidth(),
+            leftIcon = {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 16.dp)
+                        .aspectRatio(1f),
+                    painter = painterResource(id = R.drawable.hifive),
+                    contentDescription = "로고",
+                    tint = Color.Unspecified
+                )
+            },
+            title = "이어 달리기",
+            content = "이어 달리기가\n진행 중입니다!",
+            topDescription = "04.17 15:00~",
+            bottomDescription = "현재 주자는 오하빈 학생입니다.",
+            totalCnt = 20,
+            successCnt = 10,
+            color = Orange,
+            onclick = { Log.d("확인", "클릭된 ") },
+            expanded = !isScrolled
+        )
+
+        LazyColumn(
+            state = listState, modifier = Modifier
+                .weight(1f)
+        ) {
+            items(100) { index ->
+                Text(
+                    "Item $index", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
+        }
+
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun DefaultAppBarPreview() {
@@ -128,5 +172,13 @@ fun DefaultAppBarPreview() {
 fun DetailAppBarPreview() {
     UlbanTheme {
         RelayDetailAppBarPreview()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailWithProgressAppBarPreview() {
+    UlbanTheme {
+        RelayDetailWithProgressAppBarPreview()
     }
 }

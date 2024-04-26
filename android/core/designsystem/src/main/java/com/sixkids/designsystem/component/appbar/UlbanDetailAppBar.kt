@@ -19,7 +19,9 @@ fun UlbanDetailAppBar(
     modifier: Modifier = Modifier,
     leftIcon: @Composable () -> Unit = {},
     title: String,
-    content: @Composable () -> Unit,
+    content: String,
+    topDescription: String,
+    bottomDescription: String,
     color: Color,
     expanded: Boolean = true,
     onclick: () -> Unit,
@@ -28,7 +30,13 @@ fun UlbanDetailAppBar(
         modifier = modifier,
         leftIcon = leftIcon,
         title = title,
-        content = content,
+        content = {
+            AppBarDetailInfo(
+                title = content,
+                topDescription = topDescription,
+                bottomDescription = bottomDescription
+            )
+        },
         color = color,
         expanded = expanded,
         onclick = onclick
