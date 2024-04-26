@@ -22,7 +22,7 @@ import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.UlbanTheme
 
 @Composable
-fun ResponsiveTopBarWithLazyColumn() {
+fun RelayDefaultAppBarPreview() {
     val listState = rememberLazyListState()
     val isScrolled =
         listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
@@ -65,10 +65,68 @@ fun ResponsiveTopBarWithLazyColumn() {
     }
 }
 
+@Composable
+fun RelayDetailAppBarPreview() {
+    val listState = rememberLazyListState()
+    val isScrolled =
+        listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        UlbanDetailAppBar(
+            modifier = Modifier
+                .fillMaxWidth(),
+            leftIcon = {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 16.dp)
+                        .aspectRatio(1f),
+                    painter = painterResource(id = R.drawable.hifive),
+                    contentDescription = "로고",
+                    tint = Color.Unspecified
+                )
+            },
+            title = "이어 달리기",
+            content = {
+                AppBarDetailInfo(
+                    title = "이어 달리기가\n진행 중입니다!",
+                    topDescription = "04.17 15:00~",
+                    bottomDescription = "현재 주자는 오하빈 학생입니다."
+                )
+            },
+            color = Orange,
+            onclick = { Log.d("확인", "클릭된 ") },
+            expanded = !isScrolled
+        )
+
+        LazyColumn(
+            state = listState, modifier = Modifier
+                .weight(1f)
+        ) {
+            items(100) { index ->
+                Text(
+                    "Item $index", modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
+        }
+
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun ResponsiveTopBarWithLazyColumnPreview() {
+fun DefaultAppBarPreview() {
     UlbanTheme {
-        ResponsiveTopBarWithLazyColumn()
+        RelayDefaultAppBarPreview()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailAppBarPreview() {
+    UlbanTheme {
+        RelayDetailAppBarPreview()
     }
 }
