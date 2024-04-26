@@ -1,9 +1,6 @@
 package com.sixkids.designsystem.component.appbar
 
 import android.util.Log
-import androidx.compose.animation.core.TweenSpec
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,15 +8,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -36,51 +30,43 @@ fun ResponsiveTopBarWithLazyColumn() {
     val isScrolled =
         listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
 
-    val animatedHeight by animateDpAsState(
-        targetValue = if (isScrolled) 60.dp else 180.dp,
-        animationSpec = TweenSpec(durationMillis = 300)
-    )
+
 
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(animatedHeight)
-        ) {
-            BasicAppBar(
-                leftIcon = {
-                    Icon(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(vertical = 16.dp)
-                            .aspectRatio(1f),
-                        painter = painterResource(id = R.drawable.hifive),
-                        contentDescription = "로고",
-                        tint = Color.Unspecified
-                    )
-                },
-                title = "이어 달리기",
-                content = {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = "새로운\n이어 달리기\n만들기", style = AppBarTypography.titleLarge,
-                        )
-                        Spacer(modifier = Modifier.weight(3f))
-                    }
-                },
-                color = Orange,
-                onclick = { Log.d("확인", "클릭된 ") },
-                expanded = !isScrolled
-            )
 
-        }
+        BasicAppBar(
+            modifier = Modifier
+                .fillMaxWidth(),
+            leftIcon = {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 16.dp)
+                        .aspectRatio(1f),
+                    painter = painterResource(id = R.drawable.hifive),
+                    contentDescription = "로고",
+                    tint = Color.Unspecified
+                )
+            },
+            title = "이어 달리기",
+            content = {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "새로운\n이어 달리기\n만들기", style = AppBarTypography.titleLarge,
+                    )
+                    Spacer(modifier = Modifier.weight(3f))
+                }
+            },
+            color = Orange,
+            onclick = { Log.d("확인", "클릭된 ") },
+            expanded = !isScrolled
+        )
 
         LazyColumn(
             state = listState, modifier = Modifier
                 .weight(1f)
-                .background(Color.White)
         ) {
             items(100) { index ->
                 Text(
