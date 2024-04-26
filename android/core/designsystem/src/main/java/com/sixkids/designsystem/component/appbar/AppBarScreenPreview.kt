@@ -2,8 +2,6 @@ package com.sixkids.designsystem.component.appbar
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.R
-import com.sixkids.designsystem.theme.AppBarTypography
 import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.UlbanTheme
 
@@ -30,12 +27,8 @@ fun ResponsiveTopBarWithLazyColumn() {
     val isScrolled =
         listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
 
-
-
-
     Column(modifier = Modifier.fillMaxSize()) {
-
-        BasicAppBar(
+        UlbanDefaultAppBar(
             modifier = Modifier
                 .fillMaxWidth(),
             leftIcon = {
@@ -50,15 +43,7 @@ fun ResponsiveTopBarWithLazyColumn() {
                 )
             },
             title = "이어 달리기",
-            content = {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = "새로운\n이어 달리기\n만들기", style = AppBarTypography.titleLarge,
-                    )
-                    Spacer(modifier = Modifier.weight(3f))
-                }
-            },
+            content = "새로운\n이어 달리기\n만들기",
             color = Orange,
             onclick = { Log.d("확인", "클릭된 ") },
             expanded = !isScrolled
