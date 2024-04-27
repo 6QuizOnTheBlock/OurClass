@@ -1,4 +1,4 @@
-package com.sixkids.navigator
+package com.sixkids.feature.navigator
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

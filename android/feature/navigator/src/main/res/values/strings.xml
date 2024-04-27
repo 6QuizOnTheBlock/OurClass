@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="bottom_navigation_tab_label_home"></string>
+    <string name="bottom_navigation_tab_label_board"></string>
+    <string name="bottom_navigation_tab_label_manage_student"></string>
+    <string name="bottom_navigation_tab_label_manage_class"></string>
+</resources>
