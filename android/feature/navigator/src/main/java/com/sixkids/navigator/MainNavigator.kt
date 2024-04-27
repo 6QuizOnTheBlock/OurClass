@@ -2,8 +2,8 @@ package com.sixkids.navigator
 
 import androidx.navigation.NavController
 
-class MainNav(
+class MainNavigator(
     val navController: NavController,
 ) {
-
+    val startDestination =
 }
