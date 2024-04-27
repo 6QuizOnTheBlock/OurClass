@@ -13,7 +13,7 @@ import com.sixkids.home.navigation.HomeRoute
 import com.sixkids.home.navigation.navigateHome
 
 class MainNavigator(
-    val navController: NavController,
+    val navController: NavHostController,
 ) {
     val startDestination = HomeRoute.defaultRoute
     private val currentDestination: NavDestination?
