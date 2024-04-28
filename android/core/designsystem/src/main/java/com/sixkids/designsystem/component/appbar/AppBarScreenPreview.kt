@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -24,9 +27,11 @@ import com.sixkids.designsystem.theme.UlbanTheme
 @Composable
 fun RelayDefaultAppBarPreview() {
     val listState = rememberLazyListState()
-    val isScrolled =
-        listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
-
+    val isScrolled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
+        }
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         UlbanDefaultAppBar(
             modifier = Modifier
@@ -68,9 +73,11 @@ fun RelayDefaultAppBarPreview() {
 @Composable
 fun RelayDetailAppBarPreview() {
     val listState = rememberLazyListState()
-    val isScrolled =
-        listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
-
+    val isScrolled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
+        }
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         UlbanDetailAppBar(
             modifier = Modifier
@@ -115,9 +122,11 @@ fun RelayDetailAppBarPreview() {
 @Composable
 fun RelayDetailWithProgressAppBarPreview() {
     val listState = rememberLazyListState()
-    val isScrolled =
-        listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
-
+    val isScrolled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
+        }
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         UlbanDetailWithProgressAppBar(
             modifier = Modifier
@@ -159,6 +168,7 @@ fun RelayDetailWithProgressAppBarPreview() {
 
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultAppBarPreview() {
