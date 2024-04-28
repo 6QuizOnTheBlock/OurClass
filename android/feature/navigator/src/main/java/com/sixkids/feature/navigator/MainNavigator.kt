@@ -19,7 +19,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
-    val curretTab: MainNavigationTab?
+    val currentTab: MainNavigationTab?
         @Composable get() = currentDestination
             ?.route
             ?.let { MainNavigationTab.find(it) }
