@@ -27,10 +27,6 @@ class TokenAuthenticator @Inject constructor(
             tokenRepository.getAccessToken()
         }
 
-        if (refreshToken == null || accessToken == null) {
-            return null
-        }
-
         return runBlocking {
             val tokenResponse = tokenService.refreshToken(
                 RefreshTokenRequest(accessToken = accessToken, refreshToken = refreshToken),
