@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.appbar
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,7 @@ import com.sixkids.designsystem.theme.component.progressbar.StudentProgressBar
 @Composable
 fun UlbanDetailWithProgressAppBar(
     modifier: Modifier = Modifier,
-    leftIcon: @Composable () -> Unit = {},
+    @DrawableRes leftIcon: Int,
     title: String,
     content: String,
     topDescription: String,

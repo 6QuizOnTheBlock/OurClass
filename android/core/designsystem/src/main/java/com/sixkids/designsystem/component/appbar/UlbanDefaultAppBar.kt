@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.appbar
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +13,7 @@ import com.sixkids.designsystem.theme.AppBarTypography
 @Composable
 fun UlbanDefaultAppBar(
     modifier: Modifier = Modifier,
-    leftIcon: @Composable () -> Unit = {},
+    @DrawableRes leftIcon: Int,
     title: String,
     content: String,
     color: Color,

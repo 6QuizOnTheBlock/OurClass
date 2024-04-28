@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.appbar
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
@@ -12,19 +13,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.theme.AppBarTypography
@@ -32,7 +37,7 @@ import com.sixkids.designsystem.theme.AppBarTypography
 @Composable
 fun BasicAppBar(
     modifier: Modifier = Modifier,
-    leftIcon: @Composable () -> Unit,
+    @DrawableRes leftIcon: Int,
     title: String,
     content: @Composable () -> Unit,
     color: Color,
@@ -80,7 +85,15 @@ fun BasicAppBar(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                leftIcon()
+                Icon(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 16.dp)
+                        .aspectRatio(1f),
+                    painter = painterResource(id = leftIcon),
+                    contentDescription = "로고",
+                    tint = Color.Unspecified
+                )
                 content()
             }
         }

@@ -2,22 +2,17 @@ package com.sixkids.designsystem.component.appbar
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.R
@@ -36,17 +31,7 @@ fun RelayDefaultAppBarPreview() {
         UlbanDefaultAppBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            leftIcon = {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(vertical = 16.dp)
-                        .aspectRatio(1f),
-                    painter = painterResource(id = R.drawable.hifive),
-                    contentDescription = "로고",
-                    tint = Color.Unspecified
-                )
-            },
+            leftIcon = R.drawable.relay,
             title = "이어 달리기",
             content = "새로운\n이어 달리기\n만들기",
             color = Orange,
@@ -82,17 +67,7 @@ fun RelayDetailAppBarPreview() {
         UlbanDetailAppBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            leftIcon = {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(vertical = 16.dp)
-                        .aspectRatio(1f),
-                    painter = painterResource(id = R.drawable.hifive),
-                    contentDescription = "로고",
-                    tint = Color.Unspecified
-                )
-            },
+            leftIcon = R.drawable.relay,
             title = "이어 달리기",
             content = "이어 달리기가\n진행 중입니다!",
             topDescription = "04.17 15:00~",
@@ -131,17 +106,7 @@ fun RelayDetailWithProgressAppBarPreview() {
         UlbanDetailWithProgressAppBar(
             modifier = Modifier
                 .fillMaxWidth(),
-            leftIcon = {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(vertical = 16.dp)
-                        .aspectRatio(1f),
-                    painter = painterResource(id = R.drawable.hifive),
-                    contentDescription = "로고",
-                    tint = Color.Unspecified
-                )
-            },
+            leftIcon = R.drawable.relay,
             title = "이어 달리기",
             content = "이어 달리기가\n진행 중입니다!",
             topDescription = "04.17 15:00~",
