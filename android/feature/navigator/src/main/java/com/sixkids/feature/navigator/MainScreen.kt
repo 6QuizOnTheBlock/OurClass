@@ -32,7 +32,7 @@ fun MainScreen(
         bottomBar = {
             BottomNav(
                 modifier = Modifier,
-                selectedItem = navigator.curretTab ?: MainNavigationTab.HOME,
+                selectedTab = navigator.curretTab ?: MainNavigationTab.HOME,
             )
         }
     ) { innerPadding ->
@@ -53,9 +53,9 @@ fun MainScreen(
 fun BottomNav(
     modifier: Modifier,
     itemClick: (MainNavigationTab) -> Unit = {},
-    selectedItem: MainNavigationTab,
+    selectedTab: MainNavigationTab,
 ) {
-    val selectedItem = rememberUpdatedState(newValue = selectedItem)
+    val selectedItem = rememberUpdatedState(newValue = selectedTab)
 
     Surface(
         modifier
