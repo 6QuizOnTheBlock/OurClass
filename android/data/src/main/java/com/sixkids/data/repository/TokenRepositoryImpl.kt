@@ -40,4 +40,11 @@ class TokenRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun clearTokens() {
+        dataStore.edit { preferences ->
+            preferences.remove(ACCESS_TOKEN_KEY)
+            preferences.remove(REFRESH_TOKEN_KEY)
+        }
+    }
+
 }
