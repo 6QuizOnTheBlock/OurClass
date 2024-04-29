@@ -29,7 +29,8 @@ public class Member {
     Role role;
 
     @Builder
-    private Member (String email, String name, String profileImage, SocialType socialType, Role role){
+    private Member(String email, String name, String profileImage, SocialType socialType,
+        Role role) {
         this.email = email;
         this.name = name;
         this.profileImage = profileImage;
@@ -38,7 +39,7 @@ public class Member {
     }
 
 
-    public static Member Guest (String email, String name, SocialType socialType) {
+    public static Member Guest(String email, String name, SocialType socialType) {
         return Member.builder()
             .email(email)
             .name(name)
@@ -47,10 +48,10 @@ public class Member {
             .build();
     }
 
-    public static Member addInfo (Member member, String profileImage, String role){
+    public static Member addInfo(Member member, String profileImage, String role) {
         member.setProfileImage(profileImage);
-        member.setRole(role.equals("TEACHER")? Role.TEACHER : Role.STUDENT);
+        member.setRole(role.equals("TEACHER") ? Role.TEACHER : Role.STUDENT);
 
-        return  member;
+        return member;
     }
 }
