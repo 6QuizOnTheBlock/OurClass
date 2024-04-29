@@ -1,5 +1,5 @@
 package com.quiz.ourclass.domain.board.entity;
 
-public enum Category {
+public enum PostCategory {
     NOTICE, FREE
 }

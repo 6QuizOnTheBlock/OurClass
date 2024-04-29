@@ -36,7 +36,7 @@ public class AwsS3ObjectStorage {
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-    public int deleteFile(String fileUrl) {
+    public void deleteFile(String fileUrl) {
         try {
             // URL에서 객체 키 추출
             URI uri = new URI(fileUrl);
@@ -48,7 +48,6 @@ public class AwsS3ObjectStorage {
                 // S3에서 파일 삭제
                 amazonS3.deleteObject(bucket, key);
                 log.info("File deleted successfully: {}", key);
-                return 1;
             } else { // file not found
                 log.warn("File not found: {}", key);
                 throw new GlobalException(ErrorCode.FILE_NOT_FOUND);

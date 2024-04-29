@@ -3,8 +3,6 @@ package com.quiz.ourclass.domain.board.entity;
 import com.quiz.ourclass.domain.board.dto.PostRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.Organization;
-import com.quiz.ourclass.global.exception.ErrorCode;
-import com.quiz.ourclass.global.exception.GlobalException;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,11 +11,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 public class Post {
 
@@ -28,23 +28,19 @@ public class Post {
     Member author;
     @ManyToOne(fetch = FetchType.LAZY)
     Organization organization;
+    @OneToOne(fetch = FetchType.LAZY)
+    Image image;
     String title;
     String content;
     LocalDateTime createTime;
     LocalDateTime updateTime;
     boolean secretStatus;
     @Enumerated(EnumType.STRING)
-    Category category;
+    PostCategory postCategory;
 
-    @Builder
     public Post(Member member, Organization organization, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
-        Category category;
-        try {
-            category = Category.valueOf(request.getType().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new GlobalException(ErrorCode.TYPE_NAME_ERROR);
-        }
+
         this.author = member;
         this.organization = organization;
         this.title = request.getTitle();
@@ -52,7 +48,7 @@ public class Post {
         this.createTime = now;
         this.updateTime = now;
         this.secretStatus = request.getAnonymous();
-        this.category = category;
+        this.postCategory = request.getType();
     }
 
     public Post() {
