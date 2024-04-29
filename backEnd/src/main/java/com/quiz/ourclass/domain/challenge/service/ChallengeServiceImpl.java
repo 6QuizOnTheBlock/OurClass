@@ -13,6 +13,10 @@ import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.challenge.repository.GroupMemberRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
+import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeGroupRepository challengeGroupRepository;
     private final MemberRepository memberRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final OrganizationRepository organizationRepository;
     private final ChallengeMapper challengeMapper;
     private final ChallengeGroupMapper challengeGroupMapper;
 
@@ -42,8 +47,11 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public long createChallenge(ChallengeRequest challengeRequest) {
         Challenge challenge = challengeMapper.challengeRequestToChallenge(challengeRequest);
+        Organization organization = organizationRepository.findById(
+                challengeRequest.organizationId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+        challenge.setOrganization(organization);
         challengeRepository.save(challenge);
-        //TODO: org도메인 구현 뒤에 매핑 필요
         if (!challengeRequest.groups().isEmpty()) {
             challengeRequest.groups().forEach(request -> {
                 ChallengeGroup group = challengeGroupMapper.groupMatchingRequestToChallengeGroup(
