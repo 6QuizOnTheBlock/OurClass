@@ -10,4 +10,5 @@ android {
 dependencies {
     implementation(projects.core.ui)
     implementation (libs.accompanist.systemuicontroller)
+    implementation(libs.coil.compose)
 }
