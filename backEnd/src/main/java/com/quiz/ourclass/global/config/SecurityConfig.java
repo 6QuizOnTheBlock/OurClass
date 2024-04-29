@@ -37,6 +37,7 @@ public class SecurityConfig {
     */
 
 
+    private final JwtUtil jwtUtil;
 
     private final String [] whiteList = {
         "/ws-stomp/**", // * 웹 소켓 연결 및 테스팅이 완료되면 삭제
@@ -48,7 +49,7 @@ public class SecurityConfig {
     private final String [] teacherList = {};
     private final String [] studentList = {};
 
-    private final JwtUtil jwtUtil;
+
 
 
 
