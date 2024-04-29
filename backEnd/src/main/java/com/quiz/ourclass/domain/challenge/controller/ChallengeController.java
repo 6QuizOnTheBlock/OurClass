@@ -5,6 +5,8 @@ import com.quiz.ourclass.domain.challenge.dto.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.service.ChallengeService;
 import com.quiz.ourclass.global.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,12 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-    @Operation(summary = "함께달리기 목록 조회")
+    @Operation(summary = "함께달리기 목록 조회",
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+                description = "함께달리기 목록 조회 성공",
+                content = @Content(schema = @Schema(implementation = ChallengeSliceResponse.class)))
+        })
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getChallenges(ChallengSliceRequest challengSliceRequest) {
         ChallengeSliceResponse challengeSliceResponse = challengeService.getChallenges(
