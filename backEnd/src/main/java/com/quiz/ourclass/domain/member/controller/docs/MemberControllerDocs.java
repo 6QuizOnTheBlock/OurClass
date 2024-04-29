@@ -4,7 +4,7 @@ import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
-import com.quiz.ourclass.global.dto.ApiResponse;
+import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.util.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,23 +20,24 @@ public interface MemberControllerDocs {
 
 
     @Operation(summary = "회원가입(기본 정보)",
-    responses = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
-            description = "회원가입(기본 정보) 입력에 성공하였습니다.",
-            content = @Content(schema = @Schema(implementation = TokenDTO.class))
-        )
-    })
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+                description = "회원가입(기본 정보) 입력에 성공하였습니다.",
+                content = @Content(schema = @Schema(implementation = TokenDTO.class))
+            )
+        })
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> signUp (MemberSignUpRequest request);
+    public ResponseEntity<ResultResponse<?>> signUp(MemberSignUpRequest request);
 
 
     @Operation(summary = "회원가입(추가 정보)",
-    responses = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
-        description = "회원가입(추가 정보) 입력에 성공하였습니다. ")
-    })
+        responses = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+                description = "회원가입(추가 정보) 입력에 성공하였습니다. ")
+        })
     @PatchMapping
-    public ResponseEntity<ApiResponse<?>>  setUpInfo (@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<ResultResponse<?>> setUpInfo(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
         MemberAdditionalInfoRequest request);
 
 
@@ -48,5 +49,5 @@ public interface MemberControllerDocs {
             )
         })
     @PostMapping
-    public ResponseEntity<ApiResponse<?>>  signIn (MemberSigninRequest request);
+    public ResponseEntity<ResultResponse<?>> signIn(MemberSigninRequest request);
 }

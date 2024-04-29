@@ -14,6 +14,14 @@ import org.springframework.http.HttpHeaders;
 public class SwaggerConfig {
 
     @Bean
+    public GroupedOpenApi memberApi() {
+        return GroupedOpenApi.builder()
+            .group("member-api")
+            .pathsToMatch("/members/**")
+            .build();
+    }
+
+    @Bean
     public GroupedOpenApi marketApi() {
         return GroupedOpenApi.builder()
             .group("board-api")

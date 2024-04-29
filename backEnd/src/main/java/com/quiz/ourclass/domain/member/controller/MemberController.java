@@ -1,12 +1,11 @@
 package com.quiz.ourclass.domain.member.controller;
 
-import com.amazonaws.Response;
 import com.quiz.ourclass.domain.member.controller.docs.MemberControllerDocs;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
-import com.quiz.ourclass.global.dto.ApiResponse;
+import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.util.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -26,24 +25,26 @@ public class MemberController implements MemberControllerDocs {
 
     /*  1. 회원가입   */
     @PostMapping("/")
-    public ResponseEntity<ApiResponse<?>> signUp (MemberSignUpRequest request)  {
-        return ResponseEntity.ok(ApiResponse.success(memberService.signUpProcess(request)));
+    public ResponseEntity<ResultResponse<?>> signUp(MemberSignUpRequest request) {
+        return ResponseEntity.ok(ResultResponse.success(memberService.signUpProcess(request)));
     }
 
     /*  2. 추가정보 받기   */
-    @PatchMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<?>>  setUpInfo (@AuthenticationPrincipal UserDetailsImpl userDetails,MemberAdditionalInfoRequest request){
+    @PatchMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ResultResponse<?>> setUpInfo(
+        @AuthenticationPrincipal UserDetailsImpl userDetails, MemberAdditionalInfoRequest request) {
 
         memberService.addingInfoProcess(userDetails, request);
 
-        return ResponseEntity.ok(ApiResponse.success("추가정보 기입에 성공했습니다."));
+        return ResponseEntity.ok(ResultResponse.success("추가정보 기입에 성공했습니다."));
     }
 
     /*  3. 로그인    */
     @PostMapping("/sign-in")
-    public ResponseEntity<ApiResponse<?>>  signIn (MemberSigninRequest request) {
+    public ResponseEntity<ResultResponse<?>> signIn(MemberSigninRequest request) {
 
-        return ResponseEntity.ok(ApiResponse.success(memberService.signInProcess(request)));
+        return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
 
 }

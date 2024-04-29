@@ -2,7 +2,7 @@ package com.quiz.ourclass.domain.challenge.controller;
 
 import com.quiz.ourclass.domain.challenge.dto.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.ChallengeSliceResponse;
-import com.quiz.ourclass.global.dto.ApiResponse;
+import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,5 +20,5 @@ public interface ChallengeControllerDocs {
                 content = @Content(schema = @Schema(implementation = ChallengeSliceResponse.class)))
         })
     @GetMapping
-    ResponseEntity<ApiResponse<?>> getChallenges(ChallengSliceRequest challengSliceRequest);
+    ResponseEntity<ResultResponse<?>> getChallenges(ChallengSliceRequest challengSliceRequest);
 }
