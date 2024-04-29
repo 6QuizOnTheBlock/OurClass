@@ -15,6 +15,7 @@ navigationCompose = "2.7.7"
 compose-compiler = "1.5.1"
 hilt = "2.48"
 ksp = "1.9.0-1.0.13"
+accompanistSystemuicontroller = "0.27.0"
 
 
 [libraries]
@@ -43,6 +44,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
