@@ -32,7 +32,7 @@ fun MainScreen(
         bottomBar = {
             BottomNav(
                 modifier = Modifier,
-                selectedTab = navigator.curretTab ?: MainNavigationTab.HOME,
+                selectedTab = navigator.currentTab ?: MainNavigationTab.HOME,
             )
         }
     ) { innerPadding ->
