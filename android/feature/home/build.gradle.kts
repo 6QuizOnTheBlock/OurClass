@@ -3,9 +3,8 @@ plugins {
 }
 
 android {
-    namespace = "com.sixkids.navigator"
+    namespace = "com.sixkids.home"
 }
 
 dependencies {
-    implementation(projects.feature.home)
 }

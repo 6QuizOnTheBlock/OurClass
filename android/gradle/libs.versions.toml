@@ -13,16 +13,22 @@ appcompat = "1.6.1"
 material = "1.11.0"
 navigationCompose = "2.7.7"
 compose-compiler = "1.5.1"
+accompanistSystemuicontroller = "0.27.0"
+
 hilt = "2.48"
 ksp = "1.9.0-1.0.13"
+
 # Retrofit
 retrofit = "2.9.0"
 moshi-converter = "2.9.0"
 moshi-kotlin = "1.14.0"
 okhttp = "4.9.1"
 logging-interceptor = "4.8.0"
+
 #DataStore
 datastore = "1.0.0"
+
+
 
 [libraries]
 # Dependencies of the included build-logic
@@ -50,6 +56,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
