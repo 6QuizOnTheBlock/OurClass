@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -35,9 +36,9 @@ class MainNavigator(
 
         when (tab) {
             MainNavigationTab.HOME -> navController.navigateHome(navOptions)
-            MainNavigationTab.BOARD -> TODO()
-            MainNavigationTab.MANAGE_STUDENT -> TODO()
-            MainNavigationTab.MANAGE_CLASS -> TODO()
+            MainNavigationTab.BOARD -> navController.navigateBoard(navOptions)
+            MainNavigationTab.MANAGE_STUDENT -> {}
+            MainNavigationTab.MANAGE_CLASS -> {}
         }
     }
 

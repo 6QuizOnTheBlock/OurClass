@@ -26,6 +26,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import com.sixkids.designsystem.theme.Cream
+import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 
 @Composable
@@ -40,6 +41,7 @@ fun MainScreen(
                 visible = navigator.shouldShowBottomBar(),
                 modifier = Modifier,
                 selectedTab = navigator.currentTab ?: MainNavigationTab.HOME,
+                itemClick = navigator::navigate,
             )
         }
     ) { innerPadding ->
@@ -53,6 +55,10 @@ fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
+            )
+
+            boardNavGraph(
+                padding = innerPadding,
             )
         }
     }
