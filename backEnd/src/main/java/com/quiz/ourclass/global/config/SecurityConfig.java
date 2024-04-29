@@ -31,10 +31,9 @@ public class SecurityConfig {
     *  (1) JwtUtil                  : Jwt 토큰 발급, 검증 등의 로직 담당
     *  (2) AuthenticationEntryPoint : 인증 실패 시 예외 처리
     *  (3) AccessDeniedHandler      : 해당 경로를 요청할 권한이 없을 때 예외 처리
-    *  (1) whiteList                : 화이트 리스트 => 모든 유저가 권한 제약 없이 요청 가능
-    *  (2) commonList               : 선생님, 학생 모두 AccessToken 있으면 요청 가능
-    *  (3) teacherList              : 선생님 토큰으로만 입장 가능, 학생 불가
-    *  (4) studentList              : 학생 토큰으로만 입장 가능
+    *  (4) whiteList                : 화이트 리스트 => 모든 유저가 권한 제약 없이 요청 가능
+    *  (5) teacherList              : 선생님 토큰으로만 입장 가능, 학생 불가
+    *  (6) studentList              : 학생 토큰으로만 입장 가능
     */
 
 
@@ -45,7 +44,6 @@ public class SecurityConfig {
         "/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**", "/error", "/members/**"
     };
 
-    private final String [] commonList = {};
     private final String [] teacherList = {};
     private final String [] studentList = {};
 
