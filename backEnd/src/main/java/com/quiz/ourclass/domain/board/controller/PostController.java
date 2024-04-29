@@ -41,7 +41,7 @@ public class PostController implements PostControllerDocs {
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<ResultResponse<Boolean>> delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ResultResponse<?>> delete(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok(postService.delete(id));
     }
 }
