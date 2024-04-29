@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
+import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
@@ -59,6 +60,18 @@ public class MemberService {
             }
             member.setRole(request.getRole().equals("teacher")? Role.TEACHER : Role.STUDENT);
         memberRepository.save(member);
+    }
+
+    public  TokenDTO signInProcess(MemberSigninRequest request) {
+        if(!memberRepository.existsByEmail(request.getEmail())){
+            throw new GlobalException(ErrorCode.NOT_FOUND_MEMBER);
+        } else {
+            Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow();
+            String accessToken = jwtUtil.createToken(member, true);
+            String refreshToken = jwtUtil.createToken(member, false);
+
+            return TokenDTO.of(accessToken, refreshToken);
+        }
     }
 
 
