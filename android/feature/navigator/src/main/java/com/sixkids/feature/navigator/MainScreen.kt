@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.compose.NavHost
 import com.sixkids.designsystem.theme.Cream
-import com.sixkids.home.navigation.homeNavGraph
+import com.sixkids.teacher.home.navigation.homeNavGraph
 
 @Composable
 fun MainScreen(

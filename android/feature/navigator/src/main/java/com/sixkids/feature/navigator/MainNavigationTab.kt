@@ -7,8 +7,8 @@ import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
-import com.sixkids.home.navigation.HomeRoute
 import com.sixkids.navigator.R
+import com.sixkids.teacher.home.navigation.HomeRoute
 
 
 enum class MainNavigationTab(
