@@ -2,15 +2,16 @@ package com.sixkids.feature.navigator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.sixkids.home.navigation.HomeRoute
-import com.sixkids.home.navigation.navigateHome
+import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.home.navigation.HomeRoute
+import com.sixkids.teacher.home.navigation.navigateHome
+import com.sixkids.teacher.home.navigation.navigateRank
 
 class MainNavigator(
     val navController: NavHostController,
@@ -35,19 +36,25 @@ class MainNavigator(
 
         when (tab) {
             MainNavigationTab.HOME -> navController.navigateHome(navOptions)
-            MainNavigationTab.BOARD -> TODO()
-            MainNavigationTab.MANAGE_STUDENT -> TODO()
-            MainNavigationTab.MANAGE_CLASS -> TODO()
+            MainNavigationTab.BOARD -> navController.navigateBoard(navOptions)
+            MainNavigationTab.MANAGE_STUDENT -> {}
+            MainNavigationTab.MANAGE_CLASS -> {}
         }
     }
 
-
+    /**
+     * Home Navigation
+     */
     fun navigateHome(navOptions: NavOptions) {
         navController.navigate(HomeRoute.defaultRoute){
             popUpTo(navController.graph.id){
                 inclusive = true
             }
         }
+    }
+
+    fun navigateRank(){
+        navController.navigateRank()
     }
 
     @Composable

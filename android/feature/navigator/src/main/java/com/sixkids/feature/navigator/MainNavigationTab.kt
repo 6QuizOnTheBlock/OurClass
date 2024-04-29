@@ -7,8 +7,9 @@ import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
-import com.sixkids.home.navigation.HomeRoute
 import com.sixkids.navigator.R
+import com.sixkids.teacher.board.navigation.BoardRoute
+import com.sixkids.teacher.home.navigation.HomeRoute
 
 
 enum class MainNavigationTab(
@@ -27,7 +28,7 @@ enum class MainNavigationTab(
         iconId = R.drawable.board,
         iconTint = Blue,
         labelId = R.string.bottom_navigation_tab_label_board,
-        route = "ReceivedRoute.route",
+        route = BoardRoute.defaultRoute,
     ),
     MANAGE_STUDENT(
         iconId = R.drawable.manage_student,
