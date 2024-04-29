@@ -17,17 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
-import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.ui.util.formatToMonthDayTime
 import java.time.LocalDateTime
 
 @Composable
-fun UlbanHifiveItem(
+fun UlbanChallengeItem(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(
         horizontal = 16.dp,

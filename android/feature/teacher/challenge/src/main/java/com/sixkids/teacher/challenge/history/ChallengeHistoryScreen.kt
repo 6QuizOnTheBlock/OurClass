@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
-import com.sixkids.designsystem.component.item.UlbanHifiveItem
+import com.sixkids.designsystem.component.item.UlbanChallengeItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -92,7 +92,7 @@ fun ChallengeHistoryScreen(
             )
             Divider(modifier = Modifier.padding(vertical = 4.dp))
 
-            if(uiState.challengeHistory.isEmpty()){
+            if (uiState.challengeHistory.isEmpty()) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
@@ -103,7 +103,7 @@ fun ChallengeHistoryScreen(
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.weight(1f))
-            }else{
+            } else {
                 LazyColumn(
                     state = listState,
                     contentPadding = PaddingValues(vertical = 4.dp),
@@ -114,7 +114,7 @@ fun ChallengeHistoryScreen(
                         items = uiState.challengeHistory,
                         key = { it.id }
                     ) { challenge ->
-                        UlbanHifiveItem(
+                        UlbanChallengeItem(
                             title = challenge.title,
                             description = challenge.description,
                             startDate = challenge.startDate,

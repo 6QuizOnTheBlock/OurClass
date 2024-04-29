@@ -34,7 +34,7 @@ fun UlbanDetailAppBar(
     badgeCount: Int = 0,
     color: Color,
     expanded: Boolean = true,
-    onclick: () -> Unit,
+    onclick: () -> Unit = {},
 ) {
     BasicAppBar(
         modifier = modifier,
