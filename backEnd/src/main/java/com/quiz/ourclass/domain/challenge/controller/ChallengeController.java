@@ -29,9 +29,9 @@ public class ChallengeController implements ChallengeControllerDocs {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> createChallenge(
+    public ResponseEntity<ResultResponse<?>> createChallenge(
         @RequestBody ChallengeRequest challengeRequest) {
         return ResponseEntity.ok(
-            ApiResponse.success(challengeService.createChallenge(challengeRequest)));
+            ResultResponse.success(challengeService.createChallenge(challengeRequest)));
     }
 }
