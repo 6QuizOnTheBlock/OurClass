@@ -5,17 +5,15 @@ import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
-import com.quiz.ourclass.domain.board.repository.TempMember;
-import com.quiz.ourclass.domain.board.repository.TempOrg;
 import com.quiz.ourclass.domain.member.entity.Member;
-import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -30,25 +28,19 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
-    private final TempMember tempMember;
-    private final TempOrg tempOrg;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
+    private final UserAccessUtil userAccessUtil;
 
     @Transactional
     @Override
     public ResultResponse<Long> write(Long classId, MultipartFile file, PostRequest request)
         throws IOException {
         //멤버가 존재하는지 확인
-        List<Member> member = tempMember.findAll();
-        if (member.isEmpty()) {
-            throw new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = userAccessUtil.getMember();
 
         //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인(classId)
-        List<Organization> organization = tempOrg.findAll();
-        if (organization.isEmpty()) {
-            throw new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        MemberOrganization memberOrganization =
+            userAccessUtil.isMemberOfOrganization(member, classId);
 
         //S3 이미지 파일 업로드
         Image image = null;
@@ -57,11 +49,12 @@ public class PostServiceImpl implements PostService {
             if (url.isEmpty()) {
                 throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
             }
+            String fileHash = DigestUtils.sha256Hex(file.getInputStream());
             image = imageRepository.save(
-                new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
+                new Image(file.getOriginalFilename(), url, LocalDateTime.now(), fileHash));
         }
         //게시글 저장하기
-        Post post = new Post(member.getFirst(), organization.getFirst(), image, request);
+        Post post = new Post(member, memberOrganization.getOrganization(), image, request);
         return ResultResponse.success(postRepository.save(post).getId());
     }
 

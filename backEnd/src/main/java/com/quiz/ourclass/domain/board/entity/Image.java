@@ -25,10 +25,11 @@ public class Image {
     LocalDateTime createTime;
     String hash;
 
-    public Image(String originalName, String path, LocalDateTime createTime) {
+    public Image(String originalName, String path, LocalDateTime createTime, String hash) {
         this.originalName = originalName;
         this.path = path;
         this.createTime = createTime;
+        this.hash = hash;
     }
 
     public Image() {
