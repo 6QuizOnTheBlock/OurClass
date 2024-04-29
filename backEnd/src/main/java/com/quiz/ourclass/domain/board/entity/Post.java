@@ -38,11 +38,12 @@ public class Post {
     @Enumerated(EnumType.STRING)
     PostCategory postCategory;
 
-    public Post(Member member, Organization organization, PostRequest request) {
+    public Post(Member member, Organization organization, Image image, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
 
         this.author = member;
         this.organization = organization;
+        this.image = image;
         this.title = request.getTitle();
         this.content = request.getContent();
         this.createTime = now;

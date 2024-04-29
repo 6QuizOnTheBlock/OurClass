@@ -19,6 +19,5 @@ public class MemberOrganization {
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
     double sincerityPoint;
-    double hipPoint;
     int exp;
 }
