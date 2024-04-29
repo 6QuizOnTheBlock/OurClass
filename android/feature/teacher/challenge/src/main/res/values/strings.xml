@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hifive_challenge">함께 달리기</string>
+    <string name="challenge_create">새로운\n함께 달리기\n만들기</string>
+    <string name="total_challenge_count">지금까지 %d번 함께 달리기를 진행했어요</string>
+    <string name="no_challenge_history">기록이 없어요</string>
+</resources>
