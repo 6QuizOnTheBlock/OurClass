@@ -1,6 +1,6 @@
 package com.quiz.ourclass.domain.board.entity;
 
-import com.quiz.ourclass.domain.board.dto.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import jakarta.persistence.Entity;

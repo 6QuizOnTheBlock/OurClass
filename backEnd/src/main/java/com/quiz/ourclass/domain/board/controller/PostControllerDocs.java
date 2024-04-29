@@ -1,7 +1,7 @@
 package com.quiz.ourclass.domain.board.controller;
 
 
-import com.quiz.ourclass.domain.board.dto.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

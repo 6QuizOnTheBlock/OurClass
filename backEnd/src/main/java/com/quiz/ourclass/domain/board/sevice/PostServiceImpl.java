@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.board.sevice;
 
-import com.quiz.ourclass.domain.board.dto.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
@@ -100,5 +101,11 @@ public class PostServiceImpl implements PostService {
         post.setSecretStatus(request.getAnonymous());
 
         return ResultResponse.success(postRepository.save(post).getId());
+    }
+
+    @Override
+    public ResultResponse<PostDetailResponse> detailView(Long id) {
+        PostDetailResponse response = null;
+        return ResultResponse.success(response);
     }
 }

@@ -1,10 +1,11 @@
-package com.quiz.ourclass.domain.board.dto;
+package com.quiz.ourclass.domain.board.dto.request;
 
 import com.quiz.ourclass.domain.board.entity.PostCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
+@Schema(description = "게시글 작성, 수정 요청 DTO")
 public class PostRequest {
 
     @Schema(description = "게시글 카테고리", example = "FREE")

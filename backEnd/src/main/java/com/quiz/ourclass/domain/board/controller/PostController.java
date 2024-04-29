@@ -1,11 +1,13 @@
 package com.quiz.ourclass.domain.board.controller;
 
-import com.quiz.ourclass.domain.board.dto.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.sevice.PostService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,5 +39,11 @@ public class PostController implements PostControllerDocs {
         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         Long postId = postService.modify(id, file, request).getData();
         return ResponseEntity.ok(ResultResponse.success(postId));
+    }
+
+    @GetMapping(value = "{id}")
+    public ResponseEntity<ResultResponse<?>> detailView(@PathVariable(value = "id") Long id) {
+        ResultResponse<PostDetailResponse> response = postService.detailView(id);
+        return ResponseEntity.ok(ResultResponse.success(response));
     }
 }
