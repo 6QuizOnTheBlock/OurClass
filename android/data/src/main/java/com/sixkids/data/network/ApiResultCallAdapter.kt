@@ -34,7 +34,7 @@ private class ApiResultCall<T>(
                         // 정상적인 response
                         callback.onResponse(
                             this@ApiResultCall,
-                            Response.success(ApiResult.Success(response.body()!!))
+                            Response.success(ApiResult.Success(body))
                         )
                     } else {
                         callback.onResponse(
