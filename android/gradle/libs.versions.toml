@@ -14,9 +14,11 @@ material = "1.11.0"
 navigationCompose = "2.7.7"
 compose-compiler = "1.5.1"
 accompanistSystemuicontroller = "0.27.0"
+hilt-navigation-compose = "1.1.0"
 
 hilt = "2.48"
 ksp = "1.9.0-1.0.13"
+
 
 # Retrofit
 retrofit = "2.9.0"
@@ -53,6 +55,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -61,6 +64,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-lifecycle-viewmodel = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel", version.ref = "hilt" }
 
 # Network
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -89,7 +93,7 @@ sixkids-android-hilt = { id = "sixkids.android.hilt", version = "unspecified" }
 
 
 [bundles]
-compose = ["androidx-activity-compose", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-ui-test-junit4", "androidx-material3", "androidx-navigation-compose"]
+compose = ["androidx-activity-compose", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-ui-test-junit4", "androidx-material3", "androidx-navigation-compose", "androidx-hilt-navigation-compose"]
 compose-debug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
 
 # Networking Bundle
