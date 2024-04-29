@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.challenge.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,8 +11,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class ChallengeGroup {
 
     @Id
@@ -19,9 +25,11 @@ public class ChallengeGroup {
     @ManyToOne(fetch = FetchType.LAZY)
     Challenge challenge;
     @OneToMany(mappedBy = "challengeGroup")
-    List<GroupMember> groupMember;
+    List<GroupMember> groupMembers;
     long leaderId;
-    String name;
+    int headCount;
+    @Enumerated(EnumType.STRING)
+    GroupType groupType;
     boolean completeStatus;
     LocalDateTime createTime;
 }
