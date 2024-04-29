@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
         GlobalException globalException) {
         ApiResponse<Object> response = ApiResponse.fail(
             globalException.getErrorCode().getMessage());
-        return new ResponseEntity<>(response, jsonHeaders, globalException.getStatus());
+        return new ResponseEntity<>(response, jsonHeaders,
+            globalException.getErrorCode().getStatus());
     }
 }
