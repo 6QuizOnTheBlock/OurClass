@@ -234,7 +234,8 @@ fun RunningText(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RankCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -247,7 +248,7 @@ fun RankCard(
             defaultElevation = 4.dp,
             pressedElevation = 8.dp
         ),
-        onClick = {}
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier.padding(20.dp),

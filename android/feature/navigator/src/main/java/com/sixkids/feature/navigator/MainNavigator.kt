@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
+import com.sixkids.teacher.home.navigation.navigateRank
 
 class MainNavigator(
     val navController: NavHostController,
@@ -40,13 +41,19 @@ class MainNavigator(
         }
     }
 
-
+    /**
+     * Home Navigation
+     */
     fun navigateHome(navOptions: NavOptions) {
         navController.navigate(HomeRoute.defaultRoute){
             popUpTo(navController.graph.id){
                 inclusive = true
             }
         }
+    }
+
+    fun navigateRank(){
+        navController.navigateRank()
     }
 
     @Composable
