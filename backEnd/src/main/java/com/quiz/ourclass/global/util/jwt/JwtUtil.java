@@ -2,6 +2,7 @@ package com.quiz.ourclass.global.util.jwt;
 
 
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.global.util.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,14 +11,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -53,6 +55,8 @@ public class JwtUtil {
     @Value("#{new Integer('${jwt.token.refresh-expiration-time}')}")
     private Integer REFRESH_TOKEN_TIME;
     private static  final String BEARER_PREFIX = "Bearer ";
+
+    private final UserDetailsServiceImpl userDetailsService;
 
 
     /* A. Init 함수 -> JWT 토큰 만들기 위한 사전 준비  */
@@ -142,8 +146,12 @@ public class JwtUtil {
     *  F. [Member Id]에 해당하는 회원 정보를 [DB]에서 가져와 인증 객체를 생성
     * */
 
-    public Authentication createAuthentication(Long id) {
-        return null;
+    public Authentication createAuthentication(String id) {
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(id);
+
+
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
 }
