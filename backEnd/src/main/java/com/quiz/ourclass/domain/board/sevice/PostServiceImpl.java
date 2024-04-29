@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,41 +70,40 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        //게시글에 첨부된 image 파일 존재 여부 확인 후 기존 이미지와 다르면 이미지 재업로드
-        if (post.getImage() == null || !post.getImage().getOriginalName().isEmpty()) {
-            Image image = post.getImage();
-            if (image == null) { //원래 이미지가 없을 때
-                if (file != null && !file.isEmpty()) {
-                    String url = awsS3ObjectStorage.uploadFile(file);
-                    if (url.isEmpty()) {
-                        throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
-                    }
-                    Image addImage = imageRepository.save(
-                        new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
-                    post.setImage(addImage);
+        // 이미지 처리
+        Image image = post.getImage();
+        if (file != null && !file.isEmpty()) {
+            //file hash 값 계산
+            String fileHash = DigestUtils.sha256Hex(file.getInputStream());
+            boolean shouldUpdateImage = (image == null || !image.getHash().equals(fileHash));
+            if (shouldUpdateImage) { //재 업로드 해야하는 경우
+                //기존 이미지가 있으면 삭제
+                if (image != null) {
+                    awsS3ObjectStorage.deleteFile(image.getPath());
                 }
-            } else { //원래 이미지가 있을 때
-                //원본 이미지와 수정 이미지가 다를 때(업로드)
-                if (!image.getOriginalName().equals(file.getOriginalFilename())) {
-                    if (!file.isEmpty()) {
-                        String url = awsS3ObjectStorage.uploadFile(file);
-                        if (url.isEmpty()) {
-                            throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
-                        }
-                        //원본 이미지 삭제
-                        awsS3ObjectStorage.deleteFile(image.getPath());
+                //이미지 업로드
+                String url = awsS3ObjectStorage.uploadFile(file);
+                if (url.isEmpty()) {
+                    throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
+                }
+                //이미지 정보 업데이트 또는 새 이미지 저장
+                if (image == null) {
+                    image = new Image();
+                }
+                image.setOriginalName(file.getOriginalFilename());
+                image.setPath(url);
+                image.setCreateTime(LocalDateTime.now());
+                image.setHash(fileHash);
+                imageRepository.save(image);
 
-                        //수정사항 적용
-                        image.setOriginalName(file.getOriginalFilename());
-                        image.setPath(url);
-                        image.setCreateTime(LocalDateTime.now());
-                        imageRepository.save(image);
-                        post.setImage(image);
-                    }
-                }
+                post.setImage(image);
             }
+        } else { //file 없을 때 기존에 원본 이미지 삭제
+            awsS3ObjectStorage.deleteFile(image.getPath());
+            post.setImage(null);
+            imageRepository.delete(image);
         }
-        //게시글 정보 변경
+        // 게시글 정보 변경
         post.setPostCategory(request.getType());
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());

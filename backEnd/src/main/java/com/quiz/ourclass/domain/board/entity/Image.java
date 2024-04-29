@@ -23,6 +23,7 @@ public class Image {
     String originalName;
     String path;
     LocalDateTime createTime;
+    String hash;
 
     public Image(String originalName, String path, LocalDateTime createTime) {
         this.originalName = originalName;
