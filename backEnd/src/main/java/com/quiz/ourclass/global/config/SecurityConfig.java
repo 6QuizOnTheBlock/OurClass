@@ -41,6 +41,7 @@ public class SecurityConfig {
 
     private final String [] whiteList = {
         "/ws-stomp/**", // * 웹 소켓 연결 및 테스팅이 완료되면 삭제
+
         "/swagger-ui/**", "/api-docs/**","/swagger-resources/**", "/webjars/**", "/error", "/members/**"
     };
 

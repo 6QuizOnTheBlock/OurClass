@@ -20,6 +20,9 @@ public enum ErrorCode {
     AWS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 서버 에러입니다.");
 
 
+    //
+
+
     private final HttpStatus status;
     private final String message;
 }
