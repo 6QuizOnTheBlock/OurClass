@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.member.controller;
 
 import com.amazonaws.Response;
+import com.quiz.ourclass.domain.member.controller.docs.MemberControllerDocs;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
-public class MemberController {
+public class MemberController implements MemberControllerDocs {
 
     private final MemberService memberService;
 
     /*  1. 회원가입   */
     @PostMapping("/")
-    public ResponseEntity<ApiResponse<?>> signUp (MemberSignUpRequest request) throws Exception {
+    public ResponseEntity<ApiResponse<?>> signUp (MemberSignUpRequest request)  {
         return ResponseEntity.ok(ApiResponse.success(memberService.signUpProcess(request)));
     }
 

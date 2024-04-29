@@ -30,7 +30,7 @@ public class MemberService {
     private  final JwtUtil jwtUtil;
     private  final AwsS3ObjectStorage awsS3ObjectStorage;
 
-    public TokenDTO signUpProcess (MemberSignUpRequest request) throws Exception{
+    public TokenDTO signUpProcess (MemberSignUpRequest request) {
 
         if(memberRepository.existsByEmail(request.getEmail())){
                 throw new GlobalException(ErrorCode.EXISTING_MEMBER);
