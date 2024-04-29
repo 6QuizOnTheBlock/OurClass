@@ -5,7 +5,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.UUID;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -36,19 +36,18 @@ public class AwsS3ObjectStorage {
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 
-    public int deleteFile(String fileUrl) {
+    public void deleteFile(String fileUrl) {
         try {
             // URL에서 객체 키 추출
-            URL url = new URL(fileUrl);
+            URI uri = new URI(fileUrl);
             // URL의 첫 번째 '/'를 제거하여 객체 키 얻기
-            String key = url.getPath().substring(1);
+            String key = uri.getPath().substring(1);
 
             // 파일 존재 여부 확인
             if (amazonS3.doesObjectExist(bucket, key)) {
                 // S3에서 파일 삭제
                 amazonS3.deleteObject(bucket, key);
                 log.info("File deleted successfully: {}", key);
-                return 1;
             } else { // file not found
                 log.warn("File not found: {}", key);
                 throw new GlobalException(ErrorCode.FILE_NOT_FOUND);

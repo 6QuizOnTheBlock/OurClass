@@ -1,6 +1,6 @@
 package com.quiz.ourclass.global.exception;
 
-import com.quiz.ourclass.global.dto.ApiResponse;
+import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +19,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<ApiResponse<Object>> handleGlobalException(
+    public ResponseEntity<ResultResponse<Object>> handleGlobalException(
         GlobalException globalException) {
-        ApiResponse<Object> response = ApiResponse.fail(
+        ResultResponse<Object> response = ResultResponse.fail(
             globalException.getErrorCode().getMessage());
-        return new ResponseEntity<>(response, jsonHeaders, globalException.getStatus());
+        return new ResponseEntity<>(response, jsonHeaders,
+            globalException.getErrorCode().getStatus());
     }
 }
