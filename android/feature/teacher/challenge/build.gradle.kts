@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sixkids.challenge"
+    namespace = "com.sixkids.teacher.challenge"
 }
 
 dependencies {
