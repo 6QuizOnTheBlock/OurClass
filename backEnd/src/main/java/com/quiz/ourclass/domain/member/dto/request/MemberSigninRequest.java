@@ -4,11 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class MemberSigninRequest {
 
     private String email;
 
-    @Builder
+
     private MemberSigninRequest (String email) {
         this.email = email;
     }

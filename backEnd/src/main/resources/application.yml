@@ -54,7 +54,7 @@ cloud:
 
 jwt:
   # HS512 알고리즘을 사용함. 해당 알고리즘은 key 값이 최소 512bit 여야함. 따라서 [secret-key]는  64byte 이상이어야 한다.
-  secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
+  secret: ENC(FNp9vOQKsWIRx15Fh53WubD4uKv+BvB43vuybNVZfQsppupJA4r+n2wQBnZzyYtlJNvdCLWYJf6TtwDXDydvKe03XrusQWIxwsz1QZXTLSDoeWSUJkWqbt9JaYyiZY2rfMx6FYwOfCtC2cxe2Ebe/cLWJjrXWL16517tRuf0z2S3SW0ji9OHDSCp9DjLIe/n)
   token:
     # 접근 토큰 시간: 5시간 (60*60*5*1000 =18000000)
     access-expiration-time: 18000000

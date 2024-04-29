@@ -7,12 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
+@Builder
 public class MemberAdditionalInfoRequest {
     private MultipartFile file;
     private String role;
 
 
-    @Builder
     private MemberAdditionalInfoRequest (MultipartFile file, String role){
         this.file = file;
         this.role = role;
