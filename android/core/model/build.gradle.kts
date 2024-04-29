@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.sixkids.java.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies{
