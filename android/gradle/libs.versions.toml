@@ -20,7 +20,9 @@ androidx-lifecycle = "2.6.2"
 hilt = "2.48"
 inject = "1"
 ksp = "1.9.0-1.0.13"
+
 kotlinx-serialization-json = "1.6.0"
+kotlinx-datetime = "0.4.1"
 
 # Retrofit
 retrofit = "2.9.0"
@@ -80,6 +82,7 @@ okhttp-logginginterceptor = { group = "com.squareup.okhttp3", name = "logging-in
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
