@@ -6,6 +6,7 @@ import com.quiz.ourclass.global.dto.ResultResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,5 +38,10 @@ public class PostController implements PostControllerDocs {
         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         Long postId = postService.modify(id, file, request).getData();
         return ResponseEntity.ok(ResultResponse.success(postId));
+    }
+
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<ResultResponse<Boolean>> delete(@PathVariable(value = "id") Long id) {
+        return ResponseEntity.ok(postService.delete(id));
     }
 }

@@ -12,4 +12,6 @@ public interface PostService {
 
     ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
         throws IOException;
+
+    ResultResponse<Boolean> delete(Long id);
 }
