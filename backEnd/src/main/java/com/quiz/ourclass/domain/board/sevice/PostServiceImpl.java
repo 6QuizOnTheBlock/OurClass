@@ -49,16 +49,19 @@ public class PostServiceImpl implements PostService {
         if (organization.isEmpty()) {
             throw new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
         }
+
         //S3 이미지 파일 업로드
+        Image image = null;
         if (file != null && !file.isEmpty()) {
             String url = awsS3ObjectStorage.uploadFile(file);
             if (url.isEmpty()) {
                 throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
             }
-            imageRepository.save(new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
+            image = imageRepository.save(
+                new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
         }
         //게시글 저장하기
-        Post post = new Post(member.getFirst(), organization.getFirst(), request);
+        Post post = new Post(member.getFirst(), organization.getFirst(), image, request);
         return ResultResponse.success(postRepository.save(post).getId());
     }
 

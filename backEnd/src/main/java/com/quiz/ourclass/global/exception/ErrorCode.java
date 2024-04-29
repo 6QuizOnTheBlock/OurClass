@@ -29,10 +29,10 @@ public enum ErrorCode {
     TYPE_NAME_ERROR(HttpStatus.BAD_REQUEST, "게시판 유형에 맞지 않는 입력입니다."),
 
     //image
-    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다.");
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
 
-    //
-
+    //userAccess
+    MEMBER_NOT_IN_ORGANIZATION(HttpStatus.FORBIDDEN, "멤버가 해당 단체 소속이 아닙니다.");
 
     private final HttpStatus status;
     private final String message;
