@@ -73,6 +73,7 @@ fun RelayDetailAppBarPreview() {
             topDescription = "04.17 15:00~",
             bottomDescription = "현재 주자는 오하빈 학생입니다.",
             color = Orange,
+            badgeCount = 10,
             onclick = { Log.d("확인", "클릭된 ") },
             expanded = !isScrolled
         )

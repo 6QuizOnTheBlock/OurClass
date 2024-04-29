@@ -72,6 +72,7 @@ fun ChallengeHistoryScreen(
                 onclick = { navigateToDetail(currentChallenge.id) },
                 totalCnt = currentChallenge.totalUserCount,
                 successCnt = currentChallenge.activeUserCount,
+                badgeCount = currentChallenge.pendingChallengeCount,
                 expanded = !isScrolled
             )
         }
