@@ -25,8 +25,7 @@ public enum ErrorCode {
     AWS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 서버 에러입니다."),
 
     //post
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
-    TYPE_NAME_ERROR(HttpStatus.BAD_REQUEST, "게시판 유형에 맞지 않는 입력입니다."),
+    POST_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "멤버가 작성한 게시글을 찾을 수 없습니다."),
 
     //image
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
