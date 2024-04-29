@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.sixkids.android.library)
+    alias(libs.plugins.sixkids.android.hilt)
 }
 
 android {
@@ -9,6 +10,9 @@ android {
 dependencies {
     implementation(projects.core.model)
     implementation(projects.domain)
+
+    implementation(libs.bundles.retrofit)
+    implementation(libs.datastore)
 
     testImplementation(libs.junit)
 }
