@@ -30,7 +30,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public GroupedOpenApi marketApi() {
+    public GroupedOpenApi boardApi() {
         return GroupedOpenApi.builder()
             .group("board-api")
             .pathsToMatch("/board/**")

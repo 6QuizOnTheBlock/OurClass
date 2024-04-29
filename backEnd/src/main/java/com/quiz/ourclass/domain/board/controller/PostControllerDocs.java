@@ -23,7 +23,7 @@ public interface PostControllerDocs {
     @Operation(summary = "게시글 작성", description = "입력으로 들어온 dto, multipart 로 게시글을 작성합니다.")
     @ApiResponse(responseCode = "200", description = "(message : \"Success\", code : 200)",
         content = @Content(schema = @Schema(implementation = Long.class)))
-    @ApiResponse(responseCode = "400", description = "(message : \"게시판 유형에 맞지 않는 입력입니다.\", code : 400)", content = @Content)
+    @ApiResponse(responseCode = "403", description = "(message : \"멤버가 해당 단체 소속이 아닙니다.\", code : 403)", content = @Content)
     @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\", code : 404)", content = @Content)
     @ApiResponse(responseCode = "500", description = "(message : \"첨부한 파일이 S3에 업로드 되지 않았습니다.\", code : 500)", content = @Content)
     @PostMapping(consumes = {"multipart/form-data"})
@@ -35,6 +35,7 @@ public interface PostControllerDocs {
     @Operation(summary = "게시글 수정", description = "path 입력으로 들어온 게시글 PK 값 기준으로 게시글을 수정합니다.")
     @ApiResponse(responseCode = "200", description = "(message : \"Success\", code : 200)",
         content = @Content(schema = @Schema(implementation = Long.class)))
+    @ApiResponse(responseCode = "403", description = "(message : \"멤버가 해당 단체 소속이 아닙니다.\", code : 403)", content = @Content)
     @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\", code : 404)", content = @Content)
     @ApiResponse(responseCode = "500", description = "(message : \"첨부한 파일이 S3에 업로드 되지 않았습니다.\", code : 500)", content = @Content)
     @PatchMapping("/{id}")

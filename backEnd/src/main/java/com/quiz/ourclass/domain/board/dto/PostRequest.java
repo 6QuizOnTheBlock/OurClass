@@ -15,4 +15,6 @@ public class PostRequest {
     private String content;
     @Schema(description = "익명 여부", example = "true")
     private Boolean anonymous;
+    @Schema(description = "이미지 삭제 여부", example = "false")
+    private Boolean imageDelete;
 }

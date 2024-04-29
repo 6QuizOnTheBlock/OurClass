@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,9 +48,8 @@ public class PostServiceImpl implements PostService {
             if (url.isEmpty()) {
                 throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
             }
-            String fileHash = DigestUtils.sha256Hex(file.getInputStream());
             image = imageRepository.save(
-                new Image(file.getOriginalFilename(), url, LocalDateTime.now(), fileHash));
+                new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
         }
         //게시글 저장하기
         Post post = new Post(member, memberOrganization.getOrganization(), image, request);
@@ -62,42 +60,38 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
         throws IOException {
-        //수정 할 게시글 조회
-        Post post = postRepository.findById(id)
-            .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
+        //게시글을 수정할 수 있는 멤버인지 검증
+        Member member = userAccessUtil.getMember();
 
-        // 이미지 처리
+        //수정 할 게시글 조회
+        Post post = postRepository.findByIdAndAuthor(id, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.POST_EDIT_PERMISSION_DENIED));
+
+        //이미지 관련 처리 부분
         Image image = post.getImage();
-        if (file != null && !file.isEmpty()) {
-            //file hash 값 계산
-            String fileHash = DigestUtils.sha256Hex(file.getInputStream());
-            boolean shouldUpdateImage = (image == null || !image.getHash().equals(fileHash));
-            if (shouldUpdateImage) { //재 업로드 해야하는 경우
-                //기존 이미지가 있으면 삭제
-                if (image != null) {
-                    awsS3ObjectStorage.deleteFile(image.getPath());
-                }
-                //이미지 업로드
-                String url = awsS3ObjectStorage.uploadFile(file);
-                if (url.isEmpty()) {
-                    throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
-                }
-                //이미지 정보 업데이트 또는 새 이미지 저장
-                if (image == null) {
-                    image = new Image();
-                }
+        if (request.getImageDelete() && image != null) { //이미지를 삭제하는 경우
+            awsS3ObjectStorage.deleteFile(image.getPath());
+            imageRepository.delete(image);
+            post.setImage(null);
+        } else if (file != null && !file.isEmpty()) {  //이미지를 수정 할 경우 (Multipart 입력으로 들어온 경우)
+            //기존 이미지가 있으면 S3 삭제
+            if (image != null) {
+                awsS3ObjectStorage.deleteFile(image.getPath());
+            }
+            //새 이미지 업로드
+            String url = awsS3ObjectStorage.uploadFile(file);
+            if (url.isEmpty()) {
+                throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
+            }
+            if (image == null) { //이미지가 없었다면 새로 이미지 저장
+                image = new Image(file.getOriginalFilename(), url, LocalDateTime.now());
+            } else { //이미지 정보 수정
                 image.setOriginalName(file.getOriginalFilename());
                 image.setPath(url);
                 image.setCreateTime(LocalDateTime.now());
-                image.setHash(fileHash);
-                imageRepository.save(image);
-
-                post.setImage(image);
             }
-        } else { //file 없을 때 기존에 원본 이미지 삭제
-            awsS3ObjectStorage.deleteFile(image.getPath());
-            post.setImage(null);
-            imageRepository.delete(image);
+            image = imageRepository.save(image);
+            post.setImage(image);
         }
         // 게시글 정보 변경
         post.setPostCategory(request.getType());
@@ -106,9 +100,5 @@ public class PostServiceImpl implements PostService {
         post.setSecretStatus(request.getAnonymous());
 
         return ResultResponse.success(postRepository.save(post).getId());
-    }
-
-    public void imageUpload() {
-
     }
 }
