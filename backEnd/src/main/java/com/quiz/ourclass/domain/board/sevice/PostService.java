@@ -9,4 +9,6 @@ public interface PostService {
 
     ApiResponse<Long> write(Long classId, MultipartFile file, PostRequest request)
         throws IOException;
+
+    ApiResponse<Long> modify(Long id, PostRequest request);
 }

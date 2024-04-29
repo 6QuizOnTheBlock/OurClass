@@ -54,5 +54,11 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(member.getFirst(), organization.getFirst(), request);
         return ApiResponse.success(postRepository.save(post).getId());
     }
+
+    @Override
+    public ApiResponse<Long> modify(Long id, PostRequest request) {
+
+        return ApiResponse.success(1L);
+    }
 }
 

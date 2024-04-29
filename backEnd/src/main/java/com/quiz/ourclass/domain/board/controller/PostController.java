@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -38,7 +41,14 @@ public class PostController {
         @RequestParam("classId") Long classId, @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file)
         throws IOException {
-        Long id = postService.write(classId, file, request).getData();
-        return ResponseEntity.ok(ApiResponse.success(id));
+        Long postId = postService.write(classId, file, request).getData();
+        return ResponseEntity.ok(ApiResponse.success(postId));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> modify(@PathVariable Long id,
+        @RequestBody PostRequest request) {
+        Long postId = postService.modify(id, request).getData();
+        return ResponseEntity.ok(ApiResponse.success(postId));
     }
 }
