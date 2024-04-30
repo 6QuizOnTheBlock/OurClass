@@ -1,11 +1,13 @@
 package com.quiz.ourclass.domain.board.controller;
 
-import com.quiz.ourclass.domain.board.dto.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.sevice.PostService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +41,15 @@ public class PostController implements PostControllerDocs {
         Long postId = postService.modify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
-
+    
     @DeleteMapping(value = "{id}")
     public ResponseEntity<ResultResponse<?>> delete(@PathVariable(value = "id") Long id) {
         return ResponseEntity.ok(ResultResponse.success(postService.delete(id)));
+    }
+  
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ResultResponse<?>> detailView(@PathVariable(value = "id") Long id) {
+        PostDetailResponse response = postService.detailView(id);
+        return ResponseEntity.ok(ResultResponse.success(response));
     }
 }
