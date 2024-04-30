@@ -29,6 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
+import com.sixkids.designsystem.component.item.DisplayableMember
+import com.sixkids.designsystem.component.item.UlbanReportItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -37,7 +39,6 @@ import com.sixkids.model.Group
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.Report
 import com.sixkids.teacher.challenge.R
-import com.sixkids.teacher.challenge.detail.component.UlbanReportItem
 import com.sixkids.ui.util.formatToMonthDayTime
 import java.time.LocalDateTime
 
@@ -71,7 +72,7 @@ fun ChallengeDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -79,7 +80,7 @@ fun ChallengeDetailScreen(
                 Icon(
                     modifier = Modifier
                         .padding(start = 4.dp)
-                        .size(40.dp),
+                        .size(32.dp),
                     painter = painterResource(id = com.sixkids.designsystem.R.drawable.member),
                     tint = Color.Unspecified,
                     contentDescription = null
@@ -93,7 +94,7 @@ fun ChallengeDetailScreen(
                     style = UlbanTypography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }
-            Divider(modifier = Modifier.padding(vertical = 4.dp))
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
 
             if (uiState.challengeDetail.reportList.isEmpty()) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -109,12 +110,25 @@ fun ChallengeDetailScreen(
             } else {
                 LazyColumn(
                     state = listState,
-                    contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     items(uiState.challengeDetail.reportList) { report ->
                         UlbanReportItem(
-                            report = report,
+                            startDate = report.startDate,
+                            endDate = report.endDate,
+                            file = report.file,
+                            memberList = report.group.studentList.map {
+                                object : DisplayableMember {
+                                    override val name: String
+                                        get() = it.name
+                                    override val photo: String
+                                        get() = it.photo
+                                    override val isLeader: Boolean
+                                        get() = it.id == report.group.leaderId
+                                }
+                            },
+                            content = report.content,
+                            accepted = report.accepted,
                             onAccept = { },
                             onReject = { }
                         )

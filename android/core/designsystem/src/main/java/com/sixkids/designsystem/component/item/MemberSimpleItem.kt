@@ -1,4 +1,4 @@
-package com.sixkids.teacher.challenge.detail.component
+package com.sixkids.designsystem.component.item
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -16,14 +16,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.UlbanTypography
-import com.sixkids.model.MemberSimple
 
 
 @Composable
 fun MemberSimpleItem(
     modifier: Modifier = Modifier,
-    member: MemberSimple,
-    isLeader: Boolean = false
+    member: DisplayableMember,
 ) {
     Column(
         modifier = modifier,
@@ -40,7 +38,7 @@ fun MemberSimpleItem(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isLeader) {
+            if (member.isLeader) {
                 Image(
                     painter = painterResource(id = R.drawable.crown),
                     contentDescription = "리더 아이콘",
@@ -50,4 +48,10 @@ fun MemberSimpleItem(
             Text(text = member.name, style = UlbanTypography.bodySmall)
         }
     }
+}
+
+interface DisplayableMember {
+    val name: String
+    val photo: String
+    val isLeader: Boolean
 }
