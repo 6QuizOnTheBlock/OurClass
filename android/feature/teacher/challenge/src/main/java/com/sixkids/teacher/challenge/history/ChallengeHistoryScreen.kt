@@ -116,10 +116,10 @@ fun ChallengeHistoryScreen(
                     ) { challenge ->
                         UlbanChallengeItem(
                             title = challenge.title,
-                            description = challenge.description,
-                            startDate = challenge.startDate,
-                            endDate = challenge.endDate,
-                            userCount = challenge.userCount,
+                            description = challenge.content,
+                            startDate = challenge.startTime,
+                            endDate = challenge.endTime,
+                            userCount = challenge.headCount,
                         )
                     }
                 }
