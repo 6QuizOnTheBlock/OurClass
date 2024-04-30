@@ -1,9 +1,14 @@
 package com.quiz.ourclass.domain.board.sevice;
 
+import com.quiz.ourclass.domain.board.dto.CommentChildrenDTO;
+import com.quiz.ourclass.domain.board.dto.CommentDTO;
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
+import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
+import com.quiz.ourclass.domain.board.mapper.CommentMapper;
+import com.quiz.ourclass.domain.board.mapper.PostMapper;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
@@ -15,6 +20,7 @@ import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -30,11 +36,15 @@ public class PostServiceImpl implements PostService {
     private final ImageRepository imageRepository;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final UserAccessUtil userAccessUtil;
+    private final CommentMapper commentMapper;
+    private final PostMapper postMapper;
+
 
     @Transactional
     @Override
     public ResultResponse<Long> write(Long classId, MultipartFile file, PostRequest request)
         throws IOException {
+        //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
 
@@ -61,6 +71,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
         throws IOException {
+        //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();
 
@@ -104,8 +115,32 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ResultResponse<PostDetailResponse> detailView(Long id) {
-        PostDetailResponse response = null;
-        return ResultResponse.success(response);
+    public PostDetailResponse detailView(Long id) {
+        //게시글 조회
+        Post post = postRepository.fetchPostWithDetails(id);
+        if (post == null) { //게시글 없으면 예외처리
+            throw new GlobalException(ErrorCode.POST_NOT_FOUND);
+        }
+        //게시글에 해당하는 댓글 List 조회
+        List<Comment> comments = postRepository.fetchCommentsByPostId(id);
+        //댓글, 대댓글 필터 처리
+        List<CommentDTO> parentComments = buildParentComments(comments);
+        //게시글 mapping 작업
+        return postMapper.postToPostDetailResponse(post, parentComments);
+    }
+
+    private List<CommentDTO> buildParentComments(List<Comment> comments) {
+        return comments.stream()
+            .filter(c -> c.getParentId() == null)
+            .map(parentComment -> {
+                List<CommentChildrenDTO> children = comments.stream()
+                    .filter(c -> c.getParentId() != null && c.getParentId()
+                        .equals(parentComment.getId()))
+                    .map(commentMapper::commentToCommentChildrenDTO)
+                    .toList();
+
+                return commentMapper.commentToCommentDTOWithChildren(parentComment, children);
+            })
+            .toList();
     }
 }

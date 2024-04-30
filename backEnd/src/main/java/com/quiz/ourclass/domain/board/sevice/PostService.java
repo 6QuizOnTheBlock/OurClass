@@ -14,5 +14,5 @@ public interface PostService {
     ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
         throws IOException;
 
-    ResultResponse<PostDetailResponse> detailView(Long id);
+    PostDetailResponse detailView(Long id);
 }

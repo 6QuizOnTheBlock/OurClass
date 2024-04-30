@@ -41,9 +41,9 @@ public class PostController implements PostControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ResultResponse<?>> detailView(@PathVariable(value = "id") Long id) {
-        ResultResponse<PostDetailResponse> response = postService.detailView(id);
+        PostDetailResponse response = postService.detailView(id);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
 }
