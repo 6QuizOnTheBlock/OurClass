@@ -9,5 +9,5 @@ data class ChallengeDetailState(
     val challengeDetail: ChallengeDetail = ChallengeDetail(),
 ) : UiState
 
-sealed interface ChallengeDetailContract : SideEffect {
+sealed interface ChallengeDetailSideEffect : SideEffect {
 }

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.teacher.board.navigation.boardNavGraph
+import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 
 @Composable
@@ -55,11 +56,17 @@ fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
-                navigateToChallenge = navigator::navigateChallenge,
+                navigateToChallenge = navigator::navigateChallengeHistory,
             )
 
             boardNavGraph(
                 padding = innerPadding,
+            )
+
+            challengeNavGraph(
+                padding = innerPadding,
+                navigateChallengeDetail = navigator::navigateChallengeDetail,
+                navigateCreateChallenge = navigator::navigateCreateChallenge,
             )
         }
     }

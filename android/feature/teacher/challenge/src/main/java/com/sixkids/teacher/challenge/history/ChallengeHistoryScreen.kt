@@ -38,9 +38,8 @@ import com.sixkids.ui.util.formatToMonthDayTime
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
-    padding: PaddingValues,
-    navigateToDetail: (Int) -> Unit = {},
-    navigateToCreate: () -> Unit = {},
+    navigateToDetail: (Int) -> Unit,
+    navigateToCreate: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -54,16 +53,16 @@ fun ChallengeRoute(
     }
 
     ChallengeHistoryScreen(
-        padding = padding,
         uiState = uiState,
-        navigateToDetail = navigateToDetail,
+        navigateToDetail = { challengeId ->
+            viewModel.navigateChallengeDetail(challengeId)
+        },
         navigateToCreate = navigateToCreate
     )
 }
 
 @Composable
 fun ChallengeHistoryScreen(
-    padding: PaddingValues,
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
     navigateToDetail: (Int) -> Unit = {},
     navigateToCreate: () -> Unit = {},
@@ -78,7 +77,6 @@ fun ChallengeHistoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
     ) {
         val currentChallenge = uiState.currentChallenge
         if (currentChallenge == null) {
@@ -149,6 +147,7 @@ fun ChallengeHistoryScreen(
                             startDate = challenge.startTime,
                             endDate = challenge.endTime,
                             userCount = challenge.headCount,
+                            onClick = { navigateToDetail(challenge.id) }
                         )
                     }
                 }
@@ -164,8 +163,6 @@ fun ChallengeHistoryScreen(
 @Composable
 fun MyPageDefaultScreenPreview() {
     UlbanTheme {
-        ChallengeHistoryScreen(
-            padding = PaddingValues(0.dp),
-        )
+        ChallengeHistoryScreen()
     }
 }
