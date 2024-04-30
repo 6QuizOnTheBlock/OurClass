@@ -41,6 +41,9 @@ coil = "2.4.0"
 kakao = "2.20.1"
 
 
+#Paging
+paging = "3.2.1"
+paging-compose = "3.3.0-beta01"
 
 [libraries]
 # Dependencies of the included build-logic
@@ -95,6 +98,10 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 kakao-sdk = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao" }
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
 
+#Paging
+paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -116,6 +123,7 @@ sixkids-android-hilt = { id = "sixkids.android.hilt", version = "unspecified" }
 [bundles]
 compose = ["androidx-activity-compose", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-ui-test-junit4", "androidx-material3", "androidx-navigation-compose", "androidx-hilt-navigation-compose", "androidx-lifecycle-compose"]
 compose-debug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
+paging = ["paging", "paging-compose"]
 
 # Networking Bundle
 retrofit = ["retrofit", "moshi-converter", "moshi-kotlin", "okhttp", "okhttp-logginginterceptor"]
