@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
+import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ChallengeService {
@@ -13,4 +14,6 @@ public interface ChallengeService {
     long createChallenge(ChallengeRequest challengeRequest);
 
     long createReport(ReportRequest reportRequest, MultipartFile file);
+
+    void confirmReport(long id, ReportType reportType);
 }

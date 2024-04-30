@@ -8,6 +8,7 @@ import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
 import com.quiz.ourclass.domain.challenge.entity.GroupMember;
 import com.quiz.ourclass.domain.challenge.entity.Report;
+import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.challenge.mapper.ChallengeGroupMapper;
 import com.quiz.ourclass.domain.challenge.mapper.ChallengeMapper;
 import com.quiz.ourclass.domain.challenge.mapper.ReportMapper;
@@ -98,5 +99,15 @@ public class ChallengeServiceImpl implements ChallengeService {
         report.setChallengeGroup(group);
         report.setCreateTime(LocalDateTime.now());
         return reportRepository.save(report).getId();
+    }
+
+    @Transactional
+    @Override
+    public void confirmReport(long id, ReportType reportType) {
+        //TODO: 해당 학급 선생권한 체크 필요
+        Report report = reportRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.REPORT_NOW_FOUND));
+        report.setAcceptStatus(reportType);
+        reportRepository.save(report);
     }
 }

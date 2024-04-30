@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.challenge.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,5 +25,6 @@ public class Report {
     String content;
     String file;
     LocalDateTime createTime;
-    boolean acceptStatus;
+    @Enumerated(EnumType.STRING)
+    ReportType acceptStatus;
 }
