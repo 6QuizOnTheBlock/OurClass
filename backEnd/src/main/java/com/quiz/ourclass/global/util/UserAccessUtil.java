@@ -18,6 +18,7 @@ public class UserAccessUtil {
     private final MemberRepository memberRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
 
+    //유저 정보 가져오기
     public Member getMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -25,6 +26,7 @@ public class UserAccessUtil {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
+    //유저가 단체에 속해있는지 유효성 검사
     public MemberOrganization isMemberOfOrganization(Member member, Long orgId) {
         return memberOrganizationRepository.findByMemberIdAndOrganizationId(member.getId(), orgId)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));

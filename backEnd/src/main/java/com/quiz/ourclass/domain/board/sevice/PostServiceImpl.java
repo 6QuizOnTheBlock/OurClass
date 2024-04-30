@@ -116,6 +116,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post).getId();
     }
 
+    @Transactional
     @Override
     public Boolean delete(Long id) {
         //학생은 학생이 작성한 게시글만 삭제 가능
@@ -153,10 +154,10 @@ public class PostServiceImpl implements PostService {
 
     private List<CommentDTO> buildParentComments(List<Comment> comments) {
         return comments.stream()
-            .filter(c -> c.getParentId() == null)
+            .filter(c -> c.getParentId() == 0L)
             .map(parentComment -> {
                 List<CommentChildrenDTO> children = comments.stream()
-                    .filter(c -> c.getParentId() != null && c.getParentId()
+                    .filter(c -> c.getParentId() != 0L && c.getParentId()
                         .equals(parentComment.getId()))
                     .map(commentMapper::commentToCommentChildrenDTO)
                     .toList();

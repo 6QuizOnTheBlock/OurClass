@@ -1,11 +1,14 @@
 package com.quiz.ourclass.domain.member.entity;
 
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +23,8 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+    @OneToMany(mappedBy = "member")
+    List<MemberOrganization> memberOrganizations;
     String email;
     String name;
     String profileImage;
