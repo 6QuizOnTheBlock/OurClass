@@ -8,7 +8,6 @@ public record MemberSimpleDTO(
     @Schema(description = "자식 댓글 작성자 정보", example = "차성원")
     String name,
     @Schema(description = "자식 댓글 작성자 정보", example = "www.photo.com")
-    String photo
 ) {
 
 }

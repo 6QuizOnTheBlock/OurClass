@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +46,15 @@ public interface PostControllerDocs {
         @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException;
 
-    @Operation(summary = "게시글 상세 조회", description = "path 입력으로 들어온 게시글 PK 값 기준으로 게시글 상세조회 합니다. (댓글 포함)")
+    @Operation(summary = "게시글 삭제", description = "path 입력으로 들어온 게시글 PK 값 기준으로 게시글을 삭제합니다.")
+    @ApiResponse(responseCode = "200", description = "(message : \"Success\", code : 200)",
+        content = @Content(schema = @Schema(implementation = Boolean.class)))
+    @ApiResponse(responseCode = "403", description = "(message : \"멤버가 작성한 게시글을 찾을 수 없습니다.\", code : 403)", content = @Content)
+    @ApiResponse(responseCode = "404", description = "(message : \"게시글을 찾을 수 없습니다.\", code : 404)", content = @Content)
+    @DeleteMapping(value = "{id}")
+    ResponseEntity<ResultResponse<?>> delete(@PathVariable(value = "id") Long id);
+
+      @Operation(summary = "게시글 상세 조회", description = "path 입력으로 들어온 게시글 PK 값 기준으로 게시글 상세조회 합니다. (댓글 포함)")
     @ApiResponse(responseCode = "200", description = "(message : \"Success\", code : 200)",
         content = @Content(schema = @Schema(implementation = PostDetailResponse.class)))
     @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\", code : 404)", content = @Content)

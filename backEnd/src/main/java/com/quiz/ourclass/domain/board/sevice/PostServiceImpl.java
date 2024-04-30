@@ -13,8 +13,8 @@ import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
-import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public ResultResponse<Long> write(Long classId, MultipartFile file, PostRequest request)
+    public Long write(Long classId, MultipartFile file, PostRequest request)
         throws IOException {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //멤버가 존재하는지 확인
@@ -66,12 +66,12 @@ public class PostServiceImpl implements PostService {
         }
         //게시글 저장하기
         Post post = new Post(member, memberOrganization.getOrganization(), image, request);
-        return ResultResponse.success(postRepository.save(post).getId());
+        return postRepository.save(post).getId();
     }
 
     @Transactional
     @Override
-    public ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
+    public Long modify(Long id, MultipartFile file, PostRequest request)
         throws IOException {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //게시글을 수정할 수 있는 멤버인지 검증
@@ -113,7 +113,27 @@ public class PostServiceImpl implements PostService {
         post.setContent(request.getContent());
         post.setSecretStatus(request.getAnonymous());
 
-        return ResultResponse.success(postRepository.save(post).getId());
+        return postRepository.save(post).getId();
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        //학생은 학생이 작성한 게시글만 삭제 가능
+        //교사는 모든 게시글 삭제 가능
+        Member member = userAccessUtil.getMember();
+        Post post = null;
+        if (member.getRole() == Role.STUDENT) {
+            post = postRepository.findByIdAndAuthor(id, member)
+                .orElseThrow(() -> new GlobalException(ErrorCode.POST_EDIT_PERMISSION_DENIED));
+        } else if (member.getRole() == Role.TEACHER || member.getRole() == Role.ADMIN) {
+            post = postRepository.findById(id)
+                .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
+        }
+        if (post == null) {
+            throw new GlobalException(ErrorCode.POST_NOT_FOUND);
+        }
+        postRepository.delete(post);
+        return true;
     }
 
     @Override
