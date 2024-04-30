@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +35,7 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.designsystem.theme.component.progressbar.StudentProgressBar
+import com.sixkids.designsystem.theme.npsFont
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -107,6 +110,7 @@ enum class ContentAligment {
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
+    imageModifier: Modifier = Modifier,
     contentAligment: ContentAligment,
     cardColor: Color,
     contentName: String,
@@ -137,17 +141,20 @@ fun ContentCard(
                     Image(
                         painter = painterResource(id = contentImageId),
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = imageModifier
+                            .fillMaxHeight()
                             .aspectRatio(1f)
                     )
                     if (runningState == null) {
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp),
-                            textAlign = TextAlign.Center,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Black
+                                .padding(20.dp)
+                                .wrapContentHeight(),
+                            textAlign = TextAlign.Start,
+                            fontSize = 34.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = npsFont
                         )
                     } else {
                         RunningText(
@@ -161,10 +168,12 @@ fun ContentCard(
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp),
-                            textAlign = TextAlign.Center,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Black
+                                .padding(20.dp)
+                                .wrapContentHeight(),
+                            textAlign = TextAlign.Start,
+                            fontSize = 34.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = npsFont
                         )
                     } else {
                         RunningText(
@@ -175,7 +184,7 @@ fun ContentCard(
                     Image(
                         painter = painterResource(id = contentImageId),
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = imageModifier
                             .fillMaxHeight()
                             .aspectRatio(1f)
                     )
@@ -219,12 +228,14 @@ fun RunningText(
         Text(
             text = boldText,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontFamily = npsFont
         )
         Text(
             modifier = Modifier.padding(top = 10.dp),
             text = normalText,
             fontSize = 14.sp,
+            fontFamily = npsFont
         )
     }
 
@@ -262,9 +273,10 @@ fun RankCard(
                 contentDescription = null,
             )
             Text(
-                text = "랭크",
+                text = "랭킹",
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Black
+                fontWeight = FontWeight.Medium,
+                fontFamily = npsFont
             )
         }
     }
