@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.item
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -36,18 +37,22 @@ fun UlbanChallengeItem(
     startDate: LocalDateTime,
     endDate: LocalDateTime,
     userCount: Int,
-    color: Color = Cream
+    color: Color = Cream,
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
         colors = CardDefaults.cardColors(
             containerColor = color
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
         ),
-        shape = CardDefaults.outlinedShape
+        shape = CardDefaults.outlinedShape,
     ) {
         Column(
             modifier = modifier.padding(
