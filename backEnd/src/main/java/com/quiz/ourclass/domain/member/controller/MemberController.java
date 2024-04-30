@@ -27,16 +27,16 @@ public class MemberController implements MemberControllerDocs {
     /*  1. 회원가입   */
     @PostMapping("/")
 
-    public ResponseEntity<ApiResponse<?>> signUp (@RequestBody MemberSignUpRequest request)  {
+    public ResponseEntity<ResultResponse<?>> signUp (@RequestBody MemberSignUpRequest request)  {
 
         System.out.println(request.getEmail() + " " + request.getName()+ " " + request.getSocialType());
 
-        return ResponseEntity.ok(ApiResponse.success(memberService.signUpProcess(request)));
+        return ResponseEntity.ok(ResultResponse.success(memberService.signUpProcess(request)));
     }
 
     /*  2. 추가정보 받기   */
     @PatchMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<?>>  setUpInfo (@AuthenticationPrincipal UserDetailsImpl userDetails, MemberAdditionalInfoRequest request){
+    public ResponseEntity<ResultResponse<?>>  setUpInfo (@AuthenticationPrincipal UserDetailsImpl userDetails, MemberAdditionalInfoRequest request){
 
         memberService.addingInfoProcess(userDetails, request);
 
@@ -46,7 +46,7 @@ public class MemberController implements MemberControllerDocs {
     /*  3. 로그인    */
     @PostMapping("/sign-in")
 
-    public ResponseEntity<ApiResponse<?>>  signIn (@RequestBody MemberSignInRequest request) {
+    public ResponseEntity<ResultResponse<?>>  signIn (@RequestBody MemberSignInRequest request) {
 
         return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
