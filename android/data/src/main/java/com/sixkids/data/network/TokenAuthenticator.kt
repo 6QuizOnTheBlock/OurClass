@@ -33,13 +33,13 @@ class TokenAuthenticator @Inject constructor(
             )
 
             // 2-1. 정상적으로 받지 못하면 request token 까지 만료된 것.
-            if(tokenResponse.isFailure || tokenResponse.getOrNull == null) {
+            if(tokenResponse.isFailure || tokenResponse.getOrNull() == null) {
                 tokenRepository.clearTokens()
                 null
             } else {
                 // 3. 헤더에 토큰을 교체한 request 생성
                 response.request.newBuilder()
-                    .header(AUTHORIZATION_HEADER, "$TOKEN_TYPE ${tokenResponse.getOrNull.accessToken}")
+                    .header(AUTHORIZATION_HEADER, "$TOKEN_TYPE ${tokenResponse.getOrNull()!!.accessToken}")
                     .build()
             }
         }
