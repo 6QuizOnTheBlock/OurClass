@@ -1,5 +1,6 @@
 package com.sixkids.feature.navigator
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
@@ -10,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.home.navigation.HomeRoute
+import com.sixkids.teacher.home.navigation.navigateChallenge
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
 
@@ -55,6 +57,10 @@ class MainNavigator(
 
     fun navigateRank(){
         navController.navigateRank()
+    }
+
+    fun navigateChallenge() {
+        navController.navigateChallenge()
     }
 
     @Composable
