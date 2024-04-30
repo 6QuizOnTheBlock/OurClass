@@ -36,6 +36,7 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Challenge
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
