@@ -4,7 +4,6 @@ import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
-import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
@@ -14,7 +13,6 @@ import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.UserDetailsImpl;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,18 +46,15 @@ public class MemberService {
         MemberAdditionalInfoRequest request) {
         Member member = userDetails.getMember();
 
-        try {
-            member.setProfileImage(awsS3ObjectStorage.uploadFile(request.getFile()));
-        } catch (IOException e) {
-            throw new GlobalException(ErrorCode.AWS_SERVER_ERROR);
-        }
+        member.setProfileImage(awsS3ObjectStorage.uploadFile(request.getFile()));
+
         member.setRole(request.getRole().equals("teacher") ? Role.TEACHER : Role.STUDENT);
         memberRepository.save(member);
     }
 
 
-    public  TokenDTO signInProcess(MemberSignInRequest request) {
-        if(!memberRepository.existsByEmail(request.getEmail())){
+    public TokenDTO signInProcess(MemberSignInRequest request) {
+        if (!memberRepository.existsByEmail(request.getEmail())) {
             throw new GlobalException(ErrorCode.NOT_FOUND_MEMBER);
         } else {
             Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow();
@@ -70,7 +65,7 @@ public class MemberService {
         }
     }
 
-    private SocialType checkSocialType (String socialType){
+    private SocialType checkSocialType(String socialType) {
         return switch (socialType) {
             case "kakao", "KAKAO" -> SocialType.KAKAO;
             case "google", "GOOGLE" -> SocialType.GOOGLE;

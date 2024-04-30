@@ -19,7 +19,6 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.UserAccessUtil;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +43,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long write(Long classId, MultipartFile file, PostRequest request)
-        throws IOException {
+    public Long write(Long classId, MultipartFile file, PostRequest request) {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
@@ -71,8 +69,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long modify(Long id, MultipartFile file, PostRequest request)
-        throws IOException {
+    public Long modify(Long id, MultipartFile file, PostRequest request) {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();

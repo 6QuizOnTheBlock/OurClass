@@ -4,7 +4,6 @@ import com.quiz.ourclass.domain.board.dto.request.PostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.sevice.PostService;
 import com.quiz.ourclass.global.dto.ResultResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +28,7 @@ public class PostController implements PostControllerDocs {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResultResponse<?>> write(
         @RequestParam("classId") Long classId, @RequestPart(value = "request") PostRequest request,
-        @RequestPart(value = "file", required = false) MultipartFile file)
-        throws IOException {
+        @RequestPart(value = "file", required = false) MultipartFile file) {
         Long postId = postService.write(classId, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
@@ -38,7 +36,7 @@ public class PostController implements PostControllerDocs {
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResultResponse<?>> modify(@PathVariable(value = "id") Long id,
         @RequestPart(value = "request") PostRequest request,
-        @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
+        @RequestPart(value = "file", required = false) MultipartFile file) {
         Long postId = postService.modify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
@@ -49,7 +47,8 @@ public class PostController implements PostControllerDocs {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ResultResponse<?>> detailView(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ResultResponse<?>> detailView(
+        @PathVariable(value = "id") Long id) {
         PostDetailResponse response = postService.detailView(id);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
