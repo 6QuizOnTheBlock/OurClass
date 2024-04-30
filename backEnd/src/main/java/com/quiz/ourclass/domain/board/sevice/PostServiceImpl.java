@@ -8,7 +8,6 @@ import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
-import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -33,7 +32,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public ResultResponse<Long> write(Long classId, MultipartFile file, PostRequest request)
+    public Long write(Long classId, MultipartFile file, PostRequest request)
         throws IOException {
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
@@ -54,12 +53,12 @@ public class PostServiceImpl implements PostService {
         }
         //게시글 저장하기
         Post post = new Post(member, memberOrganization.getOrganization(), image, request);
-        return ResultResponse.success(postRepository.save(post).getId());
+        return postRepository.save(post).getId();
     }
 
     @Transactional
     @Override
-    public ResultResponse<Long> modify(Long id, MultipartFile file, PostRequest request)
+    public Long modify(Long id, MultipartFile file, PostRequest request)
         throws IOException {
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();
@@ -100,11 +99,11 @@ public class PostServiceImpl implements PostService {
         post.setContent(request.getContent());
         post.setSecretStatus(request.getAnonymous());
 
-        return ResultResponse.success(postRepository.save(post).getId());
+        return postRepository.save(post).getId();
     }
 
     @Override
-    public ResultResponse<Boolean> delete(Long id) {
+    public Boolean delete(Long id) {
         //학생은 학생이 작성한 게시글만 삭제 가능
         //교사는 모든 게시글 삭제 가능
         Member member = userAccessUtil.getMember();
@@ -120,6 +119,6 @@ public class PostServiceImpl implements PostService {
             throw new GlobalException(ErrorCode.POST_NOT_FOUND);
         }
         postRepository.delete(post);
-        return ResultResponse.success(true);
+        return true;
     }
 }

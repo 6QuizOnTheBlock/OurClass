@@ -28,7 +28,7 @@ public class PostController implements PostControllerDocs {
         @RequestParam("classId") Long classId, @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file)
         throws IOException {
-        Long postId = postService.write(classId, file, request).getData();
+        Long postId = postService.write(classId, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
@@ -36,12 +36,12 @@ public class PostController implements PostControllerDocs {
     public ResponseEntity<ResultResponse<?>> modify(@PathVariable(value = "id") Long id,
         @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
-        Long postId = postService.modify(id, file, request).getData();
+        Long postId = postService.modify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<ResultResponse<?>> delete(@PathVariable(value = "id") Long id) {
-        return ResponseEntity.ok(postService.delete(id));
+        return ResponseEntity.ok(ResultResponse.success(postService.delete(id)));
     }
 }
