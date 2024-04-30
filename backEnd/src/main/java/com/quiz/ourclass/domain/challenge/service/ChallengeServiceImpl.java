@@ -94,7 +94,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         }
         Report report = reportMapper.reportRequestToReport(reportRequest);
         ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
-            .orElseThrow();
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
         report.setFile(fileUrl);
         report.setChallengeGroup(group);
         report.setCreateTime(LocalDateTime.now());
