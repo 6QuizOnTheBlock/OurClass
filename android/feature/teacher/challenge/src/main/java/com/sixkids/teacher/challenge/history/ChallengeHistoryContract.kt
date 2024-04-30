@@ -13,6 +13,6 @@ data class ChallengeHistoryState(
 ) : UiState
 
 sealed interface ChallengeHistoryEffect : SideEffect {
-    data object NavigateToChallengeDetail : ChallengeHistoryEffect
+    data class NavigateToChallengeDetail(val detailId: Int) : ChallengeHistoryEffect
     data object NavigateToCreateChallenge : ChallengeHistoryEffect
 }

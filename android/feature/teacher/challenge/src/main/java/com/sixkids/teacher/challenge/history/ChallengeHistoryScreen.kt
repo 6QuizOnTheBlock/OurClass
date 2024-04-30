@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -23,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
 import com.sixkids.designsystem.component.item.UlbanChallengeItem
@@ -31,6 +34,32 @@ import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+
+@Composable
+fun ChallengeRoute(
+    viewModel: ChallengeHistoryViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    navigateToDetail: (Int) -> Unit = {},
+    navigateToCreate: () -> Unit = {},
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(sideEffect.detailId)
+                ChallengeHistoryEffect.NavigateToCreateChallenge -> navigateToCreate()
+            }
+        }
+    }
+
+    ChallengeHistoryScreen(
+        padding = padding,
+        uiState = uiState,
+        navigateToDetail = navigateToDetail,
+        navigateToCreate = navigateToCreate
+    )
+}
 
 @Composable
 fun ChallengeHistoryScreen(
