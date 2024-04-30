@@ -8,11 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
 public class Comment {
 
@@ -21,8 +17,6 @@ public class Comment {
     long id;
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
-    Post post;
     String content;
     LocalDateTime createTime;
     LocalDateTime updateTime;

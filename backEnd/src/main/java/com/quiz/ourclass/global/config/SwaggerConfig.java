@@ -5,7 +5,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,10 +69,6 @@ public class SwaggerConfig {
         return new OpenAPI()
             .components(components)
             .addSecurityItem(addSecurityItem)
-            .addServersItem(new Server().url("https://k10d107.p.ssafy.io/api")
-                .description("Default Server URL"))
-            .addServersItem(new Server().url("http://localhost:8080/api")
-                .description("Local Development Server"))
             .info(info);
     }
 }
