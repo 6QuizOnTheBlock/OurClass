@@ -9,6 +9,7 @@ import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
 import com.quiz.ourclass.domain.board.mapper.PostMapper;
+import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
@@ -33,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final UserAccessUtil userAccessUtil;
@@ -122,7 +124,7 @@ public class PostServiceImpl implements PostService {
             throw new GlobalException(ErrorCode.POST_NOT_FOUND);
         }
         //게시글에 해당하는 댓글 List 조회
-        List<Comment> comments = postRepository.fetchCommentsByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostId(id);
         //댓글, 대댓글 필터 처리
         List<CommentDTO> parentComments = buildParentComments(comments);
         //게시글 mapping 작업
