@@ -20,10 +20,10 @@ android {
             localProperties.load(localPropertiesFile.inputStream())
         }
 
-        val nativeAppKey = localProperties.getProperty("kakao_app_key_cus") ?: ""
+        val nativeAppKey = localProperties.getProperty("KAKAO_NATIVE_APP_KEY") ?: ""
         manifestPlaceholders["NATIVE_APP_KEY"] = nativeAppKey
 
-        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getProperty("KAKAO_APP_KEY"))
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${nativeAppKey}\"")
     }
 
     buildFeatures{
