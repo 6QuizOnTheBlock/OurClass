@@ -1,5 +1,6 @@
 package com.sixkids.feature.navigator
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
@@ -13,6 +14,7 @@ import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.home.navigation.HomeRoute
+import com.sixkids.teacher.home.navigation.navigateChallenge
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
 import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
@@ -71,7 +73,7 @@ class MainNavigator(
                 inclusive = true
             }
         }
-        
+
     /**
      * SignIn Navigation
      */
@@ -81,6 +83,10 @@ class MainNavigator(
 
     fun navigateSignUp(){
         navController.navigateSignUp()
+    }
+
+    fun navigateChallenge() {
+        navController.navigateChallenge()
     }
 
     @Composable

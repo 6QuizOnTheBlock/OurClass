@@ -57,6 +57,7 @@ fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
+                navigateToChallenge = navigator::navigateChallenge,
             )
 
             boardNavGraph(
