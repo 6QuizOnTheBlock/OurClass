@@ -1,3 +1,4 @@
+import com.sixkids.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
@@ -17,6 +18,8 @@ class FeatureComposeConventionPlugin: Plugin<Project> {
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:designsystem"))
                 "implementation"(project(":domain"))
+                "implementation"(libs.findLibrary("coil-compose").get())
+
             }
         }
     }
