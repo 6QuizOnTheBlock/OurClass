@@ -2,20 +2,22 @@ package com.quiz.ourclass.domain.member.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-public class MemberSigninRequest {
+@NoArgsConstructor
+public class MemberSignInRequest {
 
     private String email;
 
 
-    private MemberSigninRequest (String email) {
+    private MemberSignInRequest (String email) {
         this.email = email;
     }
 
 
-    public static MemberSigninRequest of (String email) {
+    public static MemberSignInRequest of (String email) {
         return builder().email(email).build();
     }
 }
