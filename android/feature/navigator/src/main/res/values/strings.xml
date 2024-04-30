@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_navigation_tab_label_home">홈</string>
+    <string name="bottom_navigation_tab_label_board">게시판</string>
+    <string name="bottom_navigation_tab_label_manage_student">학생관리</string>
+    <string name="bottom_navigation_tab_label_manage_class">학급관리</string>
+</resources>
