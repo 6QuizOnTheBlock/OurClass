@@ -45,10 +45,6 @@ kakao = "2.20.1"
 #Paging
 paging = "3.2.1"
 paging-compose = "3.3.0-beta01"
-pagingCommonAndroid = "3.3.0-beta01"
-#Paging
-paging = "3.2.1"
-paging-compose = "3.3.0-beta01"
 
 [libraries]
 # Dependencies of the included build-logic
@@ -112,6 +108,7 @@ paging-common = { group = "androidx.paging", name = "paging-common", version.ref
 #Paging
 paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
+paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
