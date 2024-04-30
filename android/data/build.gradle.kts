@@ -13,6 +13,7 @@ dependencies {
 
     implementation(libs.bundles.retrofit)
     implementation(libs.datastore)
+    implementation(libs.paging)
 
     testImplementation(libs.junit)
 }

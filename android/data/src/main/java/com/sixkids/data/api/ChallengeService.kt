@@ -11,6 +11,5 @@ interface ChallengeService {
         @Query("orgId") organizationId: Int,
         @Query("memberId") memberId: Int? = null,
         @Query("page") page: Int,
-        @Query("size") size: Int = 10,
     ): ApiResult<ChallengeHistoryResponse>
 }
