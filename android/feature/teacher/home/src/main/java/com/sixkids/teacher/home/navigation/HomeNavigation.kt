@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.home.main.HomeMainRoute
 import com.sixkids.teacher.home.rank.RankRoute
 
@@ -15,10 +14,6 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 
 fun NavController.navigateRank() {
     navigate(HomeRoute.rankRoute)
-}
-
-fun NavController.navigateChallenge() {
-    navigate(HomeRoute.challengeRoute)
 }
 
 fun NavGraphBuilder.homeNavGraph(
@@ -43,8 +38,6 @@ fun NavGraphBuilder.homeNavGraph(
         )
     }
 }
-
-
 
 object HomeRoute {
     const val defaultRoute = "home"
