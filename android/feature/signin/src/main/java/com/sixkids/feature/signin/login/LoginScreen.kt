@@ -1,5 +1,6 @@
 package com.sixkids.feature.signin.login
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
@@ -49,11 +50,11 @@ import com.sixkids.signin.R
 import com.sixkids.ui.extension.collectWithLifecycle
 import kotlinx.coroutines.delay
 
+private const val TAG = "HONG"
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-    onShowSnackBar: (String) -> Unit,
-    navigateToHome: () -> Unit,
+//    navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit
 ) {
     val context = LocalContext.current
@@ -67,16 +68,33 @@ fun LoginRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is LoginEffect.ShowSnackBar -> onShowSnackBar(sideEffect.message)
-            LoginEffect.NavigateToSignUp -> navigateToSignUp()
-            LoginEffect.NavigateToHome -> navigateToHome()
+            is LoginEffect.NavigateToSignUp -> navigateToSignUp()
+//            LoginEffect.NavigateToHome -> navigateToHome()
         }
     }
+
+    LoginScreen(
+        uiState = uiState,
+        onLoginClick = {
+            KakaoManager.login(
+                context = context,
+                onSuccess = { token ->
+                    viewModel.login("1", "1")
+                },
+                onFailed = {
+                    Log.d(TAG, "LoginRoute: ${it?.message}")
+                    Exception()
+                }
+            )
+        }
+
+    )
 }
 
 @Composable
 fun LoginScreen(
     uiState: LoginState = LoginState(),
+    onLoginClick: () -> Unit = {},
 ) {
     var animationStart by remember {
         mutableStateOf(false)
@@ -193,40 +211,44 @@ fun LoginScreen(
                     .padding(0.dp, 0.dp, 20.dp, 0.dp)
             )
 
+            Spacer(modifier = Modifier.weight(1f))
 
+            LogInButton(onLoginClick)
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.weight(1f)) // "울반" 텍스트와 버튼 사이의 공간을 추가합니다.
-
-            // 하단에 버튼을 위치시킵니다.
-            Button(
-                onClick = { /* TODO: Implement click action */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp, 40.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFEE500)
-                )
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.kakao), // Replace with the actual drawable resource ID
-                        contentDescription = "Icon",
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(Modifier.width(8.dp)) // Space between icon and text
-                    Text(
-                        text = "5초 만에 카카오로 시작하기",
-                        style = UlbanTypography.bodyMedium.copy(),
-                        color = Color.Black,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
+@Composable
+fun LogInButton(
+    onClick: () -> Unit,
+){
+    Button(
+        onClick = { onClick() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp, 40.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFFFEE500)
+        )
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.kakao), // Replace with the actual drawable resource ID
+                contentDescription = "Icon",
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(Modifier.width(8.dp)) // Space between icon and text
+            Text(
+                text = "5초 만에 카카오로 시작하기",
+                style = UlbanTypography.bodyMedium.copy(),
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
