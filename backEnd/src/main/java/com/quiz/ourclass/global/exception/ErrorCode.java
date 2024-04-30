@@ -36,6 +36,10 @@ public enum ErrorCode {
 
     //organization
     ORGANIZATION_NOT_FOUND(HttpStatus.NOT_FOUND, "학급을 찾을 수 없습니다."),
+
+    //challenge
+    REPORT_NOW_FOUND(HttpStatus.NOT_FOUND, "레포트를 찾을 수 없습니다."),
+    CHALLENGE_GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus status;
