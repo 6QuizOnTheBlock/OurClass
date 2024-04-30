@@ -1,12 +1,11 @@
 package com.quiz.ourclass.domain.member.controller;
 
-import com.amazonaws.Response;
 import com.quiz.ourclass.domain.member.controller.docs.MemberControllerDocs;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
-import com.quiz.ourclass.global.dto.ApiResponse;
+import com.quiz.ourclass.global.dto.ResultResponse;
 import com.quiz.ourclass.global.util.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -27,6 +26,7 @@ public class MemberController implements MemberControllerDocs {
 
     /*  1. 회원가입   */
     @PostMapping("/")
+
     public ResponseEntity<ApiResponse<?>> signUp (@RequestBody MemberSignUpRequest request)  {
 
         System.out.println(request.getEmail() + " " + request.getName()+ " " + request.getSocialType());
@@ -40,14 +40,15 @@ public class MemberController implements MemberControllerDocs {
 
         memberService.addingInfoProcess(userDetails, request);
 
-        return ResponseEntity.ok(ApiResponse.success("추가정보 기입에 성공했습니다."));
+        return ResponseEntity.ok(ResultResponse.success("추가정보 기입에 성공했습니다."));
     }
 
     /*  3. 로그인    */
     @PostMapping("/sign-in")
+
     public ResponseEntity<ApiResponse<?>>  signIn (@RequestBody MemberSignInRequest request) {
 
-        return ResponseEntity.ok(ApiResponse.success(memberService.signInProcess(request)));
+        return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
 
 }
