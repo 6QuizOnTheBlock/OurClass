@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(projects.feature.teacher.home)
     implementation(projects.feature.teacher.board)
+    implementation(projects.feature.signin)
 }

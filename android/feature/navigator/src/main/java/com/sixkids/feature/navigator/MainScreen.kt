@@ -26,6 +26,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import com.sixkids.designsystem.theme.Cream
+import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 
@@ -59,6 +60,10 @@ fun MainScreen(
 
             boardNavGraph(
                 padding = innerPadding,
+            )
+
+            signInNavGraph(
+                navigateToSignUp = navigator::navigateSignUp,
             )
         }
     }
