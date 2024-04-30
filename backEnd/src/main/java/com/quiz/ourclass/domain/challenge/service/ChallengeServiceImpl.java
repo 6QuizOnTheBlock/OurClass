@@ -97,6 +97,7 @@ public class ChallengeServiceImpl implements ChallengeService {
             .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
         report.setFile(fileUrl);
         report.setChallengeGroup(group);
+        report.setAcceptStatus(ReportType.BEFORE);
         report.setCreateTime(LocalDateTime.now());
         return reportRepository.save(report).getId();
     }
