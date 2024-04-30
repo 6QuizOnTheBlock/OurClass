@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "base_url"
+    private const val BASE_URL = "https://k10d107.p.ssafy.io/api/"
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class PublicOkHttpClient
