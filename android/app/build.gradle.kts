@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.sixkids.android.application)
@@ -13,6 +14,20 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        val nativeAppKey = localProperties.getProperty("kakao_app_key_cus") ?: ""
+        manifestPlaceholders["NATIVE_APP_KEY"] = nativeAppKey
+
+        buildConfigField("String", "KAKAO_NATIVE_APP_KEY", getProperty("KAKAO_APP_KEY"))
+    }
+
+    buildFeatures{
+        buildConfig = true
     }
 }
 
