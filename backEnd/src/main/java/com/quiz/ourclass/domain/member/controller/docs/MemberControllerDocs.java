@@ -2,8 +2,8 @@ package com.quiz.ourclass.domain.member.controller.docs;
 
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
-import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
 import com.quiz.ourclass.global.dto.ApiResponse;
 import com.quiz.ourclass.global.util.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,5 +48,5 @@ public interface MemberControllerDocs {
             )
         })
     @PostMapping
-    public ResponseEntity<ApiResponse<?>>  signIn (MemberSigninRequest request);
+    public ResponseEntity<ApiResponse<?>>  signIn (MemberSignInRequest request);
 }

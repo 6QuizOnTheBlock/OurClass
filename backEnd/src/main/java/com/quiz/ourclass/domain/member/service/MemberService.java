@@ -2,9 +2,9 @@ package com.quiz.ourclass.domain.member.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.quiz.ourclass.domain.member.dto.request.MemberAdditionalInfoRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
-import com.quiz.ourclass.domain.member.dto.request.MemberSigninRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
@@ -62,7 +62,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public  TokenDTO signInProcess(MemberSigninRequest request) {
+    public  TokenDTO signInProcess(MemberSignInRequest request) {
         if(!memberRepository.existsByEmail(request.getEmail())){
             throw new GlobalException(ErrorCode.NOT_FOUND_MEMBER);
         } else {
@@ -77,6 +77,9 @@ public class MemberService {
 
 
     private SocialType checkSocialType (String socialType){
+
+
+
         return switch (socialType) {
             case "kakao", "KAKAO" -> SocialType.KAKAO;
             case "google", "GOOGLE" -> SocialType.GOOGLE;
