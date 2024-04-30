@@ -1,6 +1,8 @@
 package com.sixkids.data.di
 
 import com.sixkids.data.repository.TokenRepositoryImpl
+import com.sixkids.data.repository.challenge.ChallengeRepositoryImpl
+import com.sixkids.domain.repository.ChallengeRepository
 import com.sixkids.data.repository.user.UserRepositoryImpl
 import com.sixkids.domain.repository.TokenRepository
 import com.sixkids.domain.repository.UserRepository
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepository: UserRepositoryImpl
     ): UserRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindChallengeRepository(
+        challengeRepository: ChallengeRepositoryImpl
+    ): ChallengeRepository
 }
