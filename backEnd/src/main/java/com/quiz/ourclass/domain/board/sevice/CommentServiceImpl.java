@@ -7,7 +7,6 @@ import com.quiz.ourclass.domain.board.mapper.CommentMapper;
 import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
-import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
@@ -27,18 +26,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Long write(Long orgId, CommentRequest request) {
-        //댓글 작성자가 입력으로 들어온 단체에 속해있는지 확인
-        MemberOrganization commentWriter =
-            userAccessUtil.isMemberOfOrganization(userAccessUtil.getMember(), orgId);
-
+    public Long write(CommentRequest request) {
+        Member commentWriter = userAccessUtil.getMember();
         //게시글 찾기
         Post post = postRepository.findById(request.boardId())
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
         //게시글을 작성한 사용자 단체와 댓글 작성자의 단체가 같은지 확인
-        boolean isSameOrganization = post.getAuthor().getMemberOrganizations().stream()
-            .anyMatch(p -> p.getOrganization().getId() == commentWriter.getOrganization().getId());
+        boolean isSameOrganization = post.getOrganization().getMemberOrganizations().stream()
+            .anyMatch(p -> p.getMember().getId() == commentWriter.getId());
         if (!isSameOrganization) {
             throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
         }
@@ -46,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
         //게시글 댓글 저장 (부모 댓글이면 0L로 저장됩니다.)
         Comment comment = commentMapper.CommentRequestTocomment(request);
         comment.setCreateTime(LocalDateTime.now());
-        comment.setMember(commentWriter.getMember());
+        comment.setMember(commentWriter);
         comment.setPost(post);
 
         return commentRepository.save(comment).getId();

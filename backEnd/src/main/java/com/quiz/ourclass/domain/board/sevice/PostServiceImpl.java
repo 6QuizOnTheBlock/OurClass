@@ -43,14 +43,14 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long write(Long classId, MultipartFile file, PostRequest request) {
+    public Long write(Long organizationId, MultipartFile file, PostRequest request) {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
 
         //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인(classId)
         MemberOrganization memberOrganization =
-            userAccessUtil.isMemberOfOrganization(member, classId);
+            userAccessUtil.isMemberOfOrganization(member, organizationId);
 
         //S3 이미지 파일 업로드
         Image image = null;
