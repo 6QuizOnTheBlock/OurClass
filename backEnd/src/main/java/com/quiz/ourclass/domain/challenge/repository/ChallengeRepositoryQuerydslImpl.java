@@ -27,7 +27,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
         Pageable pageable = PageRequest.of(request.page(), request.size());
         BooleanBuilder booleanBuilder = getChallengesBooleanBuilder(request);
 
-        List<ChallengeSimpleDTO> challenges = jpaQueryFactory.select(Projections.fields(
+        List<ChallengeSimpleDTO> challenges = jpaQueryFactory.select(Projections.constructor(
                 ChallengeSimpleDTO.class,
                 challenge.id,
                 challenge.title,
