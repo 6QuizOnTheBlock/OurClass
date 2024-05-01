@@ -76,7 +76,7 @@ fun BoardMainScreen(
             contentName = stringResource(id = R.string.board_main_post),
             contentImageId = UlbanRes.drawable.board,
             cardColor = Blue,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageEnd_TextStart
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
