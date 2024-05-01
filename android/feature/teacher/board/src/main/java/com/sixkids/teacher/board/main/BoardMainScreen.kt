@@ -51,8 +51,7 @@ fun BoardMainScreen(
             style = UlbanTypography.titleLarge
         )
         Text(
-            // TODO text = boardMainState.classString,
-            text = "인동초등학교 3학년 1반",
+            text = boardMainState.classString,
             style = UlbanTypography.bodySmall
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -88,6 +87,6 @@ fun BoardMainScreen(
 @Composable
 fun BoardMainScreenPreview() {
     BoardMainScreen(
-        boardMainState = BoardMainState(classString = "구미초등학교 1학년 1반")
+        boardMainState = BoardMainState(classString = "인동초등학교 1학년 1반")
     )
 }
