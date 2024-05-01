@@ -50,7 +50,6 @@ public class MemberService {
                   request.getRole()));
           }
 
-
         } catch (Exception e) {
             if (e instanceof GlobalException && ((GlobalException) e).getErrorCode() == ErrorCode.EXISTING_MEMBER) {
                 throw new GlobalException(ErrorCode.EXISTING_MEMBER); // 또는 사용자에게 직접 전달
@@ -95,10 +94,12 @@ public class MemberService {
                 log.error(e.getMessage());
                 throw new GlobalException(ErrorCode.CERTIFICATION_FAILED);
             }
+
+    
         }
     }
 
-    private SocialType checkSocialType (String socialType){
+    private SocialType checkSocialType(String socialType) {
         return switch (socialType) {
             case "kakao", "KAKAO" -> SocialType.KAKAO;
             case "google", "GOOGLE" -> SocialType.GOOGLE;

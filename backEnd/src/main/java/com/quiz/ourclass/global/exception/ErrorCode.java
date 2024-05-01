@@ -30,6 +30,10 @@ public enum ErrorCode {
     POST_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "멤버가 작성한 게시글을 찾을 수 없습니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
 
+    //comment
+    COMMENT_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "댓글 작성자 단체와 현재 사용자 단체가 다릅니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+
     //image
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
 
@@ -38,6 +42,10 @@ public enum ErrorCode {
 
     //organization
     ORGANIZATION_NOT_FOUND(HttpStatus.NOT_FOUND, "학급을 찾을 수 없습니다."),
+
+    //challenge
+    REPORT_NOW_FOUND(HttpStatus.NOT_FOUND, "레포트를 찾을 수 없습니다."),
+    CHALLENGE_GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus status;
