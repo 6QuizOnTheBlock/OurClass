@@ -78,8 +78,8 @@ fun LoginRoute(
         onLoginClick = {
             KakaoManager.login(
                 context = context,
-                onSuccess = { token ->
-                    viewModel.login("1", "1")
+                onSuccess = { idToken ->
+                    viewModel.login(idToken)
                 },
                 onFailed = {
                     Log.d(TAG, "LoginRoute: ${it?.message}")
@@ -108,9 +108,8 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // 배경색을 설정합니다. 실제 색상 코드로 대체해야 합니다.
+            .background(Color.White)
     ) {
-        // 배경 이미지가 전체 화면 너비를 채우고 적절한 비율로 높이가 설정되도록 조정합니다.
         Image(
             painter = painterResource(id = R.drawable.main_background),
             contentDescription = "Home Background",
@@ -120,7 +119,6 @@ fun LoginScreen(
                 .fillMaxWidth()
         )
 
-        // Arrange the images in a row
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -128,8 +126,6 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(0.dp, 20.dp, 0.dp, 0.dp)
         ) {
-            // Column for the rocket and paint images
-
             AnimatedVisibility(
                 visible = animationStart,
                 enter = slideInHorizontally(
@@ -158,8 +154,6 @@ fun LoginScreen(
                 }
             }
 
-
-            // AnimatedVisibility for pencil image
             AnimatedVisibility(
                 visible = animationStart,
                 enter = slideInHorizontally(
@@ -176,20 +170,19 @@ fun LoginScreen(
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(280.dp)  // 높이를 300dp로 증가시켜 이미지를 더 크게 표시합니다.
+                        .height(280.dp)
                         .rotate(18f)
                 )
             }
         }
 
-        // 텍스트와 버튼을 중첩시키기 위해 Column 사용
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Spacer(modifier = Modifier.weight(1f)) // 상단 내용과 "울반" 텍스트 사이의 공간을 추가합니다.
+            Spacer(modifier = Modifier.weight(1f))
 
             Text(
                 text = "슬기로운 학급생활 메이트",
@@ -238,11 +231,11 @@ fun LogInButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.kakao), // Replace with the actual drawable resource ID
+                painter = painterResource(id = R.drawable.kakao),
                 contentDescription = "Icon",
                 modifier = Modifier.size(24.dp)
             )
-            Spacer(Modifier.width(8.dp)) // Space between icon and text
+            Spacer(Modifier.width(8.dp))
             Text(
                 text = "5초 만에 카카오로 시작하기",
                 style = UlbanTypography.bodyMedium.copy(),
