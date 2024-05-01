@@ -27,14 +27,16 @@ public class PostController implements PostControllerDocs {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResultResponse<?>> write(
-        @RequestParam("classId") Long classId, @RequestPart(value = "request") PostRequest request,
+        @RequestParam("organizationId") Long organizationId,
+        @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
-        Long postId = postService.write(classId, file, request);
+        Long postId = postService.write(organizationId, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResultResponse<?>> modify(@PathVariable(value = "id") Long id,
+    public ResponseEntity<ResultResponse<?>> modify(
+        @PathVariable(value = "id") Long id,
         @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
         Long postId = postService.modify(id, file, request);

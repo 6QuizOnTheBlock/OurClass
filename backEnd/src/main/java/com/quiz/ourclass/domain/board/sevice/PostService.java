@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
-    Long write(Long classId, MultipartFile file, PostRequest request);
+    Long write(Long organizationId, MultipartFile file, PostRequest request);
 
     Long modify(Long id, MultipartFile file, PostRequest request);
 

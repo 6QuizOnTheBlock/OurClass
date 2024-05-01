@@ -4,5 +4,5 @@ import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
 
 public interface CommentService {
 
-    Long write(Long orgId, CommentRequest request);
+    Long write(CommentRequest request);
 }

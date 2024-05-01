@@ -36,8 +36,8 @@ public interface PostControllerDocs {
         })
     @PostMapping(consumes = {"multipart/form-data"})
     ResponseEntity<ResultResponse<?>> write(
-        @Parameter(name = "classId", description = "단체 PK 값", required = true, in = ParameterIn.QUERY)
-        @RequestParam("classId") Long classId,
+        @Parameter(name = "organizationId", description = "단체 PK 값", required = true, in = ParameterIn.QUERY)
+        @RequestParam("organizationId") Long classId,
         @Parameter(name = "request", description = "게시글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
         @RequestPart(value = "request") PostRequest request,
         @Parameter(name = "file", description = "사진 파일", required = true, in = ParameterIn.DEFAULT)

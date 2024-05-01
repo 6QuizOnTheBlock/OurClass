@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "CommentController", description = "SNS 댓글 API")
 public interface CommentControllerDocs {
@@ -31,8 +30,6 @@ public interface CommentControllerDocs {
     )
     @PostMapping
     ResponseEntity<ResultResponse<Long>> write(
-        @Parameter(name = "classId", description = "단체 PK 값", required = true, in = ParameterIn.QUERY)
-        @RequestParam(value = "classId") Long classId,
         @Parameter(name = "request", description = "댓글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
         @RequestBody CommentRequest request);
 }
