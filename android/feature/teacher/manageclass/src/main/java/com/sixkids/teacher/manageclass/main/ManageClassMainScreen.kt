@@ -1,12 +1,19 @@
 package com.sixkids.teacher.manageclass.main
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -44,8 +51,10 @@ fun ManageClassMainScreen(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp)
+            .wrapContentHeight()
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .verticalScroll(ScrollState(0))
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
@@ -69,7 +78,7 @@ fun ManageClassMainScreen(
         ContentCard(
             modifier = Modifier.padding(end = 40.dp),
             contentName = stringResource(id = R.string.manage_class_setting),
-            contentImageId = UlbanRes.drawable.board,
+            contentImageId = UlbanRes.drawable.setting,
             cardColor = Red,
             contentAligment = ContentAligment.ImageEnd_TextStart
         )
@@ -89,6 +98,7 @@ fun ManageClassMainScreen(
             cardColor = Green   ,
             contentAligment = ContentAligment.ImageEnd_TextStart
         )
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
