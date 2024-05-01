@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="board_main_title">게시판</string>
+    <string name="board_main_announce">알림장</string>
+    <string name="board_main_post">자유게시판</string>
+    <string name="board_main_chat">채팅</string>
+</resources>
