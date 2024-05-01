@@ -23,7 +23,6 @@ import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -87,11 +86,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     public long createReport(ReportRequest reportRequest, MultipartFile file) {
         //TODO: 유저가 해당 그룹 리더가 맞는지 검사 로직 추가필요
         String fileUrl;
-        try {
-            fileUrl = awsS3ObjectStorage.uploadFile(file);
-        } catch (GlobalException | IOException e) {
-            throw new GlobalException(ErrorCode.AWS_SERVER_ERROR);
-        }
+        fileUrl = awsS3ObjectStorage.uploadFile(file);
+
         Report report = reportMapper.reportRequestToReport(reportRequest);
         ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
             .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));

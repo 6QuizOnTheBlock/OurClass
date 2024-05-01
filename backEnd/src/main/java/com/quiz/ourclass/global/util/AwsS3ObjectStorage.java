@@ -23,7 +23,7 @@ public class AwsS3ObjectStorage {
         this.amazonS3 = amazonS3;
     }
 
-    public String uploadFile(MultipartFile multipartFile) throws IOException {
+    public String uploadFile(MultipartFile multipartFile) {
         // UUID 이용해 고유한 파일명 생성
         String originalFileName = multipartFile.getOriginalFilename();
         String fileName = UUID.randomUUID() + "_" + originalFileName;
@@ -31,8 +31,11 @@ public class AwsS3ObjectStorage {
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
-
-        amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+        try {
+            amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+        } catch (IOException ioException) {
+            throw new GlobalException(ErrorCode.AWS_SERVER_ERROR);
+        }
         return amazonS3.getUrl(bucket, fileName).toString();
     }
 

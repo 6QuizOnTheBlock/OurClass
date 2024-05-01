@@ -19,7 +19,6 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.UserAccessUtil;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,15 +43,14 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long write(Long classId, MultipartFile file, PostRequest request)
-        throws IOException {
+    public Long write(Long organizationId, MultipartFile file, PostRequest request) {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
 
         //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인(classId)
         MemberOrganization memberOrganization =
-            userAccessUtil.isMemberOfOrganization(member, classId);
+            userAccessUtil.isMemberOfOrganization(member, organizationId);
 
         //S3 이미지 파일 업로드
         Image image = null;
@@ -71,8 +69,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long modify(Long id, MultipartFile file, PostRequest request)
-        throws IOException {
+    public Long modify(Long id, MultipartFile file, PostRequest request) {
         //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();
@@ -116,6 +113,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.save(post).getId();
     }
 
+    @Transactional
     @Override
     public Boolean delete(Long id) {
         //학생은 학생이 작성한 게시글만 삭제 가능
@@ -153,10 +151,10 @@ public class PostServiceImpl implements PostService {
 
     private List<CommentDTO> buildParentComments(List<Comment> comments) {
         return comments.stream()
-            .filter(c -> c.getParentId() == null)
+            .filter(c -> c.getParentId() == 0L)
             .map(parentComment -> {
                 List<CommentChildrenDTO> children = comments.stream()
-                    .filter(c -> c.getParentId() != null && c.getParentId()
+                    .filter(c -> c.getParentId() != 0L && c.getParentId()
                         .equals(parentComment.getId()))
                     .map(commentMapper::commentToCommentChildrenDTO)
                     .toList();

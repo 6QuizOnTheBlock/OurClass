@@ -10,7 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Organization {
 
