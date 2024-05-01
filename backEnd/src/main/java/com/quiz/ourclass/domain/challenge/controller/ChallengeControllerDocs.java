@@ -29,40 +29,61 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ChallengeControllerDocs {
 
     @Operation(summary = "함께달리기 목록 조회",
+        description = "page,size 필수로 입력받아 무한스크롤 적용.",
         responses = {
-            @ApiResponse(responseCode = "200",
-                description = "함께달리기 목록 조회 성공",
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = ChallengeSliceResponse.class)))
         })
     @GetMapping
-    ResponseEntity<ResultResponse<?>> getChallenges(ChallengSliceRequest challengSliceRequest);
+    ResponseEntity<ResultResponse<?>> getChallenges(
+        ChallengSliceRequest challengSliceRequest
+    );
 
     @Operation(summary = "함께달리기 생성",
         responses = {
-            @ApiResponse(responseCode = "200",
-                description = "함께달리기 생성 성공",
-                content = @Content(schema = @Schema(implementation = Long.class)))
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = Long.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content)
         })
     @PostMapping
     public ResponseEntity<ResultResponse<?>> createChallenge(
-        @RequestBody ChallengeRequest challengeRequest);
+        @RequestBody
+        ChallengeRequest challengeRequest
+    );
 
     @Operation(summary = "함께달리기 레포트 제출",
+        description = "레포트 내용DTO는 json, 사진은 MultipartFile로 받습니다",
         responses = {
-            @ApiResponse(responseCode = "200",
-                description = "함께달리기 레포트 생성 성공",
-                content = @Content(schema = @Schema(implementation = Long.class)))
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = Long.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"그룹을 찾을 수 없습니다.\")", content = @Content),
+            @ApiResponse(responseCode = "500", description = "(message : \"AWS 서버 에러입니다.\")", content = @Content)
         })
     @PostMapping(value = "/reports", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ResultResponse<?>> createReport(
-        @RequestPart ReportRequest reportRequest,
-        @Schema(description = "사진") @RequestPart MultipartFile file);
+        @RequestPart
+        ReportRequest reportRequest,
+        @Schema(description = "사진")
+        @RequestPart
+        MultipartFile file
+    );
 
-    @Operation(summary = "함께달리기 레포트 채점")
+    @Operation(summary = "함께달리기 레포트 채점",
+        description = "레포트를 승인 또는 거절 합니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")"),
+            @ApiResponse(responseCode = "404", description = "(message : \"레포트를 찾을 수 없습니다.\")", content = @Content)
+        })
     @PatchMapping(value = "/reports/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResultResponse<?>> confirmReport(
-        @Schema(description = "레포트 id") @PathVariable long id,
-        @Schema(description = "채점값") @Parameter(description = "BEFORE,APPROVE,REFUSE") @RequestParam ReportType reportType);
+        @Schema(description = "레포트 id")
+        @PathVariable
+        long id,
+        @Schema(description = "채점값")
+        @Parameter(description = "BEFORE,APPROVE,REFUSE", required = true, in = ParameterIn.QUERY)
+        @RequestParam
+        ReportType reportType
+    );
 
     @Operation(summary = "진행중인 함께달리기 조회",
         description = "학급ID로 검색하여 해당 학급에서 진행중인 함께달리기를 조회합니다."
