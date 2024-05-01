@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +17,6 @@ public interface ChallengeService {
     long createReport(ReportRequest reportRequest, MultipartFile file);
 
     void confirmReport(long id, ReportType reportType);
+
+    RunningChallengeResponse getRunningChallenge(long organizationId);
 }

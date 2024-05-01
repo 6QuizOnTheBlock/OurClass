@@ -1,9 +1,11 @@
 package com.quiz.ourclass.domain.challenge.service;
 
+import com.quiz.ourclass.domain.challenge.dto.ChallengeSimpleDTO;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
 import com.quiz.ourclass.domain.challenge.entity.GroupMember;
@@ -106,5 +108,20 @@ public class ChallengeServiceImpl implements ChallengeService {
             .orElseThrow(() -> new GlobalException(ErrorCode.REPORT_NOW_FOUND));
         report.setAcceptStatus(reportType);
         reportRepository.save(report);
+    }
+
+    @Override
+    public RunningChallengeResponse getRunningChallenge(long organizationId) {
+        Organization organization = organizationRepository.findById(organizationId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+        Challenge challenge = challengeRepository.findFirstByOrganizationAndProgressStatusIsTrue(
+                organization)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_CHALLENGE_NOT_FOUND));
+        int waitingCount = challengeGroupRepository.countByChallengeAndCompleteStatusIsFalse(
+            challenge);
+        ChallengeSimpleDTO challengeSimpleDTO = challengeMapper.challengeToChallengeSimpleDTO(
+            challenge);
+        return RunningChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
+            .waitingCount(waitingCount).build();
     }
 }
