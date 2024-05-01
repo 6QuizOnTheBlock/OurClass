@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +19,9 @@ object DataStoreModule {
 
     private const val USER_PREFERENCES = "user_preferences"
 
-    @Provides
+
     @Singleton
+    @Provides
     fun provideUserPreferenceDataStore(@ApplicationContext context: Context)
     : DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
