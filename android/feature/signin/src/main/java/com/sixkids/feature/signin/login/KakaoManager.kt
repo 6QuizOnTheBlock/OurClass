@@ -45,8 +45,8 @@ object KakaoManager {
     ) {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
             Log.d(TAG, "loginWithKakaoTalk:$token")
-            if (token != null) {
-                onSuccess(token.accessToken)
+            if (token != null && token.idToken != null){
+                onSuccess(token.idToken!!)
             } else {
                 onFailed(error)
             }
@@ -59,8 +59,8 @@ object KakaoManager {
         onFailed: (Throwable?) -> Unit,
     ) {
         UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
-            if (token != null) {
-                onSuccess(token.accessToken)
+            if (token != null && token.idToken != null){
+                onSuccess(token.idToken!!)
             } else {
                 onFailed(error)
             }
