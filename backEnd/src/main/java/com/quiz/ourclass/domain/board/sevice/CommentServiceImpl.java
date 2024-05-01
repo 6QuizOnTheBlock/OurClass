@@ -6,6 +6,7 @@ import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
 import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
+import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -48,6 +49,24 @@ public class CommentServiceImpl implements CommentService {
         comment.setMember(commentWriter.getMember());
         comment.setPost(post);
 
+        return commentRepository.save(comment).getId();
+    }
+
+    @Override
+    public Long modify(Long commentId, CommentRequest request) {
+        Member member = userAccessUtil.getMember();
+
+        //댓글 조회
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
+
+        //댓글 수정 권한 확인
+        if (comment.getMember().getId() != member.getId()) {
+            throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
+        }
+
+        //댓글 수정
+        commentMapper.updateCommentFromRequest(request, comment);
         return commentRepository.save(comment).getId();
     }
 }
