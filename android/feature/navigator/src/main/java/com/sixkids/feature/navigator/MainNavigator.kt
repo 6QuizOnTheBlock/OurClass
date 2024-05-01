@@ -8,6 +8,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.sixkids.feature.signin.navigation.SignInRoute
+import com.sixkids.feature.signin.navigation.navigateSignIn
+import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
@@ -18,7 +21,7 @@ import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = HomeRoute.defaultRoute
+    val startDestination = SignInRoute.defaultRoute
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -59,7 +62,6 @@ class MainNavigator(
         navController.navigateRank()
     }
 
-
     /**
      * Manage Class Navigation
      */
@@ -69,6 +71,16 @@ class MainNavigator(
                 inclusive = true
             }
         }
+        
+    /**
+     * SignIn Navigation
+     */
+    fun navigateSignIn(){
+        navController.navigateSignIn()
+    }
+
+    fun navigateSignUp(){
+        navController.navigateSignUp()
     }
 
     @Composable
