@@ -12,6 +12,7 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,75 +29,49 @@ public class MemberService {
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
+        String imgUrl = awsS3ObjectStorage.uploadFile(request.getFile());
 
-        try {
-          OIDCDecodePayload payload = oidcService.certificatingIdToken(request.getIdToken());
+        return Optional.ofNullable(request.getIdToken())
+            .map(oidcService::certificatingIdToken) // ID 토큰 검증
+            .map(payload -> memberRepository.findByEmail(payload.getEmail())
+                .map(member -> updateExistingMember(member, imgUrl, request.getRole())) // 기존 멤버 업데이트
+                    .orElseGet(() -> registerNewMember(payload, imgUrl, request.getRole()))) // 새 멤버 등록
+                .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
+    }
 
-          String imgUrl = awsS3ObjectStorage.uploadFile(request.getFile());
-
-          // 이미 존재하면,
-          if(memberRepository.existsByEmail(payload.getEmail())){
-              Member member = memberRepository.findByEmail(payload.getEmail()).orElse(null);
-              // 존재하는데, 프로필 사진이나, 역할이 비었으면
-              if(member.getProfileImage() == null || member.getRole() ==null || member.getRole().equals(
-                  Role.GUEST)){
-                Member.addInfo(member,imgUrl,request.getRole());
-              }
-              else {
-                  throw new GlobalException(ErrorCode.EXISTING_MEMBER);
-              }
-          } else {
-              memberRepository.save(Member.of(payload.getEmail(), payload.getNickname(), SocialType.KAKAO,imgUrl,
-                  request.getRole()));
-          }
-
-        } catch (Exception e) {
-            if (e instanceof GlobalException && ((GlobalException) e).getErrorCode() == ErrorCode.EXISTING_MEMBER) {
-                throw new GlobalException(ErrorCode.EXISTING_MEMBER); // 또는 사용자에게 직접 전달
-            } else {
-                log.error(e.getMessage());
-                throw new GlobalException(ErrorCode.CERTIFICATION_FAILED);
-            }
+    private TokenDTO updateExistingMember(Member member, String imgUrl,String role) {
+        if (member.getProfileImage() == null || member.getRole() == null || member.getRole().equals(Role.GUEST)) {
+            Member.addInfo(member, imgUrl, role);
+            memberRepository.save(member);
+            return null; // 또는 업데이트된 멤버에 대한 새로운 토큰 반환
+        } else {
+            throw new GlobalException(ErrorCode.EXISTING_MEMBER);
         }
+    }
 
-      return null;
+    // Member 등록 후 접근 토큰, 갱신 토큰 출력
+    private TokenDTO registerNewMember(OIDCDecodePayload payload, String imgUrl, String role) {
+        Member newMember = memberRepository.save(Member.of(payload.getEmail(), payload.getNickname(), SocialType.KAKAO, imgUrl, role));
+        return createTokenDTO(newMember);
     }
 
 
 
 
-    public  TokenDTO signInProcess(MemberSignInRequest request) {
+    public TokenDTO signInProcess(MemberSignInRequest request) {
+        return Optional.ofNullable(request.getIdToken())
+            .map(oidcService::certificatingIdToken) // ID 토큰 검증
+            .map(payload -> memberRepository.findByEmail(payload.getEmail()) // 이메일로 멤버 조회
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND))) // 멤버가 없으면 예외 발생
+            .map(member -> createTokenDTO(member)) // 토큰 생성 및 반환
+            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
+    }
 
-        OIDCDecodePayload payload = null;
-
-        try {
-            payload = oidcService.certificatingIdToken(request.getIdToken());
-            // 신규 회원이면 404 에러, 기존에 존재하는 회원이면 발급
-            if(!memberRepository.existsByEmail(payload.getEmail())){
-                throw new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
-            }else{
-                Member member = memberRepository.findByEmail(payload.getEmail()).orElse(null);
-
-                if(member == null){
-                    throw  new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
-                }
-
-                String accessToken = jwtUtil.createToken(member, true);
-                String refreshToken = jwtUtil.createToken(member, false);
-
-                return TokenDTO.of(accessToken, refreshToken);
-            }
-
-        } catch (Exception e) {
-            if (e instanceof GlobalException && ((GlobalException) e).getErrorCode() == ErrorCode.EXISTING_MEMBER) {
-                throw new GlobalException(ErrorCode.EXISTING_MEMBER); // 또는 사용자에게 직접 전달
-            } else {
-                log.error(e.getMessage());
-                throw new GlobalException(ErrorCode.CERTIFICATION_FAILED);
-            }
-
-    
-        }
+    // 접근 토큰, 갱신 토큰 만들기
+    private TokenDTO createTokenDTO(Member member) {
+        String accessToken = jwtUtil.createToken(member, true);
+        String refreshToken = jwtUtil.createToken(member, false);
+        return TokenDTO.of(accessToken, refreshToken);
     }
 
     private SocialType checkSocialType(String socialType) {

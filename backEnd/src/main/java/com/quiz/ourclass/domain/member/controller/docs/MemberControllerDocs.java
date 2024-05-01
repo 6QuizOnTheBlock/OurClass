@@ -19,9 +19,12 @@ public interface MemberControllerDocs {
     @Operation(summary = "회원가입(기본 정보)",
         responses = {
             @ApiResponse(responseCode = "200",
-                description = "회원가입에 성공하였습니다.",
-                content = @Content(schema = @Schema(implementation = TokenDTO.class))
-            )
+                description = "회원가입에 성공하였습니다."
+            ),
+            @ApiResponse(responseCode = "404",
+            description = "기존에 존재하는 회원입니다."),
+            @ApiResponse(responseCode = "503",
+            description = "OIDC 토큰 인증에 실패했습니다.")
         })
     @PostMapping
     ResponseEntity<ResultResponse<?>> signUp(MemberSignUpRequest request);
@@ -30,13 +33,13 @@ public interface MemberControllerDocs {
     @Operation(summary = "로그인",
         responses = {
             @ApiResponse(responseCode = "200",
-                description = "로그인에 성공하였습니다.",
-                content = @Content(schema = @Schema(implementation = TokenDTO.class))
+                description = "로그인에 성공하였습니다."
             ),
             @ApiResponse(responseCode = "404",
-                description = "God damn it! 기존에 존재하는 회원입니다.",
-                content = @Content(schema = @Schema(implementation = TokenDTO.class))
-            )
+                description = "God damn it! 신규 회원입니다."
+            ),
+            @ApiResponse(responseCode = "503",
+                description = "OIDC 토큰 인증에 실패했습니다.")
         })
     @PostMapping
     ResponseEntity<ResultResponse<?>>  signIn (MemberSignInRequest request);
