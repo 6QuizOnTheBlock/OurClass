@@ -3,6 +3,7 @@ package com.sixkids.data.repository.challenge.remote
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sixkids.data.api.ChallengeService
+import com.sixkids.data.model.response.toModel
 import com.sixkids.model.Challenge
 import javax.inject.Inject
 
@@ -21,9 +22,15 @@ class ChallengeHistoryPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Challenge> {
         val page = params.key ?: 0
         return try {
-            val response =
-                challengeService.getChallengeHistory(organizationId, memberId, page)
-            val challengeHistory = response.getOrThrow().challenges
+
+            val response = challengeService.getChallengeHistory(
+                organizationId,
+                memberId,
+                page,
+                params.loadSize
+            )
+            val challengeHistory = response.getOrThrow().data.challenges.map { it.toModel() }
+
             LoadResult.Page(
                 data = challengeHistory,
                 prevKey = if (page == 0) null else page.minus(1),
