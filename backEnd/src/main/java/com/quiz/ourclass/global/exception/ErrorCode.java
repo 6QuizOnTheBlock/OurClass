@@ -29,7 +29,8 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
 
     //comment
-    COMMENT_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "게시글 작성자 단체와 현재 사용자 단체가 다릅니다."),
+    COMMENT_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "댓글 작성자 단체와 현재 사용자 단체가 다릅니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
 
     //image
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),

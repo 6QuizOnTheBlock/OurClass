@@ -47,4 +47,22 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.save(comment).getId();
     }
+
+    @Override
+    public Long modify(Long commentId, CommentRequest request) {
+        Member member = userAccessUtil.getMember();
+
+        //댓글 조회
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
+
+        //댓글 수정 권한 확인
+        if (comment.getMember().getId() != member.getId()) {
+            throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
+        }
+
+        //댓글 수정
+        commentMapper.updateCommentFromRequest(request, comment);
+        return commentRepository.save(comment).getId();
+    }
 }
