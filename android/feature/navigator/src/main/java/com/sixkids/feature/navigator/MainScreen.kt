@@ -29,6 +29,7 @@ import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
+import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
 
 @Composable
 fun MainScreen(
@@ -62,6 +63,10 @@ fun MainScreen(
                 padding = innerPadding,
             )
 
+            manageClassNavGraph(
+                padding = innerPadding,
+            )
+            
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
             )
