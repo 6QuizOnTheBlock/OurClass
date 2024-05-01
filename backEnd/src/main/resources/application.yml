@@ -42,10 +42,10 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: ulvanbucket
+      bucket: ENC(grPEMZ1PJTUMTnbo3+7P3rxncmVEC3Lo)
     credentials:
-      access-key: AKIAQSCG2TLXCKNPB5FO
-      secret-key: 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
+      access-key: ENC(9ss56OYIRmTDqcR1xo9MSNiZK1jjjXav5ObTtGhO68c=)
+      secret-key: ENC(NRYp7JUX0kJXYGbOXUmXeV4dO/jlrrdr9OpRHFCK5MTLgdAxmhvJz5jbveszalqL9WN6elflhLE=)
     region:
       static: ap-northeast-2
       auto: false
