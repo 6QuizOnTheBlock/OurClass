@@ -1,10 +1,13 @@
 package com.sixkids.feature.signin.login
 
 import android.content.Context
+import android.util.Log
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+
+private const val TAG = "D107"
 
 object KakaoManager {
     fun login(
@@ -41,6 +44,7 @@ object KakaoManager {
         onFailed: (Throwable?) -> Unit,
     ) {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
+            Log.d(TAG, "loginWithKakaoTalk:$token")
             if (token != null) {
                 onSuccess(token.accessToken)
             } else {
