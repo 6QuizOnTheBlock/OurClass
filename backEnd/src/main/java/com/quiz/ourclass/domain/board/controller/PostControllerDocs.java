@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public interface PostControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content),
             @ApiResponse(responseCode = "500", description = "(message : \"첨부한 파일이 S3에 업로드 되지 않았습니다.\")", content = @Content)
         })
-    @PostMapping(consumes = {"multipart/form-data"})
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ResultResponse<?>> write(
         @Parameter(name = "classId", description = "단체 PK 값", required = true, in = ParameterIn.QUERY)
         @RequestParam("classId") Long classId,
@@ -55,7 +56,7 @@ public interface PostControllerDocs {
             @ApiResponse(responseCode = "500", description = "(message : \"첨부한 파일이 S3에 업로드 되지 않았습니다.\")", content = @Content)
         }
     )
-    @PatchMapping("/{id}")
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<ResultResponse<?>> modify(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id,
