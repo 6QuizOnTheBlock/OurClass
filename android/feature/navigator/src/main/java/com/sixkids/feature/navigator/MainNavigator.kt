@@ -12,6 +12,8 @@ import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
+import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
+import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 
 class MainNavigator(
     val navController: NavHostController,
@@ -38,7 +40,7 @@ class MainNavigator(
             MainNavigationTab.HOME -> navController.navigateHome(navOptions)
             MainNavigationTab.BOARD -> navController.navigateBoard(navOptions)
             MainNavigationTab.MANAGE_STUDENT -> {}
-            MainNavigationTab.MANAGE_CLASS -> {}
+            MainNavigationTab.MANAGE_CLASS -> navController.navigateManageClass(navOptions)
         }
     }
 
@@ -55,6 +57,18 @@ class MainNavigator(
 
     fun navigateRank(){
         navController.navigateRank()
+    }
+
+
+    /**
+     * Manage Class Navigation
+     */
+    fun navigateManageClass(navOptions: NavOptions) {
+        navController.navigate(ManageClassRoute.defaultRoute){
+            popUpTo(navController.graph.id){
+                inclusive = true
+            }
+        }
     }
 
     @Composable

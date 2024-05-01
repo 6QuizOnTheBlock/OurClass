@@ -28,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
+import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
 
 @Composable
 fun MainScreen(
@@ -58,6 +59,10 @@ fun MainScreen(
             )
 
             boardNavGraph(
+                padding = innerPadding,
+            )
+
+            manageClassNavGraph(
                 padding = innerPadding,
             )
         }
