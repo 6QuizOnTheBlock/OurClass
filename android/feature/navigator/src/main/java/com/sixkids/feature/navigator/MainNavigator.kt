@@ -69,11 +69,12 @@ class MainNavigator(
      * Manage Class Navigation
      */
     fun navigateManageClass(navOptions: NavOptions) {
-        navController.navigate(ManageClassRoute.defaultRoute){
-            popUpTo(navController.graph.id){
+        navController.navigate(ManageClassRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
                 inclusive = true
             }
         }
+    }
 
     /**
      * SignIn Navigation

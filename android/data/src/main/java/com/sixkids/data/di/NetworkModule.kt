@@ -62,6 +62,7 @@ object NetworkModule {
     fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory =
         MoshiConverterFactory.create(moshi)
 
+    @Provides
     @Singleton
     @PublicOkHttpClient
     fun provideUnauthenticatedOkHttpClient(): OkHttpClient {
