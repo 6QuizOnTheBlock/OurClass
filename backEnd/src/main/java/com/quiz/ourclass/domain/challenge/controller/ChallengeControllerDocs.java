@@ -4,12 +4,15 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +30,7 @@ public interface ChallengeControllerDocs {
 
     @Operation(summary = "함께달리기 목록 조회",
         responses = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "200",
                 description = "함께달리기 목록 조회 성공",
                 content = @Content(schema = @Schema(implementation = ChallengeSliceResponse.class)))
         })
@@ -36,7 +39,7 @@ public interface ChallengeControllerDocs {
 
     @Operation(summary = "함께달리기 생성",
         responses = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "200",
                 description = "함께달리기 생성 성공",
                 content = @Content(schema = @Schema(implementation = Long.class)))
         })
@@ -46,7 +49,7 @@ public interface ChallengeControllerDocs {
 
     @Operation(summary = "함께달리기 레포트 제출",
         responses = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "200",
                 description = "함께달리기 레포트 생성 성공",
                 content = @Content(schema = @Schema(implementation = Long.class)))
         })
@@ -60,4 +63,20 @@ public interface ChallengeControllerDocs {
     public ResponseEntity<ResultResponse<?>> confirmReport(
         @Schema(description = "레포트 id") @PathVariable long id,
         @Schema(description = "채점값") @Parameter(description = "BEFORE,APPROVE,REFUSE") @RequestParam ReportType reportType);
+
+    @Operation(summary = "진행중인 함께달리기 조회",
+        description = "학급ID로 검색하여 해당 학급에서 진행중인 함께달리기를 조회합니다."
+            + "진행중인 것이 없다면 404를 응답합니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = RunningChallengeResponse.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content),
+            @ApiResponse(responseCode = "404", description = "(message : \"진행중인 함께달리기가 없습니다.\")", content = @Content)
+        })
+    @GetMapping("/running")
+    public ResponseEntity<ResultResponse<?>> getRunningChallenge(
+        @RequestParam(required = true)
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
+        long organizationId
+    );
 }
