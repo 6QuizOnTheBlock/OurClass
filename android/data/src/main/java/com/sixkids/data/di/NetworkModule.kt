@@ -4,7 +4,9 @@ import com.sixkids.data.network.ApiResultCallAdapterFactory
 import com.sixkids.data.network.RefreshTokenInterceptor
 import com.sixkids.data.network.TokenAuthenticator
 import com.sixkids.data.network.TokenInterceptor
+import com.sixkids.data.util.LocalDateTimeAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,11 +51,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun moshi(): Moshi {
-        return Moshi.Builder().build()
-    }
+    fun moshi(): Moshi =
+        Moshi.Builder()
+            .add(LocalDateTimeAdapter())
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
 
     @Provides
+    @Singleton
+    fun provideMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory =
+        MoshiConverterFactory.create(moshi)
+
     @Singleton
     @PublicOkHttpClient
     fun provideUnauthenticatedOkHttpClient(): OkHttpClient {
@@ -107,13 +115,13 @@ object NetworkModule {
     @Singleton
     @PublicRetrofit
     fun providePublicRetrofit(
-        moshi: Moshi,
+        moshiConverterFactory: MoshiConverterFactory,
         @PublicOkHttpClient okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(ApiResultCallAdapterFactory())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(moshiConverterFactory)
             .client(okHttpClient)
             .build()
     }
@@ -122,13 +130,13 @@ object NetworkModule {
     @Singleton
     @AuthRetrofit
     fun provideAuthRetrofit(
-        moshi: Moshi,
+        moshiConverterFactory: MoshiConverterFactory,
         @AuthOkHttpClient okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(ApiResultCallAdapterFactory())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(moshiConverterFactory)
             .client(okHttpClient)
             .build()
     }
@@ -137,13 +145,13 @@ object NetworkModule {
     @Singleton
     @RefreshRetrofit
     fun provideRefreshRetrofit(
-        moshi: Moshi,
+        moshiConverterFactory: MoshiConverterFactory,
         @RefreshOkHttpClient okHttpClient: OkHttpClient
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(ApiResultCallAdapterFactory())
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addConverterFactory(moshiConverterFactory)
             .client(okHttpClient)
             .build()
     }
