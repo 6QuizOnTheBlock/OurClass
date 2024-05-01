@@ -33,8 +33,6 @@ android {
 
 dependencies {
     implementation(projects.feature.navigator)
-
     implementation(libs.kakao.user)
-
     implementation(projects.data)
 }

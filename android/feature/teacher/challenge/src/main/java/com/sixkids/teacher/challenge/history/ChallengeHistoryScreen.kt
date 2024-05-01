@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -26,15 +25,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
 import com.sixkids.designsystem.component.item.UlbanChallengeItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.Challenge
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
-
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
@@ -42,6 +43,10 @@ fun ChallengeRoute(
     navigateToCreate: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getChallengeHistory()
+    }
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -54,6 +59,7 @@ fun ChallengeRoute(
 
     ChallengeHistoryScreen(
         uiState = uiState,
+        challengeItems = viewModel.challengeHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { challengeId ->
             viewModel.navigateChallengeDetail(challengeId)
         },
@@ -64,6 +70,7 @@ fun ChallengeRoute(
 @Composable
 fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
+    challengeItems: LazyPagingItems<Challenge>? = null,
     navigateToDetail: (Int) -> Unit = {},
     navigateToCreate: () -> Unit = {},
 ) {
@@ -119,7 +126,7 @@ fun ChallengeHistoryScreen(
             )
             Divider(modifier = Modifier.padding(vertical = 4.dp))
 
-            if (uiState.challengeHistory.isEmpty()) {
+            if (challengeItems == null) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
@@ -137,26 +144,23 @@ fun ChallengeHistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(
-                        items = uiState.challengeHistory,
-                        key = { it.id }
-                    ) { challenge ->
-                        UlbanChallengeItem(
-                            title = challenge.title,
-                            description = challenge.content,
-                            startDate = challenge.startTime,
-                            endDate = challenge.endTime,
-                            userCount = challenge.headCount,
-                            onClick = { navigateToDetail(challenge.id) }
-                        )
+                    items(challengeItems.itemCount) { index ->
+                        challengeItems[index]?.let { challenge ->
+                            UlbanChallengeItem(
+                                title = challenge.title,
+                                description = challenge.content,
+                                startDate = challenge.startTime,
+                                endDate = challenge.endTime,
+                                userCount = challenge.headCount,
+                                onClick = { navigateToDetail(challenge.id) }
+                            )
+                        }
                     }
                 }
             }
         }
 
-
     }
-
 }
 
 @Preview(showBackground = true)
