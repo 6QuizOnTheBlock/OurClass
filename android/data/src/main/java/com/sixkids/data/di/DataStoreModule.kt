@@ -18,8 +18,9 @@ object DataStoreModule {
 
     private const val USER_PREFERENCES = "user_preferences"
 
-    @Provides
+
     @Singleton
+    @Provides
     fun provideUserPreferenceDataStore(@ApplicationContext context: Context)
     : DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(

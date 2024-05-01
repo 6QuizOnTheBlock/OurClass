@@ -37,6 +37,10 @@ datastore = "1.0.0"
 #Coil
 coil = "2.4.0"
 
+#Kakao
+kakao = "2.20.1"
+
+
 
 [libraries]
 # Dependencies of the included build-logic
@@ -86,6 +90,10 @@ datastore = { group = "androidx.datastore", name = "datastore-preferences", vers
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+# Kakao
+kakao-sdk = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao" }
+kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
