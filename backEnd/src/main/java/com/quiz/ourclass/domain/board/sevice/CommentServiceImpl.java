@@ -86,16 +86,9 @@ public class CommentServiceImpl implements CommentService {
             if (comment.getMember().getId() != member.getId()) {
                 throw new GlobalException(ErrorCode.COMMENT_DELETE_STUDENT_PERMISSION_DENIED);
             }
-        } else {
-            if (requesterRole == Role.TEACHER) {
-                boolean isSameOrganization = member.getMemberOrganizations().stream()
-                    .anyMatch(org -> org.getId() == comment.getPost().getOrganization().getId());
-                if (!isSameOrganization) {
-                    throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
-                }
-            } else if (requesterRole == Role.GUEST) {
-                throw new GlobalException(ErrorCode.GUEST_PERMISSION_DENIED);
-            }
+        } else if (requesterRole == Role.TEACHER) {
+            Long orgId = comment.getPost().getOrganization().getId();
+            userAccessUtil.isMemberOfOrganization(member, orgId);
         }
         //댓글 삭제
         commentRepository.delete(comment);

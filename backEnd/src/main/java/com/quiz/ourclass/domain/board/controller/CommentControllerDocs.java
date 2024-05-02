@@ -74,9 +74,7 @@ public interface CommentControllerDocs {
             @ApiResponse(responseCode = "403", description = """
                 (message : "댓글 작성자와 요청자가 다릅니다.")
                                 
-                (message : "댓글 작성자 단체와 현재 사용자 단체가 다릅니다.")
-                                
-                (message : "게스트는 권한이 없습니다.")
+                (message : "멤버가 해당 단체 소속이 아닙니다.")
                 """, content = @Content),
             @ApiResponse(responseCode = "404", description = "(message : \"댓글을 찾을 수 없습니다.\")", content = @Content)
         }
