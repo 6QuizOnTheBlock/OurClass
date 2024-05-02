@@ -15,6 +15,8 @@ public record CommentDTO(
     String content,
     @Schema(description = "댓글 작성 시간", example = "2024-04-29T14:00:00")
     LocalDateTime createTime,
+    @Schema(description = "댓글 수정 시간", example = "2024-05-01T12:00:00")
+    LocalDateTime updateTime,
     @Schema(description = "대댓글 정보")
     List<CommentChildrenDTO> children
 ) {

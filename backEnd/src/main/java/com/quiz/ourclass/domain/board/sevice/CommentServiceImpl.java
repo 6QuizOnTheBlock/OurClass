@@ -63,6 +63,7 @@ public class CommentServiceImpl implements CommentService {
 
         //댓글 수정
         commentMapper.updateCommentFromRequest(request, comment);
+        comment.setUpdateTime(LocalDateTime.now());
         return commentRepository.save(comment).getId();
     }
 }
