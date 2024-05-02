@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -24,19 +25,35 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
+import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    // TODO viewmodel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     navigator: MainNavigator = rememberMainNavigator()
 ) {
+
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is MainSideEffect.ShowSnackbar -> {
+                viewModel.onShowSnackbar(uiState.snackbarToken)
+            }
+        }
+
+    }
+
     Scaffold(
         bottomBar = {
             BottomNav(
@@ -66,13 +83,24 @@ fun MainScreen(
             manageClassNavGraph(
                 padding = innerPadding,
             )
-            
+
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
                 navigateToHome = navigator::navigateHome,
             )
         }
+        with(uiState) {
+            UlbanSnackbar(
+                modifier = Modifier.padding(innerPadding),
+                visible = snackbarVisible,
+                message = snackbarToken.message,
+                actionIconId = snackbarToken.actionIcon,
+                actionButtonText = snackbarToken.actionButtonText,
+                onClickActionButton = snackbarToken.onClickActionButton,
+            )
+        }
     }
+
 }
 
 
