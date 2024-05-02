@@ -6,7 +6,7 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import java.text.DecimalFormat
 
-class PointVisualTransformation(
+class NumberVisualTransformation(
     private val postfix: String,
 ) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
