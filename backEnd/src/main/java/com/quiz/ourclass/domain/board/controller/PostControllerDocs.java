@@ -88,8 +88,11 @@ public interface PostControllerDocs {
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = PostDetailResponse.class))),
-            @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content),
-            @ApiResponse(responseCode = "404", description = "(message : \"게시글을 찾을 수 없습니다.\")", content = @Content)
+            @ApiResponse(responseCode = "404", description = """
+                (message : "멤버가 존재하지 않습니다.")
+                                
+                (message : "게시글을 찾을 수 없습니다.")
+                """, content = @Content),
         }
     )
     @GetMapping(value = "/{id}")
