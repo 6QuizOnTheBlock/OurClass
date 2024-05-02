@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -23,19 +23,57 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
 import com.sixkids.designsystem.component.item.UlbanChallengeItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.Challenge
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+@Composable
+fun ChallengeRoute(
+    viewModel: ChallengeHistoryViewModel = hiltViewModel(),
+    navigateToDetail: (Int) -> Unit,
+    navigateToCreate: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getRunningChallenge()
+        viewModel.getChallengeHistory()
+    }
+
+    LaunchedEffect(key1 = viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(sideEffect.detailId)
+                ChallengeHistoryEffect.NavigateToCreateChallenge -> navigateToCreate()
+                is ChallengeHistoryEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+            }
+        }
+    }
+
+    ChallengeHistoryScreen(
+        uiState = uiState,
+        challengeItems = viewModel.challengeHistory?.collectAsLazyPagingItems(),
+        navigateToDetail = { challengeId ->
+            viewModel.navigateChallengeDetail(challengeId)
+        },
+        navigateToCreate = navigateToCreate
+    )
+}
 
 @Composable
 fun ChallengeHistoryScreen(
-    padding: PaddingValues,
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
+    challengeItems: LazyPagingItems<Challenge>? = null,
     navigateToDetail: (Int) -> Unit = {},
     navigateToCreate: () -> Unit = {},
 ) {
@@ -49,9 +87,8 @@ fun ChallengeHistoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
     ) {
-        val currentChallenge = uiState.currentChallenge
+        val currentChallenge = uiState.runningChallenge
         if (currentChallenge == null) {
             UlbanDefaultAppBar(
                 leftIcon = com.sixkids.designsystem.R.drawable.hifive,
@@ -66,13 +103,13 @@ fun ChallengeHistoryScreen(
                 leftIcon = com.sixkids.designsystem.R.drawable.hifive,
                 title = stringResource(id = R.string.hifive_challenge),
                 content = currentChallenge.title,
-                topDescription = "${currentChallenge.startDate.formatToMonthDayTime()} ~ ${currentChallenge.endDate.formatToMonthDayTime()}",
-                bottomDescription = currentChallenge.description,
+                topDescription = "${currentChallenge.startTime.formatToMonthDayTime()} ~ ${currentChallenge.endTime.formatToMonthDayTime()}",
+                bottomDescription = currentChallenge.content,
                 color = Red,
                 onclick = { navigateToDetail(currentChallenge.id) },
-                totalCnt = currentChallenge.totalUserCount,
-                successCnt = currentChallenge.activeUserCount,
-                badgeCount = currentChallenge.pendingChallengeCount,
+                totalCnt = currentChallenge.totalMemberCount,
+                successCnt = currentChallenge.doneMemberCount,
+                badgeCount = currentChallenge.waitingCount,
                 expanded = !isScrolled
             )
         }
@@ -92,7 +129,7 @@ fun ChallengeHistoryScreen(
             )
             Divider(modifier = Modifier.padding(vertical = 4.dp))
 
-            if (uiState.challengeHistory.isEmpty()) {
+            if (challengeItems == null) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
@@ -110,33 +147,29 @@ fun ChallengeHistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(
-                        items = uiState.challengeHistory,
-                        key = { it.id }
-                    ) { challenge ->
-                        UlbanChallengeItem(
-                            title = challenge.title,
-                            description = challenge.description,
-                            startDate = challenge.startDate,
-                            endDate = challenge.endDate,
-                            userCount = challenge.userCount,
-                        )
+                    items(challengeItems.itemCount) { index ->
+                        challengeItems[index]?.let { challenge ->
+                            UlbanChallengeItem(
+                                title = challenge.title,
+                                description = challenge.content,
+                                startDate = challenge.startTime,
+                                endDate = challenge.endTime,
+                                userCount = challenge.headCount,
+                                onClick = { navigateToDetail(challenge.id) }
+                            )
+                        }
                     }
                 }
             }
         }
 
-
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MyPageDefaultScreenPreview() {
     UlbanTheme {
-        ChallengeHistoryScreen(
-            padding = PaddingValues(0.dp),
-        )
+        ChallengeHistoryScreen()
     }
 }

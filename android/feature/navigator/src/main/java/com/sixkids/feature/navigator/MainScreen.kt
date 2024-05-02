@@ -32,6 +32,7 @@ import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
+import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -74,10 +75,18 @@ fun MainScreen(
             homeNavGraph(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
+                navigateToChallenge = navigator::navigateChallengeHistory,
             )
 
             boardNavGraph(
                 padding = innerPadding,
+            )
+
+            challengeNavGraph(
+                padding = innerPadding,
+                navigateChallengeDetail = navigator::navigateChallengeDetail,
+                navigateCreateChallenge = navigator::navigateCreateChallenge,
+                handleException = viewModel::handleException,
             )
 
             manageClassNavGraph(
