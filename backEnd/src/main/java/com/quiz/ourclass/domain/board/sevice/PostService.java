@@ -10,9 +10,9 @@ public interface PostService {
 
     Long write(Long organizationId, MultipartFile file, PostRequest request);
 
-    Long modify(Long id, MultipartFile file, UpdatePostRequest request);
+    Long modify(Long postId, MultipartFile file, UpdatePostRequest request);
 
-    Boolean delete(Long id);
+    Boolean delete(Long postId);
 
-    PostDetailResponse detailView(Long id);
+    PostDetailResponse detailView(Long postId);
 }
