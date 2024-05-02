@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.member.service;
 
 import com.quiz.ourclass.domain.member.dto.OIDCDecodePayload;
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
+import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
@@ -63,7 +64,7 @@ public class MemberService {
             .map(oidcService::certificatingIdToken) // ID 토큰 검증
             .map(payload -> memberRepository.findByEmail(payload.getEmail()) // 이메일로 멤버 조회
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND))) // 멤버가 없으면 예외 발생
-            .map(member -> createTokenDTO(member)) // 토큰 생성 및 반환
+            .map(this::createTokenDTO) // 토큰 생성 및 반환
             .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
     }
 
@@ -72,6 +73,15 @@ public class MemberService {
         String accessToken = jwtUtil.createToken(member, true);
         String refreshToken = jwtUtil.createToken(member, false);
         return TokenDTO.of(accessToken, refreshToken);
+    }
+
+    public TokenDTO giveDeveloperAccessToken (DeveloperAtRtRequest request) {
+
+        return  Optional.ofNullable(request.getEmail())
+            .flatMap(memberRepository::findByEmail) // 이제 올바르게 Optional<Member>를 다룹니다.
+            .map(this::createTokenDTO) // 멤버가 존재하면 토큰 생성
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)); // 멤버가 없거나 토큰 생성이 실패했을 때 예외 처리
+
     }
 
     private SocialType checkSocialType(String socialType) {
