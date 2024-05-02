@@ -53,7 +53,7 @@ class MainNavigator(
     /**
      * Home Navigation
      */
-    fun navigateHome(navOptions: NavOptions) {
+    fun navigateHome() {
         navController.navigate(HomeRoute.defaultRoute){
             popUpTo(navController.graph.id){
                 inclusive = true

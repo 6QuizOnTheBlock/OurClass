@@ -52,7 +52,7 @@ private const val TAG = "HONG"
 @Composable
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
-//    navigateToHome: () -> Unit,
+    navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit
 ) {
     val context = LocalContext.current
@@ -67,7 +67,7 @@ fun LoginRoute(
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LoginEffect.NavigateToSignUp -> navigateToSignUp()
-//            LoginEffect.NavigateToHome -> navigateToHome()
+            LoginEffect.NavigateToHome -> navigateToHome()
         }
     }
 
@@ -80,8 +80,7 @@ fun LoginRoute(
                     viewModel.login(idToken)
                 },
                 onFailed = {
-                    Log.d(TAG, "LoginRoute: ${it?.message}")
-                    Exception()
+                    Log.d(TAG, "카카오 에러!")
                 }
             )
         }

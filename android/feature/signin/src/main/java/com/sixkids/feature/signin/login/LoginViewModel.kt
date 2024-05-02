@@ -3,6 +3,7 @@ package com.sixkids.feature.signin.login
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.user.SignInUseCase
+import com.sixkids.model.NotFoundException
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,9 +19,17 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             signInUseCase(idToken)
                 .onSuccess {
-                    Log.d(TAG, "login: ${it}")
+                    postSideEffect(LoginEffect.NavigateToHome)
                 }.onFailure {
-                    Log.d(TAG, "login: ${it}")
+                    when(it){
+                        is NotFoundException -> {
+                            Log.d(TAG, "login: NotFoundException")
+                            postSideEffect(LoginEffect.NavigateToSignUp)
+                        }
+                        else -> {
+                            Log.d(TAG, "login: ${it.message}")
+                        }
+                    }
                 }
         }
     }

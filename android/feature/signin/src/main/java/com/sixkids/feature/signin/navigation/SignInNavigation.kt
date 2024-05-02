@@ -1,6 +1,5 @@
 package com.sixkids.feature.signin.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -17,12 +16,18 @@ fun NavController.navigateSignUp() {
 
 
 fun NavGraphBuilder.signInNavGraph(
-    navigateToSignUp: () -> Unit
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     composable(route = SignInRoute.defaultRoute){
         LoginRoute(
             navigateToSignUp = navigateToSignUp,
+            navigateToHome = navigateToHome
         )
+    }
+
+    composable(route = SignInRoute.signUpRoute){
+        // SignUpRoute()
     }
 }
 
