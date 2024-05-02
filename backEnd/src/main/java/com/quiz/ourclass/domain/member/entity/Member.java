@@ -44,18 +44,20 @@ public class Member {
     }
 
 
-    public static Member Guest(String email, String name, SocialType socialType) {
+    public static Member of (String email, String name, SocialType socialType,  String profileImage, String role) {
         return Member.builder()
             .email(email)
             .name(name)
             .socialType(socialType)
             .role(Role.GUEST)
+            .profileImage(profileImage)
+            .role(role.equals("TEACHER") ? Role.TEACHER : Role.STUDENT)
             .build();
     }
 
     public static Member addInfo(Member member, String profileImage, String role) {
         member.setProfileImage(profileImage);
-        member.setRole(role.equals("TEACHER") ? Role.TEACHER : Role.STUDENT);
+        member.setRole(role.equalsIgnoreCase("TEACHER") ? Role.TEACHER : Role.STUDENT);
 
         return member;
     }
