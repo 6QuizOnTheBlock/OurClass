@@ -1,4 +1,4 @@
-package com.sixkids.domain.usecase
+package com.sixkids.domain.usecase.challenge
 
 import com.sixkids.domain.repository.ChallengeRepository
 import javax.inject.Inject

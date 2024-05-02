@@ -4,10 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.sixkids.data.api.ChallengeService
+import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.challenge.remote.ChallengeHistoryPagingSource
 import com.sixkids.data.repository.challenge.remote.ChallengeHistoryPagingSource.Companion.DEFAULT_SIZE
 import com.sixkids.domain.repository.ChallengeRepository
 import com.sixkids.model.Challenge
+import com.sixkids.model.RunningChallenge
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -28,5 +30,10 @@ class ChallengeRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+
+    override suspend fun getRunningChallenge(organizationId: Int): RunningChallenge {
+        val response = challengeService.getRunningChallenge(organizationId)
+        return response.getOrThrow().data.toModel()
+    }
 
 }

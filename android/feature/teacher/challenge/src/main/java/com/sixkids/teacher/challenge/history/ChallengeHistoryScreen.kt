@@ -45,6 +45,7 @@ fun ChallengeRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.getRunningChallenge()
         viewModel.getChallengeHistory()
     }
 
@@ -85,7 +86,7 @@ fun ChallengeHistoryScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val currentChallenge = uiState.currentChallenge
+        val currentChallenge = uiState.runningChallenge
         if (currentChallenge == null) {
             UlbanDefaultAppBar(
                 leftIcon = com.sixkids.designsystem.R.drawable.hifive,
@@ -100,13 +101,13 @@ fun ChallengeHistoryScreen(
                 leftIcon = com.sixkids.designsystem.R.drawable.hifive,
                 title = stringResource(id = R.string.hifive_challenge),
                 content = currentChallenge.title,
-                topDescription = "${currentChallenge.startDate.formatToMonthDayTime()} ~ ${currentChallenge.endDate.formatToMonthDayTime()}",
-                bottomDescription = currentChallenge.description,
+                topDescription = "${currentChallenge.startTime.formatToMonthDayTime()} ~ ${currentChallenge.endTime.formatToMonthDayTime()}",
+                bottomDescription = currentChallenge.content,
                 color = Red,
                 onclick = { navigateToDetail(currentChallenge.id) },
-                totalCnt = currentChallenge.totalUserCount,
-                successCnt = currentChallenge.activeUserCount,
-                badgeCount = currentChallenge.pendingChallengeCount,
+                totalCnt = currentChallenge.totalMemberCount,
+                successCnt = currentChallenge.doneMemberCount,
+                badgeCount = currentChallenge.waitingCount,
                 expanded = !isScrolled
             )
         }

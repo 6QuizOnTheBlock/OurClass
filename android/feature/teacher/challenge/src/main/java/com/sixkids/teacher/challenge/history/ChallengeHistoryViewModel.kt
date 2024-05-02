@@ -3,7 +3,8 @@ package com.sixkids.teacher.challenge.history
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sixkids.domain.usecase.GetChallengeHistoryUseCase
+import com.sixkids.domain.usecase.challenge.GetChallengeHistoryUseCase
+import com.sixkids.domain.usecase.challenge.GetRunningChallengeUseCase
 import com.sixkids.model.Challenge
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeHistoryViewModel @Inject constructor(
-    private val getChallengeHistoryUseCase: GetChallengeHistoryUseCase
+    private val getChallengeHistoryUseCase: GetChallengeHistoryUseCase,
+    private val getRunningChallengeUseCase: GetRunningChallengeUseCase
 ) : BaseViewModel<ChallengeHistoryState, ChallengeHistoryEffect>(
     ChallengeHistoryState()
 ) {
@@ -32,4 +34,16 @@ class ChallengeHistoryViewModel @Inject constructor(
         }
     }
 
+    fun getRunningChallenge() {
+        viewModelScope.launch {
+            intent { copy(isLoading = true) }
+            getRunningChallengeUseCase(1)
+                .onSuccess {
+                    intent { copy(isLoading = false, runningChallenge = it) }
+                }.onFailure {
+                    //TODO 에러 처리
+                }
+        }
+
+    }
 }

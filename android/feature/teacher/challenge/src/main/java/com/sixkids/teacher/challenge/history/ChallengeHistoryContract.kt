@@ -1,12 +1,12 @@
 package com.sixkids.teacher.challenge.history
 
-import com.sixkids.model.ActiveChallenge
+import com.sixkids.model.RunningChallenge
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 data class ChallengeHistoryState(
     val isLoading: Boolean = false,
-    val currentChallenge: ActiveChallenge? = null,
+    val runningChallenge: RunningChallenge? = null,
     val totalChallengeCount: Int = 0,
 ) : UiState
 
