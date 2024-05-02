@@ -36,7 +36,7 @@ public class CommentController implements CommentControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(commentId));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResultResponse<Boolean>> delete(
         @PathVariable(value = "id") Long id) {
         Boolean isDelete = commentService.delete(id);
