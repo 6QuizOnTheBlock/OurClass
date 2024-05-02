@@ -17,7 +17,7 @@ class ChallengeCreateViewModel @Inject constructor(
     private var content: String = ""
     private var startTime: LocalDateTime = LocalDateTime.now()
     private var endTime: LocalDateTime = LocalDateTime.now()
-    private var point: Int = 0
+    private var point: String = ""
 
 
 

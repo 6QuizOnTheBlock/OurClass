@@ -1,7 +1,6 @@
 package com.sixkids.designsystem.component.textfield
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,17 +44,16 @@ fun UlbanUnderLineWithTitleTextField(
 
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            when(inputTextType){
+            when (inputTextType) {
                 InputTextType.TEXT -> {
                     UlbanBasicTextField(
-                        modifier = Modifier
+                        modifier = modifier
                             .weight(1f),
                         text = text,
                         onTextChange = onTextChange,
@@ -66,6 +64,7 @@ fun UlbanUnderLineWithTitleTextField(
                         visualTransformation = visualTransformation
                     )
                 }
+
                 InputTextType.POINT -> {
                     UlbanNumberTextField(
                         modifier = Modifier
@@ -78,6 +77,7 @@ fun UlbanUnderLineWithTitleTextField(
                         postfix = stringResource(id = R.string.point_postfix)
                     )
                 }
+
                 InputTextType.PEOPLE -> {
                     UlbanNumberTextField(
                         modifier = Modifier
@@ -122,9 +122,9 @@ enum class InputTextType {
 fun UlbanUnderLineTextFieldPreview() {
     var text by remember { mutableStateOf("4월 22일 함께 달리기") }
     var point by remember { mutableStateOf("1200") }
-    var peopleCnt by remember { mutableStateOf("3") }
+    var peopleCnt by remember { mutableStateOf("") }
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+//        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(text = "제목을 입력해 주세요", style = UlbanTypography.titleSmall)
         UlbanUnderLineWithTitleTextField(
