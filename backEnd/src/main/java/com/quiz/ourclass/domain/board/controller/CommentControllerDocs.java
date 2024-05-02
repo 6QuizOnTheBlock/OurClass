@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.board.controller;
 
 import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,6 +53,6 @@ public interface CommentControllerDocs {
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id,
         @Parameter(name = "request", description = "댓글 수정 DTO", required = true, in = ParameterIn.DEFAULT)
-        @RequestBody CommentRequest request
+        @RequestBody UpdateCommentRequest request
     );
 }

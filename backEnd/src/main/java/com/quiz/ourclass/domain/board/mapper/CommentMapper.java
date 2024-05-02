@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.board.mapper;
 import com.quiz.ourclass.domain.board.dto.CommentChildrenDTO;
 import com.quiz.ourclass.domain.board.dto.CommentDTO;
 import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -20,6 +21,6 @@ public interface CommentMapper {
     @Mapping(source = "boardId", target = "post.id")
     Comment CommentRequestTocomment(CommentRequest commentRequest);
 
-    void updateCommentFromRequest(CommentRequest request, @MappingTarget Comment comment);
+    void updateCommentFromRequest(UpdateCommentRequest request, @MappingTarget Comment comment);
 
 }

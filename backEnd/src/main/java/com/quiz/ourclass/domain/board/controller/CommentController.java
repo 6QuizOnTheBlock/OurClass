@@ -1,10 +1,12 @@
 package com.quiz.ourclass.domain.board.controller;
 
 import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 import com.quiz.ourclass.domain.board.sevice.CommentService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +31,15 @@ public class CommentController implements CommentControllerDocs {
     @PatchMapping("/{id}")
     public ResponseEntity<ResultResponse<Long>> modify(
         @PathVariable(value = "id") Long id,
-        @RequestBody CommentRequest request) {
+        @RequestBody UpdateCommentRequest request) {
         Long commentId = commentService.modify(id, request);
         return ResponseEntity.ok(ResultResponse.success(commentId));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<ResultResponse<Boolean>> delete(
+        @PathVariable(value = "id") Long id) {
+        Boolean isDelete = commentService.delete(id);
+        return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
 }

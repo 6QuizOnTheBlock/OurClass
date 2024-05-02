@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.board.sevice;
 
 import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
@@ -49,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long modify(Long commentId, CommentRequest request) {
+    public Long modify(Long commentId, UpdateCommentRequest request) {
         Member member = userAccessUtil.getMember();
 
         //댓글 조회
@@ -65,5 +66,11 @@ public class CommentServiceImpl implements CommentService {
         commentMapper.updateCommentFromRequest(request, comment);
         comment.setUpdateTime(LocalDateTime.now());
         return commentRepository.save(comment).getId();
+    }
+
+    @Override
+    public Boolean delete(Long commentId) {
+
+        return null;
     }
 }
