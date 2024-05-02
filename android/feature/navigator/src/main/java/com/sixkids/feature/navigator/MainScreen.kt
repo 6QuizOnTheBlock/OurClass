@@ -30,6 +30,7 @@ import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
+import com.sixkids.teacher.managestudent.navigation.manageStudentNavGraph
 
 @Composable
 fun MainScreen(
@@ -64,6 +65,10 @@ fun MainScreen(
             )
 
             manageClassNavGraph(
+                padding = innerPadding,
+            )
+
+            manageStudentNavGraph(
                 padding = innerPadding,
             )
             

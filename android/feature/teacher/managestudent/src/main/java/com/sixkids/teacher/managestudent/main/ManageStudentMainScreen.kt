@@ -35,7 +35,12 @@ fun ManageStudentMainRoute(
     Box(
         modifier = Modifier.padding(padding)
     ) {
-
+        ManageStudentMainScreen(
+            manageStudentMainState = ManageStudentMainState(
+                classString = "인동초등학교 1학년 1반",
+                studentList = listOf("김철수", "이영희", "박영수","김철수", "이영희", "박영수")
+            )
+        )
     }
 }
 
