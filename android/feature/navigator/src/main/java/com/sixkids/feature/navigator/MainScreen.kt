@@ -1,6 +1,5 @@
 package com.sixkids.feature.navigator
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -19,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,7 +34,6 @@ import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
-import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
