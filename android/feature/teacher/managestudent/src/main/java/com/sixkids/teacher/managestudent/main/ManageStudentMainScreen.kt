@@ -78,7 +78,7 @@ fun ManageStudentMainScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "이름순",
+                    text = stringResource(id = R.string.manage_student_sort_by_name),
                     style = UlbanTypography.bodyLarge,
                 )
                 Image(
