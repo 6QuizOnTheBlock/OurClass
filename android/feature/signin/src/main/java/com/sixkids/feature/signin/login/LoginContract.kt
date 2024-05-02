@@ -4,7 +4,7 @@ import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 sealed interface LoginEffect : SideEffect{
-//    data object NavigateToHome : LoginEffect
+    data object NavigateToHome : LoginEffect
     data object NavigateToSignUp : LoginEffect
 }
 
