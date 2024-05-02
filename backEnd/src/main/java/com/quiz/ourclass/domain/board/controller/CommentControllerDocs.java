@@ -81,7 +81,7 @@ public interface CommentControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"댓글을 찾을 수 없습니다.\")", content = @Content)
         }
     )
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<ResultResponse<Boolean>> delete(
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
