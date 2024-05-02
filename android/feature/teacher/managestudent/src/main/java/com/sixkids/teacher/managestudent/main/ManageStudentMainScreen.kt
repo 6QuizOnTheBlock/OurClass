@@ -36,6 +36,7 @@ fun ManageStudentMainRoute(
         modifier = Modifier.padding(padding)
     ) {
         ManageStudentMainScreen(
+            //TODO : ManageStudentMainState를 받아오는 로직 추가 후 더미데이터 제거
             manageStudentMainState = ManageStudentMainState(
                 classString = "인동초등학교 1학년 1반",
                 studentList = listOf("김철수", "이영희", "박영수","김철수", "이영희", "박영수")
