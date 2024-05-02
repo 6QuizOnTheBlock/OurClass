@@ -1,12 +1,14 @@
 package com.quiz.ourclass.domain.board.sevice;
 
 import com.quiz.ourclass.domain.board.dto.request.CommentRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
 import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
@@ -49,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long modify(Long commentId, CommentRequest request) {
+    public Long modify(Long commentId, UpdateCommentRequest request) {
         Member member = userAccessUtil.getMember();
 
         //댓글 조회
@@ -63,6 +65,33 @@ public class CommentServiceImpl implements CommentService {
 
         //댓글 수정
         commentMapper.updateCommentFromRequest(request, comment);
+        comment.setUpdateTime(LocalDateTime.now());
         return commentRepository.save(comment).getId();
+    }
+
+    /*
+     * 시스템 관리자는 모든 댓글 삭제 가능
+     * 단체 담당자는 해당 단체의 댓글 삭제 가능
+     * 작성자 본인은 본인의 댓글 삭제 가능
+     */
+    @Override
+    public Boolean delete(Long commentId) {
+        Member member = userAccessUtil.getMember();
+
+        //댓글 삭제 권한 검증
+        Role requesterRole = member.getRole();
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
+        if (requesterRole == Role.STUDENT) {
+            if (comment.getMember().getId() != member.getId()) {
+                throw new GlobalException(ErrorCode.COMMENT_DELETE_STUDENT_PERMISSION_DENIED);
+            }
+        } else if (requesterRole == Role.TEACHER) {
+            Long orgId = comment.getPost().getOrganization().getId();
+            userAccessUtil.isMemberOfOrganization(member, orgId);
+        }
+        //댓글 삭제
+        commentRepository.delete(comment);
+        return true;
     }
 }
