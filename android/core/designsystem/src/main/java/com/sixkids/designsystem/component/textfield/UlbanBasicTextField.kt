@@ -48,10 +48,6 @@ fun UlbanBasicTextField(
     ) { innerTextField ->
         Box(
             modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = Gray,
-                )
                 .padding(8.dp)
         ) {
             if (text.isEmpty()) {
