@@ -11,6 +11,7 @@ public enum ErrorCode {
     //global
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "멤버가 존재하지 않습니다."),
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "첨부한 파일이 S3에 업로드 되지 않았습니다."),
+    GUEST_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "게스트는 권한이 없습니다."),
 
     //member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
@@ -32,6 +33,7 @@ public enum ErrorCode {
 
     //comment
     COMMENT_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "댓글 작성자 단체와 현재 사용자 단체가 다릅니다."),
+    COMMENT_DELETE_STUDENT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "댓글 작성자와 요청자가 다릅니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
 
     //image
