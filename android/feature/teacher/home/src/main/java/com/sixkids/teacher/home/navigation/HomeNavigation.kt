@@ -31,16 +31,10 @@ fun NavGraphBuilder.homeNavGraph(
     composable(route = HomeRoute.rankRoute) {
         RankRoute(padding)
     }
-
-    composable(route = HomeRoute.challengeRoute) {
-        ChallengeRoute(
-            padding = padding,
-        )
-    }
 }
+
 
 object HomeRoute {
     const val defaultRoute = "home"
     const val rankRoute = "rank"
-    const val challengeRoute = "challenge"
 }
