@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
+import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
@@ -85,6 +86,10 @@ class MainNavigator(
 
     fun navigateSignUp(){
         navController.navigateSignUp()
+    }
+
+    fun navigateSignUpPhoto(isTeacher: Boolean){
+        navController.navigateSignUpPhoto(isTeacher)
     }
 
     fun navigateChallengeHistory() {

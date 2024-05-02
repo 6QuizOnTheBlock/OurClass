@@ -95,6 +95,7 @@ fun MainScreen(
 
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
+                navigateSignUpPhoto = navigator::navigateSignUpPhoto,
                 navigateToHome = navigator::navigateHome,
             )
         }
