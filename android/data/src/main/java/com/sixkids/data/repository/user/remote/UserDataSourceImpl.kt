@@ -10,7 +10,7 @@ class UserDataSourceImpl @Inject constructor(
     private val signInService: SignInService
 ) : UserDataSource{
     override suspend fun signIn(idToken: String): JwtToken {
-        return signInService.signIn(SignInRequest(idToken)).getOrThrow().toModel()
+        return signInService.signIn(SignInRequest(idToken)).getOrThrow().data.toModel()
     }
 
 }

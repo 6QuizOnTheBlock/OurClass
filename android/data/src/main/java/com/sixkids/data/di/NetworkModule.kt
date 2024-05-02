@@ -5,6 +5,7 @@ import com.sixkids.data.network.RefreshTokenInterceptor
 import com.sixkids.data.network.TokenAuthenticator
 import com.sixkids.data.network.TokenInterceptor
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +51,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun moshi(): Moshi {
-        return Moshi.Builder().build()
+        return Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
     }
 
     @Provides
