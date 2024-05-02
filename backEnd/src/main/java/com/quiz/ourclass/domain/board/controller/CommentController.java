@@ -24,8 +24,8 @@ public class CommentController implements CommentControllerDocs {
     @PostMapping
     public ResponseEntity<ResultResponse<Long>> write(
         @RequestBody CommentRequest request) {
-        Long id = commentService.write(request);
-        return ResponseEntity.ok(ResultResponse.success(id));
+        Long commentId = commentService.write(request);
+        return ResponseEntity.ok(ResultResponse.success(commentId));
     }
 
     @PatchMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.board.controller;
 
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.sevice.PostService;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -37,7 +38,7 @@ public class PostController implements PostControllerDocs {
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResultResponse<?>> modify(
         @PathVariable(value = "id") Long id,
-        @RequestPart(value = "request") PostRequest request,
+        @RequestPart(value = "request") UpdatePostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
         Long postId = postService.modify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
