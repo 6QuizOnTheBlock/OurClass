@@ -28,7 +28,9 @@ public enum ErrorCode {
     AWS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 서버 에러입니다."),
 
     //post
+    POST_WRITE_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "알림장을 작성할 수 있는 권한이 없습니다."),
     POST_EDIT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "멤버가 작성한 게시글을 찾을 수 없습니다."),
+    POST_DELETE_STUDENT_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "게시글 작성자와 요청자가 다릅니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
 
     //comment

@@ -8,6 +8,7 @@ import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
+import com.quiz.ourclass.domain.board.entity.PostCategory;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
 import com.quiz.ourclass.domain.board.mapper.ImageMapper;
 import com.quiz.ourclass.domain.board.mapper.PostMapper;
@@ -43,13 +44,16 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
     private final ImageMapper imageMapper;
 
-
     @Transactional
     @Override
     public Long write(Long organizationId, MultipartFile file, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
+
+        if (request.postCategory() == PostCategory.NOTICE && member.getRole() == Role.STUDENT) {
+            throw new GlobalException(ErrorCode.POST_WRITE_PERMISSION_DENIED);
+        }
 
         //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인
         MemberOrganization memberOrganization =
@@ -83,13 +87,13 @@ public class PostServiceImpl implements PostService {
      * */
     @Transactional
     @Override
-    public Long modify(Long id, MultipartFile file, UpdatePostRequest request) {
+    public Long modify(Long postId, MultipartFile file, UpdatePostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();
 
         //수정 할 게시글 조회
-        Post post = postRepository.findByIdAndAuthor(id, member)
+        Post post = postRepository.findByIdAndAuthor(postId, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_EDIT_PERMISSION_DENIED));
 
         //이미지 관련 처리 부분
@@ -128,34 +132,34 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Boolean delete(Long id) {
-        //학생은 학생이 작성한 게시글만 삭제 가능
-        //교사는 모든 게시글 삭제 가능
+    public Boolean delete(Long postId) {
         Member member = userAccessUtil.getMember();
-        Post post = null;
-        if (member.getRole() == Role.STUDENT) {
-            post = postRepository.findByIdAndAuthor(id, member)
-                .orElseThrow(() -> new GlobalException(ErrorCode.POST_EDIT_PERMISSION_DENIED));
-        } else if (member.getRole() == Role.TEACHER || member.getRole() == Role.ADMIN) {
-            post = postRepository.findById(id)
-                .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
-        }
-        if (post == null) {
-            throw new GlobalException(ErrorCode.POST_NOT_FOUND);
+
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
+
+        Role requesterRole = member.getRole();
+        if (requesterRole == Role.STUDENT) {
+            if (post.getAuthor().getId() != member.getId()) {
+                throw new GlobalException(ErrorCode.POST_DELETE_STUDENT_PERMISSION_DENIED);
+            }
+        } else if (requesterRole == Role.TEACHER) {
+            Long orgId = post.getOrganization().getId();
+            userAccessUtil.isMemberOfOrganization(member, orgId);
         }
         postRepository.delete(post);
         return true;
     }
 
     @Override
-    public PostDetailResponse detailView(Long id) {
+    public PostDetailResponse detailView(Long postId) {
         //게시글 조회
-        Post post = postRepository.fetchPostWithDetails(id);
+        Post post = postRepository.fetchPostWithDetails(postId);
         if (post == null) { //게시글 없으면 예외처리
             throw new GlobalException(ErrorCode.POST_NOT_FOUND);
         }
         //게시글에 해당하는 댓글 List 조회
-        List<Comment> comments = commentRepository.findAllByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostId(postId);
         //댓글, 대댓글 필터 처리
         List<CommentDTO> parentComments = buildParentComments(comments);
         //게시글 mapping 작업
