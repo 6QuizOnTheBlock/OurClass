@@ -1,5 +1,7 @@
 package com.sixkids.designsystem.component.textfield
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.theme.Gray
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -42,10 +45,15 @@ fun UlbanBasicTextField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
     ) { innerTextField ->
-        if (text.isEmpty()) {
-            Text(text = hint, style = textStyle.copy(color = Gray))
+        Box(modifier = modifier.padding(8.dp)) {
+            if (text.isEmpty()) {
+                Text(
+                    text = hint,
+                    style = textStyle.copy(color = Gray)
+                )
+            }
+            innerTextField()
         }
-        innerTextField()
     }
 }
 

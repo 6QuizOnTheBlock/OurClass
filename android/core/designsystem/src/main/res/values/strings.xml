@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hifive_user_count">%d명 참여</string>
-    <string name="point_unit">" POINT"</string>
+    <string name="point_postfix">" POINT"</string>
+    <string name="people_postfix">명</string>
 </resources>

@@ -18,7 +18,7 @@ import com.sixkids.designsystem.theme.UlbanTypography
 
 
 @Composable
-fun UlbanPointTextField(
+fun UlbanNumberTextField(
     modifier: Modifier = Modifier,
     text: String = "",
     maxLines: Int = 1,
@@ -27,8 +27,8 @@ fun UlbanPointTextField(
     hint: String = "",
     textStyle: TextStyle = UlbanTypography.bodyLarge,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    postfix: String = "",
 ) {
-    val pointUnitString = stringResource(R.string.point_unit)
     UlbanBasicTextField(
         modifier = modifier,
         text = text,
@@ -39,7 +39,7 @@ fun UlbanPointTextField(
         minLines = minLines,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         keyboardActions = keyboardActions,
-        visualTransformation = PointVisualTransformation(pointUnitString),
+        visualTransformation = NumberVisualTransformation(postfix),
     )
 }
 
@@ -49,7 +49,7 @@ fun UlbanPointTextField(
 fun UlbanPointTextFieldPreview() {
     UlbanTheme {
         var price by remember { mutableStateOf("") }
-        UlbanPointTextField(
+        UlbanNumberTextField(
             text = price,
             onTextChange = { price = it },
             hint = "Hint",
