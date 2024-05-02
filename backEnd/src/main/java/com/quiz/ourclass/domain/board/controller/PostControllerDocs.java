@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.board.controller;
 
 
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,7 +62,7 @@ public interface PostControllerDocs {
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id,
         @Parameter(name = "request", description = "게시글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
-        @RequestPart(value = "request") PostRequest request,
+        @RequestPart(value = "request") UpdatePostRequest request,
         @Parameter(name = "file", description = "사진 파일", required = true, in = ParameterIn.DEFAULT)
         @RequestPart(value = "file", required = false) MultipartFile file
     );

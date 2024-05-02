@@ -1,6 +1,5 @@
 package com.quiz.ourclass.domain.board.entity;
 
-import com.quiz.ourclass.domain.board.dto.request.PostRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import jakarta.persistence.Entity;
@@ -19,8 +18,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @Entity
 public class Post {
 
@@ -42,22 +41,4 @@ public class Post {
     boolean secretStatus;
     @Enumerated(EnumType.STRING)
     PostCategory postCategory;
-
-    public Post(Member member, Organization organization, Image image, PostRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-
-        this.author = member;
-        this.organization = organization;
-        this.image = image;
-        this.title = request.getTitle();
-        this.content = request.getContent();
-        this.createTime = now;
-        this.updateTime = now;
-        this.secretStatus = request.getAnonymous();
-        this.postCategory = request.getType();
-    }
-
-    public Post() {
-
-    }
 }
