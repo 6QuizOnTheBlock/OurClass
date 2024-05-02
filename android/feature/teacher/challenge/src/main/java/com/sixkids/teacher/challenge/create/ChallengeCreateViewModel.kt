@@ -11,6 +11,8 @@ class ChallengeCreateViewModel @Inject constructor(
 ) : BaseViewModel<ChallengeCreateUiState, ChallengeCreateEffect>(
     ChallengeCreateUiState()
 ) {
+
+
     private var title: String = ""
     private var content: String = ""
     private var startTime: LocalDateTime = LocalDateTime.now()
