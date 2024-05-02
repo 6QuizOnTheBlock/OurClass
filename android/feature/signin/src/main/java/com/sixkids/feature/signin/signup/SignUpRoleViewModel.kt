@@ -11,10 +11,6 @@ class SignUpRoleViewModel @Inject constructor(
 ) : BaseViewModel<SignUpRoleState, SignUpRoleEffect>(SignUpRoleState()){
 
     fun onTeacherClick(isTeacher: Boolean){
-        if (isTeacher){
-
-        }else{
-            postSideEffect(SignUpRoleEffect.NavigateToSignUpPhoto)
-        }
+        postSideEffect(SignUpRoleEffect.NavigateToSignUpPhoto(isTeacher))
     }
 }

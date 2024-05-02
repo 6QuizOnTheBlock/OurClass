@@ -6,7 +6,7 @@ import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 sealed interface SignUpRoleEffect : SideEffect {
-    data object NavigateToSignUpPhoto : SignUpRoleEffect
+    data class NavigateToSignUpPhoto(val isTeacher: Boolean) : SignUpRoleEffect
 }
 
 data class SignUpRoleState(

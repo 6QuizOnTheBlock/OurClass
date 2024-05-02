@@ -19,7 +19,7 @@ fun NavController.navigateSignUp() {
 }
 
 fun NavController.navigateSignUpPhoto(isTeacher: Boolean) {
-    navigate(SignInRoute.signUpRoute)
+    navigate(SignInRoute.signUpPhotoRoute(isTeacher))
 }
 
 
@@ -43,7 +43,8 @@ fun NavGraphBuilder.signInNavGraph(
         )
     }
 
-    composable(route = SignInRoute.signUpPhotoRoute,
+    composable(
+        route = SignInRoute.signUpPhotoRoute,
         arguments = listOf(navArgument(SignInRoute.SIGN_UP_TEACHER) { type = NavType.BoolType })
     ){
         SignUpPhotoRoute(
@@ -53,11 +54,11 @@ fun NavGraphBuilder.signInNavGraph(
 }
 
 object SignInRoute{
-    const val SIGN_UP_TEACHER = "signUpTeacher"
+    const val SIGN_UP_TEACHER = "isTeacher"
 
     const val defaultRoute = "signIn"
     const val signUpRoute = "signUp"
-    const val signUpPhotoRoute = "sign-up-photo/$SIGN_UP_TEACHER"
+    const val signUpPhotoRoute = "sign-up-photo/{$SIGN_UP_TEACHER}"
 
     fun signUpPhotoRoute(isTeacher: Boolean) = "sign-up-photo/$isTeacher"
 

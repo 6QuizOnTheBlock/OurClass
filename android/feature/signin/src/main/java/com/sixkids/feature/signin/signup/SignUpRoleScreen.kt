@@ -33,14 +33,14 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun SignUpRoute(
     viewModel: SignUpRoleViewModel = hiltViewModel(),
-    navigateToSignUpPhoto: () -> Unit
+    navigateToSignUpPhoto: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    viewModel.sideEffect.collectWithLifecycle {
-        when (it) {
-            is SignUpRoleEffect.NavigateToSignUpPhoto -> navigateToSignUpPhoto()
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is SignUpRoleEffect.NavigateToSignUpPhoto -> navigateToSignUpPhoto(sideEffect.isTeacher)
         }
     }
 
