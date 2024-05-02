@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.managestudent.R
 import com.sixkids.designsystem.R as UlbanRes
 
@@ -39,7 +40,14 @@ fun ManageStudentMainRoute(
             //TODO : ManageStudentMainState를 받아오는 로직 추가 후 더미데이터 제거
             manageStudentMainState = ManageStudentMainState(
                 classString = "인동초등학교 1학년 1반",
-                studentList = listOf("김철수", "이영희", "박영수","김철수", "이영희", "박영수")
+                studentList = List(20
+                ) {
+                    MemberSimple(
+                        0,
+                        "정철주",
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
+                    )
+                }
             )
         )
     }
@@ -95,9 +103,8 @@ fun ManageStudentMainScreen(
             items(manageStudentMainState.studentList.size) {
                 StudentSimpleCardItem(
                     modifier = Modifier.padding(4.dp),
-                    name = manageStudentMainState.studentList[it],
-                    photo = "https://i.pinimg.com/564x/f9/e5/c1/f9e5c19d2a51bda108e5ea536d7745c1.jpg",
-                    score = 97
+                    name = manageStudentMainState.studentList[it].name,
+                    photo = manageStudentMainState.studentList[it].photo,
                 )
             }
         }
@@ -111,7 +118,14 @@ fun ManageStudentMainScreenPreview() {
     ManageStudentMainScreen(
         manageStudentMainState = ManageStudentMainState(
             classString = "인동초등학교 1학년 1반",
-            studentList = listOf("김철수", "이영희", "박영수","김철수", "이영희", "박영수")
+            studentList = List(20
+            ) {
+                MemberSimple(
+                    0,
+                    "정철주",
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
+                )
+            }
         )
     )
 }
