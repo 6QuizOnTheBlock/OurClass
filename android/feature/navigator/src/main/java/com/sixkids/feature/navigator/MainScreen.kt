@@ -40,9 +40,21 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    // TODO viewmodel: MainViewModel,
+    viewModel: MainViewModel = hiltViewModel(),
     navigator: MainNavigator = rememberMainNavigator()
 ) {
+
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is MainSideEffect.ShowSnackbar -> {
+                viewModel.onShowSnackbar(uiState.snackbarToken)
+            }
+        }
+
+    }
+
     Scaffold(
         bottomBar = {
             BottomNav(
