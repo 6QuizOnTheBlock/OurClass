@@ -23,7 +23,7 @@ import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = HomeRoute.defaultRoute
+    val startDestination = SignInRoute.defaultRoute
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
