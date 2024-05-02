@@ -1,6 +1,7 @@
 package com.sixkids.feature.signin.signup
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,23 +17,58 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sixkids.designsystem.theme.UlbanTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sixkids.designsystem.R
+import com.sixkids.designsystem.theme.Green
+import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTypography
-
+import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
-fun SignUpRoleScreen() {
+fun SignUpRoute(
+    viewModel: SignUpRoleViewModel = hiltViewModel(),
+    navigateToSignUpPhoto: () -> Unit
+) {
+    val context = LocalContext.current
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is SignUpRoleEffect.NavigateToSignUpPhoto -> navigateToSignUpPhoto()
+        }
+    }
+
+    SignUpScreen(
+        uiState = uiState,
+        onTeacherClick = {
+            viewModel.onTeacherClick(it)
+        }
+    )
+}
+
+@Composable
+fun SignUpScreen(
+    uiState: SignUpRoleState,
+    onTeacherClick: (Boolean) -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(21.dp)
     ) {
         TopSection()
-        BodySection(onCardClick = {}, Modifier.weight(1f).padding(0.dp, 0.dp, 0.dp, 40.dp))
+        BodySection(
+            onCardClick = onTeacherClick,
+            modifier = Modifier
+                .weight(1f)
+                .padding(0.dp, 0.dp, 0.dp, 40.dp)
+        )
     }
 }
 
@@ -42,7 +78,7 @@ fun TopSection() {
         horizontalAlignment = Alignment.Start,
     ) {
         Image(
-            painter = painterResource(id = com.sixkids.designsystem.R.drawable.ic_arrow_back),
+            painter = painterResource(id = R.drawable.ic_arrow_back),
             contentDescription = "back button",
         )
 
@@ -55,7 +91,7 @@ fun TopSection() {
 }
 
 @Composable
-fun BodySection(onCardClick: () -> Unit, modifier: Modifier = Modifier) {
+fun BodySection(onCardClick: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,25 +100,30 @@ fun BodySection(onCardClick: () -> Unit, modifier: Modifier = Modifier) {
         Card(
             modifier = Modifier
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable {
+                    onCardClick(true)
+                },
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
-                containerColor = com.sixkids.designsystem.theme.Red
+                containerColor = Red
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp,
                 pressedElevation = 8.dp
             ),
         ) {
-            Row(modifier = Modifier
-                .padding(40.dp, 10.dp)
-                .fillMaxWidth(),
+            Row(
+                modifier = Modifier
+                    .padding(40.dp, 10.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start) {
+                horizontalArrangement = Arrangement.Start
+            ) {
 
                 Image(
-                    painter = painterResource(id = com.sixkids.designsystem.R.drawable.teacher_woman),
-                    contentDescription = "role image",
+                    painter = painterResource(id = R.drawable.teacher_woman),
+                    contentDescription = "teacher",
                     modifier = Modifier.size(120.dp)
                 )
 
@@ -101,21 +142,26 @@ fun BodySection(onCardClick: () -> Unit, modifier: Modifier = Modifier) {
         Card(
             modifier = Modifier
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable {
+                    onCardClick(false)
+                },
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
-                containerColor = com.sixkids.designsystem.theme.Green
+                containerColor = Green
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp,
                 pressedElevation = 8.dp
             ),
         ) {
-            Row(modifier = Modifier
-                .padding(40.dp, 10.dp)
-                .fillMaxWidth(),
+            Row(
+                modifier = Modifier
+                    .padding(40.dp, 10.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End) {
+                horizontalArrangement = Arrangement.End
+            ) {
                 Text(
                     text = "학생",
                     style = UlbanTypography.titleLarge.copy(
@@ -126,8 +172,8 @@ fun BodySection(onCardClick: () -> Unit, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.size(10.dp))
 
                 Image(
-                    painter = painterResource(id = com.sixkids.designsystem.R.drawable.student_girl),
-                    contentDescription = "role image",
+                    painter = painterResource(id = R.drawable.student_girl),
+                    contentDescription = "student",
                     modifier = Modifier.size(120.dp)
                 )
 
@@ -135,13 +181,3 @@ fun BodySection(onCardClick: () -> Unit, modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-@Composable
-@Preview(showBackground = true)
-fun PreviewSignUpRoleScreen() {
-    UlbanTheme {
-        SignUpRoleScreen()
-    }
-}
-

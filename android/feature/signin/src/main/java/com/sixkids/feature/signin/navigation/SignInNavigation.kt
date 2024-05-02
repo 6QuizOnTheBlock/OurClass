@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.sixkids.feature.signin.login.LoginRoute
+import com.sixkids.feature.signin.signup.SignUpRoute
 
 
 fun NavController.navigateSignIn() {
@@ -27,7 +28,10 @@ fun NavGraphBuilder.signInNavGraph(
     }
 
     composable(route = SignInRoute.signUpRoute){
-        // SignUpRoute()
+        SignUpRoute {
+            navigateToHome()
+
+        }
     }
 }
 
