@@ -23,7 +23,8 @@ public class GlobalExceptionHandler {
         GlobalException globalException) {
         ResultResponse<Object> response = ResultResponse.fail(
             globalException.getErrorCode().getMessage());
-        return new ResponseEntity<>(response, jsonHeaders,
-            globalException.getErrorCode().getStatus());
+        return ResponseEntity.ok(response);
+//        return new ResponseEntity<>(response, jsonHeaders,
+//            globalException.getErrorCode().getStatus());
     }
 }
