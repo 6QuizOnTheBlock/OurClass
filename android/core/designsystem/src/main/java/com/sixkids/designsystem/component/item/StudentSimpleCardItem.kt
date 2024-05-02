@@ -40,6 +40,10 @@ fun StudentSimpleCardItem(
         colors = CardDefaults.cardColors(
             containerColor = Cream
         ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp
+        ),
         onClick = onClick
     ) {
         Column(
@@ -51,8 +55,9 @@ fun StudentSimpleCardItem(
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape),
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .padding(8.dp),
                 model = photo,
                 contentScale = ContentScale.Crop,
                 contentDescription = "프로필 사진"
@@ -71,11 +76,11 @@ fun StudentSimpleCardItem(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF000000)
+@Preview(showBackground = true)
 @Composable
 fun StudentSimpleCardItemPreview() {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(4),
+        columns = GridCells.Fixed(3),
 
     ) {
         items(25){
