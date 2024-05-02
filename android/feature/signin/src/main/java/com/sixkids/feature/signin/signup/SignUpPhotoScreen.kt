@@ -1,5 +1,6 @@
 package com.sixkids.feature.signin.signup
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,8 @@ import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.ui.extension.collectWithLifecycle
 
+private const val TAG = "D107"
+
 @Composable
 fun SignUpPhotoRoute(
     viewModel: SignUpPhotoViewModel = hiltViewModel(),
@@ -50,8 +53,15 @@ fun SignUpPhotoRoute(
 
     SignUpPhotoScreen(
         uiState = uiState,
-        isTeacher = true,
-        onClickPhoto = {}
+        isTeacher = viewModel.isTeacher,
+        onClickPhoto = { resId ->
+            Log.d(TAG, "SignUpPhotoRoute: $resId")
+            if (resId == R.drawable.camera) {
+                Log.d(TAG, "SignUpPhotoRoute: open gallery")
+            }else{
+                viewModel.onProfileDefaultPhotoSelected(resId)
+            }
+        }
     )
 
 }
@@ -59,11 +69,12 @@ fun SignUpPhotoRoute(
 @Composable
 fun SignUpPhotoScreen(
     uiState: SignUpPhotoState,
-    isTeacher: Boolean = true,
+    isTeacher: Boolean,
     onClickPhoto: (Int) -> Unit
 ) {
-    val image_man = if (isTeacher) R.drawable.teacher_man else R.drawable.student_boy
-    val image_woman = if (isTeacher) R.drawable.teacher_woman else R.drawable.student_girl
+    Log.d(TAG, "SignUpPhotoScreen: ${uiState.profileDefaultPhoto}")
+    val imageMan = if (isTeacher) R.drawable.teacher_man else R.drawable.student_boy
+    val imageWoman = if (isTeacher) R.drawable.teacher_woman else R.drawable.student_girl
 
     Column(
         modifier = Modifier
@@ -90,7 +101,7 @@ fun SignUpPhotoScreen(
                     .padding(10.dp)
                     .weight(1f)
                     .aspectRatio(1f),
-                img = image_man,
+                img = imageMan,
                 onClickPhoto = onClickPhoto
             )
 
@@ -99,7 +110,7 @@ fun SignUpPhotoScreen(
                     .padding(10.dp)
                     .weight(1f)
                     .aspectRatio(1f),
-                img = image_woman,
+                img = imageWoman,
                 onClickPhoto = onClickPhoto
             )
 
@@ -143,7 +154,7 @@ fun DoneButton() {
         onClick = { /*TODO*/ },
         modifier = Modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp), // 둥근 모서리를 가진 버튼
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Blue
         )
@@ -172,20 +183,20 @@ fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) 
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            if(uiState.profileDefaultPhoto != null) {
+            if(uiState.profileUserPhoto != null) {
                 Image(
-                    painter = painterResource(id = uiState.profileDefaultPhoto),
+                    bitmap = uiState.profileUserPhoto.asImageBitmap(),
                     contentDescription = "selected photo",
-                    modifier = Modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }else{
                 Image(
-                    bitmap = uiState.profileUserPhoto!!.asImageBitmap(),
+                    painter = painterResource(id = uiState.profileDefaultPhoto ?: R.drawable.camera),
                     contentDescription = "selected photo",
-                    modifier = Modifier,
+                    modifier = Modifier.fillMaxSize(),
                 )
-
             }
+
         }
     }
 }
