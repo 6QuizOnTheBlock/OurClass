@@ -41,7 +41,7 @@ class ChallengeHistoryViewModel @Inject constructor(
                 .onSuccess {
                     intent { copy(isLoading = false, runningChallenge = it) }
                 }.onFailure {
-                    //TODO 에러 처리
+                    postSideEffect(ChallengeHistoryEffect.HandleException(it, ::getRunningChallenge))
                 }
         }
 

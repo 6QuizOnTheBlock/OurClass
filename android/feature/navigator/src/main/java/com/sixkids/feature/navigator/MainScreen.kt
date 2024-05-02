@@ -86,6 +86,7 @@ fun MainScreen(
                 padding = innerPadding,
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
+                handleException = viewModel::handleException,
             )
 
             manageClassNavGraph(

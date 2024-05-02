@@ -32,6 +32,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun handleException(throwable: Throwable, retry: () -> Unit) {
+        onShowSnackbar(SnackbarToken(
+            message = throwable.message ?: "알 수 없는 에러 입니다.",
+            actionButtonText = "재시도",
+            onClickActionButton = retry
+        ))
+    }
+
 
     companion object {
         private const val SHOW_TOAST_LENGTH = 2000L

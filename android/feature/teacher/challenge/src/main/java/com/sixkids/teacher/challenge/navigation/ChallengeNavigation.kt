@@ -26,13 +26,15 @@ fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
     navigateChallengeDetail: (Int) -> Unit,
     navigateCreateChallenge: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     composable(route = ChallengeRoute.defaultRoute) {
         ChallengeRoute(
             navigateToDetail = { challengeId ->
                 navigateChallengeDetail(challengeId)
             },
-            navigateToCreate = navigateCreateChallenge
+            navigateToCreate = navigateCreateChallenge,
+            handleException = handleException
         )
     }
 

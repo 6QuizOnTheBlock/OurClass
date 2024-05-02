@@ -41,6 +41,7 @@ fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
     navigateToDetail: (Int) -> Unit,
     navigateToCreate: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -54,6 +55,7 @@ fun ChallengeRoute(
             when (sideEffect) {
                 is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(sideEffect.detailId)
                 ChallengeHistoryEffect.NavigateToCreateChallenge -> navigateToCreate()
+                is ChallengeHistoryEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
             }
         }
     }
