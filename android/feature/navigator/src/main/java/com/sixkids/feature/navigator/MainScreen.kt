@@ -34,26 +34,15 @@ import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
+import com.sixkids.teacher.managestudent.navigation.manageStudentNavGraph
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel(),
+    // TODO viewmodel: MainViewModel,
     navigator: MainNavigator = rememberMainNavigator()
 ) {
-
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
-    viewModel.sideEffect.collectWithLifecycle {
-        when (it) {
-            is MainSideEffect.ShowSnackbar -> {
-                viewModel.onShowSnackbar(uiState.snackbarToken)
-            }
-        }
-
-    }
-
     Scaffold(
         bottomBar = {
             BottomNav(
@@ -84,6 +73,10 @@ fun MainScreen(
                 padding = innerPadding,
             )
 
+            manageStudentNavGraph(
+                padding = innerPadding,
+            )
+
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
                 navigateToHome = navigator::navigateHome,
@@ -100,7 +93,6 @@ fun MainScreen(
             )
         }
     }
-
 }
 
 

@@ -11,4 +11,5 @@ dependencies {
     implementation(projects.feature.teacher.board)
     implementation(projects.feature.teacher.manageclass)
     implementation(projects.feature.signin)
+    implementation(projects.feature.teacher.managestudent)
 }
