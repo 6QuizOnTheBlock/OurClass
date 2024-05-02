@@ -3,21 +3,31 @@ package com.quiz.ourclass.domain.challenge.repository;
 import static com.quiz.ourclass.domain.challenge.entity.QChallenge.challenge;
 import static com.quiz.ourclass.domain.challenge.entity.QChallengeGroup.challengeGroup;
 import static com.quiz.ourclass.domain.challenge.entity.QGroupMember.groupMember;
+import static com.quiz.ourclass.domain.challenge.entity.QReport.report;
+import static com.quiz.ourclass.domain.member.entity.QMember.member;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.challenge.dto.ChallengeSimpleDTO;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.GroupMatchingResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.ReportResponse;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
+@Log4j2
 public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuerydsl {
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -67,5 +77,66 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             booleanBuilder.and(challenge.id.in(subQuery));
         }
         return booleanBuilder;
+    }
+
+    @Override
+    public ChallengeResponse getChallengeDetail(long id, long groupId) {
+        ChallengeSimpleDTO challengeSimpleDTO = jpaQueryFactory
+            .select(Projections.constructor(
+                ChallengeSimpleDTO.class,
+                challenge.id,
+                challenge.title,
+                challenge.content,
+                challenge.headCount,
+                challenge.startTime,
+                challenge.endTime))
+            .from(challenge)
+            .where(challenge.id.eq(id))
+            .fetchOne();
+
+        List<ReportResponse> reportResponses = jpaQueryFactory
+            .select(Projections.fields(
+                ReportResponse.class,
+                report.id.as("id"),
+                Projections.constructor(
+                    GroupMatchingResponse.class,
+                    challengeGroup.id,
+                    challengeGroup.headCount,
+                    challengeGroup.leaderId,
+                    Expressions.constant(new ArrayList<MemberSimpleDTO>())
+                ).as("group"),
+                challengeGroup.createTime.as("startTime"),
+                report.createTime.as("endTime"),
+                report.file.as("file"),
+                report.content.as("content"),
+                report.acceptStatus.as("acceptStatus")
+            ))
+            .from(report)
+            .join(report.challengeGroup, challengeGroup)
+            .on(challengeGroup.challenge.id.eq(id))
+            .fetch();
+
+        for (ReportResponse reportResponse : reportResponses) {
+            List<MemberSimpleDTO> members = jpaQueryFactory
+                .select(Projections.constructor(
+                    MemberSimpleDTO.class,
+                    member.id,
+                    member.name,
+                    member.profileImage.as("photo")
+                ))
+                .from(groupMember)
+                .join(groupMember.member, member)
+                .where(groupMember.challengeGroup.id.eq(reportResponse.getGroup().getId()))
+                .fetch();
+            for (MemberSimpleDTO memberSimpleDTO : members) {
+                log.info(memberSimpleDTO);
+                System.out.println(memberSimpleDTO);
+            }
+            reportResponse.getGroup().setStudents(members);
+        }
+
+        return ChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
+            .reports(reportResponses)
+            .build();
     }
 }
