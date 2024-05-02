@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.sixkids.teacher.challenge.create.ChallengeCreateRoute
 import com.sixkids.teacher.challenge.detail.ChallengeDetailRoute
 import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
@@ -43,6 +44,10 @@ fun NavGraphBuilder.challengeNavGraph(
         arguments = listOf(navArgument(CHALLENGE_ID_NAME) { type = NavType.IntType })
     ) {
         ChallengeDetailRoute()
+    }
+
+    composable(route = ChallengeRoute.createRoute) {
+        ChallengeCreateRoute()
     }
 
 }
