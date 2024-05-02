@@ -3,11 +3,13 @@ package com.quiz.ourclass.domain.board.sevice;
 import com.quiz.ourclass.domain.board.dto.CommentChildrenDTO;
 import com.quiz.ourclass.domain.board.dto.CommentDTO;
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
 import com.quiz.ourclass.domain.board.mapper.CommentMapper;
+import com.quiz.ourclass.domain.board.mapper.ImageMapper;
 import com.quiz.ourclass.domain.board.mapper.PostMapper;
 import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.ImageRepository;
@@ -39,16 +41,17 @@ public class PostServiceImpl implements PostService {
     private final UserAccessUtil userAccessUtil;
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
+    private final ImageMapper imageMapper;
 
 
     @Transactional
     @Override
     public Long write(Long organizationId, MultipartFile file, PostRequest request) {
-        //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
+        LocalDateTime now = LocalDateTime.now();
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember();
 
-        //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인(classId)
+        //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인
         MemberOrganization memberOrganization =
             userAccessUtil.isMemberOfOrganization(member, organizationId);
 
@@ -59,18 +62,29 @@ public class PostServiceImpl implements PostService {
             if (url.isEmpty()) {
                 throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
             }
-            image = imageRepository.save(
-                new Image(file.getOriginalFilename(), url, LocalDateTime.now()));
+            image = Image.builder()
+                .originalName(file.getOriginalFilename())
+                .path(url)
+                .createTime(now)
+                .build();
+            imageRepository.save(image);
         }
         //게시글 저장하기
-        Post post = new Post(member, memberOrganization.getOrganization(), image, request);
+        Post post = postMapper.postRequestToPost(
+            request, member, memberOrganization.getOrganization(), now, image
+        );
         return postRepository.save(post).getId();
     }
 
+    /*
+     * boolean 값 여부로 확인해서 이미지 삭제
+     * multipart 가 새로 들어오면 이미지 수정
+     * multipart 가 아무것도 입력으로 오지 않으면 글만 수정 (이미지 수정 X)
+     * */
     @Transactional
     @Override
-    public Long modify(Long id, MultipartFile file, PostRequest request) {
-        //TODO : Mapper 사용해서 로직 구성해야함 (추후 리팩토링 필요)
+    public Long modify(Long id, MultipartFile file, UpdatePostRequest request) {
+        LocalDateTime now = LocalDateTime.now();
         //게시글을 수정할 수 있는 멤버인지 검증
         Member member = userAccessUtil.getMember();
 
@@ -80,7 +94,7 @@ public class PostServiceImpl implements PostService {
 
         //이미지 관련 처리 부분
         Image image = post.getImage();
-        if (request.getImageDelete() && image != null) { //이미지를 삭제하는 경우
+        if (request.imageDelete() && image != null) { //이미지를 삭제하는 경우
             awsS3ObjectStorage.deleteFile(image.getPath());
             imageRepository.delete(image);
             post.setImage(null);
@@ -95,20 +109,19 @@ public class PostServiceImpl implements PostService {
                 throw new GlobalException(ErrorCode.FILE_UPLOAD_ERROR);
             }
             if (image == null) { //이미지가 없었다면 새로 이미지 저장
-                image = new Image(file.getOriginalFilename(), url, LocalDateTime.now());
+                image = Image.builder()
+                    .originalName(file.getOriginalFilename())
+                    .path(url)
+                    .createTime(now)
+                    .build();
             } else { //이미지 정보 수정
-                image.setOriginalName(file.getOriginalFilename());
-                image.setPath(url);
-                image.setCreateTime(LocalDateTime.now());
+                imageMapper.updateImage(file.getOriginalFilename(), url, now, image);
             }
             image = imageRepository.save(image);
             post.setImage(image);
         }
         // 게시글 정보 변경
-        post.setPostCategory(request.getType());
-        post.setTitle(request.getTitle());
-        post.setContent(request.getContent());
-        post.setSecretStatus(request.getAnonymous());
+        postMapper.updatePostFromRequest(now, request, post);
 
         return postRepository.save(post).getId();
     }

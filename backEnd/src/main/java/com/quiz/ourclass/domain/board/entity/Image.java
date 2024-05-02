@@ -7,11 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Image {
 
@@ -23,13 +29,4 @@ public class Image {
     String originalName;
     String path;
     LocalDateTime createTime;
-
-    public Image(String originalName, String path, LocalDateTime createTime) {
-        this.originalName = originalName;
-        this.path = path;
-        this.createTime = createTime;
-    }
-
-    public Image() {
-    }
 }
