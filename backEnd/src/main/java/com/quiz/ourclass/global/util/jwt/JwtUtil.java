@@ -83,7 +83,7 @@ public class JwtUtil {
         //  header: 사용한 알고리즘에 따라 관련 메타데이터가 채워짐
         //  payload: 제목, 발행일, 만료일이 들어갔다. 추가하고 싶다면 Claim 객체를 만들어 내용을 채우고 추가하면 된다.
         //  signWith: JWT 토큰 위조 방지를 위한 서명
-        return BEARER_PREFIX + Jwts.builder()
+        return Jwts.builder()
             .setSubject(String.valueOf(member.getId()))
             .setIssuedAt(new Date(now.getTime()))
             .setExpiration(new Date(now.getTime() + (isAccess? ACCESS_TOKEN_TIME : REFRESH_TOKEN_TIME)))
