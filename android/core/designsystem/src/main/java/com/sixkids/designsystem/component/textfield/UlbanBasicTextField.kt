@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.textfield
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
@@ -38,18 +39,25 @@ fun UlbanBasicTextField(
         modifier = modifier,
         value = text,
         onValueChange = onTextChange,
-        textStyle = UlbanTypography.bodyLarge,
+        textStyle = textStyle,
         maxLines = maxLines,
         minLines = minLines,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
     ) { innerTextField ->
-        Box(modifier = modifier.padding(8.dp)) {
+        Box(
+            modifier = Modifier
+                .border(
+                    width = 1.dp,
+                    color = Gray,
+                )
+                .padding(8.dp)
+        ) {
             if (text.isEmpty()) {
                 Text(
                     text = hint,
-                    style = textStyle.copy(color = Gray)
+                    style = textStyle.copy(color = Gray),
                 )
             }
             innerTextField()

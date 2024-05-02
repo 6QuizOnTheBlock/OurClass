@@ -5,4 +5,8 @@
     <string name="total_challenge_count">지금까지 %d번 함께 달리기를 진행했어요</string>
     <string name="no_challenge_history">기록이 없어요</string>
     <string name="challenge_report_state">%d개 팀, %d명 학생이 참여했어요.</string>
+    <string name="please_input_point">포인트를 입력해 주세요</string>
+    <string name="point_hint">점수를 입력하세요</string>
+    <string name="please_input_content">내용을 입력해 주세요</string>
+    <string name="please_input_title">제목을 입력해 주세요</string>
 </resources>

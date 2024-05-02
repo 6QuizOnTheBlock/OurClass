@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -35,7 +37,7 @@ fun ChallengeCreateScreen(
     updateContent: (String) -> Unit = {},
     updateStartTime: (LocalDateTime) -> Unit = {},
     updateEndTime: (LocalDateTime) -> Unit = {},
-    updatePoint: (Int) -> Unit = {},
+    updatePoint: (String) -> Unit = {},
     onShowSnackbar: (SnackbarToken) -> Unit = {},
 ) {
     AnimatedContent(
@@ -49,7 +51,7 @@ fun ChallengeCreateScreen(
                 updateContent = {},
                 updateStartTime = {},
                 updateEndTime = {},
-                updatePoint = {},
+                updatePoint = updatePoint,
                 onShowSnackbar = {},
             )
 
@@ -58,5 +60,16 @@ fun ChallengeCreateScreen(
             ChallengeCreateStep.CREATE -> TODO()
             ChallengeCreateStep.RESULT -> TODO()
         }
+    }
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChallengeCreateScreenPreview() {
+    UlbanTheme {
+        ChallengeCreateScreen(
+            uiState = ChallengeCreateUiState(),
+        )
     }
 }
