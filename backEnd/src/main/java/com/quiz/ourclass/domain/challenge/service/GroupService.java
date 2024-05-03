@@ -9,4 +9,6 @@ public interface GroupService {
     long createGroup(String key);
 
     void deleteMatchingMember(String key, Long id);
+
+    void inviteMatchingRoom(String key, Long memberId);
 }

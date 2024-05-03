@@ -11,6 +11,9 @@ import com.quiz.ourclass.domain.challenge.repository.ChallengeGroupRepository;
 import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.challenge.repository.GroupMemberRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
+import com.quiz.ourclass.domain.notice.dto.SseDTO;
+import com.quiz.ourclass.domain.notice.dto.SseType;
+import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
@@ -27,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class GroupServiceImpl implements GroupService {
 
+    private final SseService sseService;
     private final ChallengeGroupRepository challengeGroupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final MemberRepository memberRepository;
@@ -90,6 +94,17 @@ public class GroupServiceImpl implements GroupService {
             throw new GlobalException(PERMISSION_DENIED);
         }
         redisUtil.removeMembers(key, String.valueOf(id));
+    }
+
+    @Override
+    public void inviteMatchingRoom(String key, Long memberId) {
+        SseDTO sseDTO = SseDTO.builder()
+            .eventType(SseType.INVITE_REQUEST)
+            .receiverId(memberId)
+            .url(key)
+            .time(LocalDateTime.now())
+            .build();
+        sseService.send(sseDTO);
     }
 
     private static String makeGroupKey(long challengeId, long MemberId) {
