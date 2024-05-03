@@ -8,7 +8,7 @@ public interface GroupService {
 
     long createGroup(String key);
 
-    void deleteMatchingMember(String key, Long id);
+    void deleteMatchingMember(String key, Long memberId);
 
     void inviteMatchingRoom(String key, Long memberId);
 }

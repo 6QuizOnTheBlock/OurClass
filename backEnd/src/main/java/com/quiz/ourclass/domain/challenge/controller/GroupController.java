@@ -36,8 +36,8 @@ public class GroupController {
     }
 
     @DeleteMapping("/groups/matching")
-    public ResponseEntity<ResultResponse<?>> deleteMatchingMember(String key, Long id) {
-        groupService.deleteMatchingMember(key, id);
+    public ResponseEntity<ResultResponse<?>> deleteMatchingMember(String key, Long memberId) {
+        groupService.deleteMatchingMember(key, memberId);
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 

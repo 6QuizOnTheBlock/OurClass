@@ -106,19 +106,19 @@ public class GroupServiceImpl implements GroupService {
 
     @Transactional
     @Override
-    public void deleteMatchingMember(String key, Long id) {
+    public void deleteMatchingMember(String key, Long memberId) {
         long loginUserId = accessUtil.getMember().getId();
         if (getLeaderIdFromKey(key) != loginUserId) {
             throw new GlobalException(PERMISSION_DENIED);
         }
         SseDTO sseDTO = SseDTO.builder()
             .eventType(SseType.KICK_MEMBER)
-            .receiverId(id)
+            .receiverId(memberId)
             .url(key)
             .time(LocalDateTime.now())
             .build();
         sseService.send(sseDTO);
-        redisUtil.removeMembers(key, String.valueOf(id));
+        redisUtil.removeMembers(key, String.valueOf(memberId));
     }
 
     @Override
