@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.textfield.InputTextType
-import com.sixkids.designsystem.component.textfield.UlbanUnderLineWithTitleTextField
+import com.sixkids.designsystem.component.textfield.UlbanUnderLineTextField
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.challenge.R
@@ -71,6 +71,7 @@ fun InfoContentRoute(
                     message = context.getString(R.string.please_input_all_info)
                 )
             )
+
             InfoEffect.MoveGroupTypeStep -> moveNextStep()
         }
     }
@@ -111,7 +112,7 @@ fun InfoContent(
 
     val focusManager = LocalFocusManager.current
 
-    val handelNext: () -> Unit ={
+    val handelNext: () -> Unit = {
         if (uiState.step != InfoStep.POINT) {
             moveNextInput()
         } else {
@@ -148,7 +149,7 @@ fun InfoContent(
                         text = stringResource(R.string.please_input_point),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineWithTitleTextField(
+                    UlbanUnderLineTextField(
                         modifier = Modifier
                             .focusRequester(pointFocusRequester)
                             .onFocusChanged {
@@ -179,7 +180,7 @@ fun InfoContent(
                         text = stringResource(R.string.end_time),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineWithTitleTextField(
+                    UlbanUnderLineTextField(
                         modifier = Modifier
                             .focusRequester(endTimeFocusRequester)
                             .onFocusChanged {
@@ -208,7 +209,7 @@ fun InfoContent(
                         text = stringResource(R.string.start_time),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineWithTitleTextField(
+                    UlbanUnderLineTextField(
                         modifier = Modifier
                             .focusRequester(startTimeFocusRequester)
                             .onFocusChanged {
@@ -236,7 +237,7 @@ fun InfoContent(
                         text = stringResource(R.string.please_input_content),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineWithTitleTextField(
+                    UlbanUnderLineTextField(
                         modifier = Modifier
                             .focusRequester(contentFocusRequester)
                             .onFocusChanged {
@@ -266,7 +267,7 @@ fun InfoContent(
                         text = stringResource(R.string.please_input_title),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineWithTitleTextField(
+                    UlbanUnderLineTextField(
                         modifier = Modifier
                             .focusRequester(titleFocusRequester)
                             .onFocusChanged {

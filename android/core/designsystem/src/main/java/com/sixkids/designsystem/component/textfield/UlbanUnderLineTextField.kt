@@ -29,7 +29,7 @@ import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.UlbanTypography
 
 @Composable
-fun UlbanUnderLineWithTitleTextField(
+fun UlbanUnderLineTextField(
     modifier: Modifier = Modifier,
     text: String = "",
     onTextChange: (String) -> Unit = {},
@@ -127,7 +127,7 @@ fun UlbanUnderLineTextFieldPreview() {
 //        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(text = "제목을 입력해 주세요", style = UlbanTypography.titleSmall)
-        UlbanUnderLineWithTitleTextField(
+        UlbanUnderLineTextField(
             text = text,
             onTextChange = { text = it },
             hint = "hint",
@@ -138,7 +138,7 @@ fun UlbanUnderLineTextFieldPreview() {
         )
 
         Text(text = "포인트를 입력해 주세요", style = UlbanTypography.titleSmall)
-        UlbanUnderLineWithTitleTextField(
+        UlbanUnderLineTextField(
             text = point,
             onTextChange = { point = it },
             hint = "hint",
@@ -149,7 +149,7 @@ fun UlbanUnderLineTextFieldPreview() {
         )
 
         Text(text = "그룹 최소 인원을 설정해 주세요", style = UlbanTypography.titleSmall)
-        UlbanUnderLineWithTitleTextField(
+        UlbanUnderLineTextField(
             text = peopleCnt,
             onTextChange = { peopleCnt = it },
             hint = "hint",
