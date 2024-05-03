@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
+import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
@@ -20,6 +21,8 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +35,7 @@ public class MemberService {
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final OidcService oidcService;
     private final DefaultImageRepository defaultImageRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -131,4 +135,7 @@ public class MemberService {
     }
 
 
+    public void updateFcmToken(UpdateFcmTokenRequest request) {
+        ValueOperations<String, Object> value = redisTemplate.opsForValue();
+    }
 }

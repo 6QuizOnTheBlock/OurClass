@@ -6,7 +6,8 @@ import lombok.Builder;
 @Builder
 public record RunningChallengeResponse(
     ChallengeSimpleDTO challengeSimpleDTO,
-    int waitingCount
+    int waitingCount,
+    int doneMemberCount
 ) {
 
 }
