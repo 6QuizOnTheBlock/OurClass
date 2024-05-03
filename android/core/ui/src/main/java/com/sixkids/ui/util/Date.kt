@@ -13,3 +13,8 @@ fun LocalDate.formatToDayMonthYear(): String {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     return this.format(formatter)
 }
+
+fun LocalDateTime.formatToHourMinute(): String {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    return this.format(formatter)
+}
