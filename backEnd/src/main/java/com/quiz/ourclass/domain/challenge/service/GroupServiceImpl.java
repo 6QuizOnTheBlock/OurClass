@@ -51,11 +51,20 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public boolean joinMatchingRoom(String key, boolean joinStatus) {
+        long memberId = accessUtil.getMember().getId();
+        long leaderId = getLeaderIdFromKey(key);
+        SseDTO sseDTO = SseDTO.builder()
+            .eventType(SseType.INVITE_RESPONSE)
+            .receiverId(leaderId)
+            .url(key)
+            .data(String.valueOf(joinStatus))
+            .time(LocalDateTime.now())
+            .build();
+        sseService.send(sseDTO);
         if (!joinStatus) {
             return false;
         }
-        long MemberId = accessUtil.getMember().getId();
-        redisUtil.setAdd(key, String.valueOf(MemberId));
+        redisUtil.setAdd(key, String.valueOf(memberId));
         return true;
     }
 
@@ -81,6 +90,15 @@ public class GroupServiceImpl implements GroupService {
             .map(Optional::get)
             .map(member -> GroupMember.builder().member(member).challengeGroup(group).build())
             .toList();
+        groupMembers.forEach(member -> {
+            SseDTO sseDTO = SseDTO.builder()
+                .eventType(SseType.CREATE_GROUP)
+                .receiverId(member.getId())
+                .url(key)
+                .time(LocalDateTime.now())
+                .build();
+            sseService.send(sseDTO);
+        });
         groupMemberRepository.saveAll(groupMembers);
         redisUtil.delete(key);
         return group.getId();
@@ -93,6 +111,13 @@ public class GroupServiceImpl implements GroupService {
         if (getLeaderIdFromKey(key) != loginUserId) {
             throw new GlobalException(PERMISSION_DENIED);
         }
+        SseDTO sseDTO = SseDTO.builder()
+            .eventType(SseType.KICK_MEMBER)
+            .receiverId(id)
+            .url(key)
+            .time(LocalDateTime.now())
+            .build();
+        sseService.send(sseDTO);
         redisUtil.removeMembers(key, String.valueOf(id));
     }
 
