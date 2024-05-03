@@ -69,4 +69,12 @@ public class MemberController implements MemberControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
+    /* 7. 기본 이미지 업데이트 */
+    @PatchMapping("/default-image")
+    public ResponseEntity<ResultResponse<?>> updateDefaultImage(
+        @ModelAttribute DefaultImageRequest request) {
+
+        return ResponseEntity.ok(
+            ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
+    }
 }
