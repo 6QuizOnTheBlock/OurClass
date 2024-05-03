@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/challenge")
+@RequestMapping("/challenges")
 @RequiredArgsConstructor
 public class GroupController {
 
     private final GroupService groupService;
 
-    @PostMapping("/group/matchingroom")
+    @PostMapping("/groups/matchingroom")
     public ResponseEntity<ResultResponse<?>> createMatchingRoom(long challengeId) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.createMatchingRoom(challengeId)));
     }
 
-    @PostMapping("/group/join")
+    @PostMapping("/groups/join")
     public ResponseEntity<ResultResponse<?>> joinMatchingRoom(String key, boolean joinStatus) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.joinMatchingRoom(key, joinStatus)));
     }
-
+    
 }
