@@ -18,7 +18,7 @@ spring:
       authentication-database: ENC(z33qIA0NJs/P0DdjUma0gA==)
     redis:
       host: ENC(tCytoj2btfmkEuW78BEnFZAa1DZdT8lp)
-      port: ENC(knTIBM9PALqlEPofKSdVTQ==)
+      port: ENC(xYICKbov7iUk/SDmjjy0rQ==)
       password: ENC(5tNR7TfRtIj69kmaPS/JC7P9oqwfW/ooTu9MD/GK6E4=)
 ---
 spring:
