@@ -43,6 +43,7 @@ public class GroupServiceImpl implements GroupService {
         return dataKey;
     }
 
+    @Transactional
     @Override
     public boolean joinMatchingRoom(String key, boolean joinStatus) {
         if (!joinStatus) {
@@ -53,6 +54,7 @@ public class GroupServiceImpl implements GroupService {
         return true;
     }
 
+    @Transactional
     @Override
     public long createGroup(String key) {
         Set<String> members = redisUtil.setMembers(key);
@@ -75,6 +77,7 @@ public class GroupServiceImpl implements GroupService {
             .map(member -> GroupMember.builder().member(member).challengeGroup(group).build())
             .toList();
         groupMemberRepository.saveAll(groupMembers);
+        redisUtil.delete(key);
         return group.getId();
     }
 
