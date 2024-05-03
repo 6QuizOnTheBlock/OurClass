@@ -134,10 +134,6 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
                 .join(groupMember.member, member)
                 .where(groupMember.challengeGroup.id.eq(reportResponse.getGroup().getId()))
                 .fetch();
-            for (MemberSimpleDTO memberSimpleDTO : members) {
-                log.info(memberSimpleDTO);
-                System.out.println(memberSimpleDTO);
-            }
             reportResponse.getGroup().setStudents(members);
         }
 
