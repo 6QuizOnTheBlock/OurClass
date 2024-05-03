@@ -19,6 +19,11 @@ class ChallengeCreateViewModel @Inject constructor(
     private var endTime: LocalDateTime = LocalDateTime.now()
     private var point: String = ""
 
+    fun moveNextStep() {
+        intent {
+            copy(step = ChallengeCreateStep.GROUP_TYPE)
+        }
+    }
 
 
 }

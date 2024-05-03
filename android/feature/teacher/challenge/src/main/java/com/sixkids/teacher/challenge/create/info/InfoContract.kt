@@ -12,6 +12,7 @@ data class InfoState(
     val endTime: LocalDateTime = LocalDateTime.now(),
     val point: String = "",
     val step: InfoStep = InfoStep.TITLE,
+    val stepVisibilityList: List<Boolean> = emptyList()
 ) : UiState
 
 sealed interface InfoEffect : SideEffect {
@@ -21,6 +22,7 @@ sealed interface InfoEffect : SideEffect {
     data class UpdateStartTime(val startTime: LocalDateTime) : InfoEffect
     data class UpdateEndTime(val endTime: LocalDateTime) : InfoEffect
     data class UpdatePoint(val point: String) : InfoEffect
+    data object MoveGroupTypeStep : InfoEffect
     data class ShowSnackbar(val token: SnackbarToken) : InfoEffect
 }
 
@@ -29,5 +31,5 @@ enum class InfoStep {
     CONTENT,
     START_TIME,
     END_TIME,
-    POINT,
+    POINT
 }
