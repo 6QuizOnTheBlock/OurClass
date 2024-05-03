@@ -2,6 +2,7 @@ package com.sixkids.teacher.challenge.create.info
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +49,8 @@ fun InfoContentRoute(
     moveNextStep: () -> Unit,
 ) {
 
+    val context = LocalContext.current
+
     LaunchedEffect(key1 = Unit) {
         viewModel.setInitVisibility()
     }
@@ -60,7 +66,11 @@ fun InfoContentRoute(
             is InfoEffect.UpdateStartTime -> updateStartTime(it.startTime)
             is InfoEffect.UpdateEndTime -> updateEndTime(it.endTime)
             is InfoEffect.UpdatePoint -> updatePoint(it.point)
-            is InfoEffect.ShowSnackbar -> onShowSnackbar(it.token)
+            is InfoEffect.ShowInputErrorSnackbar -> onShowSnackbar(
+                SnackbarToken(
+                    message = context.getString(R.string.please_input_all_info)
+                )
+            )
             InfoEffect.MoveGroupTypeStep -> moveNextStep()
         }
     }
@@ -99,6 +109,16 @@ fun InfoContent(
     val pointFocusRequester = remember { FocusRequester() }
 
 
+    val focusManager = LocalFocusManager.current
+
+    val handelNext: () -> Unit ={
+        if (uiState.step != InfoStep.POINT) {
+            moveNextInput()
+        } else {
+            moveNextStep()
+        }
+    }
+
 
     LaunchedEffect(key1 = uiState.step) {
         if (uiState.stepVisibilityList.isNotEmpty() && uiState.stepVisibilityList[uiState.step.ordinal]) {
@@ -115,6 +135,11 @@ fun InfoContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { focusManager.clearFocus() }
+                )
+            }
     ) {
         if (uiState.stepVisibilityList.isNotEmpty()) {
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.POINT.ordinal]) {
@@ -139,7 +164,7 @@ fun InfoContent(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-//                                moveNextStep()
+                                handelNext()
                             }
                         )
                     )
@@ -151,7 +176,7 @@ fun InfoContent(
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.END_TIME.ordinal]) {
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = "끝나는 시간",
+                        text = stringResource(R.string.end_time),
                         style = UlbanTypography.titleSmall
                     )
                     UlbanUnderLineWithTitleTextField(
@@ -167,7 +192,7 @@ fun InfoContent(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                moveNextInput()
+                                handelNext()
                             }
                         )
                     )
@@ -180,7 +205,7 @@ fun InfoContent(
 
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = "시작되는 시간",
+                        text = stringResource(R.string.start_time),
                         style = UlbanTypography.titleSmall
                     )
                     UlbanUnderLineWithTitleTextField(
@@ -196,7 +221,7 @@ fun InfoContent(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                moveNextInput()
+                                handelNext()
                             }
                         )
                     )
@@ -226,7 +251,7 @@ fun InfoContent(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                moveNextInput()
+                                handelNext()
                             }
                         )
                     )
@@ -256,7 +281,7 @@ fun InfoContent(
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {
-                                moveNextInput()
+                                handelNext()
                             }
                         )
                     )
@@ -268,19 +293,14 @@ fun InfoContent(
         }
         Spacer(modifier = Modifier.weight(1f))
         UlbanFilledButton(
-            text = "다음",
+            text = stringResource(R.string.next),
             onClick = {
-                if (uiState.step != InfoStep.POINT) {
-                    moveNextInput()
-                } else {
-                    moveNextStep()
-                }
+                handelNext()
             },
             modifier = Modifier
                 .fillMaxWidth()
         )
     }
-
 }
 
 

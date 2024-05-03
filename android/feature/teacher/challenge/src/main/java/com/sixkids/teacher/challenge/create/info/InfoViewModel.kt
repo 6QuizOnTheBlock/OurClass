@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create.info
 
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
@@ -110,7 +111,18 @@ class InfoViewModel @Inject constructor(
         }
     }
 
-    fun moveNextStep() = postSideEffect(InfoEffect.MoveGroupTypeStep)
+    fun moveNextStep() {
+        if (
+            uiState.value.title.isEmpty() ||
+            uiState.value.content.isEmpty() ||
+            uiState.value.point.isEmpty()
+        ) {
+            postSideEffect(InfoEffect.ShowInputErrorSnackbar)
+        } else {
+            postSideEffect(InfoEffect.MoveGroupTypeStep)
+        }
+    }
+
     fun focusChange(infoStep: InfoStep) {
         intent {
             copy(step = infoStep)

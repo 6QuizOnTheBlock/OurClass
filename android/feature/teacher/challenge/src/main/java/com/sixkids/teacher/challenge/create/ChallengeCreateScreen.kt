@@ -23,17 +23,22 @@ import java.time.LocalDateTime
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
     infoViewModel: InfoViewModel = hiltViewModel(),
+    onShowSnackbar: (SnackbarToken) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val infoUiState = infoViewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is ChallengeCreateEffect.ShowSnackbar -> onShowSnackbar(it.snackbarToken)
+        }
     }
 
 
     ChallengeCreateScreen(
         uiState = uiState,
         onMoveNextStep = viewModel::moveNextStep,
+        onShowSnackbar = viewModel::onShowSnackbar,
     )
 
 }
@@ -66,7 +71,7 @@ fun ChallengeCreateScreen(
                     updateStartTime = {},
                     updateEndTime = {},
                     updatePoint = updatePoint,
-                    onShowSnackbar = {},
+                    onShowSnackbar = onShowSnackbar,
                     moveNextStep = onMoveNextStep,
                 )
 

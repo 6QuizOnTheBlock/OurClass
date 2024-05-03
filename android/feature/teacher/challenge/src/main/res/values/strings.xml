@@ -9,4 +9,8 @@
     <string name="point_hint">점수를 입력하세요</string>
     <string name="please_input_content">내용을 입력해 주세요</string>
     <string name="please_input_title">제목을 입력해 주세요</string>
+    <string name="please_input_all_info">모든 항목을 입력해주세요.</string>
+    <string name="next">다음</string>
+    <string name="start_time">시작되는 시간</string>
+    <string name="end_time">끝나는 시간</string>
 </resources>
