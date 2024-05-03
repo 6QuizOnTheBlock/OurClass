@@ -20,4 +20,11 @@ public class GroupController {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.createMatchingRoom(challengeId)));
     }
+
+    @PostMapping("/group/join")
+    public ResponseEntity<ResultResponse<?>> joinMatchingRoom(String key, boolean joinStatus) {
+        return ResponseEntity.ok(
+            ResultResponse.success(groupService.joinMatchingRoom(key, joinStatus)));
+    }
+
 }

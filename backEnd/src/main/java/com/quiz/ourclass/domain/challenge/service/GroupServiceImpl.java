@@ -24,6 +24,16 @@ public class GroupServiceImpl implements GroupService {
         return dataKey;
     }
 
+    @Override
+    public boolean joinMatchingRoom(String key, boolean joinStatus) {
+        if (!joinStatus) {
+            return false;
+        }
+        long Memberid = accessUtil.getMember().getId();
+        redisUtil.setAdd(key, String.valueOf(Memberid));
+        return true;
+    }
+
     private static String makeGroupKey(long challengeId, long Memberid) {
         return REDIS_GROUP_KEY + challengeId + "_" + Memberid;
     }
