@@ -8,5 +8,5 @@ public interface ChallengeRepositoryQuerydsl {
 
     ChallengeSliceResponse getChallenges(ChallengSliceRequest challengSliceRequest);
 
-    ChallengeResponse getChallengeDetail(long id, long groupId);
+    ChallengeResponse getChallengeDetail(long id, Long groupId);
 }

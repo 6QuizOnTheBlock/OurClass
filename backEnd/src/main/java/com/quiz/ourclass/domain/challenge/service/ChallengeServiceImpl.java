@@ -127,7 +127,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     @Override
-    public ChallengeResponse getChallengeDetail(long id, long groupId) {
+    public ChallengeResponse getChallengeDetail(long id, Long groupId) {
         return challengeRepository.getChallengeDetail(id, groupId);
     }
 }

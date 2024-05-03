@@ -35,7 +35,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
     @Override
     public ChallengeSliceResponse getChallenges(ChallengSliceRequest request) {
         Pageable pageable = PageRequest.of(request.page(), request.size());
-        BooleanBuilder booleanBuilder = getChallengesBooleanBuilder(request);
+        BooleanBuilder challengeCondition = getChallengesBooleanBuilder(request);
 
         List<ChallengeSimpleDTO> challenges = jpaQueryFactory.select(Projections.constructor(
                 ChallengeSimpleDTO.class,
@@ -47,7 +47,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
                 challenge.endTime
             ))
             .from(challenge)
-            .where(booleanBuilder)
+            .where(challengeCondition)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize() + 1)
             .orderBy(challenge.id.desc())
@@ -64,9 +64,9 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
     }
 
     private static BooleanBuilder getChallengesBooleanBuilder(ChallengSliceRequest request) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        BooleanBuilder challengeCondition = new BooleanBuilder();
         if (request.orgId() != null && request.orgId() > 0) {
-            booleanBuilder.and(challenge.organization.id.eq(request.orgId()));
+            challengeCondition.and(challenge.organization.id.eq(request.orgId()));
         }
         if (request.memberId() != null && request.memberId() > 0) {
             JPQLQuery<Long> subQuery = JPAExpressions
@@ -74,13 +74,13 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
                 .from(groupMember)
                 .join(groupMember.challengeGroup, challengeGroup)
                 .where(groupMember.member.id.eq(request.memberId()));
-            booleanBuilder.and(challenge.id.in(subQuery));
+            challengeCondition.and(challenge.id.in(subQuery));
         }
-        return booleanBuilder;
+        return challengeCondition;
     }
 
     @Override
-    public ChallengeResponse getChallengeDetail(long id, long groupId) {
+    public ChallengeResponse getChallengeDetail(long id, Long groupId) {
         ChallengeSimpleDTO challengeSimpleDTO = jpaQueryFactory
             .select(Projections.constructor(
                 ChallengeSimpleDTO.class,
@@ -93,6 +93,11 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             .from(challenge)
             .where(challenge.id.eq(id))
             .fetchOne();
+
+        BooleanBuilder groupCondition = new BooleanBuilder();
+        if (groupId != null && groupId > 0) {
+            groupCondition.and(challengeGroup.id.eq(groupId));
+        }
 
         List<ReportResponse> reportResponses = jpaQueryFactory
             .select(Projections.fields(
@@ -114,6 +119,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             .from(report)
             .join(report.challengeGroup, challengeGroup)
             .on(challengeGroup.challenge.id.eq(id))
+            .where(groupCondition)
             .fetch();
 
         for (ReportResponse reportResponse : reportResponses) {

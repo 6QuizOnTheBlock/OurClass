@@ -69,7 +69,7 @@ public class ChallengeController implements ChallengeControllerDocs {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResultResponse<?>> getChallengeDetail(@PathVariable long id,
-        @RequestParam(required = false) long groupId) {
+        @RequestParam(required = false) Long groupId) {
         ChallengeResponse challengeResponse = challengeService.getChallengeDetail(id, groupId);
         return ResponseEntity.ok(ResultResponse.success(challengeResponse));
     }

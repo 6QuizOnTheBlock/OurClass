@@ -21,5 +21,5 @@ public interface ChallengeService {
 
     RunningChallengeResponse getRunningChallenge(long organizationId);
 
-    ChallengeResponse getChallengeDetail(long id, long groupId);
+    ChallengeResponse getChallengeDetail(long id, Long groupId);
 }
