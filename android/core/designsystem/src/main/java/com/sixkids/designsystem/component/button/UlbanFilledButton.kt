@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Gray
@@ -23,9 +24,9 @@ import com.sixkids.designsystem.theme.UlbanTypography
 fun UlbanFilledButton(
     modifier: Modifier = Modifier,
     text: String,
-    textStyle: TextStyle = UlbanTypography.titleSmall,
+    textStyle: TextStyle = UlbanTypography.titleSmall.copy(fontSize = 14.sp),
     onClick: () -> Unit,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = RoundedCornerShape(12.dp),
     color: Color = Blue,
     elevation: Dp = 4.dp,
     textColor: Color = BlueDark,
@@ -47,7 +48,7 @@ fun UlbanFilledButton(
         Text(
             text = text, color = if (enabled) textColor else disabledTextColor,
             style = textStyle,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(4.dp)
         )
 
     }
