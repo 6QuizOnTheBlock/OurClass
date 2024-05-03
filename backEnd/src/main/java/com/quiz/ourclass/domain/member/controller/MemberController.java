@@ -1,11 +1,9 @@
 package com.quiz.ourclass.domain.member.controller;
 
 import com.quiz.ourclass.domain.member.controller.docs.MemberControllerDocs;
-import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
-import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -15,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +29,8 @@ public class MemberController implements MemberControllerDocs {
     private final KakaoOicdClient kakaoOicdClient;
 
     /*  1. 회원가입   */
-    @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResultResponse<?>> signUp(@ModelAttribute MemberSignUpRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.signUpProcess(request)));
     }
@@ -40,21 +38,21 @@ public class MemberController implements MemberControllerDocs {
     /*  2. 로그인    */
     @PostMapping("/sign-in")
 
-    public ResponseEntity<ResultResponse<?>>  signIn (@RequestBody MemberSignInRequest request) {
+    public ResponseEntity<ResultResponse<?>> signIn(@RequestBody MemberSignInRequest request) {
 
         return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
 
     /* 4. 테스트용  */
     @GetMapping("/kakao-keys")
-    public ResponseEntity<ResultResponse<?>> getKakaoKeys(){
+    public ResponseEntity<ResultResponse<?>> getKakaoKeys() {
 
         return ResponseEntity.ok(ResultResponse.success(kakaoOicdClient.getKakaoOIDCOpenKeys()));
     }
 
     /* 5. id-Token 받아서 Decoding 하기 */
     @PostMapping("/decode-id-token")
-    public ResponseEntity<ResultResponse<?>> decodeIdToken (@RequestParam String idToken) {
+    public ResponseEntity<ResultResponse<?>> decodeIdToken(@RequestParam String idToken) {
         log.info(idToken);
 //        return ResponseEntity.ok(ResultResponse.success(oicdUtil.getUnsignedTokenClaims(idToken,"https://kauth.kakao.com", "edbf10bd8627e6eb676872109e996a9e")));
         return null;
@@ -63,10 +61,10 @@ public class MemberController implements MemberControllerDocs {
 
     /* 6 개발자용 Access, RefreshToken 발급 */
     @GetMapping("/developer-At")
-    public ResponseEntity<ResultResponse<?>> getAtRt (@RequestBody DeveloperAtRtRequest request) {
+    public ResponseEntity<ResultResponse<?>> getAtRt(@RequestBody DeveloperAtRtRequest request) {
 
-
-        return ResponseEntity.ok(ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
+        return ResponseEntity.ok(
+            ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
     /* 7. 기본 이미지 업데이트 */

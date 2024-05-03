@@ -97,7 +97,8 @@ public class MemberService {
         String accessToken = jwtUtil.createToken(member, true);
         String refreshToken = jwtUtil.createToken(member, false);
         jwtUtil.saveRefresh(member.getId(), refreshToken);
-        return TokenDTO.of(accessToken, refreshToken);
+        return TokenDTO.of(accessToken, refreshToken,
+            member.getRole().equals(Role.TEACHER) ? "TEACHER" : "STUDENT");
     }
 
 
