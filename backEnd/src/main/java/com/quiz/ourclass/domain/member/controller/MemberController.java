@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
+import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -69,6 +70,12 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
+    @PostMapping("/fcm")
+    public ResponseEntity<ResultResponse<Void>> saveFcmToken(
+        @RequestBody UpdateFcmTokenRequest request) {
+        memberService.saveFcmToken(request);
+        return ResponseEntity.ok(ResultResponse.success(null));
+    }
     /* 7. 기본 이미지 업데이트 */
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(

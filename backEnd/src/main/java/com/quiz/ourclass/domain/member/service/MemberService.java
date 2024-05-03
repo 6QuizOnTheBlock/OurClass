@@ -16,13 +16,15 @@ import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.RedisUtil;
+import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +36,8 @@ public class MemberService {
     private final JwtUtil jwtUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final OidcService oidcService;
+    private final RedisUtil redisUtil;
+    private final UserAccessUtil userAccessUtil;
     private final DefaultImageRepository defaultImageRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -136,9 +140,12 @@ public class MemberService {
 
     }
 
-    public void updateFcmToken(UpdateFcmTokenRequest request) {
-        ValueOperations<String, Object> value = redisTemplate.opsForValue();
+    public void saveFcmToken(UpdateFcmTokenRequest request) {
+        Member member = userAccessUtil.getMember();
+        long id = member.getId();
+        String key = "FCM_" + id;
+        String value = request.fcmToken();
+        Duration twoMonths = Duration.ofDays(60); // 2달
+        redisUtil.valueSet(key, value, twoMonths);
     }
-
-
 }

@@ -1,7 +1,9 @@
 package com.quiz.ourclass.global.util;
 
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,19 +12,12 @@ public class RedisUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void valueSet(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+    public void valueSet(String key, String value, Duration time) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(key, value, time);
     }
 
-    public void valueSet(String key, String value, Long time) {
-        redisTemplate.opsForValue().set(key, value, time);
-    }
-
-    public String valueSet(String key) {
-        return redisTemplate.opsForValue().get(key);
-    }
-
-    public void delete(String key) {
-        redisTemplate.delete(key);
+    public String valueGet(String key) {
+        return (String) redisTemplate.opsForValue().get(key);
     }
 }
