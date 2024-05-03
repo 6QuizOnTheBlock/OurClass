@@ -23,7 +23,7 @@ sealed interface InfoEffect : SideEffect {
     data class UpdateEndTime(val endTime: LocalDateTime) : InfoEffect
     data class UpdatePoint(val point: String) : InfoEffect
     data object MoveGroupTypeStep : InfoEffect
-    data class ShowSnackbar(val token: SnackbarToken) : InfoEffect
+    data object ShowInputErrorSnackbar : InfoEffect
 }
 
 enum class InfoStep {

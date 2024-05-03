@@ -6,10 +6,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.sixkids.teacher.challenge.create.ChallengeCreateEffect
 import com.sixkids.teacher.challenge.create.ChallengeCreateRoute
 import com.sixkids.teacher.challenge.detail.ChallengeDetailRoute
 import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
+import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateChallengeHistory() {
     navigate(ChallengeRoute.defaultRoute)
@@ -27,6 +29,7 @@ fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
     navigateChallengeDetail: (Int) -> Unit,
     navigateCreateChallenge: () -> Unit,
+    showSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     composable(route = ChallengeRoute.defaultRoute) {
@@ -47,14 +50,15 @@ fun NavGraphBuilder.challengeNavGraph(
     }
 
     composable(route = ChallengeRoute.createRoute) {
-        ChallengeCreateRoute()
+        ChallengeCreateRoute(
+            onShowSnackbar = showSnackbar
+        )
     }
 
 }
 
 object ChallengeRoute {
     const val CHALLENGE_ID_NAME = "challengeId"
-
     const val defaultRoute = "challenge-history"
     const val createRoute = "challenge-create"
     const val detailRoute = "challenge-detail/{$CHALLENGE_ID_NAME}"

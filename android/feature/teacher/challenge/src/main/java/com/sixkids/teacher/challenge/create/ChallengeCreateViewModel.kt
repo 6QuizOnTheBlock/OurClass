@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create
 
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDateTime
@@ -23,6 +24,10 @@ class ChallengeCreateViewModel @Inject constructor(
         intent {
             copy(step = ChallengeCreateStep.GROUP_TYPE)
         }
+    }
+
+    fun onShowSnackbar(snackbarToken: SnackbarToken) {
+        postSideEffect(ChallengeCreateEffect.ShowSnackbar(snackbarToken))
     }
 
 

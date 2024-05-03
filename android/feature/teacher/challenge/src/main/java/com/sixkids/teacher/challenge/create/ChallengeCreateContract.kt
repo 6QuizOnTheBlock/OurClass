@@ -1,6 +1,7 @@
 package com.sixkids.teacher.challenge.create
 
 import androidx.annotation.StringRes
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
@@ -12,6 +13,7 @@ data class ChallengeCreateUiState(
 ): UiState
 
 sealed interface ChallengeCreateEffect: SideEffect {
+    data class ShowSnackbar(val snackbarToken: SnackbarToken) : ChallengeCreateEffect
 }
 
 enum class ChallengeCreateStep {
