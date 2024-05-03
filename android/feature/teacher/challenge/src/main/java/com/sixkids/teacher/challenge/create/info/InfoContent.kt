@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,12 +30,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.textfield.InputTextType
+import com.sixkids.designsystem.component.textfield.UlbanUnderLineIconInputField
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineTextField
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.challenge.R
+import com.sixkids.designsystem.R as DesignSystemR
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
+import com.sixkids.ui.util.formatToDayMonthYear
+import com.sixkids.ui.util.formatToHourMinute
 import java.time.LocalDateTime
 
 @Composable
@@ -125,10 +130,9 @@ fun InfoContent(
         if (uiState.stepVisibilityList.isNotEmpty() && uiState.stepVisibilityList[uiState.step.ordinal]) {
             when (uiState.step) {
                 InfoStep.TITLE -> titleFocusRequester.requestFocus()
-                InfoStep.CONTENT -> contentFocusRequester.requestFocus()
-                InfoStep.START_TIME -> startTimeFocusRequester.requestFocus()
                 InfoStep.END_TIME -> endTimeFocusRequester.requestFocus()
                 InfoStep.POINT -> pointFocusRequester.requestFocus()
+                else -> {}
             }
         }
     }
@@ -180,26 +184,25 @@ fun InfoContent(
                         text = stringResource(R.string.end_time),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineTextField(
-                        modifier = Modifier
-                            .focusRequester(endTimeFocusRequester)
-                            .onFocusChanged {
-                                focusChange(InfoStep.END_TIME)
-                            },
-                        text = uiState.point,
-                        inputTextType = InputTextType.TEXT,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                handelNext()
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        UlbanUnderLineIconInputField(
+                            modifier = Modifier.weight(3f),
+                            text = uiState.endTime.toLocalDate().formatToDayMonthYear(),
+                            iconResource = DesignSystemR.drawable.ic_calendar,
+                            onIconClick = {
+                                //캘린더 띄우기
                             }
                         )
-                    )
-                }
-                LaunchedEffect(key1 = uiState.stepVisibilityList[InfoStep.END_TIME.ordinal]) {
-                    endTimeFocusRequester.requestFocus()
+                        Spacer(modifier = Modifier.weight(1f))
+                        UlbanUnderLineIconInputField(
+                            modifier = Modifier.weight(2f),
+                            text = uiState.endTime.formatToHourMinute(),
+                            iconResource = DesignSystemR.drawable.ic_time,
+                            onIconClick = {
+                                //시계 띄우기
+                            }
+                        )
+                    }
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.START_TIME.ordinal]) {
@@ -209,26 +212,25 @@ fun InfoContent(
                         text = stringResource(R.string.start_time),
                         style = UlbanTypography.titleSmall
                     )
-                    UlbanUnderLineTextField(
-                        modifier = Modifier
-                            .focusRequester(startTimeFocusRequester)
-                            .onFocusChanged {
-                                focusChange(InfoStep.START_TIME)
-                            },
-                        text = uiState.point,
-                        inputTextType = InputTextType.TEXT,
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                handelNext()
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        UlbanUnderLineIconInputField(
+                            modifier = Modifier.weight(3f),
+                            text = uiState.startTime.toLocalDate().formatToDayMonthYear(),
+                            iconResource = DesignSystemR.drawable.ic_calendar,
+                            onIconClick = {
+                                //캘린더 띄우기
                             }
                         )
-                    )
-                }
-                LaunchedEffect(key1 = uiState.stepVisibilityList[InfoStep.START_TIME.ordinal]) {
-                    startTimeFocusRequester.requestFocus()
+                        Spacer(modifier = Modifier.weight(1f))
+                        UlbanUnderLineIconInputField(
+                            modifier = Modifier.weight(2f),
+                            text = uiState.startTime.formatToHourMinute(),
+                            iconResource = DesignSystemR.drawable.ic_time,
+                            onIconClick = {
+                                //시계 띄우기
+                            }
+                        )
+                    }
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.CONTENT.ordinal]) {
