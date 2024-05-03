@@ -110,9 +110,4 @@ public class OidcUtilImpl implements OidcUtil {
         return keyFactory.generatePublic(keySpec);
 
     }
-
-
-
-
-
 }

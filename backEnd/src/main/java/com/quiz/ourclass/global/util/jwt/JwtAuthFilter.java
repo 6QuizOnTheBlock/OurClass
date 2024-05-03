@@ -40,7 +40,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         switch (jwtUtil.validateToken(token)){
             case -1:
                 request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
-
                 filterChain.doFilter(request, response);
                 return;
             case -2:

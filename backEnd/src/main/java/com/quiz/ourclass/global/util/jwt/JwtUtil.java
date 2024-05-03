@@ -2,6 +2,8 @@ package com.quiz.ourclass.global.util.jwt;
 
 
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.entity.Refresh;
+import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.util.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -58,6 +60,9 @@ public class JwtUtil {
 
     private final UserDetailsServiceImpl userDetailsService;
 
+    // Redis Repository 에 집어넣기 위함.
+    private final RefreshRepository refreshRepository;
+
 
     /* A. Init 함수 -> JWT 토큰 만들기 위한 사전 준비  */
     // 객체 생성 후 바로 동작
@@ -79,6 +84,9 @@ public class JwtUtil {
         // 오늘 날짜 확인
         Date now = new Date();
 
+        //
+
+
         // 토큰 생성 후 반환 :
         //  header: 사용한 알고리즘에 따라 관련 메타데이터가 채워짐
         //  payload: 제목, 발행일, 만료일이 들어갔다. 추가하고 싶다면 Claim 객체를 만들어 내용을 채우고 추가하면 된다.
@@ -89,6 +97,7 @@ public class JwtUtil {
             .setExpiration(new Date(now.getTime() + (isAccess? ACCESS_TOKEN_TIME : REFRESH_TOKEN_TIME)))
             .signWith(key, signatureAlgorithm)
             .compact();
+
     }
 
 
@@ -147,11 +156,16 @@ public class JwtUtil {
     * */
 
     public Authentication createAuthentication(String id) {
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(id);
-
-
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+
+    /*
+    *  G. [RefreshToken Redis]에 집어넣기
+    * */
+
+    public void saveRefresh(long memberId, String refreshToken){
+        refreshRepository.save(Refresh.of(memberId,refreshToken,REFRESH_TOKEN_TIME/1000));
     }
 
 }

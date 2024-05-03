@@ -6,9 +6,11 @@ import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.entity.Refresh;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
+import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -60,20 +62,22 @@ public class MemberService {
 
 
     public TokenDTO signInProcess(MemberSignInRequest request) {
-        return Optional.ofNullable(request.getIdToken())
-            .map(oidcService::certificatingIdToken) // ID 토큰 검증
-            .map(payload -> memberRepository.findByEmail(payload.getEmail()) // 이메일로 멤버 조회
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND))) // 멤버가 없으면 예외 발생
-            .map(this::createTokenDTO) // 토큰 생성 및 반환
-            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
+        return Optional.ofNullable(request.getIdToken())                                            // Optional.ofNullable -> null 이 나오면 바로 종료
+            .map(oidcService::certificatingIdToken)                                                 // ID 토큰 검증
+            .map(payload -> memberRepository.findByEmail(payload.getEmail())                        // 이메일로 멤버 조회
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)))                // 멤버가 없으면 예외 발생
+            .map(this::createTokenDTO)                                                              // 토큰 생성 및 반환
+            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED));                // 검증 실패 예외 처리
     }
 
     // 접근 토큰, 갱신 토큰 만들기
     private TokenDTO createTokenDTO(Member member) {
         String accessToken = jwtUtil.createToken(member, true);
         String refreshToken = jwtUtil.createToken(member, false);
+        jwtUtil.saveRefresh(member.getId(), refreshToken);
         return TokenDTO.of(accessToken, refreshToken);
     }
+
 
     public TokenDTO giveDeveloperAccessToken (DeveloperAtRtRequest request) {
 
