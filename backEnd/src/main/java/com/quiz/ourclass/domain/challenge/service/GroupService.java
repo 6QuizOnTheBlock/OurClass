@@ -7,4 +7,6 @@ public interface GroupService {
     boolean joinMatchingRoom(String key, boolean joinStatus);
 
     long createGroup(String key);
+
+    void deleteMatchingMember(String key, Long id);
 }

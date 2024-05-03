@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.service.GroupService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +32,11 @@ public class GroupController {
     public ResponseEntity<ResultResponse<?>> createGroup(String key) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.createGroup(key)));
+    }
+
+    @DeleteMapping("/groups/matching")
+    public ResponseEntity<ResultResponse<?>> deleteMatchingMember(String key, Long id) {
+        groupService.deleteMatchingMember(key, id);
+        return ResponseEntity.ok(ResultResponse.success(null));
     }
 }

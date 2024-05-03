@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.challenge.service;
 
 import static com.quiz.ourclass.global.exception.ErrorCode.CHALLENGE_NOT_FOUND;
+import static com.quiz.ourclass.global.exception.ErrorCode.PERMISSION_DENIED;
 
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
@@ -37,9 +38,9 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public String createMatchingRoom(long challengeId) {
-        long Memberid = accessUtil.getMember().getId();
-        String dataKey = makeGroupKey(challengeId, Memberid);
-        redisUtil.setAdd(dataKey, String.valueOf(Memberid));
+        long MemberId = accessUtil.getMember().getId();
+        String dataKey = makeGroupKey(challengeId, MemberId);
+        redisUtil.setAdd(dataKey, String.valueOf(MemberId));
         return dataKey;
     }
 
@@ -49,8 +50,8 @@ public class GroupServiceImpl implements GroupService {
         if (!joinStatus) {
             return false;
         }
-        long Memberid = accessUtil.getMember().getId();
-        redisUtil.setAdd(key, String.valueOf(Memberid));
+        long MemberId = accessUtil.getMember().getId();
+        redisUtil.setAdd(key, String.valueOf(MemberId));
         return true;
     }
 
@@ -81,8 +82,18 @@ public class GroupServiceImpl implements GroupService {
         return group.getId();
     }
 
-    private static String makeGroupKey(long challengeId, long Memberid) {
-        return REDIS_GROUP_KEY + challengeId + "_" + Memberid;
+    @Transactional
+    @Override
+    public void deleteMatchingMember(String key, Long id) {
+        long loginUserId = accessUtil.getMember().getId();
+        if (getLeaderIdFromKey(key) != loginUserId) {
+            throw new GlobalException(PERMISSION_DENIED);
+        }
+        redisUtil.removeMembers(key, String.valueOf(id));
+    }
+
+    private static String makeGroupKey(long challengeId, long MemberId) {
+        return REDIS_GROUP_KEY + challengeId + "_" + MemberId;
     }
 
     private static long getChallengeIdFromKey(String key) {
