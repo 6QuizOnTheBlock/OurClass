@@ -14,16 +14,21 @@ public class TokenDTO {
     @Schema(description = "갱신 토큰")
     private String refreshToken;
 
+    @Schema(description = "역할")
+    private String role;
+
     @Builder
-    private TokenDTO (String accessToken, String refreshToken){
+    private TokenDTO(String accessToken, String refreshToken, String role) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.role = role;
     }
 
-    public static TokenDTO of (String accessToken, String refreshToken){
+    public static TokenDTO of(String accessToken, String refreshToken, String role) {
         return TokenDTO.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
+            .role(role)
             .build();
     }
 }

@@ -16,7 +16,6 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -38,13 +37,12 @@ public class TokenRefreshFilter extends GenericFilter {
         // 2) [Header]에서 RefreshToken 받기
         String refreshToken = httpRequest.getHeader("refreshToken");
 
-
         // 3) 경로가 다음과 같고, refreshToken 이 null 이 아닐경우, refresh 토큰이 [Redis]에 있는지 확인한다.
-        if("/api/members/token".equals(httpRequest.getRequestURI())){
-            if(refreshToken != null){
+        if ("/api/members/token".equals(httpRequest.getRequestURI())) {
+            if (refreshToken != null) {
 
                 // 토큰 검사
-                switch (jwtUtil.validateToken(refreshToken)){
+                switch (jwtUtil.validateToken(refreshToken)) {
                     case -1:
                         request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
                         filterChain.doFilter(request, response);
@@ -53,34 +51,31 @@ public class TokenRefreshFilter extends GenericFilter {
                     case -3:
                     case -4:
                         request.setAttribute("exception", ErrorCode.INVALID_TOKEN);
-                        filterChain.doFilter(request,response);
+                        filterChain.doFilter(request, response);
                         return;
                 }
 
-
                 Claims info = jwtUtil.getUserInfoFromToken(refreshToken);
-                Refresh refresh = refreshRepository.findByMemberId(Long.parseLong(info.getSubject())).orElseThrow();
+                Refresh refresh = refreshRepository.findByMemberId(
+                    Long.parseLong(info.getSubject())).orElseThrow();
             }
         }
 
 
     }
 
-    private TokenDTO refreshToken (long memberId) {
+    private TokenDTO refreshToken(long memberId) {
 
         Member member = memberRepository.findById(memberId).orElse(null);
 
-        if(member == null){
-            throw  new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
+        if (member == null) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
-        String accessToken = jwtUtil.createToken(member,true);
+        String accessToken = jwtUtil.createToken(member, true);
         String refreshToken = jwtUtil.createToken(member, false);
         jwtUtil.saveRefresh(memberId, refreshToken);
 
-
-        return TokenDTO.of(accessToken, refreshToken);
-
-
+        return null;
     }
 }
