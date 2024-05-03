@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.dto.ChallengeSimpleDTO;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
@@ -123,5 +124,10 @@ public class ChallengeServiceImpl implements ChallengeService {
             challenge);
         return RunningChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
             .waitingCount(waitingCount).build();
+    }
+
+    @Override
+    public ChallengeResponse getChallengeDetail(long id, Long groupId) {
+        return challengeRepository.getChallengeDetail(id, groupId);
     }
 }

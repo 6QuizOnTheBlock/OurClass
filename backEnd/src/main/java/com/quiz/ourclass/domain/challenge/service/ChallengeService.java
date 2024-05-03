@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.challenge.service;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
@@ -19,4 +20,6 @@ public interface ChallengeService {
     void confirmReport(long id, ReportType reportType);
 
     RunningChallengeResponse getRunningChallenge(long organizationId);
+
+    ChallengeResponse getChallengeDetail(long id, Long groupId);
 }

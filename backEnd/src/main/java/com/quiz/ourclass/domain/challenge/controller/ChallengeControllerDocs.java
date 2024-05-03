@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.challenge.controller;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
@@ -100,4 +101,20 @@ public interface ChallengeControllerDocs {
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
+
+    @Operation(summary = "함께달리기 상세 조회",
+        description = "함께달리기 ID로  검색하여 함께달리기와 관련 레포트 모두 조회합니다."
+            + "그룹 ID 지정 시 해당 그룹의 레포트만 가져옵니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = ChallengeResponse.class)))
+        })
+    @GetMapping("/{id}")
+    public ResponseEntity<ResultResponse<?>> getChallengeDetail(
+        @PathVariable
+        @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.PATH)
+        long id,
+        @RequestParam(required = false)
+        @Parameter(description = "그룹 ID", required = false, in = ParameterIn.QUERY)
+        Long groupId);
 }

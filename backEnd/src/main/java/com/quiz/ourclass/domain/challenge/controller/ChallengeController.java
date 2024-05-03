@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.challenge.controller;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
@@ -64,5 +65,12 @@ public class ChallengeController implements ChallengeControllerDocs {
         RunningChallengeResponse runningChallengeResponse = challengeService.getRunningChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResultResponse<?>> getChallengeDetail(@PathVariable long id,
+        @RequestParam(required = false) Long groupId) {
+        ChallengeResponse challengeResponse = challengeService.getChallengeDetail(id, groupId);
+        return ResponseEntity.ok(ResultResponse.success(challengeResponse));
     }
 }
