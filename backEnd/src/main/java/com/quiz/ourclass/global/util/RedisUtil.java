@@ -30,7 +30,7 @@ public class RedisUtil {
         return redisTemplate.opsForSet().members(key);
     }
 
-    public Long setMembers(String key, String value) {
+    public Long removeMembers(String key, String value) {
         return redisTemplate.opsForSet().remove(key, value);
     }
 
