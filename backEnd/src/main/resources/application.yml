@@ -65,9 +65,8 @@ jwt:
     #갱신토큰시간: 3일  (60*60*24*3*1000=259200000)
     refresh-expiration-time: 604800000
 
-oicd:
+oicd :
   # id-token 발행자
-  iss: ENC(AP4nYWw9KTDrd3gDkroFyXEed8DgS4sp7nglomVpjas=)
+  iss : ENC(AP4nYWw9KTDrd3gDkroFyXEed8DgS4sp7nglomVpjas=)
   # id-token 발행을 요청한 서비스 앱의 ID
-  # aud: ENC(G4sxMKOTz0fFoO58luWfV6rqCBZTtEhj81DicEx5wBy8ZgUFTGm1HMlgCTVX9XpW)
-  aud: d697a78f91cf36426d72e25eec9b9155
+  aud : ENC(G4sxMKOTz0fFoO58luWfV6rqCBZTtEhj81DicEx5wBy8ZgUFTGm1HMlgCTVX9XpW)
