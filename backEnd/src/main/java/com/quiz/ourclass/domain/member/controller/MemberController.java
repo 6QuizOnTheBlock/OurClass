@@ -32,8 +32,7 @@ public class MemberController implements MemberControllerDocs {
     private final KakaoOicdClient kakaoOicdClient;
 
     /*  1. 회원가입   */
-    @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
-        MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResultResponse<?>> signUp(@ModelAttribute MemberSignUpRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.signUpProcess(request)));
     }
@@ -41,21 +40,21 @@ public class MemberController implements MemberControllerDocs {
     /*  2. 로그인    */
     @PostMapping("/sign-in")
 
-    public ResponseEntity<ResultResponse<?>> signIn(@RequestBody MemberSignInRequest request) {
+    public ResponseEntity<ResultResponse<?>>  signIn (@RequestBody MemberSignInRequest request) {
 
         return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
 
     /* 4. 테스트용  */
     @GetMapping("/kakao-keys")
-    public ResponseEntity<ResultResponse<?>> getKakaoKeys() {
+    public ResponseEntity<ResultResponse<?>> getKakaoKeys(){
 
         return ResponseEntity.ok(ResultResponse.success(kakaoOicdClient.getKakaoOIDCOpenKeys()));
     }
 
     /* 5. id-Token 받아서 Decoding 하기 */
     @PostMapping("/decode-id-token")
-    public ResponseEntity<ResultResponse<?>> decodeIdToken(@RequestParam String idToken) {
+    public ResponseEntity<ResultResponse<?>> decodeIdToken (@RequestParam String idToken) {
         log.info(idToken);
 //        return ResponseEntity.ok(ResultResponse.success(oicdUtil.getUnsignedTokenClaims(idToken,"https://kauth.kakao.com", "edbf10bd8627e6eb676872109e996a9e")));
         return null;
@@ -64,17 +63,10 @@ public class MemberController implements MemberControllerDocs {
 
     /* 6 개발자용 Access, RefreshToken 발급 */
     @GetMapping("/developer-At")
-    public ResponseEntity<ResultResponse<?>> getAtRt(@RequestBody DeveloperAtRtRequest request) {
+    public ResponseEntity<ResultResponse<?>> getAtRt (@RequestBody DeveloperAtRtRequest request) {
 
-        return ResponseEntity.ok(
-            ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
-    }
 
-    @PostMapping("/fcm")
-    public ResponseEntity<ResultResponse<Void>> updateFcmToken(
-        @RequestBody UpdateFcmTokenRequest request) {
-        memberService.updateFcmToken(request);
-        return ResponseEntity.ok(ResultResponse.success(null));
+        return ResponseEntity.ok(ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
     /* 7. 기본 이미지 업데이트 */
