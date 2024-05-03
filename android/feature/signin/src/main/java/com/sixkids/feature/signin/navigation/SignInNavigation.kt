@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.sixkids.feature.signin.login.LoginRoute
 import com.sixkids.feature.signin.signup.SignUpPhotoRoute
 import com.sixkids.feature.signin.signup.SignUpRoute
+import com.sixkids.ui.SnackbarToken
 
 
 fun NavController.navigateSignIn() {
@@ -26,7 +27,9 @@ fun NavController.navigateSignUpPhoto(isTeacher: Boolean) {
 fun NavGraphBuilder.signInNavGraph(
     navigateToSignUp: () -> Unit,
     navigateSignUpPhoto: (Boolean) -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit,
+    onBackClick : () -> Unit
 ) {
     composable(route = SignInRoute.defaultRoute){
         LoginRoute(
@@ -39,7 +42,8 @@ fun NavGraphBuilder.signInNavGraph(
         SignUpRoute(
             navigateToSignUpPhoto = { isTeacher ->
                 navigateSignUpPhoto(isTeacher)
-            }
+            },
+            onBackClick = onBackClick
         )
     }
 
@@ -48,7 +52,9 @@ fun NavGraphBuilder.signInNavGraph(
         arguments = listOf(navArgument(SignInRoute.SIGN_UP_TEACHER) { type = NavType.BoolType })
     ){
         SignUpPhotoRoute(
-            navigateToHome = navigateToHome
+            onShowSnackBar = onShowSnackBar,
+            navigateToHome = navigateToHome,
+            onBackClick = onBackClick
         )
     }
 }

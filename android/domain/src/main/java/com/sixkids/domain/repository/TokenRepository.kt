@@ -5,5 +5,8 @@ interface TokenRepository {
     suspend fun saveAccessToken(token: String)
     suspend fun getRefreshToken(): String
     suspend fun saveRefreshToken(token: String)
+    suspend fun saveIdToken(token: String)
+    suspend fun getIdToken(): String
+    suspend fun deleteIdToken()
     suspend fun clearTokens()
 }

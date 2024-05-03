@@ -1,5 +1,6 @@
 package com.sixkids.feature.signin.signup
 
+import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +34,8 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun SignUpRoute(
     viewModel: SignUpRoleViewModel = hiltViewModel(),
-    navigateToSignUpPhoto: (Boolean) -> Unit
+    navigateToSignUpPhoto: (Boolean) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -48,6 +50,9 @@ fun SignUpRoute(
         uiState = uiState,
         onTeacherClick = {
             viewModel.onTeacherClick(it)
+        },
+        onBackClick = {
+            onBackClick()
         }
     )
 }
@@ -55,14 +60,15 @@ fun SignUpRoute(
 @Composable
 fun SignUpScreen(
     uiState: SignUpRoleState,
-    onTeacherClick: (Boolean) -> Unit = {}
+    onTeacherClick: (Boolean) -> Unit = {},
+    onBackClick : () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(21.dp)
     ) {
-        TopSection()
+        TopSection(onBackClick)
         BodySection(
             onCardClick = onTeacherClick,
             modifier = Modifier
@@ -73,13 +79,16 @@ fun SignUpScreen(
 }
 
 @Composable
-fun TopSection() {
+fun TopSection(onBackClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.Start,
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_arrow_back),
             contentDescription = "back button",
+            modifier = Modifier.clickable {
+                onBackClick()
+            }
         )
 
         Text(

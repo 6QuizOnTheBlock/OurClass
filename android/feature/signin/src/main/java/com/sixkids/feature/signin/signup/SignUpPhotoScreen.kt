@@ -1,6 +1,16 @@
 package com.sixkids.feature.signin.signup
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,6 +29,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -28,26 +42,52 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
+import java.io.IOException
 
 private const val TAG = "D107"
 
 @Composable
 fun SignUpPhotoRoute(
     viewModel: SignUpPhotoViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit
-){
+    navigateToHome: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit,
+    onBackClick: () -> Unit
+) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let {
+            try {
+                val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, it))
+                }
+                viewModel.onProfilePhotoSelected(bitmap)
+            } catch (e: IOException) {
+                Log.e(TAG, "Error decoding bitmap", e)
+            }
+        }
+    }
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is SignUpPhotoEffect.NavigateToHome -> navigateToHome()
+            is SignUpPhotoEffect.onShowSnackBar -> onShowSnackBar(it.tkn)
         }
     }
 
@@ -55,24 +95,35 @@ fun SignUpPhotoRoute(
         uiState = uiState,
         isTeacher = viewModel.isTeacher,
         onClickPhoto = { resId ->
-            Log.d(TAG, "SignUpPhotoRoute: $resId")
-            if (resId == R.drawable.camera) {
-                Log.d(TAG, "SignUpPhotoRoute: open gallery")
-            }else{
-                viewModel.onProfileDefaultPhotoSelected(resId)
+            when(resId){
+                R.drawable.camera ->
+                    launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                R.drawable.teacher_man ->
+                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.MAN)
+                R.drawable.student_boy ->
+                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.MAN)
+                R.drawable.teacher_woman ->
+                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
+                R.drawable.student_girl ->
+                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
             }
+        },
+        onDoneClick = {
+            viewModel.signUp()
+        },
+        onBackClick = {
+            onBackClick()
         }
     )
-
 }
-
 @Composable
 fun SignUpPhotoScreen(
     uiState: SignUpPhotoState,
     isTeacher: Boolean,
-    onClickPhoto: (Int) -> Unit
+    onClickPhoto: (Int) -> Unit,
+    onDoneClick : () -> Unit,
+    onBackClick : () -> Unit
 ) {
-    Log.d(TAG, "SignUpPhotoScreen: ${uiState.profileDefaultPhoto}")
     val imageMan = if (isTeacher) R.drawable.teacher_man else R.drawable.student_boy
     val imageWoman = if (isTeacher) R.drawable.teacher_woman else R.drawable.student_girl
 
@@ -81,7 +132,7 @@ fun SignUpPhotoScreen(
             .fillMaxSize()
             .padding(21.dp)
     ) {
-        SignUpPhotoTopSection()
+        SignUpPhotoTopSection(onBackClick)
 
         Spacer(modifier = Modifier.height(60.dp))
 
@@ -119,25 +170,26 @@ fun SignUpPhotoScreen(
                     .padding(10.dp)
                     .weight(1f)
                     .aspectRatio(1f),
-                img =  R.drawable.camera,
+                img = R.drawable.camera,
                 onClickPhoto = onClickPhoto
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        DoneButton()
+        DoneButton(onDoneClick)
     }
 }
 
 @Composable
-fun SignUpPhotoTopSection() {
+fun SignUpPhotoTopSection(onDoneClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.Start,
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_arrow_back),
             contentDescription = "back button",
+            modifier = Modifier.clickable { onDoneClick() }
         )
 
         Text(
@@ -149,9 +201,11 @@ fun SignUpPhotoTopSection() {
 }
 
 @Composable
-fun DoneButton() {
+fun DoneButton(
+    onDoneClick: () -> Unit
+) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { onDoneClick },
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -183,15 +237,17 @@ fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) 
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            if(uiState.profileUserPhoto != null) {
+            if (uiState.profileUserPhoto != null) {
                 Image(
                     bitmap = uiState.profileUserPhoto.asImageBitmap(),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
                 )
-            }else{
+            } else {
                 Image(
-                    painter = painterResource(id = uiState.profileDefaultPhoto ?: R.drawable.camera),
+                    painter = painterResource(
+                        id = uiState.profileDefaultPhoto ?: R.drawable.camera
+                    ),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
                 )
@@ -216,7 +272,7 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
             modifier = Modifier.fillMaxSize(),
         ) {
             Image(
-                painter = painterResource(id =img),
+                painter = painterResource(id = img),
                 contentDescription = "profile",
                 modifier = Modifier,
             )
