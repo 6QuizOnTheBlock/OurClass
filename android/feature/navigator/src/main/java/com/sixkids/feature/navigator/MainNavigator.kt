@@ -51,6 +51,10 @@ class MainNavigator(
         }
     }
 
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+
     /**
      * Home Navigation
      */
