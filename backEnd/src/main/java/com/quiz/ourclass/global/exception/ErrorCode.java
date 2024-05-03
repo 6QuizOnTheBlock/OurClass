@@ -51,6 +51,7 @@ public enum ErrorCode {
     //challenge
     REPORT_NOW_FOUND(HttpStatus.NOT_FOUND, "레포트를 찾을 수 없습니다."),
     CHALLENGE_GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
+    CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "함께달리기를 찾을 수 없습니다."),
     RUNNING_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 함께달리기가 없습니다."),
     ;
 

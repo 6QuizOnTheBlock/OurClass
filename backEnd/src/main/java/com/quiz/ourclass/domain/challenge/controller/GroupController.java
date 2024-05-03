@@ -26,5 +26,10 @@ public class GroupController {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.joinMatchingRoom(key, joinStatus)));
     }
-    
+
+    @PostMapping("/groups")
+    public ResponseEntity<ResultResponse<?>> createGroup(String key) {
+        return ResponseEntity.ok(
+            ResultResponse.success(groupService.createGroup(key)));
+    }
 }

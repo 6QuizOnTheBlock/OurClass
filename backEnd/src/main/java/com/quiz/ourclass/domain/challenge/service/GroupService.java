@@ -5,4 +5,6 @@ public interface GroupService {
     String createMatchingRoom(long challengeId);
 
     boolean joinMatchingRoom(String key, boolean joinStatus);
+
+    long createGroup(String key);
 }
