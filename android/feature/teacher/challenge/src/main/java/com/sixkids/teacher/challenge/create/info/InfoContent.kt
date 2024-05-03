@@ -115,7 +115,6 @@ fun InfoContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
     ) {
         if (uiState.stepVisibilityList.isNotEmpty()) {
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.POINT.ordinal]) {
@@ -207,7 +206,7 @@ fun InfoContent(
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.CONTENT.ordinal]) {
-                Column {
+                Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
                         text = stringResource(R.string.please_input_content),
                         style = UlbanTypography.titleSmall
@@ -279,7 +278,6 @@ fun InfoContent(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
         )
     }
 

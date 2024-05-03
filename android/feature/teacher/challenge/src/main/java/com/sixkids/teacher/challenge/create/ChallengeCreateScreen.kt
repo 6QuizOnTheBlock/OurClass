@@ -2,10 +2,13 @@ package com.sixkids.teacher.challenge.create
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
@@ -37,6 +40,7 @@ fun ChallengeCreateRoute(
 
 @Composable
 fun ChallengeCreateScreen(
+    paddingValues: PaddingValues = PaddingValues(20.dp),
     uiState: ChallengeCreateUiState,
     updateTitle: (String) -> Unit = {},
     updateContent: (String) -> Unit = {},
@@ -47,7 +51,8 @@ fun ChallengeCreateScreen(
     onMoveNextStep: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().
+        padding(paddingValues),
     ) {
         AnimatedContent(
             modifier = Modifier.weight(1f),

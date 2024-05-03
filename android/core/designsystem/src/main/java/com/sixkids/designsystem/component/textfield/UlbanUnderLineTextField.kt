@@ -105,7 +105,7 @@ fun UlbanUnderLineWithTitleTextField(
         Divider(
             modifier = Modifier.fillMaxWidth(),
             color = Blue,
-            thickness = 4.dp
+            thickness = 2.dp
         )
     }
 }
