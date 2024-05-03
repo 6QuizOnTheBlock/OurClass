@@ -46,6 +46,9 @@ kakao = "2.20.1"
 paging = "3.2.1"
 paging-compose = "3.3.0-beta01"
 
+#accompanist
+accompanist = "0.34.0"
+
 #Lottie
 lottie = "6.4.0"
 
@@ -107,6 +110,10 @@ kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" 
 paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+
+#Accompanist
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicator = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
 
 #Permissions
 permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "permissions" }
