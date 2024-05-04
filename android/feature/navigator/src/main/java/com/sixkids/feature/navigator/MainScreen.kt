@@ -35,6 +35,7 @@ import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
+import com.sixkids.teacher.managestudent.navigation.manageStudentNavGraph
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
@@ -93,6 +94,10 @@ fun MainScreen(
                 padding = innerPadding,
             )
 
+            manageStudentNavGraph(
+                padding = innerPadding,
+            )
+
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
                 navigateToHome = navigator::navigateHome,
@@ -109,7 +114,6 @@ fun MainScreen(
             )
         }
     }
-
 }
 
 

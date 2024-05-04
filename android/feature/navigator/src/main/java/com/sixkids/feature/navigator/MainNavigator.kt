@@ -20,6 +20,8 @@ import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
 import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
+import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
+import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
 
 class MainNavigator(
     val navController: NavHostController,
@@ -45,7 +47,7 @@ class MainNavigator(
         when (tab) {
             MainNavigationTab.HOME -> navController.navigateHome(navOptions)
             MainNavigationTab.BOARD -> navController.navigateBoard(navOptions)
-            MainNavigationTab.MANAGE_STUDENT -> {}
+            MainNavigationTab.MANAGE_STUDENT -> navController.navigateManageStudent(navOptions)
             MainNavigationTab.MANAGE_CLASS -> navController.navigateManageClass(navOptions)
         }
     }
@@ -74,6 +76,17 @@ class MainNavigator(
                 inclusive = true
             }
         }
+    }
+
+    /**
+     * Manage Student Navigation
+     */
+    fun navigateManageStudent() {
+        navController.navigateManageStudent(navOptions{
+            popUpTo(ManageStudentRoute.defaultRoute){
+                inclusive = true
+            }
+        })
     }
 
     /**
