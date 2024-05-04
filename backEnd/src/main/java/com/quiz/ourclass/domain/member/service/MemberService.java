@@ -55,13 +55,16 @@ public class MemberService {
                 .getPhoto();
         }
 
+        // a) ID 토큰 검증
+        // b) 기존 멤버 업데이트 (위의 chaining 에서 Optional 이 비어있으면 실행되지 않는다.)
+        // c) 새 멤버 등록 -> orElseGet Null일 때만 발동!
+        // d) 검증 실패 예외 처리
         return Optional.ofNullable(request.getIdToken())
-            .map(oidcService::certificatingIdToken) // ID 토큰 검증
+            .map(oidcService::certificatingIdToken)
             .map(payload -> memberRepository.findByEmail(payload.getEmail())
-                .map(
-                    member -> updateExistingMember(member, imgUrl, request.getRole())) // 기존 멤버 업데이트
-                .orElseGet(() -> registerNewMember(payload, imgUrl, request.getRole()))) // 새 멤버 등록
-            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
+                .map(member -> updateExistingMember(member, imgUrl, request.getRole()))
+                .orElseGet(() -> registerNewMember(payload, imgUrl, request.getRole())))
+            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED));
     }
 
     private TokenDTO updateExistingMember(Member member, String imgUrl, String role) {
@@ -83,26 +86,30 @@ public class MemberService {
     }
 
 
+    /*
+     *  로그인 프로세스 (chaining 설명)
+     *  1) Optional.ofNullable -> null 이 나오면 바로 종료
+     *  2) ID 토큰 검증
+     *  3) 이메일로 멤버 조회
+     *  4) 멤버가 없으면 예외 발생
+     *  5) 토큰 생성 및 반환
+     *  6) 검증 실패 시 예외 처리
+     * */
     public TokenDTO signInProcess(MemberSignInRequest request) {
         return Optional.ofNullable(
-                request.getIdToken())                                            // Optional.ofNullable -> null 이 나오면 바로 종료
-            .map(
-                oidcService::certificatingIdToken)                                                 // ID 토큰 검증
-            .map(payload -> memberRepository.findByEmail(
-                    payload.getEmail())                        // 이메일로 멤버 조회
-                .orElseThrow(() -> new GlobalException(
-                    ErrorCode.MEMBER_NOT_FOUND)))                // 멤버가 없으면 예외 발생
-            .map(
-                this::createTokenDTO)                                                              // 토큰 생성 및 반환
-            .orElseThrow(() -> new GlobalException(
-                ErrorCode.CERTIFICATION_FAILED));                // 검증 실패 예외 처리
+                request.getIdToken())
+            .map(oidcService::certificatingIdToken)
+            .map(payload -> memberRepository.findByEmail(payload.getEmail())
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)))
+            .map(this::createTokenDTO)
+            .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED));
     }
 
-    // 접근 토큰, 갱신 토큰 만들기
+    // 접근 토큰, 갱신 토큰 만들기 -> 토큰을 만들 멤버에 대한 검증을 끝냈다.
     private TokenDTO createTokenDTO(Member member) {
-        String accessToken = jwtUtil.createToken(member, true);
-        String refreshToken = jwtUtil.createToken(member, false);
-        jwtUtil.saveRefresh(member.getId(), refreshToken);
+        String accessToken = jwtUtil.createToken(member.getId(), member.getRole().name(), true);
+        String refreshToken = jwtUtil.createToken(member.getId(), member.getRole().name(), false);
+        jwtUtil.saveRefresh(member.getId(), accessToken, refreshToken);
         return TokenDTO.of(accessToken, refreshToken,
             member.getRole().equals(Role.TEACHER) ? "TEACHER" : "STUDENT");
     }
@@ -111,21 +118,12 @@ public class MemberService {
     public TokenDTO giveDeveloperAccessToken(DeveloperAtRtRequest request) {
 
         return Optional.ofNullable(request.getEmail())
-            .flatMap(memberRepository::findByEmail) // 이제 올바르게 Optional<Member>를 다룹니다.
-            .map(this::createTokenDTO) // 멤버가 존재하면 토큰 생성
-            .orElseThrow(() -> new GlobalException(
-                ErrorCode.MEMBER_NOT_FOUND)); // 멤버가 없거나 토큰 생성이 실패했을 때 예외 처리
+            .flatMap(memberRepository::findByEmail)
+            .map(this::createTokenDTO)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
     }
 
-    private SocialType checkSocialType(String socialType) {
-        return switch (socialType) {
-            case "kakao", "KAKAO" -> SocialType.KAKAO;
-            case "google", "GOOGLE" -> SocialType.GOOGLE;
-            case "naver", "NAVER" -> SocialType.NAVER;
-            default -> null;
-        };
-    }
 
     public DefaultImage updateDefaultImage(DefaultImageRequest request) {
         String imgUrl = awsS3ObjectStorage.uploadFile(request.getFile());

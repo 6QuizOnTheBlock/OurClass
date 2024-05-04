@@ -81,8 +81,9 @@ public class MemberController implements MemberControllerDocs {
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request) {
-
         return ResponseEntity.ok(
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
     }
+
+
 }
