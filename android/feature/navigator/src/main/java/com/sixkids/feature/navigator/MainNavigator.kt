@@ -11,8 +11,10 @@ import androidx.navigation.navOptions
 import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
+import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -55,6 +57,24 @@ class MainNavigator(
             MainNavigationTab.MANAGE_CLASS -> navController.navigateManageClass(navOptions)
         }
     }
+
+    /**
+     * Board Navigation
+     */
+
+    fun navigateBoard() {
+        navController.navigate(BoardRoute.defaultRoute){
+            popUpTo(navController.graph.id){
+                inclusive = true
+            }
+        }
+    }
+
+    fun navigatePost() {
+        navController.navigatePost()
+    }
+
+
 
     fun popBackStack() {
         navController.popBackStack()

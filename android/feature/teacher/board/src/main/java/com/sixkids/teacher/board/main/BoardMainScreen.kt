@@ -24,7 +24,8 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun BoardMainRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    navigateToPost: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -38,7 +39,8 @@ fun BoardMainRoute(
 @Composable
 fun BoardMainScreen(
     modifier: Modifier = Modifier,
-    boardMainState: BoardMainState = BoardMainState()
+    boardMainState: BoardMainState = BoardMainState(),
+    postCardOnClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
