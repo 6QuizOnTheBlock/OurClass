@@ -3,7 +3,7 @@ package com.sixkids.teacher.challenge.create.info
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,14 +33,14 @@ class InfoViewModel @Inject constructor(
         }
     }
 
-    fun updateStartTime(startTime: LocalDateTime) {
+    fun updateStartTime(startTime: LocalTime) {
         intent {
             postSideEffect(InfoEffect.UpdateStartTime(startTime))
             copy(startTime = startTime)
         }
     }
 
-    fun updateEndTime(endTime: LocalDateTime) {
+    fun updateEndTime(endTime: LocalTime) {
         intent {
             postSideEffect(InfoEffect.UpdateEndTime(endTime))
             copy(endTime = endTime)

@@ -26,14 +26,17 @@ import java.time.LocalTime
 fun UlbanTimePickerDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
-    onClickConfirm: (date: LocalTime) -> Unit,
+    onClickConfirm: (time: LocalTime) -> Unit,
     selectedTime: LocalTime = LocalTime.now(),
 ) {
     UlbanBasicDialog(
         modifier = modifier,
         onDismiss = onDismiss,
     ) {
-        val timePickerState = rememberTimePickerState()
+        val timePickerState = rememberTimePickerState(
+            initialHour = selectedTime.hour,
+            initialMinute = selectedTime.minute
+        )
 
         Column(
             modifier = modifier,
@@ -50,7 +53,7 @@ fun UlbanTimePickerDialog(
                 }
                 TextButton(
                     onClick = {
-                        onClickConfirm(selectedTime)
+                        onClickConfirm(LocalTime.of(timePickerState.hour, timePickerState.minute))
                     }
                 ) {
                     Text(stringResource(id = R.string.confirm))
