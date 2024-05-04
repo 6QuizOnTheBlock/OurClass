@@ -12,6 +12,9 @@ import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
+import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
+import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -95,6 +98,18 @@ class MainNavigator(
 
     fun navigateSignUp(){
         navController.navigateSignUp()
+    }
+
+    fun navigateChallengeHistory() {
+        navController.navigateChallengeHistory()
+    }
+
+    fun navigateChallengeDetail(challengeId: Int) {
+        navController.navigateChallengeDetail(challengeId)
+    }
+
+    fun navigateCreateChallenge() {
+        navController.navigateCreateChallenge()
     }
 
     @Composable

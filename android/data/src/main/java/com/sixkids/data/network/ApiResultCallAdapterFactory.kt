@@ -10,7 +10,7 @@ class ApiResultCallAdapterFactory : CallAdapter.Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,
-        retrofit: Retrofit
+        retrofit: Retrofit,
     ): CallAdapter<*, *>? {
         val wrapperType = getParameterUpperBound(0, returnType as ParameterizedType)
         if (getRawType(returnType) != Call::class.java) {

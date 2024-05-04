@@ -1,5 +1,6 @@
 package com.sixkids.data.di
 
+import com.sixkids.data.api.ChallengeService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.api.TokenService
 import dagger.Module
@@ -27,5 +28,13 @@ object ServiceModule {
         @NetworkModule.PublicRetrofit retrofit: Retrofit
     ): SignInService {
         return retrofit.create(SignInService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideChallengeService(
+        @NetworkModule.AuthRetrofit retrofit: Retrofit
+    ): ChallengeService {
+        return retrofit.create(ChallengeService::class.java)
     }
 }

@@ -24,14 +24,18 @@ import com.sixkids.teacher.home.component.TeacherInfo
 @Composable
 fun HomeMainRoute(
     padding: PaddingValues,
-    navigateToRank: () -> Unit
+    navigateToRank: () -> Unit,
+    navigateToChallenge: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .padding(padding)
             .fillMaxSize()
     ) {
-        HomeMainScreen(navigateToRank = navigateToRank)
+        HomeMainScreen(
+            navigateToRank = navigateToRank,
+            navigateToChallenge = navigateToChallenge
+        )
     }
 }
 
@@ -39,7 +43,8 @@ fun HomeMainRoute(
 fun HomeMainScreen(
     modifier: Modifier = Modifier,
     homeMainState: HomeMainState = HomeMainState(),
-    navigateToRank: () -> Unit = {}
+    navigateToRank: () -> Unit = {},
+    navigateToChallenge: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -54,7 +59,7 @@ fun HomeMainScreen(
             cardColor = Cream,
             contentName = "이어 달리기",
             contentImageId = R.drawable.relay,
-            runningState = homeMainState.runningRelayState
+            runningState = homeMainState.runningRelayState,
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
@@ -63,7 +68,8 @@ fun HomeMainScreen(
             cardColor = Red,
             contentName = "함께 달리기",
             contentImageId = R.drawable.hifive,
-            runningState = homeMainState.runningTogetherState
+            runningState = homeMainState.runningTogetherState,
+            onclick = navigateToChallenge
         )
         RankCard(
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),

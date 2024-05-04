@@ -2,7 +2,6 @@ package com.sixkids.teacher.challenge.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.item.DisplayableMember
 import com.sixkids.designsystem.component.item.UlbanReportItem
@@ -44,8 +45,18 @@ import java.time.LocalDateTime
 
 
 @Composable
+fun ChallengeDetailRoute(
+    viewModel: ChallengeDetailViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    ChallengeDetailScreen(
+        uiState = uiState,
+    )
+}
+
+
+@Composable
 fun ChallengeDetailScreen(
-    padding: PaddingValues,
     uiState: ChallengeDetailState = ChallengeDetailState(),
 ) {
     val listState = rememberLazyListState()
@@ -58,7 +69,6 @@ fun ChallengeDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
     ) {
         UlbanDetailAppBar(
             leftIcon = com.sixkids.designsystem.R.drawable.hifive,
@@ -145,7 +155,6 @@ fun ChallengeDetailScreen(
 fun ChallengeDetailScreenPreview() {
     UlbanTheme {
         ChallengeDetailScreen(
-            padding = PaddingValues(0.dp),
             uiState = ChallengeDetailState(
                 challengeDetail = ChallengeDetail(
                     title = "4월 22일 함께 달리기",

@@ -1,6 +1,7 @@
 [versions]
 agp = "8.3.1"
 kotlin = "1.9.0"
+kotlinx-coroutines = "1.7.3"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -40,7 +41,12 @@ coil = "2.4.0"
 #Kakao
 kakao = "2.20.1"
 
+#Paging
+paging = "3.2.1"
+paging-compose = "3.3.0-beta01"
 
+#Lottie
+lottie = "6.4.0"
 
 [libraries]
 # Dependencies of the included build-logic
@@ -90,10 +96,19 @@ datastore = { group = "androidx.datastore", name = "datastore-preferences", vers
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 
 # Kakao
 kakao-sdk = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao" }
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+
+#Paging
+paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
+paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+
+#Lottie
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -116,6 +131,7 @@ sixkids-android-hilt = { id = "sixkids.android.hilt", version = "unspecified" }
 [bundles]
 compose = ["androidx-activity-compose", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-ui-test-junit4", "androidx-material3", "androidx-navigation-compose", "androidx-hilt-navigation-compose", "androidx-lifecycle-compose"]
 compose-debug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
+paging = ["paging", "paging-compose"]
 
 # Networking Bundle
 retrofit = ["retrofit", "moshi-converter", "moshi-kotlin", "okhttp", "okhttp-logginginterceptor"]
