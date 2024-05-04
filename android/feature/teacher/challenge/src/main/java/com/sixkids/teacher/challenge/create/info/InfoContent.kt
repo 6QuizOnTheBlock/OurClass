@@ -14,7 +14,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -29,18 +32,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
+import com.sixkids.designsystem.component.datepicker.UlbanDatePicker
 import com.sixkids.designsystem.component.textfield.InputTextType
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineIconInputField
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineTextField
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.challenge.R
-import com.sixkids.designsystem.R as DesignSystemR
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.ui.util.formatToDayMonthYear
 import com.sixkids.ui.util.formatToHourMinute
+import java.time.LocalDate
 import java.time.LocalDateTime
+import com.sixkids.designsystem.R as DesignSystemR
+
+private const val TAG = "D107"
 
 @Composable
 fun InfoContentRoute(
@@ -62,7 +69,7 @@ fun InfoContentRoute(
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
-    Log.d("D107", "InfoContentRoute: ${uiState.step}")
+    Log.d(TAG, "InfoContentRoute: ${uiState.step}")
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
@@ -86,6 +93,8 @@ fun InfoContentRoute(
         updateTitle = viewModel::updateTitle,
         updateContent = viewModel::updateContent,
         updatePoint = viewModel::updatePoint,
+        updateStartDate = viewModel::updateStartDate,
+        updateEndDate = viewModel::updateEndDate,
         updateStartTime = viewModel::updateStartTime,
         updateEndTime = viewModel::updateEndTime,
         moveNextInput = viewModel::moveNextInput,
@@ -100,6 +109,8 @@ fun InfoContent(
     uiState: InfoState = InfoState(),
     updateTitle: (String) -> Unit = {},
     updateContent: (String) -> Unit = {},
+    updateStartDate: (LocalDate) -> Unit = {},
+    updateEndDate: (LocalDate) -> Unit = {},
     updateStartTime: (LocalDateTime) -> Unit = {},
     updateEndTime: (LocalDateTime) -> Unit = {},
     updatePoint: (String) -> Unit = {},
@@ -110,8 +121,6 @@ fun InfoContent(
 
     val titleFocusRequester = remember { FocusRequester() }
     val contentFocusRequester = remember { FocusRequester() }
-    val startTimeFocusRequester = remember { FocusRequester() }
-    val endTimeFocusRequester = remember { FocusRequester() }
     val pointFocusRequester = remember { FocusRequester() }
 
 
@@ -130,11 +139,14 @@ fun InfoContent(
         if (uiState.stepVisibilityList.isNotEmpty() && uiState.stepVisibilityList[uiState.step.ordinal]) {
             when (uiState.step) {
                 InfoStep.TITLE -> titleFocusRequester.requestFocus()
-                InfoStep.END_TIME -> endTimeFocusRequester.requestFocus()
                 InfoStep.POINT -> pointFocusRequester.requestFocus()
                 else -> {}
             }
         }
+    }
+
+    LaunchedEffect(key1 = uiState.endDate) {
+        Log.d(TAG, "InfoContent: ${uiState.endDate}")
     }
 
     Column(
@@ -179,6 +191,7 @@ fun InfoContent(
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.END_TIME.ordinal]) {
+                var showDateDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
                         text = stringResource(R.string.end_time),
@@ -187,10 +200,10 @@ fun InfoContent(
                     Row(modifier = Modifier.fillMaxWidth()) {
                         UlbanUnderLineIconInputField(
                             modifier = Modifier.weight(3f),
-                            text = uiState.endTime.toLocalDate().formatToDayMonthYear(),
+                            text = uiState.endDate.formatToDayMonthYear(),
                             iconResource = DesignSystemR.drawable.ic_calendar,
                             onIconClick = {
-                                //캘린더 띄우기
+                                showDateDialog = true
                             }
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -203,10 +216,22 @@ fun InfoContent(
                             }
                         )
                     }
+                    if(showDateDialog){
+                        UlbanDatePicker(
+                            selectedDate = uiState.endDate,
+                            onDismiss = {
+                                showDateDialog = false
+                            },
+                            onClickConfirm = {
+                                showDateDialog = false
+                                updateEndDate(it)
+                            }
+                        )
+                    }
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.START_TIME.ordinal]) {
-
+                var showDateDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
                         text = stringResource(R.string.start_time),
@@ -215,10 +240,10 @@ fun InfoContent(
                     Row(modifier = Modifier.fillMaxWidth()) {
                         UlbanUnderLineIconInputField(
                             modifier = Modifier.weight(3f),
-                            text = uiState.startTime.toLocalDate().formatToDayMonthYear(),
+                            text = uiState.startDate.formatToDayMonthYear(),
                             iconResource = DesignSystemR.drawable.ic_calendar,
                             onIconClick = {
-                                //캘린더 띄우기
+                                showDateDialog = true
                             }
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -231,6 +256,18 @@ fun InfoContent(
                             }
                         )
                     }
+                }
+                if(showDateDialog){
+                    UlbanDatePicker(
+                        selectedDate = uiState.startDate,
+                        onDismiss = {
+                            showDateDialog = false
+                        },
+                        onClickConfirm = {
+                            showDateDialog = false
+                            updateStartDate(it)
+                        }
+                    )
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.CONTENT.ordinal]) {
@@ -305,7 +342,6 @@ fun InfoContent(
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

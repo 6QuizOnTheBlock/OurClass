@@ -1,8 +1,8 @@
 package com.sixkids.teacher.challenge.create.info
 
-import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -126,6 +126,18 @@ class InfoViewModel @Inject constructor(
     fun focusChange(infoStep: InfoStep) {
         intent {
             copy(step = infoStep)
+        }
+    }
+
+    fun updateStartDate(localDate: LocalDate) {
+        intent {
+            copy(startDate = localDate)
+        }
+    }
+
+    fun updateEndDate(localDate: LocalDate) {
+        intent {
+            copy(endDate = localDate)
         }
     }
 }

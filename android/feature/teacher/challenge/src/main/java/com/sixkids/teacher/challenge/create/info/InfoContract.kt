@@ -1,13 +1,15 @@
 package com.sixkids.teacher.challenge.create.info
 
-import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class InfoState(
     val title: String = "",
     val content: String = "",
+    val startDate: LocalDate = LocalDate.now(),
+    val endDate: LocalDate = LocalDate.now(),
     val startTime: LocalDateTime = LocalDateTime.now(),
     val endTime: LocalDateTime = LocalDateTime.now(),
     val point: String = "",
