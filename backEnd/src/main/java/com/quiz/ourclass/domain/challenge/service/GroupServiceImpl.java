@@ -75,13 +75,14 @@ public class GroupServiceImpl implements GroupService {
         Challenge challenge = challengeRepository.findById(getChallengeIdFromKey(key))
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
         long leaderId = getLeaderIdFromKey(key);
+        LocalDateTime createTime = LocalDateTime.now();
         ChallengeGroup group = ChallengeGroup.builder()
             .challenge(challenge)
             .leaderId(leaderId)
             .groupType(GroupType.FREE)
             .headCount(members.size())
             .completeStatus(false)
-            .createTime(LocalDateTime.now())
+            .createTime(createTime)
             .build();
         challengeGroupRepository.save(group);
         List<GroupMember> groupMembers = members.stream().map(Long::parseLong)
@@ -95,7 +96,7 @@ public class GroupServiceImpl implements GroupService {
                 .eventType(SseType.CREATE_GROUP)
                 .receiverId(member.getId())
                 .url(key)
-                .time(LocalDateTime.now())
+                .time(createTime)
                 .build();
             sseService.send(sseDTO);
         });
