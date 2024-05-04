@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/challenges")
 @RequiredArgsConstructor
-public class GroupController {
+public class GroupController implements GroupControllerDocs {
 
     private final GroupService groupService;
 
