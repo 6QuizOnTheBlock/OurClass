@@ -2,7 +2,10 @@ package com.quiz.ourclass.global.config;
 
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.dto.FilterResponse;
+import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtAuthFilter;
+import com.quiz.ourclass.global.util.jwt.JwtLogOutHandler;
+import com.quiz.ourclass.global.util.jwt.JwtLogOutSuccessHandler;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import com.quiz.ourclass.global.util.jwt.TokenRefreshFilter;
 import jakarta.servlet.DispatcherType;
@@ -38,9 +41,9 @@ public class SecurityConfig {
 
 
     private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
     private final RefreshRepository refreshRepository;
     private final FilterResponse filterResponse;
-
     private final String[] whiteList = {
         "/ws-stomp/**", // * 웹 소켓 연결 및 테스팅이 완료되면 삭제
         "/health-check",
@@ -61,6 +64,7 @@ public class SecurityConfig {
      * (3) API 라서 사이트 위조 공격이 들어오지 않는다. -> csrf 도 비활성화
      * (4) 다른 출처도 우리 리소스를 쓸 수 있게 설정 (같은 출처 = 프로토콜, 호스트, 포트 동일)
      * (5) iframe 설정은 동일 출처에게만 허락한다.
+     * (6) 로그아웃 설정 -> [yaml 파일에 정한 Context root]는 빼줘야 한다.
      * (6) Session 을 StateLess 하게 바꾼다. JWT 기반은 Session 을 요청 단위로 쓰고 죽인다.
      * (7) 권한 설정
      * */
@@ -103,25 +107,32 @@ public class SecurityConfig {
                 HeadersConfigurer.FrameOptionsConfig::sameOrigin
             ));                                                 // (5)
 
+        http.logout(auth ->                                     // (6)
+            auth
+                .logoutUrl("/members/logout")
+                .addLogoutHandler(new JwtLogOutHandler(redisUtil, jwtUtil, filterResponse))
+                .logoutSuccessHandler(new JwtLogOutSuccessHandler(filterResponse))
+        );
+
         http
             .sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );                                                  // (6)
+            );                                                  // (7)
 
         http
             .authorizeHttpRequests(
                 (auth) ->
-                    auth
+                    auth                                        // (8)
                         .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
                         .requestMatchers(whiteList).permitAll()
                         .requestMatchers(teacherList).hasRole("TEACHER")
                         .requestMatchers(studentList).hasRole("STUDENT")
                         .anyRequest().authenticated()
-            );                                                  // (7)
+            );                                                  // (9)
 
-        http.addFilterAt(new JwtAuthFilter(jwtUtil),
-            UsernamePasswordAuthenticationFilter.class);  // (8)
+        http.addFilterAt(new JwtAuthFilter(jwtUtil, filterResponse),
+            UsernamePasswordAuthenticationFilter.class);        // (10)
         http.addFilterBefore(new TokenRefreshFilter(jwtUtil, refreshRepository, filterResponse),
             UsernamePasswordAuthenticationFilter.class);
         return http.build();
