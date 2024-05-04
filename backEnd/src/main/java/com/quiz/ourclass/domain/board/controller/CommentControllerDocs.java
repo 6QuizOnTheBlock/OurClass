@@ -84,4 +84,25 @@ public interface CommentControllerDocs {
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );
+
+
+    @Operation(
+        summary = "댓글 신고",
+        description = "path 입력으로 들어온 게시글 PK 값 기준으로 댓을 신고하여 해당 단체 관리자에게 FCM 알림을 전송합니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = Boolean.class))),
+            @ApiResponse(responseCode = "403", description = "(message : \"멤버가 해당 단체 소속이 아닙니다.\")", content = @Content),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "멤버가 존재하지 않습니다.")
+                                
+                (message : "댓글을 찾을 수 없습니다.")
+                """, content = @Content),
+        }
+    )
+    @PostMapping("/{id}/report")
+    ResponseEntity<ResultResponse<Boolean>> report(
+        @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
+        @PathVariable(value = "id") Long id
+    );
 }
