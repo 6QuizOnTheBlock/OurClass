@@ -3,7 +3,9 @@ package com.quiz.ourclass.global.util;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
+import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class UserAccessUtil {
 
     private final MemberRepository memberRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
+    private final OrganizationRepository organizationRepository;
 
     //유저 정보 가져오기
     public Member getMember() {
@@ -30,5 +33,10 @@ public class UserAccessUtil {
     public MemberOrganization isMemberOfOrganization(Member member, Long orgId) {
         return memberOrganizationRepository.findByMemberIdAndOrganizationId(member.getId(), orgId)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+    }
+
+    public Organization isOrganizationManager(Member member, Long orgId) {
+        return organizationRepository.findByIdAndManager(orgId, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
     }
 }

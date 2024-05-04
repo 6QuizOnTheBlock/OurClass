@@ -48,6 +48,7 @@ public enum ErrorCode {
 
     //userAccess
     MEMBER_NOT_IN_ORGANIZATION(HttpStatus.FORBIDDEN, "멤버가 해당 단체 소속이 아닙니다."),
+    MEMBER_NOT_MANAGER(HttpStatus.FORBIDDEN, "해당 학급의 관리자가 아닙니다."),
 
     //organization
     ORGANIZATION_NOT_FOUND(HttpStatus.NOT_FOUND, "학급을 찾을 수 없습니다."),
