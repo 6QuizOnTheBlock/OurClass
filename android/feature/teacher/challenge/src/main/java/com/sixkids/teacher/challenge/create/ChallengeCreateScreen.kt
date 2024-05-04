@@ -2,7 +2,6 @@ package com.sixkids.teacher.challenge.create
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
-import com.sixkids.teacher.challenge.create.info.InfoViewModel
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import java.time.LocalDateTime
@@ -22,11 +20,9 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
-    infoViewModel: InfoViewModel = hiltViewModel(),
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val infoUiState = infoViewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
@@ -37,6 +33,11 @@ fun ChallengeCreateRoute(
 
     ChallengeCreateScreen(
         uiState = uiState,
+        updateTitle = viewModel::updateTitle,
+        updateContent = viewModel::updateContent,
+        updateStartTime = viewModel::updateStartTime,
+        updateEndTime = viewModel::updateEndTime,
+        updatePoint = viewModel::updatePoint,
         onMoveNextStep = viewModel::moveNextStep,
         onShowSnackbar = viewModel::onShowSnackbar,
     )
@@ -45,7 +46,6 @@ fun ChallengeCreateRoute(
 
 @Composable
 fun ChallengeCreateScreen(
-    paddingValues: PaddingValues = PaddingValues(20.dp),
     uiState: ChallengeCreateUiState,
     updateTitle: (String) -> Unit = {},
     updateContent: (String) -> Unit = {},
@@ -56,8 +56,9 @@ fun ChallengeCreateScreen(
     onMoveNextStep: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().
-        padding(paddingValues),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp, start = 20.dp, end = 20.dp, bottom = 20.dp),
     ) {
         AnimatedContent(
             modifier = Modifier.weight(1f),
@@ -67,9 +68,9 @@ fun ChallengeCreateScreen(
             when (targetState) {
                 ChallengeCreateStep.INFO -> InfoContentRoute(
                     updateTitle = updateTitle,
-                    updateContent = {},
-                    updateStartTime = {},
-                    updateEndTime = {},
+                    updateContent = updateContent,
+                    updateStartTime = updateStartTime,
+                    updateEndTime = updateEndTime,
                     updatePoint = updatePoint,
                     onShowSnackbar = onShowSnackbar,
                     moveNextStep = onMoveNextStep,

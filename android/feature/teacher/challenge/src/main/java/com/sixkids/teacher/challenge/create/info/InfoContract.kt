@@ -3,6 +3,7 @@ package com.sixkids.teacher.challenge.create.info
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 data class InfoState(
@@ -21,8 +22,8 @@ sealed interface InfoEffect : SideEffect {
 
     data class UpdateTitle(val title: String) : InfoEffect
     data class UpdateContent(val content: String) : InfoEffect
-    data class UpdateStartTime(val startTime: LocalTime) : InfoEffect
-    data class UpdateEndTime(val endTime: LocalTime) : InfoEffect
+    data class UpdateStartTime(val startTime: LocalDateTime) : InfoEffect
+    data class UpdateEndTime(val endTime: LocalDateTime) : InfoEffect
     data class UpdatePoint(val point: String) : InfoEffect
     data object MoveGroupTypeStep : InfoEffect
     data object ShowInputErrorSnackbar : InfoEffect

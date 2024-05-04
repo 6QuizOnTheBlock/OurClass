@@ -3,6 +3,7 @@ package com.sixkids.teacher.challenge.create.info
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -33,16 +34,35 @@ class InfoViewModel @Inject constructor(
         }
     }
 
+
+    fun updateStartDate(startDate: LocalDate) {
+        intent {
+            val selectedTime = LocalDateTime.of(startDate, startTime)
+            postSideEffect(InfoEffect.UpdateStartTime(selectedTime))
+            copy(startDate = startDate)
+        }
+    }
+
+    fun updateEndDate(endDate: LocalDate) {
+        intent {
+            val selectedTime = LocalDateTime.of(endDate, endTime)
+            postSideEffect(InfoEffect.UpdateStartTime(selectedTime))
+            copy(endDate = endDate)
+        }
+    }
+
     fun updateStartTime(startTime: LocalTime) {
         intent {
-            postSideEffect(InfoEffect.UpdateStartTime(startTime))
+            val selectedTime = LocalDateTime.of(startDate, startTime)
+            postSideEffect(InfoEffect.UpdateStartTime(selectedTime))
             copy(startTime = startTime)
         }
     }
 
     fun updateEndTime(endTime: LocalTime) {
         intent {
-            postSideEffect(InfoEffect.UpdateEndTime(endTime))
+            val selectedTime = LocalDateTime.of(endDate, endTime)
+            postSideEffect(InfoEffect.UpdateEndTime(selectedTime))
             copy(endTime = endTime)
         }
     }
@@ -129,15 +149,4 @@ class InfoViewModel @Inject constructor(
         }
     }
 
-    fun updateStartDate(localDate: LocalDate) {
-        intent {
-            copy(startDate = localDate)
-        }
-    }
-
-    fun updateEndDate(localDate: LocalDate) {
-        intent {
-            copy(endDate = localDate)
-        }
-    }
 }
