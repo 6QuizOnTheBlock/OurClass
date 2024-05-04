@@ -10,7 +10,7 @@ fun LocalDateTime.formatToMonthDayTime(): String {
 }
 
 fun LocalDate.formatToDayMonthYear(): String {
-    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
     return this.format(formatter)
 }
 
