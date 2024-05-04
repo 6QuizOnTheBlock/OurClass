@@ -32,7 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
-import com.sixkids.designsystem.component.dialog.UlbanDatePicker
+import com.sixkids.designsystem.component.dialog.UlbanDatePickerDialog
+import com.sixkids.designsystem.component.dialog.UlbanTimePickerDialog
 import com.sixkids.designsystem.component.textfield.InputTextType
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineIconInputField
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineTextField
@@ -45,6 +46,7 @@ import com.sixkids.ui.util.formatToDayMonthYear
 import com.sixkids.ui.util.formatToHourMinute
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import com.sixkids.designsystem.R as DesignSystemR
 
 private const val TAG = "D107"
@@ -54,8 +56,8 @@ fun InfoContentRoute(
     viewModel: InfoViewModel = hiltViewModel(),
     updateTitle: (String) -> Unit,
     updateContent: (String) -> Unit,
-    updateStartTime: (LocalDateTime) -> Unit,
-    updateEndTime: (LocalDateTime) -> Unit,
+    updateStartTime: (LocalTime) -> Unit,
+    updateEndTime: (LocalTime) -> Unit,
     updatePoint: (String) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     moveNextStep: () -> Unit,
@@ -111,8 +113,8 @@ fun InfoContent(
     updateContent: (String) -> Unit = {},
     updateStartDate: (LocalDate) -> Unit = {},
     updateEndDate: (LocalDate) -> Unit = {},
-    updateStartTime: (LocalDateTime) -> Unit = {},
-    updateEndTime: (LocalDateTime) -> Unit = {},
+    updateStartTime: (LocalTime) -> Unit = {},
+    updateEndTime: (LocalTime) -> Unit = {},
     updatePoint: (String) -> Unit = {},
     moveNextInput: () -> Unit = {},
     moveNextStep: () -> Unit = {},
@@ -147,6 +149,10 @@ fun InfoContent(
 
     LaunchedEffect(key1 = uiState.endDate) {
         Log.d(TAG, "InfoContent: ${uiState.endDate}")
+    }
+
+    LaunchedEffect(key1 = uiState.endTime){
+        Log.d(TAG, "InfoContent: ${uiState.endTime}")
     }
 
     Column(
@@ -192,6 +198,7 @@ fun InfoContent(
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.END_TIME.ordinal]) {
                 var showDateDialog by remember { mutableStateOf(false) }
+                var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
                         text = stringResource(R.string.end_time),
@@ -212,12 +219,12 @@ fun InfoContent(
                             text = uiState.endTime.formatToHourMinute(),
                             iconResource = DesignSystemR.drawable.ic_time,
                             onIconClick = {
-                                //시계 띄우기
+                                showTimeDialog = true
                             }
                         )
                     }
-                    if(showDateDialog){
-                        UlbanDatePicker(
+                    if (showDateDialog) {
+                        UlbanDatePickerDialog(
                             selectedDate = uiState.endDate,
                             onDismiss = {
                                 showDateDialog = false
@@ -228,10 +235,23 @@ fun InfoContent(
                             }
                         )
                     }
+                    if (showTimeDialog) {
+                        UlbanTimePickerDialog(
+                            selectedTime = uiState.endTime,
+                            onDismiss = {
+                                showTimeDialog = false
+                            },
+                            onClickConfirm = {
+                                showTimeDialog = false
+                                updateEndTime(it)
+                            }
+                        )
+                    }
                 }
             }
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.START_TIME.ordinal]) {
                 var showDateDialog by remember { mutableStateOf(false) }
+                var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
                         text = stringResource(R.string.start_time),
@@ -252,13 +272,13 @@ fun InfoContent(
                             text = uiState.startTime.formatToHourMinute(),
                             iconResource = DesignSystemR.drawable.ic_time,
                             onIconClick = {
-                                //시계 띄우기
+                                showTimeDialog = true
                             }
                         )
                     }
                 }
-                if(showDateDialog){
-                    UlbanDatePicker(
+                if (showDateDialog) {
+                    UlbanDatePickerDialog(
                         selectedDate = uiState.startDate,
                         onDismiss = {
                             showDateDialog = false
@@ -266,6 +286,18 @@ fun InfoContent(
                         onClickConfirm = {
                             showDateDialog = false
                             updateStartDate(it)
+                        }
+                    )
+                }
+                if (showTimeDialog) {
+                    UlbanTimePickerDialog(
+                        selectedTime = uiState.startTime,
+                        onDismiss = {
+                            showTimeDialog = false
+                        },
+                        onClickConfirm = {
+                            showTimeDialog = false
+                            updateStartTime(it)
                         }
                     )
                 }
