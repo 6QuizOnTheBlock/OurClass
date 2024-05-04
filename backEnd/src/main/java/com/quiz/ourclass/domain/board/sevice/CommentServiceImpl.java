@@ -9,13 +9,8 @@ import com.quiz.ourclass.domain.board.repository.CommentRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
-import com.quiz.ourclass.domain.notice.entity.Notice;
-import com.quiz.ourclass.domain.notice.entity.NoticeType;
-import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
-import com.quiz.ourclass.global.dto.FcmDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
-import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +23,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final NoticeRepository noticeRepository;
     private final UserAccessUtil userAccessUtil;
-    private final FcmUtil fcmUtil;
     private final CommentMapper commentMapper;
 
     @Transactional
@@ -99,41 +92,6 @@ public class CommentServiceImpl implements CommentService {
         }
         //댓글 삭제
         commentRepository.delete(comment);
-        return true;
-    }
-
-    @Transactional
-    @Override
-    public Boolean report(Long commentId) {
-        Member member = userAccessUtil.getMember();
-
-        Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
-
-        userAccessUtil.isMemberOfOrganization(member, comment.getPost().getOrganization().getId());
-
-        String reportMember = member.getName();
-        String authorMember = comment.getPost().getAuthor().getName();
-        String body = authorMember + " 학생이 작성한 댓글을 " + reportMember + " 학생이 신고하였습니다.";
-
-        FcmDTO fcmDTO = FcmDTO.builder()
-            .title(comment.getPost().getOrganization().getName() + "게시글 신고")
-            .body(body)
-            .build();
-
-        // 알림 저장
-        Notice notice = Notice.builder()
-            .receiver(comment.getPost().getOrganization().getManager())
-            .url(reportMember)
-            .content(body)
-            .type(NoticeType.REPORT)
-            .createTime(LocalDateTime.now())
-            .build();
-        noticeRepository.save(notice);
-
-        //fcm 전송
-        fcmUtil.singleFcmSend(comment.getPost().getOrganization().getManager(), fcmDTO);
-
         return true;
     }
 }

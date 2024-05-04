@@ -72,4 +72,4 @@ oicd:
   aud: ENC(G4sxMKOTz0fFoO58luWfV6rqCBZTtEhj81DicEx5wBy8ZgUFTGm1HMlgCTVX9XpW)
 
 firebase:
-  path: ENC(gG1P3HSYoou6l49cHkZr2vgFevWbm5rbFncRaN8C2f0=)
+  path: ulvan-firebase-key.json
