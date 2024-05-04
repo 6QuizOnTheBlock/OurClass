@@ -1,4 +1,4 @@
-package com.sixkids.designsystem.component.datepicker
+package com.sixkids.designsystem.component.dialog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -15,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTheme
 import java.time.Instant
@@ -25,7 +27,7 @@ import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UlbanDatePicker(
+fun UlbanDatePickerDialog(
     selectedDate: LocalDate = LocalDate.now(),
     onDismiss: () -> Unit,
     onClickConfirm: (date: LocalDate) -> Unit
@@ -47,13 +49,13 @@ fun UlbanDatePicker(
                     } ?: LocalDate.now())
                 },
             ) {
-                Text("확인")
+                Text(stringResource(R.string.confirm))
             }
         }, dismissButton = {
             TextButton(onClick = {
                 onDismiss()
             }) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }, colors = DatePickerDefaults.colors(
             containerColor = Cream
@@ -77,7 +79,7 @@ fun CustomDatePickerDialogPreview() {
                 text = selectedDate.toString(),
             )
             if (showDialog) {
-                UlbanDatePicker(
+                UlbanDatePickerDialog(
                     selectedDate = selectedDate,
                     onDismiss = {
                         showDialog = false

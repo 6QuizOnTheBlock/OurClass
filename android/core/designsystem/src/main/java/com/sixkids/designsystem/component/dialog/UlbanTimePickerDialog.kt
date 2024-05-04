@@ -15,7 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.UlbanTheme
 import java.time.LocalTime
 
@@ -44,14 +46,14 @@ fun UlbanTimePickerDialog(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(onClick = onDismiss) {
-                    Text("취소")
+                    Text(stringResource(id = R.string.cancel))
                 }
                 TextButton(
                     onClick = {
                         onClickConfirm(selectedTime)
                     }
                 ) {
-                    Text("확인")
+                    Text(stringResource(id = R.string.confirm))
                 }
             }
         }
