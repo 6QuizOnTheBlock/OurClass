@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
-import com.sixkids.designsystem.component.datepicker.UlbanDatePicker
+import com.sixkids.designsystem.component.dialog.UlbanDatePicker
 import com.sixkids.designsystem.component.textfield.InputTextType
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineIconInputField
 import com.sixkids.designsystem.component.textfield.UlbanUnderLineTextField
