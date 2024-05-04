@@ -16,15 +16,11 @@ public class Refresh {
     @Id
     private long memberId;
     private String refreshToken;
-
     @Indexed
     private String accessToken;
-
-
     // 토큰 수명 -> SpEL 문으로 기본값도 설정
     @TimeToLive
     private long lifeTime;
-
 
     @Builder
     private Refresh(long memberId, String accessToken, String refreshToken, long lifeTime) {

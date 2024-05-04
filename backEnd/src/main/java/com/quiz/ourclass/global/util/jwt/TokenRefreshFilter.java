@@ -41,13 +41,12 @@ public class TokenRefreshFilter extends OncePerRequestFilter {
             && refreshToken != null
             && httpRequest.getMethod().equals("GET")) {
             // 3-1) Redis 안에 들어있으면, 만료 되지 않고, 유효한 토큰이다.
-            if (refreshRepository.findByAccessToken(
-                    accessToken)                                            // accessToken 의 Pair 인 Refresh 토큰 찾으셈
-                .map(refresh -> refresh.getRefreshToken()
-                    .equals(
-                        refreshToken))                                 // 그게 진짜 보내온 [Refresh]랑 같음?
-                .orElse(
-                    false)) {                                      // 앞의 값이 null 이면 Error 내지 말고 false 반환
+            // -- if문 Chaining 설명
+            // a) accessToken 의 Pair 인 Refresh 토큰 찾으셈
+            // b) 그게 진짜 보내온 [Refresh]랑 같음?
+            // c) 앞의 값이 null 이면 Error 내지 말고 false 반환
+            if (refreshRepository.findByAccessToken(accessToken)
+                .map(refresh -> refresh.getRefreshToken().equals(refreshToken)).orElse(false)) {
 
                 // 3-2) [RefreshToken]이 있으면 새로운 AT, RT 발급 및 Redis 갱신, 요청 응답 전달 후 종료
                 Claims info = jwtUtil.getUserInfoFromToken(refreshToken);
