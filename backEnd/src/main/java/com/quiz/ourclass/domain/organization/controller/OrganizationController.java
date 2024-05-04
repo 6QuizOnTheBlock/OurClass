@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/organizations")
 @RequiredArgsConstructor
-public class OrganizationController {
+public class OrganizationController implements OrganizationControllerDocs {
 
     private final OrganizationService organizationService;
 
