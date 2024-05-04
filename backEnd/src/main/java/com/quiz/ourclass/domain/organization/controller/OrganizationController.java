@@ -1,10 +1,13 @@
 package com.quiz.ourclass.domain.organization.controller;
 
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.service.OrganizationService;
 import com.quiz.ourclass.global.dto.ResultResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,5 +25,11 @@ public class OrganizationController implements OrganizationControllerDocs {
         @RequestBody OrganizationRequest organizationRequest) {
         Long organizationId = organizationService.createOrganization(organizationRequest);
         return ResponseEntity.ok(ResultResponse.success(organizationId));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResultResponse<?>> getOrganizations() {
+        List<OrganizationResponse> organizations = organizationService.getOrganizations();
+        return ResponseEntity.ok(ResultResponse.success(organizations));
     }
 }
