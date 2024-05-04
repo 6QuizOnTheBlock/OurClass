@@ -1,8 +1,8 @@
 package com.sixkids.teacher.challenge.create.info
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,15 +49,13 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import com.sixkids.designsystem.R as DesignSystemR
 
-private const val TAG = "D107"
-
 @Composable
 fun InfoContentRoute(
     viewModel: InfoViewModel = hiltViewModel(),
     updateTitle: (String) -> Unit,
     updateContent: (String) -> Unit,
-    updateStartTime: (LocalTime) -> Unit,
-    updateEndTime: (LocalTime) -> Unit,
+    updateStartTime: (LocalDateTime) -> Unit,
+    updateEndTime: (LocalDateTime) -> Unit,
     updatePoint: (String) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit,
     moveNextStep: () -> Unit,
@@ -70,9 +68,6 @@ fun InfoContentRoute(
     }
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
-    Log.d(TAG, "InfoContentRoute: ${uiState.step}")
-
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is InfoEffect.UpdateTitle -> updateTitle(it.title)
@@ -130,6 +125,9 @@ fun InfoContent(
 
     val handelNext: () -> Unit = {
         if (uiState.step != InfoStep.POINT) {
+            if (uiState.step == InfoStep.CONTENT && uiState.stepVisibilityList[InfoStep.POINT.ordinal].not()) {
+                focusManager.clearFocus()
+            }
             moveNextInput()
         } else {
             moveNextStep()
@@ -141,19 +139,17 @@ fun InfoContent(
         if (uiState.stepVisibilityList.isNotEmpty() && uiState.stepVisibilityList[uiState.step.ordinal]) {
             when (uiState.step) {
                 InfoStep.TITLE -> titleFocusRequester.requestFocus()
+                InfoStep.CONTENT -> contentFocusRequester.requestFocus()
                 InfoStep.POINT -> pointFocusRequester.requestFocus()
-                else -> {}
+                else -> {
+                    if (uiState.stepVisibilityList[InfoStep.POINT.ordinal]) {
+                        pointFocusRequester.requestFocus()
+                    }
+                }
             }
         }
     }
 
-    LaunchedEffect(key1 = uiState.endDate) {
-        Log.d(TAG, "InfoContent: ${uiState.endDate}")
-    }
-
-    LaunchedEffect(key1 = uiState.endTime){
-        Log.d(TAG, "InfoContent: ${uiState.endTime}")
-    }
 
     Column(
         modifier = Modifier
@@ -162,7 +158,8 @@ fun InfoContent(
                 detectTapGestures(
                     onPress = { focusManager.clearFocus() }
                 )
-            }
+            },
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         if (uiState.stepVisibilityList.isNotEmpty()) {
             AnimatedVisibility(uiState.stepVisibilityList[InfoStep.POINT.ordinal]) {

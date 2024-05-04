@@ -30,5 +30,25 @@ class ChallengeCreateViewModel @Inject constructor(
         postSideEffect(ChallengeCreateEffect.ShowSnackbar(snackbarToken))
     }
 
+    fun updateTitle(title: String) {
+        this.title = title
+    }
+
+    fun updateContent(content: String) {
+        this.content = content
+    }
+
+    fun updateStartTime(startTime: LocalDateTime) {
+        this.startTime = startTime
+    }
+
+    fun updateEndTime(endTime: LocalDateTime) {
+        this.endTime = endTime
+    }
+
+    fun updatePoint(point: String) {
+        this.point = point
+    }
+
 
 }
