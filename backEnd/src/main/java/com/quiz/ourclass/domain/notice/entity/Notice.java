@@ -10,7 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Notice {
 
@@ -24,5 +34,6 @@ public class Notice {
     @Enumerated(EnumType.STRING)
     NoticeType type;
     LocalDateTime createTime;
-    boolean readStatus;
+    @Builder.Default
+    boolean readStatus = false;
 }
