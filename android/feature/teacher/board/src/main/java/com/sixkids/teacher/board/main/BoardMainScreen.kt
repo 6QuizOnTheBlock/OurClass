@@ -32,7 +32,9 @@ fun BoardMainRoute(
             .fillMaxSize()
             .padding(padding)
     ) {
-        BoardMainScreen()
+        BoardMainScreen(
+            postCardOnClick = navigateToPost
+        )
     }
 }
 
@@ -71,7 +73,8 @@ fun BoardMainScreen(
             contentName = stringResource(id = R.string.board_main_post),
             contentImageId = UlbanRes.drawable.board,
             cardColor = Blue,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = postCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
