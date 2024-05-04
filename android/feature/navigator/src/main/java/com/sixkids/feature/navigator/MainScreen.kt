@@ -80,6 +80,7 @@ fun MainScreen(
 
             boardNavGraph(
                 padding = innerPadding,
+                navigateToPost = navigator::navigatePost,
             )
 
             challengeNavGraph(
