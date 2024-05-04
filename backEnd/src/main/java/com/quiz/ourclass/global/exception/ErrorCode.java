@@ -13,6 +13,7 @@ public enum ErrorCode {
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "첨부한 파일이 S3에 업로드 되지 않았습니다."),
     GUEST_PERMISSION_DENIED(HttpStatus.FORBIDDEN, "게스트는 권한이 없습니다."),
     NOT_FOUND_DEFAULT_IMAGE(HttpStatus.NOT_FOUND, "해당 번호의 기본 이미지를 찾을 수 없습니다."),
+    PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     //member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
@@ -51,6 +52,7 @@ public enum ErrorCode {
     //challenge
     REPORT_NOW_FOUND(HttpStatus.NOT_FOUND, "레포트를 찾을 수 없습니다."),
     CHALLENGE_GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
+    CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "함께달리기를 찾을 수 없습니다."),
     RUNNING_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 함께달리기가 없습니다."),
     ;
 
