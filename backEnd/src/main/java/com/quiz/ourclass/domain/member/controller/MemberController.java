@@ -76,6 +76,7 @@ public class MemberController implements MemberControllerDocs {
         memberService.saveFcmToken(request);
         return ResponseEntity.ok(ResultResponse.success(null));
     }
+
     /* 7. 기본 이미지 업데이트 */
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
@@ -84,4 +85,6 @@ public class MemberController implements MemberControllerDocs {
         return ResponseEntity.ok(
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
     }
+
+
 }

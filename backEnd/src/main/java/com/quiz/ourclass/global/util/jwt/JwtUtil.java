@@ -1,8 +1,9 @@
 package com.quiz.ourclass.global.util.jwt;
 
 
-import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.entity.Refresh;
+import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.util.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -32,18 +33,18 @@ public class JwtUtil {
 
 
     /*
-    * JwtUtil 변수 명세
-    * (1) ingredient: HS 알고리즘에서 쓸 수 있는 알고리즘 [Key]를 만들기 위한 재료
-    *                 String 형태의 SecretKey -> Base64로 decoding 해서 bytes 로 변환 -> [Security Key]로 재구성
-    *
-    * (2) key: JWT의 C(전자서명) 파트를 만들 때 쓰이는 KEY이다. (1)번을 재구성해서 만들었다.
-    *
-    * (3) signatureAlgorithm: JWT의 전자서명 파트를 만들 때 쓰이는 알고리즘이다.
-    *
-    * (4) ACCESS_TOKEN_TIME: 접근 토큰 수명
-    * (5) REFRESH_TOKEN_TIME: 갱신 토큰 수명
-    * (6) Bearer Token Prefix
-    * */
+     * JwtUtil 변수 명세
+     * (1) ingredient: HS 알고리즘에서 쓸 수 있는 알고리즘 [Key]를 만들기 위한 재료
+     *                 String 형태의 SecretKey -> Base64로 decoding 해서 bytes 로 변환 -> [Security Key]로 재구성
+     *
+     * (2) key: JWT의 C(전자서명) 파트를 만들 때 쓰이는 KEY이다. (1)번을 재구성해서 만들었다.
+     *
+     * (3) signatureAlgorithm: JWT의 전자서명 파트를 만들 때 쓰이는 알고리즘이다.
+     *
+     * (4) ACCESS_TOKEN_TIME: 접근 토큰 수명
+     * (5) REFRESH_TOKEN_TIME: 갱신 토큰 수명
+     * (6) Bearer Token Prefix
+     * */
 
 
     @Value("${jwt.secret}")
@@ -56,12 +57,13 @@ public class JwtUtil {
 
     @Value("#{new Integer('${jwt.token.refresh-expiration-time}')}")
     private Integer REFRESH_TOKEN_TIME;
-    private static  final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final UserDetailsServiceImpl userDetailsService;
 
     // Redis Repository 에 집어넣기 위함.
     private final RefreshRepository refreshRepository;
+    private final MemberRepository memberRepository;
 
 
     /* A. Init 함수 -> JWT 토큰 만들기 위한 사전 준비  */
@@ -70,31 +72,32 @@ public class JwtUtil {
     public void init() {
 
         // String 형태의 [secretKey]를 [Byte]로 디코딩
-        byte [] bytes = Base64.getDecoder().decode(ingredient);
+        byte[] bytes = Base64.getDecoder().decode(ingredient);
         // hmacShaKeyFor() = 매개 변수로 들어온 byte 배열을 HS 알고리즘에서 사용할 수 있는 키로 탈바꿈
         key = Keys.hmacShaKeyFor(bytes);
     }
 
 
     /* B. createToken
-    *  (1) isAccess boolean 값에 따라, AccessToken 혹은 RefreshToken 을 만든다.
-    * */
-    public String createToken (Member member, boolean isAccess) {
+     *  (1) isAccess boolean 값에 따라, AccessToken 혹은 RefreshToken 을 만든다.
+     * */
+    public String createToken(long memberId, String role, boolean isAccess) {
 
         // 오늘 날짜 확인
         Date now = new Date();
 
         //
 
-
         // 토큰 생성 후 반환 :
         //  header: 사용한 알고리즘에 따라 관련 메타데이터가 채워짐
         //  payload: 제목, 발행일, 만료일이 들어갔다. 추가하고 싶다면 Claim 객체를 만들어 내용을 채우고 추가하면 된다.
         //  signWith: JWT 토큰 위조 방지를 위한 서명
         return Jwts.builder()
-            .setSubject(String.valueOf(member.getId()))
+            .setSubject(String.valueOf(memberId))
+            .claim("ROLE", role)
             .setIssuedAt(new Date(now.getTime()))
-            .setExpiration(new Date(now.getTime() + (isAccess? ACCESS_TOKEN_TIME : REFRESH_TOKEN_TIME)))
+            .setExpiration(
+                new Date(now.getTime() + (isAccess ? ACCESS_TOKEN_TIME : REFRESH_TOKEN_TIME)))
             .signWith(key, signatureAlgorithm)
             .compact();
 
@@ -102,12 +105,12 @@ public class JwtUtil {
 
 
     /* C. separateBearer
-    *  Access Token 혹은 Refresh Token 의 접두사 분리
-    * */
-    public String separateBearer (String bearerToken) {
+     *  Access Token 혹은 Refresh Token 의 접두사 분리
+     * */
+    public String separateBearer(String bearerToken) {
 
         // [bearerToken]이 [Null]이 아니다. 또한 Bearer 로 시작하면, 앞의 7 글자를 잘라서 반환하라.
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
 
@@ -115,16 +118,16 @@ public class JwtUtil {
     }
 
     /*
-    * D. 토큰 유효성 검증
-    * 0: 정상, -1: 만료된 토큰, -2: 유효하지 않은 서명, -3: 지원되지 않는 토큰, -4: 잘못된 JWT 토큰
-    * */
+     * D. 토큰 유효성 검증
+     * 0: 정상, -1: 만료된 토큰, -2: 유효하지 않은 서명, -3: 지원되지 않는 토큰, -4: 잘못된 JWT 토큰
+     * */
 
     public int validateToken(String token) {
         try {
             // JWT 토큰을 Parsing 하는 객체를 만들어서 객체의 파싱 매소드에 매개변수로 token 을 넣었다.
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return 0;
-        } catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.");
             log.error("관련에러: {}", e.getMessage());
             return -1;
@@ -145,27 +148,38 @@ public class JwtUtil {
     }
 
     /*
-    *  E. 토큰 해부해서 Payload 전체를 반환하기
-    * */
-    public Claims getUserInfoFromToken(String token){
+     *  E. 토큰 해부해서 Payload 전체를 반환하기
+     * */
+    public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     /*
-    *  F. [Member Id]에 해당하는 회원 정보를 [DB]에서 가져와 인증 객체를 생성
-    * */
+     *  F. [Member Id]에 해당하는 회원 정보를 [DB]에서 가져와 인증 객체를 생성
+     * */
 
     public Authentication createAuthentication(String id) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(id);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
     }
 
     /*
-    *  G. [RefreshToken Redis]에 집어넣기
-    * */
+     *  G. [RefreshToken Redis]에 집어넣기
+     * */
 
-    public void saveRefresh(long memberId, String refreshToken){
-        refreshRepository.save(Refresh.of(memberId,refreshToken,REFRESH_TOKEN_TIME/1000));
+    public void saveRefresh(long memberId, String accessToken, String refreshToken) {
+        refreshRepository.save(
+            Refresh.of(memberId, accessToken, refreshToken, REFRESH_TOKEN_TIME / 1000));
+    }
+
+    public TokenDTO refreshToken(long memberId, String role) {
+
+        String accessToken = createToken(memberId, role, true);
+        String refreshToken = createToken(memberId, role, false);
+        saveRefresh(memberId, accessToken, refreshToken);
+
+        return TokenDTO.of(accessToken, refreshToken, role);
     }
 
 }

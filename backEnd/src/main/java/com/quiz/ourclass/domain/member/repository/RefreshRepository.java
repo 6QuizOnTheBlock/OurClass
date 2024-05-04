@@ -10,4 +10,6 @@ public interface RefreshRepository extends KeyValueRepository<Refresh, Long> {
 
     Optional<Refresh> findByMemberId(long id);
 
+    Optional<Refresh> findByAccessToken(String accessToken);
+
 }

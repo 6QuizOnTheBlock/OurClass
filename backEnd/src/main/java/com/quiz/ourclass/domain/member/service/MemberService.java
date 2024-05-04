@@ -59,8 +59,10 @@ public class MemberService {
             .map(oidcService::certificatingIdToken) // ID 토큰 검증
             .map(payload -> memberRepository.findByEmail(payload.getEmail())
                 .map(
-                    member -> updateExistingMember(member, imgUrl, request.getRole())) // 기존 멤버 업데이트
-                .orElseGet(() -> registerNewMember(payload, imgUrl, request.getRole()))) // 새 멤버 등록
+                    member -> updateExistingMember(member, imgUrl,
+                        request.getRole())) // 기존 멤버 업데이트 (위의 chaining 에서 Optional 이 비어있으면 실행되지 않는다.)
+                .orElseGet(() -> registerNewMember(payload, imgUrl,
+                    request.getRole()))) // 새 멤버 등록 -> orElseGet Null일 때만 발동!
             .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED)); // 검증 실패 예외 처리
     }
 
@@ -98,11 +100,13 @@ public class MemberService {
                 ErrorCode.CERTIFICATION_FAILED));                // 검증 실패 예외 처리
     }
 
-    // 접근 토큰, 갱신 토큰 만들기
+    // 접근 토큰, 갱신 토큰 만들기 -> 토큰을 만들 멤버에 대한 검증을 끝냈다.
     private TokenDTO createTokenDTO(Member member) {
-        String accessToken = jwtUtil.createToken(member, true);
-        String refreshToken = jwtUtil.createToken(member, false);
-        jwtUtil.saveRefresh(member.getId(), refreshToken);
+        String accessToken = jwtUtil.createToken(member.getId(),
+            covertRoleToString(member.getRole()), true);
+        String refreshToken = jwtUtil.createToken(member.getId(),
+            covertRoleToString(member.getRole()), false);
+        jwtUtil.saveRefresh(member.getId(), accessToken, refreshToken);
         return TokenDTO.of(accessToken, refreshToken,
             member.getRole().equals(Role.TEACHER) ? "TEACHER" : "STUDENT");
     }
@@ -118,13 +122,8 @@ public class MemberService {
 
     }
 
-    private SocialType checkSocialType(String socialType) {
-        return switch (socialType) {
-            case "kakao", "KAKAO" -> SocialType.KAKAO;
-            case "google", "GOOGLE" -> SocialType.GOOGLE;
-            case "naver", "NAVER" -> SocialType.NAVER;
-            default -> null;
-        };
+    private String covertRoleToString(Role roleType) {
+        return roleType.equals(Role.TEACHER) ? "TEACHER" : "STUDENT";
     }
 
     public DefaultImage updateDefaultImage(DefaultImageRequest request) {
