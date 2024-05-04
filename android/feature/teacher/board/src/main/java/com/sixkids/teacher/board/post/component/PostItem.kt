@@ -35,7 +35,8 @@ fun PostItem(
             text = title,
             style = UlbanTypography.titleLarge,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            style = UlbanTypography.titleLarge
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(
