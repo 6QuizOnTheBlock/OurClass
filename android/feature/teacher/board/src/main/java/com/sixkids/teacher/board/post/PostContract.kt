@@ -1,6 +1,6 @@
 package com.sixkids.teacher.board.post
 
-import com.sixkids.model.Post
+import com.sixkids.model.PostItem
 
 data class PostState(
     val classString: String = "",
