@@ -10,4 +10,6 @@ public interface CommentService {
     Long modify(Long commentId, UpdateCommentRequest request);
 
     Boolean delete(Long commentId);
+
+    Boolean report(Long commentId);
 }
