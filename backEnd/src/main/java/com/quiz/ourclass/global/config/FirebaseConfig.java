@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -12,9 +13,12 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 public class FirebaseConfig {
 
+    @Value("${firebase.path}")
+    String path;
+
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
-        ClassPathResource resource = new ClassPathResource("ulvan-firebase-key.json");
+        ClassPathResource resource = new ClassPathResource(path);
 
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseOptions options = FirebaseOptions.builder()
