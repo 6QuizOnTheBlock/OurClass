@@ -18,8 +18,9 @@ import org.springframework.stereotype.Component;
 public class FcmUtil {
 
     private final RedisUtil redisUtil;
-
     private static final String FCM_KEY_PREFIX = "FCM_";
+    private static final int MAX_RETRIES = 5; //최대 재시도 횟수
+    private static final long INITIAL_BACKOFF = 1000L; //초기 백오프 시간 (1초)
 
     @Async("taskExecutor")
     public void singleFcmSend(Member member, FcmDTO fcmDTO) {
@@ -53,10 +54,32 @@ public class FcmUtil {
     }
 
     private void sendMessage(Message message) {
-        try {
-            FirebaseMessaging.getInstance().send(message);
-        } catch (FirebaseMessagingException e) {
-            log.error("FCM send error", e);
+        int attempt = 0;
+        long backoff = INITIAL_BACKOFF;
+
+        while (attempt < MAX_RETRIES) { //지수 백오프 전략
+            try {
+                FirebaseMessaging.getInstance().send(message);
+                log.info("FCM Send Success");
+                break;  // 성공 시 루프 종료
+            } catch (FirebaseMessagingException e) {
+                log.error("FCM Send Error: {}", e.getMessage());
+                attempt++;
+                if (attempt >= MAX_RETRIES) {
+                    // 최대 재시도 횟수 도달 시 루프 종료
+                    // 다른 메시지 시스템으로 알림을 전송하는 방법을 고려해볼 수 있음
+                    log.error("Reached Maximum Retry Attempts");
+                    break;
+                }
+                try {
+                    Thread.sleep(backoff);  // 지수 백오프를 위한 대기
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    log.error("Interrupted While Waiting For Retry");
+                    break;  // 인터럽트 발생 시 루프 종료
+                }
+                backoff *= 2;
+            }
         }
     }
 }
