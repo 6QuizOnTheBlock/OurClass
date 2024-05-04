@@ -63,7 +63,7 @@ public class MemberController implements MemberControllerDocs {
 
 
     /* 6 개발자용 Access, RefreshToken 발급 */
-    @GetMapping("/developer-At")
+    @PostMapping("/developer-At")
     public ResponseEntity<ResultResponse<?>> getAtRt(@RequestBody DeveloperAtRtRequest request) {
 
         return ResponseEntity.ok(
@@ -76,6 +76,7 @@ public class MemberController implements MemberControllerDocs {
         memberService.saveFcmToken(request);
         return ResponseEntity.ok(ResultResponse.success(null));
     }
+
     /* 7. 기본 이미지 업데이트 */
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
