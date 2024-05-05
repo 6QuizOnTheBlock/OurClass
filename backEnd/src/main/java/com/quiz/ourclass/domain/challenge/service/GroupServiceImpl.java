@@ -14,6 +14,7 @@ import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.notice.dto.SseDTO;
 import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
+import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
@@ -42,7 +43,8 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public String createMatchingRoom(long challengeId) {
-        long MemberId = accessUtil.getMember().getId();
+        long MemberId = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         String dataKey = makeGroupKey(challengeId, MemberId);
         redisUtil.setAdd(dataKey, String.valueOf(MemberId));
         return dataKey;
@@ -51,7 +53,8 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public boolean joinMatchingRoom(String key, boolean joinStatus) {
-        long memberId = accessUtil.getMember().getId();
+        long memberId = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         long leaderId = getLeaderIdFromKey(key);
         SseDTO sseDTO = SseDTO.builder()
             .eventType(SseType.INVITE_RESPONSE)
@@ -108,7 +111,8 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public void deleteMatchingMember(String key, Long memberId) {
-        long loginUserId = accessUtil.getMember().getId();
+        long loginUserId = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         if (getLeaderIdFromKey(key) != loginUserId) {
             throw new GlobalException(PERMISSION_DENIED);
         }

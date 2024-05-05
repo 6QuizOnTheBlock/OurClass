@@ -10,6 +10,8 @@ import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.mapper.OrganizationMapper;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.Duration;
@@ -33,7 +35,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Long createOrganization(OrganizationRequest organizationRequest) {
-        Member member = accessUtil.getMember();
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         Organization organization = Organization.builder()
             .name(organizationRequest.name())
             .manager(member)
@@ -44,7 +47,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public List<OrganizationResponse> getOrganizations() {
-        Member member = accessUtil.getMember();
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         if (member.getRole().equals(Role.TEACHER)) {
             List<Organization> organizations = organizationRepository.findByManager(member);
             return organizations.stream()
@@ -61,8 +65,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public InviteCodeDTO getOrganizationCode(long id) {
-        Member member = accessUtil.getMember();
-        accessUtil.isOrganizationManager(member, id);
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        accessUtil.isOrganizationManager(member, id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
         String redisKey = REDIS_ORG_KEY + id;
         String code = redisUtil.valueGet(redisKey);
         if (code == null || code.isEmpty()) {

@@ -6,8 +6,7 @@ import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
-import com.quiz.ourclass.global.exception.ErrorCode;
-import com.quiz.ourclass.global.exception.GlobalException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,21 +21,18 @@ public class UserAccessUtil {
     private final OrganizationRepository organizationRepository;
 
     //유저 정보 가져오기
-    public Member getMember() {
+    public Optional<Member> getMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        return memberRepository.findByName(userName)
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        return memberRepository.findByName(userName);
     }
 
     //유저가 단체에 속해있는지 유효성 검사
-    public MemberOrganization isMemberOfOrganization(Member member, Long orgId) {
-        return memberOrganizationRepository.findByMemberIdAndOrganizationId(member.getId(), orgId)
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+    public Optional<MemberOrganization> isMemberOfOrganization(Member member, Long orgId) {
+        return memberOrganizationRepository.findByMemberIdAndOrganizationId(member.getId(), orgId);
     }
 
-    public Organization isOrganizationManager(Member member, Long orgId) {
-        return organizationRepository.findByIdAndManager(orgId, member)
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
+    public Optional<Organization> isOrganizationManager(Member member, Long orgId) {
+        return organizationRepository.findByIdAndManager(orgId, member);
     }
 }

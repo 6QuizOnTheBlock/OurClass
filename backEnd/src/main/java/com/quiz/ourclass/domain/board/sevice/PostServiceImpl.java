@@ -57,7 +57,8 @@ public class PostServiceImpl implements PostService {
     public Long write(Long organizationId, MultipartFile file, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버가 존재하는지 확인
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (request.postCategory() == PostCategory.NOTICE && member.getRole() == Role.STUDENT) {
             throw new GlobalException(ErrorCode.POST_WRITE_PERMISSION_DENIED);
@@ -65,7 +66,8 @@ public class PostServiceImpl implements PostService {
 
         //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인
         MemberOrganization memberOrganization =
-            userAccessUtil.isMemberOfOrganization(member, organizationId);
+            userAccessUtil.isMemberOfOrganization(member, organizationId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
 
         //S3 이미지 파일 업로드
         Image image = null;
@@ -98,7 +100,8 @@ public class PostServiceImpl implements PostService {
     public Long modify(Long postId, MultipartFile file, UpdatePostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //게시글을 수정할 수 있는 멤버인지 검증
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         //수정 할 게시글 조회
         Post post = postRepository.findByIdAndAuthor(postId, member)
@@ -141,7 +144,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Boolean delete(Long postId) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
@@ -153,7 +157,8 @@ public class PostServiceImpl implements PostService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = post.getOrganization().getId();
-            userAccessUtil.isMemberOfOrganization(member, orgId);
+            userAccessUtil.isMemberOfOrganization(member, orgId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
         postRepository.delete(post);
         return true;
@@ -177,12 +182,14 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Boolean report(Long postId) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId());
+        userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
 
         String reportMember = member.getName();
         String authorMember = post.getAuthor().getName();

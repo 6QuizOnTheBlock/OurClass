@@ -139,7 +139,8 @@ public class MemberService {
     }
 
     public void saveFcmToken(UpdateFcmTokenRequest request) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         long id = member.getId();
         String key = "FCM_" + id;
         String value = request.fcmToken();
