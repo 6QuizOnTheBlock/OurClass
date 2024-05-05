@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create
 
+import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +20,24 @@ class ChallengeCreateViewModel @Inject constructor(
     private var startTime: LocalDateTime = LocalDateTime.now()
     private var endTime: LocalDateTime = LocalDateTime.now()
     private var point: String = ""
+    private var headCount : String = ""
+    private var groupType: GroupType = GroupType.FREE
 
     fun moveNextStep() {
         intent {
-            copy(step = ChallengeCreateStep.GROUP_TYPE)
+            when(step) {
+                ChallengeCreateStep.INFO -> copy(step = ChallengeCreateStep.GROUP_TYPE)
+                ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
+                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.CREATE)
+                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.RESULT)
+                ChallengeCreateStep.RESULT -> copy(step = ChallengeCreateStep.INFO)
+            }
+        }
+    }
+
+    fun moveToResult() {
+        intent {
+            copy(step = ChallengeCreateStep.RESULT)
         }
     }
 
@@ -48,6 +63,14 @@ class ChallengeCreateViewModel @Inject constructor(
 
     fun updatePoint(point: String) {
         this.point = point
+    }
+
+    fun updateCount(count: String) {
+        this.headCount = count
+    }
+
+    fun updateGroupType(groupType: GroupType) {
+        this.groupType = groupType
     }
 
 

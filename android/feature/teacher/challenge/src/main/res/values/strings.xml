@@ -11,6 +11,11 @@
     <string name="please_input_title">제목을 입력해 주세요</string>
     <string name="please_input_all_info">모든 항목을 입력해주세요.</string>
     <string name="next">다음</string>
+    <string name="confirm">확인</string>
     <string name="start_time">언제 시작할까요?</string>
     <string name="end_time">언제 종료할까요?</string>
+    <string name="please_input_min_head_count">그룹 최소 인원을 설정해 주세요</string>
+    <string name="please_select_group_type">그룹 유형을 선택해 주세요</string>
+    <string name="free_group">학생들이 자율적으로 선택할게요</string>
+    <string name="matching_group">그룹을 지정할게요</string>
 </resources>
