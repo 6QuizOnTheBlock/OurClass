@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.member.dto.request;
 
+import com.quiz.ourclass.domain.member.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class MemberSignUpRequest {
     private MultipartFile file;
 
     @Schema(description = "회원의 직책")
-    private String role;
+    private Role role;
 
     @Schema(description = "기본 이미지 번호")
     private int defaultImage;
