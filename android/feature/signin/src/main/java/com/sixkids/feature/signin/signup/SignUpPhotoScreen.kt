@@ -132,7 +132,8 @@ fun SignUpPhotoScreen(
         Spacer(modifier = Modifier.height(60.dp))
 
         SelectedPhotoCard(
-            uiState,
+            uiState.profileDefaultPhoto ?: imageMan,
+            uiState.profileUserPhoto,
             modifier = Modifier
                 .padding(10.dp)
                 .size(180.dp)
@@ -221,7 +222,7 @@ fun DoneButton(
 }
 
 @Composable
-fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) {
+fun SelectedPhotoCard(defaultImage: Int, bitmap: Bitmap?, modifier: Modifier = Modifier) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
         colors = CardDefaults.cardColors(
@@ -232,9 +233,9 @@ fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) 
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            if (uiState.profileUserPhoto != null) {
+            if (bitmap != null) {
                 Image(
-                    bitmap = uiState.profileUserPhoto.asImageBitmap(),
+                    bitmap = bitmap.asImageBitmap(),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -242,7 +243,7 @@ fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) 
             } else {
                 Image(
                     painter = painterResource(
-                        id = uiState.profileDefaultPhoto ?: R.drawable.camera
+                        id = defaultImage
                     ),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
