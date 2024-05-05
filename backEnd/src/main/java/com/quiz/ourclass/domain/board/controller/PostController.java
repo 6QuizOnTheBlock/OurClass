@@ -1,8 +1,10 @@
 package com.quiz.ourclass.domain.board.controller;
 
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostSliceRequest;
 import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
+import com.quiz.ourclass.domain.board.dto.response.PostListResponse;
 import com.quiz.ourclass.domain.board.sevice.PostService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -61,5 +63,12 @@ public class PostController implements PostControllerDocs {
         @PathVariable(value = "id") Long id) {
         boolean isReport = postService.report(id);
         return ResponseEntity.ok(ResultResponse.success(isReport));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResultResponse<?>> listView(
+        PostSliceRequest request) {
+        PostListResponse response = postService.listView(request);
+        return ResponseEntity.ok(ResultResponse.success(response));
     }
 }

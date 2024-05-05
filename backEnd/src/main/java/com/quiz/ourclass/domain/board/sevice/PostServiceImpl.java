@@ -3,8 +3,10 @@ package com.quiz.ourclass.domain.board.sevice;
 import com.quiz.ourclass.domain.board.dto.CommentChildrenDTO;
 import com.quiz.ourclass.domain.board.dto.CommentDTO;
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostSliceRequest;
 import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
+import com.quiz.ourclass.domain.board.dto.response.PostListResponse;
 import com.quiz.ourclass.domain.board.entity.Comment;
 import com.quiz.ourclass.domain.board.entity.Image;
 import com.quiz.ourclass.domain.board.entity.Post;
@@ -224,5 +226,13 @@ public class PostServiceImpl implements PostService {
                 return commentMapper.commentToCommentDTOWithChildren(parentComment, children);
             })
             .toList();
+    }
+
+    @Override
+    public PostListResponse listView(PostSliceRequest request) {
+        if (request.size() < 1 || request.page() < 0) {
+            throw new GlobalException(ErrorCode.BAD_REQUEST);
+        }
+        return postRepository.getPostList(request);
     }
 }
