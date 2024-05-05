@@ -1,6 +1,7 @@
 package com.quiz.ourclass.global.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quiz.ourclass.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,10 @@ public class FilterResponse {
         response.setStatus(HttpServletResponse.SC_OK);
 
         return response;
+    }
+
+    public void error(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        response.sendError(errorCode.getStatus().value(), errorCode.getMessage());
     }
 
     public void error(HttpServletResponse response, String msg) throws IOException {

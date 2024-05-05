@@ -1,5 +1,6 @@
 package com.quiz.ourclass.global.util.jwt;
 
+import com.quiz.ourclass.global.dto.FilterResponse;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -8,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final FilterResponse filterResponse;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -31,13 +32,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = jwtUtil.separateBearer(request.getHeader("Authorization"));
 
         // 토큰이 없다면 다음 [Filter]로 넘어가기
-        if(token == null){
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
         // 토큰 유효성 체크 -> 통과 못하면 바로 다음 filter 로 넘어간다.
-        switch (jwtUtil.validateToken(token)){
+        switch (jwtUtil.validateToken(token)) {
             case -1:
                 request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
                 filterChain.doFilter(request, response);
@@ -46,7 +47,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             case -3:
             case -4:
                 request.setAttribute("exception", ErrorCode.INVALID_TOKEN);
-                filterChain.doFilter(request,response);
+                filterChain.doFilter(request, response);
+                return;
+            case -5:
+                filterResponse.error(response, ErrorCode.ALREADY_LOGOUT);
                 return;
         }
 
@@ -58,12 +62,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         try {
             setAuthentication(info.getSubject());
-        } catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException e) {
             request.setAttribute("exception", ErrorCode.NOT_FOUND_MEMBER.getMessage());
             log.error("관련 에러: {}", e.getMessage());
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
     // 인증 객체 생성 후, SecurityPlaceHolder 임시 세션에 등록

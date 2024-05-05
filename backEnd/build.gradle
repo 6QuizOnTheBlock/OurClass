@@ -89,6 +89,9 @@ dependencies {
 
     // ⭐ feign Client
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // ⭐ Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 tasks.named('test') {

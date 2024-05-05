@@ -3,8 +3,8 @@ package com.quiz.ourclass.global.util.jwt;
 
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.entity.Refresh;
-import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
+import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -63,7 +63,7 @@ public class JwtUtil {
 
     // Redis Repository 에 집어넣기 위함.
     private final RefreshRepository refreshRepository;
-    private final MemberRepository memberRepository;
+    private final RedisUtil redisUtil;
 
 
     /* A. Init 함수 -> JWT 토큰 만들기 위한 사전 준비  */
@@ -123,6 +123,10 @@ public class JwtUtil {
      * */
 
     public int validateToken(String token) {
+
+        if (redisUtil.hasKey("AT:" + token)) {
+            return -5;
+        }
         try {
             // JWT 토큰을 Parsing 하는 객체를 만들어서 객체의 파싱 매소드에 매개변수로 token 을 넣었다.
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
