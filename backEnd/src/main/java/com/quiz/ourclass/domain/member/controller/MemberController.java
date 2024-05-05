@@ -70,6 +70,7 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
+    /* 7. 클라이언트로부터 받은 FCM 저장 */
     @PostMapping("/fcm")
     public ResponseEntity<ResultResponse<Void>> saveFcmToken(
         @RequestBody UpdateFcmTokenRequest request) {
@@ -77,7 +78,7 @@ public class MemberController implements MemberControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 
-    /* 7. 기본 이미지 업데이트 */
+    /* 8. 기본 이미지 업데이트 */
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request) {
@@ -85,5 +86,11 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
     }
 
+    /* 9. 현 유저의 회원 정보 주기 */
+    @GetMapping("/")
+    public ResponseEntity<ResultResponse<?>> rememberMe() {
 
+        return ResponseEntity.ok(
+            ResultResponse.success(memberService.rememberMe()));
+    }
 }

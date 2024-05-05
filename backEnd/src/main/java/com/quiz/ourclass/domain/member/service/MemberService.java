@@ -7,10 +7,12 @@ import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
+import com.quiz.ourclass.domain.member.mapper.MemberMeMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
@@ -24,7 +26,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +40,7 @@ public class MemberService {
     private final RedisUtil redisUtil;
     private final UserAccessUtil userAccessUtil;
     private final DefaultImageRepository defaultImageRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final MemberMeMapper memberMeMapper;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -146,4 +147,13 @@ public class MemberService {
         Duration twoMonths = Duration.ofDays(60); // 2달
         redisUtil.valueSet(key, value, twoMonths);
     }
+
+
+    public MemberMeResponse rememberMe() {
+        return Optional.ofNullable(userAccessUtil.getMember())
+            .map(memberMeMapper::toMemberMeResponse)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+
 }
