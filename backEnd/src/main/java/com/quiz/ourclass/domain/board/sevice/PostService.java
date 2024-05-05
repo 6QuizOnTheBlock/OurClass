@@ -15,4 +15,6 @@ public interface PostService {
     Boolean delete(Long postId);
 
     PostDetailResponse detailView(Long postId);
+
+    Boolean report(Long postId);
 }

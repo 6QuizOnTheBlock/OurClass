@@ -42,4 +42,11 @@ public class CommentController implements CommentControllerDocs {
         Boolean isDelete = commentService.delete(id);
         return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
+
+    @PostMapping("/{id}/report")
+    public ResponseEntity<ResultResponse<Boolean>> report(
+        @PathVariable(value = "id") Long id) {
+        Boolean isReport = commentService.report(id);
+        return ResponseEntity.ok(ResultResponse.success(isReport));
+    }
 }

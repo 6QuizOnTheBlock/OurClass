@@ -17,10 +17,16 @@ import com.quiz.ourclass.domain.board.repository.ImageRepository;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
+import com.quiz.ourclass.domain.notice.entity.Notice;
+import com.quiz.ourclass.domain.notice.entity.NoticeType;
+import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import com.quiz.ourclass.global.dto.FcmDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.FcmType;
+import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,8 +44,10 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
+    private final NoticeRepository noticeRepository;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final UserAccessUtil userAccessUtil;
+    private final FcmUtil fcmUtil;
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
     private final ImageMapper imageMapper;
@@ -164,6 +172,43 @@ public class PostServiceImpl implements PostService {
         List<CommentDTO> parentComments = buildParentComments(comments);
         //게시글 mapping 작업
         return postMapper.postToPostDetailResponse(post, parentComments);
+    }
+
+    @Transactional
+    @Override
+    public Boolean report(Long postId) {
+        Member member = userAccessUtil.getMember();
+
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
+
+        userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId());
+
+        String reportMember = member.getName();
+        String authorMember = post.getAuthor().getName();
+        String title = fcmUtil.makeReportTitle(
+            post.getOrganization().getName(), FcmType.POST.getType()
+        );
+        String body = fcmUtil.makeReportBody(
+            authorMember, reportMember, FcmType.POST.getType()
+        );
+
+        FcmDTO fcmDTO = fcmUtil.makeFcmDTO(title, body);
+
+        // 알림 저장
+        Notice notice = Notice.builder()
+            .receiver(post.getOrganization().getManager())
+            .url(reportMember)
+            .content(body)
+            .type(NoticeType.REPORT)
+            .createTime(LocalDateTime.now())
+            .build();
+        noticeRepository.save(notice);
+
+        //fcm 전송
+        fcmUtil.singleFcmSend(post.getOrganization().getManager(), fcmDTO);
+
+        return true;
     }
 
     private List<CommentDTO> buildParentComments(List<Comment> comments) {
