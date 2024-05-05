@@ -277,10 +277,7 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
 }
 
 fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File? {
-    val directory = context.getExternalFilesDir(null)
-    if (directory == null) {
-        return null
-    }
+    val directory = context.getExternalFilesDir(null) ?: return null
 
     val file = File(directory, fileName)
     var fileOutputStream: FileOutputStream? = null
