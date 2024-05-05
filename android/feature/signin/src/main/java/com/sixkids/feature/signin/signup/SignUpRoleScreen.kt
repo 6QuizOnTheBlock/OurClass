@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Red
+import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.ui.extension.collectWithLifecycle
 
@@ -59,9 +60,9 @@ fun SignUpRoute(
 
 @Composable
 fun SignUpScreen(
-    uiState: SignUpRoleState,
+    uiState: SignUpRoleState = SignUpRoleState(),
     onTeacherClick: (Boolean) -> Unit = {},
-    onBackClick : () -> Unit
+    onBackClick : () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -188,5 +189,13 @@ fun BodySection(onCardClick: (Boolean) -> Unit, modifier: Modifier = Modifier) {
 
             }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun SignUpScreenPreview() {
+    UlbanTheme {
+        SignUpScreen()
     }
 }
