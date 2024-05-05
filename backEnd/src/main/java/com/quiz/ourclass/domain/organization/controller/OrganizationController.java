@@ -40,5 +40,12 @@ public class OrganizationController implements OrganizationControllerDocs {
         InviteCodeDTO code = organizationService.getOrganizationCode(id);
         return ResponseEntity.ok(ResultResponse.success(code));
     }
+
+    @PostMapping("/{id}/join")
+    public ResponseEntity<ResultResponse<?>> joinOrganization(@PathVariable long id,
+        @RequestBody InviteCodeDTO inviteCodeDTO) {
+        Long organizationId = organizationService.joinOrganization(id, inviteCodeDTO);
+        return ResponseEntity.ok(ResultResponse.success(organizationId));
+    }
 }
 

@@ -20,8 +20,10 @@ import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
@@ -33,6 +35,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final static String REDIS_ORG_KEY = "ORGANIZATION:";
     private final static int REDIS_ORG_ALIVE_MINUTE = 10;
 
+    @Transactional
     @Override
     public Long createOrganization(OrganizationRequest organizationRequest) {
         Member member = accessUtil.getMember()
@@ -63,6 +66,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             .toList();
     }
 
+    @Transactional
     @Override
     public InviteCodeDTO getOrganizationCode(long id) {
         Member member = accessUtil.getMember()
@@ -79,5 +83,31 @@ public class OrganizationServiceImpl implements OrganizationService {
         return InviteCodeDTO.builder()
             .code(code)
             .build();
+    }
+
+    @Transactional
+    @Override
+    public Long joinOrganization(long id, InviteCodeDTO inviteCodeDTO) {
+        String redisKey = REDIS_ORG_KEY + id;
+        String getCode = redisUtil.valueGet(redisKey);
+        if (getCode == null || getCode.isEmpty()) {
+            throw new GlobalException(ErrorCode.ORGANIZATION_CODE_NOT_FOUND);
+        }
+        if (!getCode.equals(inviteCodeDTO.code())) {
+            throw new GlobalException(ErrorCode.ORGANIZATION_CODE_NOT_MATCH);
+        }
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        if (accessUtil.isMemberOfOrganization(member, id).isPresent()) {
+            throw new GlobalException(ErrorCode.ALREADY_IN_ORGANIZATION);
+        }
+        Organization organization = organizationRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+        MemberOrganization memberOrganization = MemberOrganization.builder()
+            .member(member)
+            .organization(organization)
+            .build();
+        memberOrganizationRepository.save(memberOrganization);
+        return organization.getId();
     }
 }

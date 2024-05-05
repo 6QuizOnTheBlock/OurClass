@@ -12,4 +12,6 @@ public interface OrganizationService {
     List<OrganizationResponse> getOrganizations();
 
     InviteCodeDTO getOrganizationCode(long id);
+
+    Long joinOrganization(long id, InviteCodeDTO inviteCodeDTO);
 }
