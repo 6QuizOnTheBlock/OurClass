@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.service.OrganizationService;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,12 @@ public class OrganizationController implements OrganizationControllerDocs {
         @RequestBody InviteCodeDTO inviteCodeDTO) {
         Long organizationId = organizationService.joinOrganization(id, inviteCodeDTO);
         return ResponseEntity.ok(ResultResponse.success(organizationId));
+    }
+
+    @GetMapping("/{id}/members")
+    public ResponseEntity<ResultResponse<?>> getOrganizationMembers(@PathVariable long id) {
+        List<MemberSimpleDTO> members = organizationService.getOrganizationMembers(id);
+        return ResponseEntity.ok(ResultResponse.success(members));
     }
 }
 

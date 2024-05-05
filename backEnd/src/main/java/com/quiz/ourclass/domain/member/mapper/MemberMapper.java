@@ -8,6 +8,9 @@ import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import java.util.List;
+import com.quiz.ourclass.domain.board.mapper.CommentMapper;
+import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -39,4 +42,8 @@ public interface MemberMapper {
 
     @Mapping(source = "member.profileImage", target = "photoImageUrl")
     MemberUpdateResponse toUpdateResponse(Member member);
+
+    @Mapping(source = "profileImage", target = "photo")
+    MemberSimpleDTO memberToMemberSimpleDTO(Member member);
+
 }
