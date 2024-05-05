@@ -9,7 +9,7 @@ sealed interface ClassListEffect: SideEffect{
     data object NavigateToNewClass : ClassListEffect
     data object NavigateToProfile : ClassListEffect
     data object NavigateToHome : ClassListEffect
-    data class onShowSnackBar(val tkn : SnackbarToken) : ClassListEffect
+    data class OnShowSnackBar(val tkn : SnackbarToken) : ClassListEffect
 }
 
 data class ClassListState(

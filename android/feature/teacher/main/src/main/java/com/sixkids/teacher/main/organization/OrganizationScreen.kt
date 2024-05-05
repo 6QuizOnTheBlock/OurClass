@@ -72,7 +72,7 @@ fun OrganizationListRoute(
             ClassListEffect.NavigateToNewClass -> navigateToNewClass()
             ClassListEffect.NavigateToProfile -> navigateToProfile()
             ClassListEffect.NavigateToHome -> navigateToHome()
-            is ClassListEffect.onShowSnackBar -> onShowSnackBar(sideEffect.tkn)
+            is ClassListEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
     }
 
