@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
 import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
@@ -22,6 +23,7 @@ import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -146,6 +148,13 @@ public class MemberService {
         String value = request.fcmToken();
         Duration twoMonths = Duration.ofDays(60); // 2달
         redisUtil.valueSet(key, value, twoMonths);
+    }
+
+    public DefaultImagesResponse getDefaultImages() {
+        List<DefaultImage> images = defaultImageRepository.findAll();
+
+        return DefaultImagesResponse.of(images.get(0).getPhoto(), images.get(1).getPhoto(),
+            images.get(2).getPhoto(), images.get(3).getPhoto());
     }
 
 

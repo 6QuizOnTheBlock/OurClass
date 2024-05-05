@@ -44,14 +44,15 @@ public class Member {
     }
 
 
-    public static Member of (String email, String name, SocialType socialType,  String profileImage, String role) {
+    public static Member of(String email, String name, SocialType socialType, String profileImage,
+        String role) {
         return Member.builder()
             .email(email)
             .name(name)
             .socialType(socialType)
             .role(Role.GUEST)
             .profileImage(profileImage)
-            .role(role.equals("TEACHER") ? Role.TEACHER : Role.STUDENT)
+            .role(role.equalsIgnoreCase("TEACHER") ? Role.TEACHER : Role.STUDENT)
             .build();
     }
 
