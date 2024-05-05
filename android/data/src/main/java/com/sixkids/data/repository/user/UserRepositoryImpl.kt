@@ -5,6 +5,7 @@ import com.sixkids.data.repository.user.remote.UserRemoteDataSource
 import com.sixkids.domain.repository.TokenRepository
 import com.sixkids.domain.repository.UserRepository
 import com.sixkids.model.JwtToken
+import com.sixkids.model.UserInfo
 import java.io.File
 import javax.inject.Inject
 
@@ -49,5 +50,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getRole(): String {
         return userLocalDataSource.getRole()
+    }
+
+    override suspend fun getMemberInfo(): UserInfo {
+        return userRemoteDataSource.getMemberInfo()
     }
 }

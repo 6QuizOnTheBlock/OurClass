@@ -1,10 +1,12 @@
 package com.sixkids.data.repository.user.remote
 
+import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.model.JwtToken
+import com.sixkids.model.UserInfo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,6 +16,7 @@ import javax.inject.Inject
 
 class UserRemoteDataSourceImpl @Inject constructor(
     private val signInService: SignInService,
+    private val memberService: MemberService,
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRemoteDataSource{
     override suspend fun signIn(idToken: String): JwtToken {
@@ -52,6 +55,10 @@ class UserRemoteDataSourceImpl @Inject constructor(
             userLocalDataSource.saveRole(response.getOrNull()?.data?.role ?: "error")
         }
         return response.getOrThrow().data.toModel()
+    }
+
+    override suspend fun getMemberInfo(): UserInfo {
+        return memberService.getMemberInfo().getOrThrow().data.toModel()
     }
 
 }
