@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMeMapper {
 
-    // 1) 실제 구현된 MemberMeMapper 클래스의 객체를 가져오는 함수
+    // 1) 실제 구현된 MemberMeMapper 클래스의 객체를 가져오는 함수 -> static 함수도 똑같음.
     MemberMeMapper INSTANCE = Mappers.getMapper(MemberMeMapper.class);
 
     // 2) Mapping 진행 Entity -> DTO

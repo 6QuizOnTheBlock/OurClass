@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.member.controller.docs;
 import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,4 +78,8 @@ public interface MemberControllerDocs {
         })
     @GetMapping("/")
     public ResponseEntity<ResultResponse<?>> rememberMe();
+
+
+    @PatchMapping("/photo")
+    public ResponseEntity<ResultResponse<?>> updateProfile(MemberUpdateRequest request);
 }

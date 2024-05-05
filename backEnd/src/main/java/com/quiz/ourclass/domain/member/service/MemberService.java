@@ -6,15 +6,18 @@ import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
 import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
+import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
 import com.quiz.ourclass.domain.member.mapper.DefaultImageMapper;
 import com.quiz.ourclass.domain.member.mapper.MemberMeMapper;
+import com.quiz.ourclass.domain.member.mapper.MemberUpdateMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
@@ -29,6 +32,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -44,6 +48,7 @@ public class MemberService {
     private final DefaultImageRepository defaultImageRepository;
     private final MemberMeMapper memberMeMapper;
     private final DefaultImageMapper defaultImageMapper;
+    private final MemberUpdateMapper memberUpdateMapper;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -160,6 +165,18 @@ public class MemberService {
         return Optional.ofNullable(userAccessUtil.getMember())
             .map(memberMeMapper::toMemberMeResponse)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    public MemberUpdateResponse updateProfile(MemberUpdateRequest request) {
+        return Optional.ofNullable(userAccessUtil.getMember())
+            .map(member -> updateMemberProfile(member, request.file()))
+            .map(memberUpdateMapper::toUpdateResponse)
+            .orElseThrow(() -> new GlobalException(ErrorCode.AWS_SERVER_ERROR));
+    }
+
+    private Member updateMemberProfile(Member member, MultipartFile file) {
+        member.setProfileImage(awsS3ObjectStorage.uploadFile(file));
+        return memberRepository.save(member);
     }
 
 

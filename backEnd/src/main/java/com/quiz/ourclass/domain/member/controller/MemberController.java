@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
@@ -98,5 +99,10 @@ public class MemberController implements MemberControllerDocs {
 
         return ResponseEntity.ok(
             ResultResponse.success(memberService.rememberMe()));
+    }
+
+    @PatchMapping("/photo")
+    public ResponseEntity<ResultResponse<?>> updateProfile(MemberUpdateRequest request) {
+        return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
     }
 }
