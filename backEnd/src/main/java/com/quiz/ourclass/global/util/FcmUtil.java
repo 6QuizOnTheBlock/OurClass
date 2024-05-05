@@ -82,4 +82,19 @@ public class FcmUtil {
             }
         }
     }
+
+    public FcmDTO makeFcmDTO(String title, String body) {
+        return FcmDTO.builder()
+            .title(title)
+            .body(body)
+            .build();
+    }
+
+    public String makeReportTitle(String organizationName, String type) {
+        return organizationName + " " + type + " 신고";
+    }
+
+    public String makeReportBody(String authorMember, String reportMember, String type) {
+        return authorMember + " 학생이 작성한 " + type + "을" + reportMember + "학생이 신고하였습니다.";
+    }
 }

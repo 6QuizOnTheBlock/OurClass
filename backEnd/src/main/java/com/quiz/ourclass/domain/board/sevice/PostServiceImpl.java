@@ -25,6 +25,7 @@ import com.quiz.ourclass.global.dto.FcmDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.FcmType;
 import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
@@ -185,12 +186,14 @@ public class PostServiceImpl implements PostService {
 
         String reportMember = member.getName();
         String authorMember = post.getAuthor().getName();
-        String body = authorMember + " 학생이 작성한 게시글을 " + reportMember + " 학생이 신고하였습니다.";
+        String title = fcmUtil.makeReportTitle(
+            post.getOrganization().getName(), FcmType.POST.getType()
+        );
+        String body = fcmUtil.makeReportBody(
+            authorMember, reportMember, FcmType.POST.getType()
+        );
 
-        FcmDTO fcmDTO = FcmDTO.builder()
-            .title(post.getOrganization().getName() + "게시글 신고")
-            .body(body)
-            .build();
+        FcmDTO fcmDTO = fcmUtil.makeFcmDTO(title, body);
 
         // 알림 저장
         Notice notice = Notice.builder()
