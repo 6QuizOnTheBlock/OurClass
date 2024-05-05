@@ -1,5 +1,7 @@
 package com.sixkids.feature.signin.signup
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
@@ -42,6 +44,8 @@ import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 private const val TAG = "D107"
@@ -98,7 +102,9 @@ fun SignUpPhotoRoute(
             }
         },
         onDoneClick = {
-            viewModel.signUp()
+            viewModel.signUp(
+                saveBitmapToFile(context, uiState.profileUserPhoto!!, "profile.jpg")
+            )
         },
         onBackClick = {
             onBackClick()
@@ -268,4 +274,31 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
             )
         }
     }
+}
+
+fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File? {
+    val directory = context.getExternalFilesDir(null)
+    if (directory == null) {
+        return null
+    }
+
+    val file = File(directory, fileName)
+    var fileOutputStream: FileOutputStream? = null
+
+    try {
+        fileOutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        fileOutputStream.flush()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    } finally {
+        try {
+            fileOutputStream?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    return file
 }

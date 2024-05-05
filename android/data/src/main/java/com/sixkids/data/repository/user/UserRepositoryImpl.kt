@@ -1,6 +1,5 @@
 package com.sixkids.data.repository.user
 
-import android.util.Log
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.data.repository.user.remote.UserRemoteDataSource
 import com.sixkids.domain.repository.TokenRepository

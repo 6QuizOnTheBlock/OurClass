@@ -1,6 +1,5 @@
 package com.sixkids.data.repository.user.remote
 
-import android.util.Log
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
@@ -13,7 +12,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
-private const val TAG = "D107"
 class UserRemoteDataSourceImpl @Inject constructor(
     private val signInService: SignInService,
     private val userLocalDataSource: UserLocalDataSource
@@ -40,8 +38,6 @@ class UserRemoteDataSourceImpl @Inject constructor(
             val image = file.asRequestBody("image/*".toMediaTypeOrNull())
             multipartBody = MultipartBody.Part.createFormData("file", file.name, image)
         }
-
-        Log.d(TAG, "signUp: ${multipartBody?.body}")
 
         val _idToken = RequestBody.create("text/plain".toMediaTypeOrNull(), idToken)
         val _defaultImage = RequestBody.create("text/plain".toMediaTypeOrNull(), defaultImage.toString())
