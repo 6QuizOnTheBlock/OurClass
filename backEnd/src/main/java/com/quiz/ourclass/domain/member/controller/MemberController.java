@@ -85,5 +85,9 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
     }
 
-
+    /* 8. 기본 이미지 조회 */
+    @GetMapping("/default-image")
+    public ResponseEntity<ResultResponse<?>> getDefaultImages() {
+        return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));
+    }
 }
