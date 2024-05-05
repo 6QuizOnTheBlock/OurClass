@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
+import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -98,5 +100,11 @@ public class MemberController implements MemberControllerDocs {
 
         return ResponseEntity.ok(
             ResultResponse.success(memberService.rememberMe()));
+    }
+
+    @PatchMapping("/photo")
+    public ResponseEntity<ResultResponse<?>> updateProfile(
+        @RequestPart("file") MemberUpdateRequest request) {
+        return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
     }
 }
