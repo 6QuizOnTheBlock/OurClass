@@ -230,9 +230,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostListResponse listView(PostSliceRequest request) {
-        if (request.size() < 1 || request.page() < 0) {
-            throw new GlobalException(ErrorCode.BAD_REQUEST);
-        }
         return postRepository.getPostList(request);
     }
 }

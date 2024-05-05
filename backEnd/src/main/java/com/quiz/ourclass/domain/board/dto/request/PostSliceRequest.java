@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.board.dto.request;
 
 import com.quiz.ourclass.domain.board.entity.PostCategory;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record PostSliceRequest(
@@ -16,4 +18,9 @@ public record PostSliceRequest(
     PostCategory postCategory
 ) {
 
+    public PostSliceRequest {
+        if (size < 1 || page < 0) {
+            throw new GlobalException(ErrorCode.BAD_REQUEST);
+        }
+    }
 }
