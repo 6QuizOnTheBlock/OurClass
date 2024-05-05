@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.organization.controller;
 import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -74,5 +75,18 @@ public interface OrganizationControllerDocs {
         long id,
         @RequestBody
         InviteCodeDTO inviteCodeDTO
+    );
+
+    @Operation(summary = "학급 멤버 목록 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberSimpleDTO.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content)
+        })
+    @GetMapping("/{id}/members")
+    ResponseEntity<ResultResponse<?>> getOrganizationMembers(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id
     );
 }
