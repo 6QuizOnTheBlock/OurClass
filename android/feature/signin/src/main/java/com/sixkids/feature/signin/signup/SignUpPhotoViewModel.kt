@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.user.GetRoleUseCase
 import com.sixkids.domain.usecase.user.SignUpUseCase
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,13 +13,15 @@ import javax.inject.Inject
 import com.sixkids.feature.signin.navigation.SignInRoute.SIGN_UP_TEACHER
 import com.sixkids.ui.SnackbarToken
 import kotlinx.coroutines.launch
+import java.io.File
 
 private const val TAG = "D107"
 
 @HiltViewModel
 class SignUpPhotoViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val getRoleUseCase: GetRoleUseCase
 ) : BaseViewModel<SignUpPhotoState, SignUpPhotoEffect>(SignUpPhotoState()) {
 
     val isTeacher = savedStateHandle.get<Boolean>(SIGN_UP_TEACHER)!!
@@ -45,7 +48,6 @@ class SignUpPhotoViewModel @Inject constructor(
     }
 
     fun signUp() {
-
         viewModelScope.launch {
 
             val file = uiState.value.profileUserPhoto?.let { bitmap ->
@@ -75,12 +77,20 @@ class SignUpPhotoViewModel @Inject constructor(
                 postSideEffect(SignUpPhotoEffect.onShowSnackBar(SnackbarToken(
                     message = "환영합니다."
                 )))
-                postSideEffect(SignUpPhotoEffect.NavigateToHome)
+                getUserRole()
             }.onFailure {
                 postSideEffect(SignUpPhotoEffect.onShowSnackBar(SnackbarToken(
                     message = it.message ?: "알 수 없는 에러 입니다."
                 )))
             }
         }
+    }
+
+    fun getUserRole(){
+        viewModelScope.launch {
+            val role = getRoleUseCase()
+            Log.d(TAG, "getUserRole: $role")
+        }
+
     }
 }

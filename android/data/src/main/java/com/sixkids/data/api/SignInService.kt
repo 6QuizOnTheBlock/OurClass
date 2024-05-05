@@ -20,7 +20,7 @@ interface SignInService {
     ): ApiResult<ApiResponse<SignInResponse>>
 
     @Multipart
-    @POST("members")
+    @POST("members/")
     suspend fun signUp(
         @Part file: MultipartBody.Part?,
         @PartMap data: HashMap<String, RequestBody>

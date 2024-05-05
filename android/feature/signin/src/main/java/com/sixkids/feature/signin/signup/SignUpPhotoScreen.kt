@@ -1,13 +1,9 @@
 package com.sixkids.feature.signin.signup
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,23 +25,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
@@ -205,7 +194,7 @@ fun DoneButton(
     onDoneClick: () -> Unit
 ) {
     Button(
-        onClick = { onDoneClick },
+        onClick = { onDoneClick() },
         modifier = Modifier
             .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -242,6 +231,7 @@ fun SelectedPhotoCard(uiState: SignUpPhotoState, modifier: Modifier = Modifier) 
                     bitmap = uiState.profileUserPhoto.asImageBitmap(),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
             } else {
                 Image(
