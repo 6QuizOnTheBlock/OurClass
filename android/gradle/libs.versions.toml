@@ -17,6 +17,7 @@ compose-compiler = "1.5.1"
 accompanistSystemuicontroller = "0.27.0"
 hilt-navigation-compose = "1.1.0"
 androidx-lifecycle = "2.6.2"
+permissions = "0.34.0"
 
 hilt = "2.48"
 inject = "1"
@@ -106,6 +107,9 @@ kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" 
 paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging-compose" }
 paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
+
+#Permissions
+permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "permissions" }
 
 #Lottie
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }

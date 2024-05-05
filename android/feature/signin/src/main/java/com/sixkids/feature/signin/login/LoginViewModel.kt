@@ -17,6 +17,7 @@ class LoginViewModel @Inject constructor(
 
     fun login(idToken: String){
         viewModelScope.launch {
+            intent { copy(isLoading = true)}
             signInUseCase(idToken)
                 .onSuccess {
                     postSideEffect(LoginEffect.NavigateToHome)
@@ -31,6 +32,7 @@ class LoginViewModel @Inject constructor(
                         }
                     }
                 }
+            intent { copy(isLoading = false)}
         }
     }
 }

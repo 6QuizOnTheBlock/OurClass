@@ -100,7 +100,10 @@ fun MainScreen(
 
             signInNavGraph(
                 navigateToSignUp = navigator::navigateSignUp,
+                navigateSignUpPhoto = navigator::navigateSignUpPhoto,
                 navigateToHome = navigator::navigateHome,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
             )
         }
         with(uiState) {

@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.signin.R
@@ -182,7 +184,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "슬기로운 학급생활 메이트",
+                text = stringResource(id = R.string.signin_subtitle),
                 style = UlbanTypography.bodyMedium.copy(
                     fontSize = 16.sp
                 ),
@@ -191,8 +193,10 @@ fun LoginScreen(
                     .padding(0.dp, 100.dp, 20.dp, 0.dp)
             )
 
+            Spacer(modifier = Modifier.height(5.dp))
+
             Text(
-                text = "울반",
+                text = stringResource(id = R.string.signin_title),
                 style = UlbanTypography.titleLarge.copy(
                     fontSize = 48.sp
                 ),
@@ -204,6 +208,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             LogInButton(onLoginClick)
+        }
+
+        if (uiState.isLoading){
+            LoadingScreen()
         }
     }
 }
@@ -234,7 +242,7 @@ fun LogInButton(
             )
             Spacer(Modifier.width(8.dp))
             Text(
-                text = "5초 만에 카카오로 시작하기",
+                text = stringResource(id = R.string.signin_kakao),
                 style = UlbanTypography.bodyMedium.copy(),
                 color = Color.Black,
                 textAlign = TextAlign.Center
