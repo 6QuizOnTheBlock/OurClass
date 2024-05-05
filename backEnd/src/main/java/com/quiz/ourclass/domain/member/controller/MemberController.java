@@ -9,10 +9,12 @@ import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
 import com.quiz.ourclass.global.dto.ResultResponse;
+import com.quiz.ourclass.global.util.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -70,6 +72,7 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
     }
 
+    /* 7. 클라이언트로부터 받은 FCM 저장 */
     @PostMapping("/fcm")
     public ResponseEntity<ResultResponse<Void>> saveFcmToken(
         @RequestBody UpdateFcmTokenRequest request) {
@@ -77,7 +80,7 @@ public class MemberController implements MemberControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 
-    /* 7. 기본 이미지 업데이트 */
+    /* 8. 기본 이미지 업데이트 */
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request) {
@@ -85,5 +88,10 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
     }
 
-
+    /* 9. 현 유저의 회원 정보 주기 */
+    @GetMapping("/")
+    public ResponseEntity<ResultResponse<?>> rememberMe(
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(ResultResponse.success(memberService.rememberMe(userDetails)));
+    }
 }

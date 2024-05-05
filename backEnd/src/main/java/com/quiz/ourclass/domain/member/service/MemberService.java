@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
@@ -18,6 +19,7 @@ import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import com.quiz.ourclass.global.util.UserDetailsImpl;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.time.Duration;
 import java.util.Objects;
@@ -146,4 +148,18 @@ public class MemberService {
         Duration twoMonths = Duration.ofDays(60); // 2달
         redisUtil.valueSet(key, value, twoMonths);
     }
+
+    public MemberMeResponse rememberMe(UserDetailsImpl userDetails) {
+        return Optional.of(userDetails.getMember())
+            .map(member -> MemberMeResponse.builder()
+                .id(member.getId())
+                .photo(member.getProfileImage())
+                .email(member.getEmail())
+                .role(member.getRole().name())
+                .name(member.getName())
+                .build())
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+
 }

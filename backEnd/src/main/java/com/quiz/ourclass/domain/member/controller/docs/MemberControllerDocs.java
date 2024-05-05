@@ -1,15 +1,21 @@
 package com.quiz.ourclass.domain.member.controller.docs;
 
+import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
+import com.quiz.ourclass.global.util.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -55,4 +61,23 @@ public interface MemberControllerDocs {
     ResponseEntity<ResultResponse<Void>> saveFcmToken(
         @Parameter(name = "request", description = "FCM 토큰", required = true, in = ParameterIn.DEFAULT)
         @RequestBody UpdateFcmTokenRequest request);
+
+    @Operation(summary = "기본 이미지 정보 조회",
+        responses = {
+            @ApiResponse(responseCode = "200",
+                description = "기본 이미지 조회에 성공하였습니다."
+            )
+        })
+    @PatchMapping("/default-image")
+    public ResponseEntity<ResultResponse<?>> updateDefaultImage(
+        @ModelAttribute DefaultImageRequest request);
+
+    @Operation(summary = "현 유저의 회원정보 가져오기",
+        responses = {
+            @ApiResponse(responseCode = "200",
+                description = "유저 정보 확인에 성공하였습니다.")
+        })
+    @GetMapping("/")
+    public ResponseEntity<ResultResponse<?>> rememberMe(
+        @AuthenticationPrincipal UserDetailsImpl userDetails);
 }
