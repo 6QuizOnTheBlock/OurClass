@@ -5,14 +5,12 @@ import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
-import com.quiz.ourclass.global.util.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -78,6 +76,5 @@ public interface MemberControllerDocs {
                 description = "유저 정보 확인에 성공하였습니다.")
         })
     @GetMapping("/")
-    public ResponseEntity<ResultResponse<?>> rememberMe(
-        @AuthenticationPrincipal UserDetailsImpl userDetails);
+    public ResponseEntity<ResultResponse<?>> rememberMe();
 }

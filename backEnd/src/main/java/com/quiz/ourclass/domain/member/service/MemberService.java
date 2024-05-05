@@ -12,6 +12,7 @@ import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
+import com.quiz.ourclass.domain.member.mapper.MemberMeMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
@@ -19,14 +20,12 @@ import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
-import com.quiz.ourclass.global.util.UserDetailsImpl;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +40,7 @@ public class MemberService {
     private final RedisUtil redisUtil;
     private final UserAccessUtil userAccessUtil;
     private final DefaultImageRepository defaultImageRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final MemberMeMapper memberMeMapper;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -149,15 +148,10 @@ public class MemberService {
         redisUtil.valueSet(key, value, twoMonths);
     }
 
-    public MemberMeResponse rememberMe(UserDetailsImpl userDetails) {
-        return Optional.of(userDetails.getMember())
-            .map(member -> MemberMeResponse.builder()
-                .id(member.getId())
-                .photo(member.getProfileImage())
-                .email(member.getEmail())
-                .role(member.getRole().name())
-                .name(member.getName())
-                .build())
+
+    public MemberMeResponse rememberMe() {
+        return Optional.ofNullable(userAccessUtil.getMember())
+            .map(memberMeMapper::toMemberMeResponse)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
