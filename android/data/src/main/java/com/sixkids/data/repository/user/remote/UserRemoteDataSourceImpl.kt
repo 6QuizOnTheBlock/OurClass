@@ -58,7 +58,13 @@ class UserRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getMemberInfo(): UserInfo {
-        return memberService.getMemberInfo().getOrThrow().data.toModel()
+        val response = memberService.getMemberInfo()
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveUserId(response.getOrNull()?.data?.id ?: 0)
+            userLocalDataSource.saveUserName(response.getOrNull()?.data?.name ?: "")
+            userLocalDataSource.saveUserProfileImage(response.getOrNull()?.data?.photo ?: "")
+        }
+        return response.getOrThrow().data.toModel()
     }
 
 }
