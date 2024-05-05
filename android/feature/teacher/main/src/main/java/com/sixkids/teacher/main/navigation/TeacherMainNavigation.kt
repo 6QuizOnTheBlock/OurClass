@@ -3,8 +3,7 @@ package com.sixkids.teacher.main.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.sixkids.teacher.main.classlist.ClassListEffect
-import com.sixkids.teacher.main.classlist.OrganizationListRoute
+import com.sixkids.teacher.main.organization.OrganizationListRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateOrganizationList() {

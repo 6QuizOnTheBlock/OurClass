@@ -1,4 +1,4 @@
-package com.sixkids.teacher.main.classlist
+package com.sixkids.teacher.main.organization
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -58,7 +58,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 fun OrganizationListRoute(
-    viewModel: ClassListViewModel = hiltViewModel(),
+    viewModel: OrganizationViewModel = hiltViewModel(),
     navigateToNewClass: () -> Unit,
     navigateToProfile: () -> Unit,
     navigateToHome: () -> Unit,

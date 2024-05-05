@@ -1,4 +1,4 @@
-package com.sixkids.teacher.main.classlist
+package com.sixkids.teacher.main.organization
 
 import com.sixkids.model.Organization
 import com.sixkids.ui.SnackbarToken

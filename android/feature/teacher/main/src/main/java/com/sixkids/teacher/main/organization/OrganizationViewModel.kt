@@ -1,4 +1,4 @@
-package com.sixkids.teacher.main.classlist
+package com.sixkids.teacher.main.organization
 
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetOrganizationListUseCase
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ClassListViewModel @Inject constructor(
+class OrganizationViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getOrganizationListUseCase: GetOrganizationListUseCase
 ) : BaseViewModel<ClassListState, ClassListEffect>(ClassListState()) {
