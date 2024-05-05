@@ -26,6 +26,7 @@ sealed interface SignUpPhotoEffect : SideEffect {
 }
 
 data class SignUpPhotoState(
+    val isLoading: Boolean = false,
     val gender: Gender? = null,
     val profileDefaultPhoto: Int? = null,
     val profileUserPhoto: Bitmap? = null
