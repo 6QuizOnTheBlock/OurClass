@@ -57,11 +57,11 @@ import com.sixkids.ui.extension.collectWithLifecycle
 import kotlin.math.absoluteValue
 
 @Composable
-fun ClassListRoute(
+fun OrganizationListRoute(
     viewModel: ClassListViewModel = hiltViewModel(),
     navigateToNewClass: () -> Unit,
     navigateToProfile: () -> Unit,
-    navigateToHome: (Int) -> Unit,
+    navigateToHome: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
     val context = LocalContext.current
@@ -71,7 +71,7 @@ fun ClassListRoute(
         when (sideEffect) {
             ClassListEffect.NavigateToNewClass -> navigateToNewClass()
             ClassListEffect.NavigateToProfile -> navigateToProfile()
-            ClassListEffect.NavigateToHome -> navigateToHome(1)
+            ClassListEffect.NavigateToHome -> navigateToHome()
             is ClassListEffect.onShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
     }
@@ -80,7 +80,7 @@ fun ClassListRoute(
         viewModel.initData()
     }
 
-    ClassListScreen(
+    OrganizationListScreen(
         uiState = uiState,
         onNewClassClick = {
             viewModel.newOrganizationClick()
@@ -97,7 +97,7 @@ fun ClassListRoute(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ClassListScreen(
+fun OrganizationListScreen(
     uiState: ClassListState = ClassListState(),
     onNewClassClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
@@ -282,6 +282,6 @@ fun NewClassButton(
 @Composable
 @Preview(showBackground = true)
 fun ClassListScreenPreview() {
-    ClassListScreen()
+    OrganizationListScreen()
 }
 

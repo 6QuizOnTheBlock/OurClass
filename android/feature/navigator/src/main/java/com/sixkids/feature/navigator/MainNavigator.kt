@@ -19,6 +19,9 @@ import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
+import com.sixkids.teacher.main.navigation.navigateNewOrganization
+import com.sixkids.teacher.main.navigation.navigateOrganizationList
+import com.sixkids.teacher.main.navigation.navigateProfile
 import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
@@ -119,6 +122,18 @@ class MainNavigator(
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
+    }
+
+    fun navigateTeacherOrganizationList(){
+        navController.navigateOrganizationList()
+    }
+
+    fun navigateNewOrganization(){
+        navController.navigateNewOrganization()
+    }
+
+    fun navigateProfile(){
+        navController.navigateProfile()
     }
 
     @Composable
