@@ -49,6 +49,7 @@ fun GroupTypeRoute(
     updateGroupType: (GroupType) -> Unit,
     moveToResult: () -> Unit,
     moveNextStep: () -> Unit,
+    createChallenge: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
 
@@ -67,6 +68,7 @@ fun GroupTypeRoute(
             is GroupTypeEffect.MoveToMatchingStep -> moveNextStep()
             is GroupTypeEffect.UpdateGroupType -> updateGroupType(it.type)
             is GroupTypeEffect.UpdateMinCount -> updateMinCount(it.minCount)
+            GroupTypeEffect.CreateChallenge -> createChallenge()
         }
     }
 
@@ -74,9 +76,9 @@ fun GroupTypeRoute(
         uiState = uiState,
         updateMinCount = viewModel::updateMinCount,
         updateGroupType = viewModel::updateGroupType,
-        createGroup = viewModel::createGroup,
         moveNextStep = viewModel::moveNextStep,
-        moveToMatchingStep = viewModel::moveToMatchingStep
+        moveToMatchingStep = viewModel::moveToMatchingStep,
+        createChallenge = viewModel::createChallenge
     )
 }
 
@@ -85,7 +87,7 @@ fun GroupTypeScreen(
     uiState: GroupTypeState,
     updateMinCount: (String) -> Unit = {},
     updateGroupType: (GroupType) -> Unit = {},
-    createGroup: () -> Unit = {},
+    createChallenge: () -> Unit = {},
     moveNextStep: () -> Unit = {},
     moveToMatchingStep: () -> Unit = {},
 ) {
@@ -100,7 +102,7 @@ fun GroupTypeScreen(
         if (uiState.groutTypeVisibility.not()) {
             moveNextStep()
         } else if (uiState.groutTypeVisibility && uiState.groutType == GroupType.FREE) {
-            createGroup()
+            createChallenge()
         } else {
             moveToMatchingStep()
         }

@@ -1,15 +1,20 @@
 package com.sixkids.teacher.challenge.create
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
+import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeCreateViewModel @Inject constructor(
-
+    private val createChallengeUseCase: CreateChallengeUseCase
 ) : BaseViewModel<ChallengeCreateUiState, ChallengeCreateEffect>(
     ChallengeCreateUiState()
 ) {
@@ -20,12 +25,34 @@ class ChallengeCreateViewModel @Inject constructor(
     private var startTime: LocalDateTime = LocalDateTime.now()
     private var endTime: LocalDateTime = LocalDateTime.now()
     private var point: String = ""
-    private var headCount : String = ""
+    private var headCount: String = ""
     private var groupType: GroupType = GroupType.FREE
+    private val groupList: List<GroupSimple> = emptyList()
+
+    fun createChallenge() {
+        viewModelScope.launch {
+            createChallengeUseCase(
+                //TODO 그룹 아이디 지정 하기
+                organizationId = 1,
+                title = title,
+                content = content,
+                startTime = startTime,
+                endTime = endTime,
+                reword = point.toInt(),
+                minCount = headCount.toInt(),
+                groups = if (groupType == GroupType.FREE) null else groupList
+            ).onSuccess { challengeId ->
+//                moveToResult(challengeId)
+                Log.d("D107", "createChallenge: $challengeId")
+            }.onFailure {
+                onShowSnackbar(SnackbarToken("챌린지 생성에 실패했습니다."))
+            }
+        }
+    }
 
     fun moveNextStep() {
         intent {
-            when(step) {
+            when (step) {
                 ChallengeCreateStep.INFO -> copy(step = ChallengeCreateStep.GROUP_TYPE)
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
                 ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.CREATE)
