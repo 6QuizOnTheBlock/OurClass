@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.dto.FilterResponse;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtAuthFilter;
+import com.quiz.ourclass.global.util.jwt.JwtAutoLoginFilter;
 import com.quiz.ourclass.global.util.jwt.JwtLogOutHandler;
 import com.quiz.ourclass.global.util.jwt.JwtLogOutSuccessHandler;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
@@ -21,6 +22,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
@@ -131,10 +133,21 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
             );                                                  // (9)
 
-        http.addFilterAt(new JwtAuthFilter(jwtUtil, filterResponse),
-            UsernamePasswordAuthenticationFilter.class);        // (10)
-        http.addFilterBefore(new TokenRefreshFilter(jwtUtil, refreshRepository, filterResponse),
-            UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(
+            new JwtAuthFilter(jwtUtil, filterResponse),
+            UsernamePasswordAuthenticationFilter.class
+        );        // (10)
+
+        http.addFilterBefore(
+            new TokenRefreshFilter(jwtUtil, refreshRepository, filterResponse),
+            UsernamePasswordAuthenticationFilter.class
+        );
+
+        http.addFilterAfter(
+            new JwtAutoLoginFilter(jwtUtil, redisUtil, filterResponse, refreshRepository),
+            LogoutFilter.class
+        );
+
         return http.build();
     }
 

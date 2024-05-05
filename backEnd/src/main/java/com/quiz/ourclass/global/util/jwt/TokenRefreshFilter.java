@@ -28,18 +28,16 @@ public class TokenRefreshFilter extends OncePerRequestFilter {
 
         // 1) 그냥 [Servlet Request]를 HttpsServletRequest 로 변환, [Response]도 마찬가지
         // -> HTTP 프로토콜을 사용하는 요청에 특화된 데이터와 메소드 사용가능
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         // 2) [Header]에서 RefreshToken 받기
-        String refreshToken = jwtUtil.separateBearer(httpRequest.getHeader("refreshToken"));
-        String accessToken = jwtUtil.separateBearer(httpRequest.getHeader("Authorization"));
+        String refreshToken = jwtUtil.separateBearer((request).getHeader("refreshToken"));
+        String accessToken = jwtUtil.separateBearer((request).getHeader("Authorization"));
 
         // 3) 경로가 다음과 같고, refreshToken 이 null 이 아니며, Method가 GET 일 경우
         //    refresh 토큰이 [Redis]에 있는지 확인한다.
-        if ("/api/members/token".equals(httpRequest.getRequestURI())
+        if ("/api/members/token".equals(request.getRequestURI())
             && refreshToken != null
-            && httpRequest.getMethod().equals("GET")) {
+            && request.getMethod().equals("GET")) {
             // 3-1) Redis 안에 들어있으면, 만료 되지 않고, 유효한 토큰이다.
             // -- if문 Chaining 설명
             // a) accessToken 의 Pair 인 Refresh 토큰 찾으셈
@@ -54,10 +52,10 @@ public class TokenRefreshFilter extends OncePerRequestFilter {
                     String.valueOf(info.get("ROLE")));
 
                 // 3-3) 이제 저장한 정보들을 Response 객체에 담는다.
-                filterResponse.ok(httpResponse, tokens);
+                filterResponse.ok(response, tokens);
                 return;
             } else {
-                filterResponse.error(httpResponse, ErrorCode.CANT_FIND_REFRESH.getMessage());
+                filterResponse.error(response, ErrorCode.CANT_FIND_REFRESH.getMessage());
                 return;
             }
         }
