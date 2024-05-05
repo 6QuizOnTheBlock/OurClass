@@ -29,6 +29,7 @@ fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
     navigateChallengeDetail: (Int) -> Unit,
     navigateCreateChallenge: () -> Unit,
+    navigateUp: () -> Unit,
     showSnackbar: (SnackbarToken) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -51,7 +52,8 @@ fun NavGraphBuilder.challengeNavGraph(
 
     composable(route = ChallengeRoute.createRoute) {
         ChallengeCreateRoute(
-            onShowSnackbar = showSnackbar
+            onShowSnackbar = showSnackbar,
+            onNavigateUp = navigateUp
         )
     }
 

@@ -89,6 +89,7 @@ fun MainScreen(
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
                 handleException = viewModel::handleException,
                 showSnackbar = viewModel::onShowSnackbar,
+                navigateUp = navigator::popBackStack,
             )
 
             manageClassNavGraph(

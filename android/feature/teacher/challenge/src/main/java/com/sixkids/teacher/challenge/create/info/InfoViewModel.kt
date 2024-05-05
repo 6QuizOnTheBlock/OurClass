@@ -122,6 +122,7 @@ class InfoViewModel @Inject constructor(
     }
 
     fun setInitVisibility() {
+        if (uiState.value.stepVisibilityList.isNotEmpty()) return
         intent {
             copy(
                 stepVisibilityList = MutableList(InfoStep.entries.size) { false }.apply {

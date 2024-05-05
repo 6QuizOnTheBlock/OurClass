@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -29,6 +31,7 @@ fun ChallengeCreateRoute(
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is ChallengeCreateEffect.ShowSnackbar -> onShowSnackbar(it.snackbarToken)
+            ChallengeCreateEffect.NavigateUp -> onNavigateUp()
         }
     }
 
@@ -43,6 +46,7 @@ fun ChallengeCreateRoute(
         updateGroupType = viewModel::updateGroupType,
         moveToResult = viewModel::moveToResult,
         onMoveNextStep = viewModel::moveNextStep,
+        onMovePrevStep = viewModel::movePrevStep,
         onShowSnackbar = viewModel::onShowSnackbar,
         createChallenge = viewModel::createChallenge,
     )
@@ -61,8 +65,14 @@ fun ChallengeCreateScreen(
     updateGroupType: (GroupType) -> Unit = {},
     moveToResult: () -> Unit = {},
     onMoveNextStep: () -> Unit = {},
+    onMovePrevStep: () -> Unit = {},
     createChallenge: () -> Unit = {},
 ) {
+
+    BackHandler {
+        onMovePrevStep()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

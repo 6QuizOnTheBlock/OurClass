@@ -62,6 +62,23 @@ class ChallengeCreateViewModel @Inject constructor(
         }
     }
 
+    fun movePrevStep() {
+        intent {
+            when (step) {
+                ChallengeCreateStep.INFO -> {
+                    postSideEffect(ChallengeCreateEffect.NavigateUp)
+                    copy()
+                }
+
+                ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.INFO)
+                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.GROUP_TYPE)
+                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
+                else -> copy()
+            }
+        }
+    }
+
+
     fun moveToResult() {
         intent {
             copy(step = ChallengeCreateStep.RESULT)

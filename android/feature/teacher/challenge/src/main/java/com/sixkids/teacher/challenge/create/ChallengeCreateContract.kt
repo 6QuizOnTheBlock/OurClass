@@ -10,9 +10,10 @@ data class ChallengeCreateUiState(
     val buttonEnabled: Boolean = false,
     @StringRes val buttonText: Int? = null,
     val step: ChallengeCreateStep = ChallengeCreateStep.INFO,
-): UiState
+) : UiState
 
-sealed interface ChallengeCreateEffect: SideEffect {
+sealed interface ChallengeCreateEffect : SideEffect {
+    data object NavigateUp : ChallengeCreateEffect
     data class ShowSnackbar(val snackbarToken: SnackbarToken) : ChallengeCreateEffect
 }
 
