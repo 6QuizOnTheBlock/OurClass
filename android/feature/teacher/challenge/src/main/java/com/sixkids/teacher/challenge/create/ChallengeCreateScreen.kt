@@ -44,6 +44,7 @@ fun ChallengeCreateRoute(
         moveToResult = viewModel::moveToResult,
         onMoveNextStep = viewModel::moveNextStep,
         onShowSnackbar = viewModel::onShowSnackbar,
+        createChallenge = viewModel::createChallenge,
     )
 }
 
@@ -60,6 +61,7 @@ fun ChallengeCreateScreen(
     updateGroupType: (GroupType) -> Unit = {},
     moveToResult: () -> Unit = {},
     onMoveNextStep: () -> Unit = {},
+    createChallenge: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -90,6 +92,7 @@ fun ChallengeCreateScreen(
                     moveNextStep = {
                         onShowSnackbar(SnackbarToken("그룹 지정 로직은 미구현 입니다."))
                     },
+                    createChallenge = createChallenge,
                     onShowSnackbar = onShowSnackbar,
                 )
 

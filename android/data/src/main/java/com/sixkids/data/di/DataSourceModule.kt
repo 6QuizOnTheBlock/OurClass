@@ -1,5 +1,7 @@
 package com.sixkids.data.di
 
+import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSource
+import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSourceImpl
 import com.sixkids.data.repository.user.remote.UserDataSource
 import com.sixkids.data.repository.user.remote.UserDataSourceImpl
 import dagger.Binds
@@ -14,5 +16,10 @@ abstract class DataSourceModule {
     abstract fun bindUserDataSource(
         userDataSource: UserDataSourceImpl
     ): UserDataSource
+
+    @Binds
+    abstract fun bindChallengeDataSource(
+        challengeRemoteDataSource: ChallengeRemoteDataSourceImpl
+    ): ChallengeRemoteDataSource
 
 }

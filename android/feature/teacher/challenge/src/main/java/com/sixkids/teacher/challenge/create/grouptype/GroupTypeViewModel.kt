@@ -10,11 +10,11 @@ class GroupTypeViewModel @Inject constructor(
 ) : BaseViewModel<GroupTypeState, GroupTypeEffect>(
     GroupTypeState()
 ) {
-    fun createGroup() {
+    fun createChallenge() {
         if ((uiState.value.minCount.toIntOrNull() ?: 0) == 0) {
             postSideEffect(GroupTypeEffect.ShowInputErrorSnackbar)
         } else {
-            //그룹 생성 요청 보내기 로직 구현 필요
+            postSideEffect(GroupTypeEffect.CreateChallenge)
         }
     }
 
