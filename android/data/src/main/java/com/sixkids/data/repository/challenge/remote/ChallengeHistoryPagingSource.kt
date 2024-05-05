@@ -27,7 +27,7 @@ class ChallengeHistoryPagingSource @Inject constructor(
                 organizationId,
                 memberId,
                 page,
-                params.loadSize
+                DEFAULT_SIZE
             )
             val challengeHistory = response.getOrThrow().data.challenges.map { it.toModel() }
 
