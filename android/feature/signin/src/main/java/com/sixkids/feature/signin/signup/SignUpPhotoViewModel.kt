@@ -47,6 +47,7 @@ class SignUpPhotoViewModel @Inject constructor(
 
     fun signUp(file: File?) {
         viewModelScope.launch {
+            intent { copy(isLoading = true)}
             val defaultImage = when (file) {
                 null -> {
                     when (uiState.value.gender) {
@@ -72,6 +73,7 @@ class SignUpPhotoViewModel @Inject constructor(
                     message = it.message ?: "알 수 없는 에러 입니다."
                 )))
             }
+            intent { copy(isLoading = false)}
         }
     }
 

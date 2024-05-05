@@ -11,6 +11,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,14 +34,17 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Cream
+import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -113,67 +117,71 @@ fun SignUpPhotoRoute(
 }
 @Composable
 fun SignUpPhotoScreen(
-    uiState: SignUpPhotoState,
-    isTeacher: Boolean,
-    onClickPhoto: (Int) -> Unit,
-    onDoneClick : () -> Unit,
-    onBackClick : () -> Unit
+    uiState: SignUpPhotoState = SignUpPhotoState(),
+    isTeacher: Boolean = true,
+    onClickPhoto: (Int) -> Unit = {},
+    onDoneClick : () -> Unit = {},
+    onBackClick : () -> Unit = {}
 ) {
     val imageMan = if (isTeacher) R.drawable.teacher_man else R.drawable.student_boy
     val imageWoman = if (isTeacher) R.drawable.teacher_woman else R.drawable.student_girl
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(21.dp)
-    ) {
-        SignUpPhotoTopSection(onBackClick)
-
-        Spacer(modifier = Modifier.height(60.dp))
-
-        SelectedPhotoCard(
-            uiState.profileDefaultPhoto ?: imageMan,
-            uiState.profileUserPhoto,
+    Box(modifier = Modifier.fillMaxSize()){
+        Column(
             modifier = Modifier
-                .padding(10.dp)
-                .size(180.dp)
-                .align(Alignment.CenterHorizontally),
-        )
+                .fillMaxSize()
+                .padding(21.dp)
+        ) {
+            SignUpPhotoTopSection(onBackClick)
 
-        Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
-        Row {
-            PhotoCard(
+            SelectedPhotoCard(
+                uiState.profileDefaultPhoto ?: imageMan,
+                uiState.profileUserPhoto,
                 modifier = Modifier
                     .padding(10.dp)
-                    .weight(1f)
-                    .aspectRatio(1f),
-                img = imageMan,
-                onClickPhoto = onClickPhoto
+                    .size(180.dp)
+                    .align(Alignment.CenterHorizontally),
             )
 
-            PhotoCard(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .weight(1f)
-                    .aspectRatio(1f),
-                img = imageWoman,
-                onClickPhoto = onClickPhoto
-            )
+            Spacer(modifier = Modifier.height(60.dp))
 
-            PhotoCard(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .weight(1f)
-                    .aspectRatio(1f),
-                img = R.drawable.camera,
-                onClickPhoto = onClickPhoto
-            )
+            Row {
+                PhotoCard(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f)
+                        .aspectRatio(1f),
+                    img = imageMan,
+                    onClickPhoto = onClickPhoto
+                )
+
+                PhotoCard(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f)
+                        .aspectRatio(1f),
+                    img = imageWoman,
+                    onClickPhoto = onClickPhoto
+                )
+
+                PhotoCard(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .weight(1f)
+                        .aspectRatio(1f),
+                    img = R.drawable.camera,
+                    onClickPhoto = onClickPhoto
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            DoneButton(onDoneClick)
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        DoneButton(onDoneClick)
+        if (uiState.isLoading){
+            LoadingScreen()
+        }
     }
 }
 
@@ -299,4 +307,12 @@ fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File? 
     }
 
     return file
+}
+
+@Composable
+@Preview(showBackground = true)
+fun SignUpPhotoScreenPreview() {
+    UlbanTheme {
+        SignUpPhotoScreen()
+    }
 }

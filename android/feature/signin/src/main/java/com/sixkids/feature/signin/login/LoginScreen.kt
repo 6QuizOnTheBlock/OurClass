@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.signin.R
@@ -207,6 +208,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             LogInButton(onLoginClick)
+        }
+
+        if (uiState.isLoading){
+            LoadingScreen()
         }
     }
 }
