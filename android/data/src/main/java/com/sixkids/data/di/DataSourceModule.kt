@@ -28,5 +28,4 @@ abstract class DataSourceModule {
     abstract fun bindChallengeDataSource(
         challengeRemoteDataSource: ChallengeRemoteDataSourceImpl
     ): ChallengeRemoteDataSource
-
 }
