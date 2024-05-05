@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.teacher.challenge.create.grouptype.GroupType
+import com.sixkids.teacher.challenge.create.grouptype.GroupTypeRoute
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -30,7 +32,6 @@ fun ChallengeCreateRoute(
         }
     }
 
-
     ChallengeCreateScreen(
         uiState = uiState,
         updateTitle = viewModel::updateTitle,
@@ -38,10 +39,12 @@ fun ChallengeCreateRoute(
         updateStartTime = viewModel::updateStartTime,
         updateEndTime = viewModel::updateEndTime,
         updatePoint = viewModel::updatePoint,
+        updateCount = viewModel::updateCount,
+        updateGroupType = viewModel::updateGroupType,
+        moveToResult = viewModel::moveToResult,
         onMoveNextStep = viewModel::moveNextStep,
         onShowSnackbar = viewModel::onShowSnackbar,
     )
-
 }
 
 @Composable
@@ -53,6 +56,9 @@ fun ChallengeCreateScreen(
     updateEndTime: (LocalDateTime) -> Unit = {},
     updatePoint: (String) -> Unit = {},
     onShowSnackbar: (SnackbarToken) -> Unit = {},
+    updateCount: (String) -> Unit = {},
+    updateGroupType: (GroupType) -> Unit = {},
+    moveToResult: () -> Unit = {},
     onMoveNextStep: () -> Unit = {},
 ) {
     Column(
@@ -76,7 +82,17 @@ fun ChallengeCreateScreen(
                     moveNextStep = onMoveNextStep,
                 )
 
-                ChallengeCreateStep.GROUP_TYPE -> TODO()
+                ChallengeCreateStep.GROUP_TYPE -> GroupTypeRoute(
+                    updateMinCount = updateCount,
+                    updateGroupType = updateGroupType,
+                    moveToResult = moveToResult,
+//                    moveNextStep = onMoveNextStep,
+                    moveNextStep = {
+                        onShowSnackbar(SnackbarToken("그룹 지정 로직은 미구현 입니다."))
+                    },
+                    onShowSnackbar = onShowSnackbar,
+                )
+
                 ChallengeCreateStep.MATCHING_TYPE -> TODO()
                 ChallengeCreateStep.CREATE -> TODO()
                 ChallengeCreateStep.RESULT -> TODO()
