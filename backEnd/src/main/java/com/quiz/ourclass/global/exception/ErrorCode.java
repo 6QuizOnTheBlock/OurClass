@@ -20,6 +20,7 @@ public enum ErrorCode {
     EXISTING_MEMBER(HttpStatus.NOT_FOUND, "존재하는 회원입니다."),
     OIDC_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 OIDC 토큰 입니다. "),
     CERTIFICATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "검증에 실패했습니다."),
+    DEFAULT_IMAGES_UNDER_4(HttpStatus.INTERNAL_SERVER_ERROR, "기본 이미지의 개수가 4보다 적습니다."),
 
 
     //security

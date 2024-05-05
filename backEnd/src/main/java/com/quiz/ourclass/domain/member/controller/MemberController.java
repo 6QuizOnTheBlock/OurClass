@@ -91,11 +91,7 @@ public class MemberController implements MemberControllerDocs {
     public ResponseEntity<ResultResponse<?>> getDefaultImages() {
         return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));
     }
-    /* 8. 기본 이미지 조회 */
-    @GetMapping("/default-image")
-    public ResponseEntity<ResultResponse<?>> getDefaultImages() {
-        return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));
-    }
+
     /* 9. 현 유저의 회원 정보 주기 */
     @GetMapping("/")
     public ResponseEntity<ResultResponse<?>> rememberMe() {

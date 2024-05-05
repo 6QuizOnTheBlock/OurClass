@@ -8,12 +8,12 @@ import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
-import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
 import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.entity.SocialType;
+import com.quiz.ourclass.domain.member.mapper.DefaultImageMapper;
 import com.quiz.ourclass.domain.member.mapper.MemberMeMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
@@ -24,7 +24,6 @@ import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +43,7 @@ public class MemberService {
     private final UserAccessUtil userAccessUtil;
     private final DefaultImageRepository defaultImageRepository;
     private final MemberMeMapper memberMeMapper;
+    private final DefaultImageMapper defaultImageMapper;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -71,7 +71,7 @@ public class MemberService {
             .orElseThrow(() -> new GlobalException(ErrorCode.CERTIFICATION_FAILED));
     }
 
-    private TokenDTO updateExistingMember(Member member, String imgUrl, String role) {
+    private TokenDTO updateExistingMember(Member member, String imgUrl, Role role) {
         if (member.getProfileImage() == null || member.getRole() == null || member.getRole()
             .equals(Role.GUEST)) {
             Member.addInfo(member, imgUrl, role);
@@ -83,7 +83,7 @@ public class MemberService {
     }
 
     // Member 등록 후 접근 토큰, 갱신 토큰 출력
-    private TokenDTO registerNewMember(OIDCDecodePayload payload, String imgUrl, String role) {
+    private TokenDTO registerNewMember(OIDCDecodePayload payload, String imgUrl, Role role) {
         Member newMember = memberRepository.save(
             Member.of(payload.getEmail(), payload.getNickname(), SocialType.KAKAO, imgUrl, role));
         return createTokenDTO(newMember);
@@ -152,10 +152,7 @@ public class MemberService {
     }
 
     public DefaultImagesResponse getDefaultImages() {
-        List<DefaultImage> images = defaultImageRepository.findAll();
-
-        return DefaultImagesResponse.of(images.get(0).getPhoto(), images.get(1).getPhoto(),
-            images.get(2).getPhoto(), images.get(3).getPhoto());
+        return defaultImageMapper.toDefaultImages(defaultImageRepository.findAll());
     }
 
 
