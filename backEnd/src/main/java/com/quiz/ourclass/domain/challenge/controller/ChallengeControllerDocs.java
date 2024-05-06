@@ -42,7 +42,7 @@ public interface ChallengeControllerDocs {
 
     @Operation(summary = "함께달리기 생성",
         description = "학생 그룹 지정 생성 시 요청데이터에 그룹 정보 포함하여 요청."
-            + "자율 그룹 생성은 NULL로 보내주세요.",
+            + "자율 그룹 생성은 빈 리스트로 보내주세요.",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = Long.class))),
