@@ -55,4 +55,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getMemberInfo(): UserInfo {
         return userRemoteDataSource.getMemberInfo()
     }
+
+    override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
+        return userRemoteDataSource.updateMemberProfilePhoto(file, defaultImage)
+    }
 }

@@ -115,7 +115,10 @@ fun MainScreen(
                 navigateToProfile = navigator::navigateProfile,
                 navigateToHome = navigator::navigateHome,
                 onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
             )
+
+
 
 
         }
