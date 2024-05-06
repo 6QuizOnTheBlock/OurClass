@@ -5,10 +5,11 @@ import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;
 
 @Builder
-
 public record MemberUpdateRequest(
     @Schema(description = "바꿀 사진")
-    MultipartFile file
+    MultipartFile file,
+    @Schema(description = "기본 이미지 index")
+    long defaultImage
 ) {
 
 }
