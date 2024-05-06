@@ -36,7 +36,9 @@ public class RelayServiceImpl implements RelayService {
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
         int randomCount = organization.getMemberCount() / 2;
         int totalCount = (int) (Math.random() * (randomCount + 1) + randomCount);
-        //TODO: 진행중인거 있으면 생성 못하게.
+        if (relayRepository.existsByOrganizationAndEndStatusIsFalse(organization)) {
+            throw new GlobalException(ErrorCode.EXIST_PROGRESS_RELAY);
+        }
         Relay relay = Relay.builder()
             .organization(organization)
             .startMember(member)
