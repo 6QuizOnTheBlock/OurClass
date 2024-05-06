@@ -4,6 +4,7 @@ import com.sixkids.data.network.ApiResultCallAdapterFactory
 import com.sixkids.data.network.RefreshTokenInterceptor
 import com.sixkids.data.network.TokenAuthenticator
 import com.sixkids.data.network.TokenInterceptor
+import com.sixkids.data.util.LocalDateAdapter
 import com.sixkids.data.util.LocalDateTimeAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -54,6 +55,7 @@ object NetworkModule {
     fun moshi(): Moshi =
         Moshi.Builder()
             .add(LocalDateTimeAdapter())
+            .add(LocalDateAdapter())
             .addLast(KotlinJsonAdapterFactory())
             .build()
 

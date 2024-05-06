@@ -28,13 +28,16 @@ fun NavGraphBuilder.signInNavGraph(
     navigateToSignUp: () -> Unit,
     navigateSignUpPhoto: (Boolean) -> Unit,
     navigateToHome: () -> Unit,
+    navigateToTeacherOrganizationList: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick : () -> Unit
 ) {
     composable(route = SignInRoute.defaultRoute){
         LoginRoute(
             navigateToSignUp = navigateToSignUp,
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
+            onShowSnackBar = onShowSnackBar,
+            navigateToTeacherOrganizationList = navigateToTeacherOrganizationList
         )
     }
 
@@ -53,7 +56,7 @@ fun NavGraphBuilder.signInNavGraph(
     ){
         SignUpPhotoRoute(
             onShowSnackBar = onShowSnackBar,
-            navigateToHome = navigateToHome,
+            navigateToTeacherOrganizationList = navigateToTeacherOrganizationList,
             onBackClick = onBackClick
         )
     }

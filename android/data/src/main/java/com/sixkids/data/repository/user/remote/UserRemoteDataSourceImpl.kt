@@ -1,10 +1,12 @@
 package com.sixkids.data.repository.user.remote
 
+import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.model.JwtToken
+import com.sixkids.model.UserInfo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,6 +16,7 @@ import javax.inject.Inject
 
 class UserRemoteDataSourceImpl @Inject constructor(
     private val signInService: SignInService,
+    private val memberService: MemberService,
     private val userLocalDataSource: UserLocalDataSource
 ) : UserRemoteDataSource{
     override suspend fun signIn(idToken: String): JwtToken {
@@ -50,6 +53,23 @@ class UserRemoteDataSourceImpl @Inject constructor(
         val response = signInService.signUp(multipartBody, data)
         if (response.getOrNull() != null) {
             userLocalDataSource.saveRole(response.getOrNull()?.data?.role ?: "error")
+        }
+        return response.getOrThrow().data.toModel()
+    }
+
+    override suspend fun getMemberInfo(): UserInfo {
+        val response = memberService.getMemberInfo()
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveUserId(response.getOrNull()?.data?.id ?: 0)
+            userLocalDataSource.saveUserName(response.getOrNull()?.data?.name ?: "")
+            userLocalDataSource.saveUserProfileImage(response.getOrNull()?.data?.photo ?: "")
+            userLocalDataSource.saveUserInfo(
+                response.getOrNull()?.data?.id ?: 0,
+                response.getOrNull()?.data?.name ?: "",
+                response.getOrNull()?.data?.email ?: "",
+                response.getOrNull()?.data?.photo ?: "",
+                response.getOrNull()?.data?.role ?: ""
+            )
         }
         return response.getOrThrow().data.toModel()
     }
