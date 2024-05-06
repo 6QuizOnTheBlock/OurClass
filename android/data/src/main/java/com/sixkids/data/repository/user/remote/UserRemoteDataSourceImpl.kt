@@ -74,4 +74,26 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return response.getOrThrow().data.toModel()
     }
 
+    override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
+        val data = HashMap<String, RequestBody>()
+
+        var multipartBody : MultipartBody.Part? = null
+
+        if (file != null) {
+            val image = file.asRequestBody("image/*".toMediaTypeOrNull())
+            multipartBody = MultipartBody.Part.createFormData("file", file.name, image)
+        }
+
+        val _defaultImage = RequestBody.create("text/plain".toMediaTypeOrNull(), defaultImage.toString())
+        data["defaultImage"] = _defaultImage
+
+        val response = memberService.updateMemberProfilePhoto(multipartBody, data)
+
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveUserProfileImage(response.getOrNull()?.data?.photoImageUrl ?: "")
+        }
+
+        return response.getOrThrow().data.photoImageUrl
+    }
+
 }

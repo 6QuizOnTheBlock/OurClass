@@ -10,4 +10,6 @@ interface UserRemoteDataSource {
     suspend fun signUp(file: File?, idToken: String, defaultImage: Int, role: String): JwtToken
 
     suspend fun getMemberInfo(): UserInfo
+
+    suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
 }

@@ -12,4 +12,6 @@ interface UserRepository {
     suspend fun getRole(): String
 
     suspend fun getMemberInfo(): UserInfo
+
+    suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
 }

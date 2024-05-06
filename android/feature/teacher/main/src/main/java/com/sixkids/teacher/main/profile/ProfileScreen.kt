@@ -117,7 +117,12 @@ fun TeacherProfileRoute(
                     viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
             }
         },
-        onDoneClick = viewModel::onChangeDoneClick,
+        onDoneClick = {
+            viewModel.onChangeDoneClick(
+                saveBitmapToFile(context, uiState.changedProfileUserPhoto, "profile.jpg")
+            )
+        },
+        onSignOutClick = viewModel::onSignOutClick,
         onBackClick = onBackClick
     )
 
@@ -128,6 +133,7 @@ fun TeacherProfileScreen(
     uiState: ProfileState = ProfileState(),
     onClickPhoto: (Int) -> Unit = {},
     onDoneClick: () -> Unit = {},
+    onSignOutClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     val imageMan = R.drawable.teacher_man
@@ -186,7 +192,7 @@ fun TeacherProfileScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            BottomSection(onDoneClick = { /*TODO*/ }, onSignOutClick = { /*TODO*/ })
+            BottomSection(onDoneClick = onDoneClick, onSignOutClick = onSignOutClick)
 
         }
         if (uiState.isLoading) {
@@ -295,31 +301,31 @@ fun SelectedPhotoCard(
                     modifier = Modifier.fillMaxSize(),
                 )
 
-            }
-            else if (originalImage != null){
-                if(bitmap == null && defaultImage == null){
+            } else if (originalImage != null) {
+                if (bitmap == null && defaultImage == null) {
                     AsyncImage(
                         model = originalImage,
                         contentDescription = "original image",
                         modifier = Modifier.fillMaxWidth(),
                         contentScale = ContentScale.Crop
                     )
-                }
-                if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "selected photo",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }else{
-                    Image(
-                        painter = painterResource(
-                            id = defaultImage!!
-                        ),
-                        contentDescription = "selected photo",
-                        modifier = Modifier.fillMaxSize(),
-                    )
+                } else {
+                    if (bitmap != null) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "selected photo",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(
+                                id = defaultImage!!
+                            ),
+                            contentDescription = "selected photo",
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
                 }
             }
         }
@@ -354,13 +360,13 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
 
 fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File? {
     val directory = context.getExternalFilesDir(null) ?: return null
-
+    if(bitmap == null) return null
     val file = File(directory, fileName)
     var fileOutputStream: FileOutputStream? = null
 
     try {
         fileOutputStream = FileOutputStream(file)
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
     } catch (e: Exception) {
         e.printStackTrace()
