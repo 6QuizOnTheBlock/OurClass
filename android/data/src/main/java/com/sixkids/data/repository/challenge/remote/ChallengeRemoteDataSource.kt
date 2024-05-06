@@ -16,5 +16,5 @@ interface ChallengeRemoteDataSource {
         reword: Int,
         minCount: Int,
         groups: List<GroupSimple>
-    ): Long
+    ): Int
 }

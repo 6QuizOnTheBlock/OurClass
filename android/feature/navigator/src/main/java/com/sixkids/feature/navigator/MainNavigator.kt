@@ -13,6 +13,7 @@ import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -122,6 +123,10 @@ class MainNavigator(
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
+    }
+
+    fun navigateChallengeCreatedResult(challengeId: Int) {
+        navController.navigateChallengeCreatedResult(challengeId)
     }
 
     fun navigateTeacherOrganizationList(){

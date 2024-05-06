@@ -1,6 +1,5 @@
 package com.sixkids.teacher.challenge.create
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
 import com.sixkids.model.GroupSimple
@@ -42,8 +41,8 @@ class ChallengeCreateViewModel @Inject constructor(
                 minCount = headCount.toInt(),
                 groups = groupList
             ).onSuccess { challengeId ->
-//                moveToResult(challengeId)
-                Log.d("D107", "createChallenge: $challengeId")
+                postSideEffect(ChallengeCreateEffect.NavigateResult(challengeId))
+//                Log.d("D107", "createChallenge: $challengeId")
             }.onFailure {
                 onShowSnackbar(SnackbarToken("챌린지 생성에 실패했습니다."))
             }
@@ -78,12 +77,6 @@ class ChallengeCreateViewModel @Inject constructor(
         }
     }
 
-
-    fun moveToResult() {
-        intent {
-            copy(step = ChallengeCreateStep.RESULT)
-        }
-    }
 
     fun onShowSnackbar(snackbarToken: SnackbarToken) {
         postSideEffect(ChallengeCreateEffect.ShowSnackbar(snackbarToken))
