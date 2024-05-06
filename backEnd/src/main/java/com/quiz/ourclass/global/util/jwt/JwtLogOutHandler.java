@@ -32,8 +32,6 @@ public class JwtLogOutHandler implements LogoutHandler {
                     Duration.ofMillis(
                         info.getExpiration().getTime() - info.getIssuedAt().getTime()));
                 request.setAttribute("name", info.getSubject());
-
-
             } else if (valid == 1) {
                 filterResponse.error(response, ErrorCode.EXPIRED_TOKEN);
             } else if (valid > 1) {
