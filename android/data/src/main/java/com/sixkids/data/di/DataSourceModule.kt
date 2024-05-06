@@ -1,5 +1,7 @@
 package com.sixkids.data.di
 
+import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
+import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSourceImpl
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.data.repository.user.local.UserLocalDataSourceImpl
 import com.sixkids.data.repository.user.remote.UserRemoteDataSource
@@ -21,5 +23,10 @@ abstract class DataSourceModule {
     abstract fun bindLocalUserDataSource(
         userLocalDataSource: UserLocalDataSourceImpl
     ): UserLocalDataSource
+
+    @Binds
+    abstract fun bindOrganizationRemoteDataSource(
+        organizationRemoteDataSource: OrganizationRemoteDataSourceImpl
+    ): OrganizationRemoteDataSource
 
 }

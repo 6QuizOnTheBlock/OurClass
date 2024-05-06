@@ -1,5 +1,6 @@
-package com.sixkids.data.repository.organization.remote
+package com.sixkids.data.repository.organization
 
+import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
 import com.sixkids.model.Organization
 import javax.inject.Inject

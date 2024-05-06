@@ -6,5 +6,7 @@ import javax.inject.Inject
 class GetRoleUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke() = userRepository.getRole()
+    suspend operator fun invoke() = runCatching {
+        userRepository.getRole()
+    }
 }

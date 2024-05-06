@@ -67,7 +67,15 @@ class SignUpPhotoViewModel @Inject constructor(
                 postSideEffect(SignUpPhotoEffect.onShowSnackBar(SnackbarToken(
                     message = "환영합니다."
                 )))
-                getUserRole()
+                getRoleUseCase()
+                    .onSuccess {
+                        when(it){
+                            "TEACHER" -> postSideEffect(SignUpPhotoEffect.NavigateToTeacherOrganizationList)
+//                            "STUDENT" -> postSideEffect(SignUpPhotoEffect.NavigateToStudentOrganizationList)
+                        }
+                    }.onFailure {
+
+                    }
             }.onFailure {
                 postSideEffect(SignUpPhotoEffect.onShowSnackBar(SnackbarToken(
                     message = it.message ?: "알 수 없는 에러 입니다."

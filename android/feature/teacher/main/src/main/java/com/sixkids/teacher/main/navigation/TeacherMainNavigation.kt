@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.sixkids.teacher.main.organization.OrganizationListRoute
 import com.sixkids.ui.SnackbarToken
 
-fun NavController.navigateOrganizationList() {
+fun NavController.navigateTeacherOrganizationList() {
     navigate(TeacherMainRoute.defaultRoute)
 }
 

@@ -200,6 +200,7 @@ fun OrganizationListSection(
                     modifier = Modifier
                         .padding(10.dp)
                         .size(200.dp)
+                        /*
                         .graphicsLayer {
                             val pageOffset = calculateCurrentOffsetForPage(idx).absoluteValue
 
@@ -218,6 +219,8 @@ fun OrganizationListSection(
                                 fraction = 1f - pageOffset.coerceIn(0f, 1f)
                             )
                         }
+
+                         */
                         .clickable { onClassClick(item.id) },
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = backgroundColorList[idx % backgroundColorList.size]),
