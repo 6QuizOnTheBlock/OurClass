@@ -2,8 +2,10 @@ package com.quiz.ourclass.domain.board.controller;
 
 
 import com.quiz.ourclass.domain.board.dto.request.PostRequest;
+import com.quiz.ourclass.domain.board.dto.request.PostSliceRequest;
 import com.quiz.ourclass.domain.board.dto.request.UpdatePostRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostDetailResponse;
+import com.quiz.ourclass.domain.board.dto.response.PostListResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -120,5 +122,19 @@ public interface PostControllerDocs {
     ResponseEntity<ResultResponse<?>> report(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
+    );
+
+    @Operation(
+        summary = "게시글 목록 조회",
+        description = "쿼리 입력으로 들어온 값 기준으로 게시글 목록을 조회합니다. (page 0부터 시작입니다!)",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = PostListResponse.class))),
+            @ApiResponse(responseCode = "403", description = "(message : \"잘못된 입력 입니다.\")", content = @Content),
+        }
+    )
+    @GetMapping
+    ResponseEntity<ResultResponse<?>> listView(
+        PostSliceRequest request
     );
 }

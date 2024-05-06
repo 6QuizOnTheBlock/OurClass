@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -102,9 +101,10 @@ public class MemberController implements MemberControllerDocs {
             ResultResponse.success(memberService.rememberMe()));
     }
 
+    /* 10. 멤버 프로필 이미지 수정 */
     @PatchMapping("/photo")
     public ResponseEntity<ResultResponse<?>> updateProfile(
-        @RequestPart("file") MemberUpdateRequest request) {
+        @ModelAttribute MemberUpdateRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
     }
 }

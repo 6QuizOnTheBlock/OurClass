@@ -30,7 +30,6 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -166,13 +165,20 @@ public class MemberService {
 
     public MemberUpdateResponse updateProfile(MemberUpdateRequest request) {
         return userAccessUtil.getMember()
-            .map(member -> updateMemberProfile(member, request.file()))
+            .map(member -> updateMemberProfile(member, request))
             .map(memberMapper::toUpdateResponse)
             .orElseThrow(() -> new GlobalException(ErrorCode.AWS_SERVER_ERROR));
     }
 
-    private Member updateMemberProfile(Member member, MultipartFile file) {
-        member.setProfileImage(awsS3ObjectStorage.uploadFile(file));
+    private Member updateMemberProfile(Member member, MemberUpdateRequest request) {
+
+        if (request.defaultImage() == 0) {
+            member.setProfileImage(awsS3ObjectStorage.uploadFile(request.file()));
+        } else {
+            member.setProfileImage(defaultImageRepository
+                .findById(request.defaultImage())
+                .orElseThrow(() -> new GlobalException(ErrorCode.AWS_SERVER_ERROR)).getPhoto());
+        }
         return memberRepository.save(member);
     }
 
