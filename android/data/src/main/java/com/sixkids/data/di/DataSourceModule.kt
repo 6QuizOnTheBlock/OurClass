@@ -8,6 +8,8 @@ import com.sixkids.data.repository.user.remote.UserRemoteDataSource
 import com.sixkids.data.repository.user.remote.UserRemoteDataSourceImpl
 import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSource
 import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSourceImpl
+import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
+import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -35,5 +37,10 @@ abstract class DataSourceModule {
     abstract fun bindOrganizationRemoteDataSource(
         organizationRemoteDataSource: OrganizationRemoteDataSourceImpl
     ): OrganizationRemoteDataSource
+
+    @Binds
+    abstract fun bindLocalOrganizationDataSource(
+        organizationLocalDataSource: OrganizationLocalDataSourceImpl
+    ): OrganizationLocalDataSource
 
 }
