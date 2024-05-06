@@ -44,7 +44,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         endTime: LocalDateTime,
         reword: Int,
         minCount: Int,
-        groups: List<GroupSimple>?
+        groups: List<GroupSimple>
     ) = challengeRemoteDataSourceImpl.createChallenge(
         organizationId,
         title,

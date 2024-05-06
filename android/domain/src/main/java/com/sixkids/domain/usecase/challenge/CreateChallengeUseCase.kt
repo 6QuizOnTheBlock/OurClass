@@ -16,7 +16,7 @@ class CreateChallengeUseCase @Inject constructor(
         endTime: LocalDateTime,
         reword: Int,
         minCount: Int,
-        groups: List<GroupSimple>?,
+        groups: List<GroupSimple> = emptyList(),
     ) = runCatching {
         challengeRepository.createChallenge(
             organizationId = organizationId,

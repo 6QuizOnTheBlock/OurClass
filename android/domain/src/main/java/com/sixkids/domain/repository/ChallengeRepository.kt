@@ -23,6 +23,6 @@ interface ChallengeRepository {
         endTime: LocalDateTime,
         reword: Int,
         minCount: Int,
-        groups: List<GroupSimple>? = null
+        groups: List<GroupSimple>
     ): Long
 }

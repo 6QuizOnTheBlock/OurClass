@@ -40,7 +40,7 @@ class ChallengeCreateViewModel @Inject constructor(
                 endTime = endTime,
                 reword = point.toInt(),
                 minCount = headCount.toInt(),
-                groups = if (groupType == GroupType.FREE) null else groupList
+                groups = groupList
             ).onSuccess { challengeId ->
 //                moveToResult(challengeId)
                 Log.d("D107", "createChallenge: $challengeId")

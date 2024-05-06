@@ -10,7 +10,7 @@ data class ChallengeCreateRequest(
     val endTime: LocalDateTime,
     val minCount: Int,
     val reword: Int,
-    val groups: List<GroupRequest>? = null,
+    val groups: List<GroupRequest>
 )
 
 data class GroupRequest(

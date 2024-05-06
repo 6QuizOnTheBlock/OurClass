@@ -15,6 +15,6 @@ interface ChallengeRemoteDataSource {
         endTime: LocalDateTime,
         reword: Int,
         minCount: Int,
-        groups: List<GroupSimple>?
+        groups: List<GroupSimple>
     ): Long
 }
