@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,7 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.model.Organization
+import com.sixkids.teacher.main.R
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import kotlin.math.absoluteValue
@@ -162,7 +164,7 @@ fun UserInfoSection(name: String, photo: String) {
         )
 
         Text(
-            text = "$name 선생님 환영합니다",
+            text = String.format(stringResource(id = R.string.organization_welcome), name),
             style = UlbanTypography.titleMedium,
             modifier = Modifier
                 .padding(0.dp, 0.dp, 0.dp, 60.dp)
@@ -188,7 +190,7 @@ fun OrganizationListSection(
 
     if (organizationList.isEmpty()) {
         Text(
-            text = "학급이 없습니다",
+            text = stringResource(id = R.string.organization_no_organization),
             style = UlbanTypography.titleMedium,
         )
     } else {
@@ -267,7 +269,7 @@ fun NewClassButton(
             Icon(imageVector = Icons.Outlined.Add, contentDescription = "new class")
             Spacer(modifier = Modifier.width(2.dp))
             Text(
-                text = "학급 추가",
+                text = stringResource(id = R.string.organization_new_class),
                 style = UlbanTypography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
             )
         }
