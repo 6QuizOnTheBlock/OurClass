@@ -14,4 +14,9 @@ dependencies {
     implementation(projects.feature.signin)
     implementation(projects.feature.teacher.managestudent)
     implementation(projects.feature.teacher.main)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.permissions)
 }

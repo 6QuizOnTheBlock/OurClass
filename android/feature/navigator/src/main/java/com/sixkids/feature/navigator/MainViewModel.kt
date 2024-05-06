@@ -40,6 +40,10 @@ class MainViewModel @Inject constructor(
         ))
     }
 
+    fun onTokenRefresh(result: String) {
+
+    }
+
 
     companion object {
         private const val SHOW_TOAST_LENGTH = 2000L

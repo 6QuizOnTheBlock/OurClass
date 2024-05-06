@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
@@ -54,7 +56,6 @@ fun MainScreen(
                 viewModel.onShowSnackbar(uiState.snackbarToken)
             }
         }
-
     }
 
     Scaffold(
@@ -119,9 +120,6 @@ fun MainScreen(
                 navigateToSignIn = navigator::navigateSignIn,
             )
 
-
-
-
         }
         with(uiState) {
             UlbanSnackbar(
@@ -134,6 +132,17 @@ fun MainScreen(
             )
         }
     }
+
+    FirebaseMessaging.getInstance().token.addOnCompleteListener(
+        OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            if (task.result != null) {
+                viewModel.onTokenRefresh(task.result)
+            }
+        },
+    )
 }
 
 
