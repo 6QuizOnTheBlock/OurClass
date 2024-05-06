@@ -1,18 +1,19 @@
 package com.sixkids.feature.signin.login
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.user.GetRoleUseCase
 import com.sixkids.domain.usecase.user.SignInUseCase
 import com.sixkids.model.NotFoundException
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "HONG"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase
+    private val signInUseCase: SignInUseCase,
+    private val getRoleUseCase: GetRoleUseCase
 ) : BaseViewModel<LoginState, LoginEffect>(LoginState()){
 
     fun login(idToken: String){
@@ -20,15 +21,20 @@ class LoginViewModel @Inject constructor(
             intent { copy(isLoading = true)}
             signInUseCase(idToken)
                 .onSuccess {
-                    postSideEffect(LoginEffect.NavigateToHome)
+                    getRoleUseCase()
+                        .onSuccess {
+                            postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)
+                        }.onFailure {
+                            postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken("로그인 실패")))
+                        }
                 }.onFailure {
                     when(it){
                         is NotFoundException -> {
-                            Log.d(TAG, "login: NotFoundException")
+                            postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken(it.message)))
                             postSideEffect(LoginEffect.NavigateToSignUp)
                         }
                         else -> {
-                            Log.d(TAG, "login: ${it.message}")
+                            postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken(it.message?:"로그인 실패")))
                         }
                     }
                 }

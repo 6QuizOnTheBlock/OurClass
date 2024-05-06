@@ -47,6 +47,7 @@ import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.signin.R
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import kotlinx.coroutines.delay
 
@@ -55,7 +56,9 @@ private const val TAG = "HONG"
 fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
     navigateToHome: () -> Unit,
-    navigateToSignUp: () -> Unit
+    navigateToSignUp: () -> Unit,
+    navigateToTeacherOrganizationList: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -70,6 +73,8 @@ fun LoginRoute(
         when (sideEffect) {
             is LoginEffect.NavigateToSignUp -> navigateToSignUp()
             LoginEffect.NavigateToHome -> navigateToHome()
+            is LoginEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
+            LoginEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
         }
     }
 

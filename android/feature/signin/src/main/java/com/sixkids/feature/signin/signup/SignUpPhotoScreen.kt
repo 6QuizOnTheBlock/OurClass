@@ -57,7 +57,7 @@ private const val TAG = "D107"
 @Composable
 fun SignUpPhotoRoute(
     viewModel: SignUpPhotoViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit,
+    navigateToTeacherOrganizationList: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -83,8 +83,8 @@ fun SignUpPhotoRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is SignUpPhotoEffect.NavigateToHome -> navigateToHome()
             is SignUpPhotoEffect.onShowSnackBar -> onShowSnackBar(it.tkn)
+            SignUpPhotoEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
         }
     }
 
@@ -107,7 +107,7 @@ fun SignUpPhotoRoute(
         },
         onDoneClick = {
             viewModel.signUp(
-                saveBitmapToFile(context, uiState.profileUserPhoto!!, "profile.jpg")
+                saveBitmapToFile(context, uiState.profileUserPhoto, "profile.jpg")
             )
         },
         onBackClick = {
@@ -285,7 +285,7 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
     }
 }
 
-fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File? {
+fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File? {
     val directory = context.getExternalFilesDir(null) ?: return null
 
     val file = File(directory, fileName)
@@ -293,7 +293,7 @@ fun saveBitmapToFile(context: Context, bitmap: Bitmap, fileName: String): File? 
 
     try {
         fileOutputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
     } catch (e: Exception) {
         e.printStackTrace()
