@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/relays")
 @RestController
-public class RelayController {
+public class RelayController implements RelayControllerDocs {
 
     private final RelayService relayService;
 
