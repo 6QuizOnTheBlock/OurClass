@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -213,7 +214,7 @@ fun SignUpPhotoTopSection(name: String, onDoneClick: () -> Unit) {
         )
 
         Text(
-            text = "안녕하세요 $name 선생님!",
+            text = String.format(stringResource(id = com.sixkids.teacher.main.R.string.profile_welcome), name),
             style = UlbanTypography.titleMedium,
             modifier = Modifier.padding(top = 20.dp)
         )
@@ -227,14 +228,14 @@ fun BottomSection(
     onExitClick: () -> Unit = { }
 ) {
     Column {
-        WideButton(onDoneClick, "완료", Blue, BlueDark)
+        WideButton(onDoneClick, stringResource(id = com.sixkids.teacher.main.R.string.profile_done), Blue, BlueDark)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        WideButton(onSignOutClick, "로그아웃", Red, RedDark)
+        WideButton(onSignOutClick, stringResource(id = com.sixkids.teacher.main.R.string.profile_sign_out), Red, RedDark)
 
         Text(
-            text = "회원 탈퇴",
+            text = stringResource(id = com.sixkids.teacher.main.R.string.profile_exit),
             style = UlbanTypography.titleSmall.copy(textDecoration = TextDecoration.Underline),
             modifier = Modifier
                 .padding(10.dp)

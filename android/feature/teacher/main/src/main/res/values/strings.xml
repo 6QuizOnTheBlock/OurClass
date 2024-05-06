@@ -4,4 +4,8 @@
     <string name="organization_no_organization">학급이 없습니다</string>
     <string name="organization_new_class">학급 추가</string>
 
+    <string name="profile_welcome">안녕하세요 %s 선생님!</string>
+    <string name="profile_done">완료</string>
+    <string name="profile_sign_out">로그아웃</string>
+    <string name="profile_exit">회원 탈퇴</string>
 </resources>
