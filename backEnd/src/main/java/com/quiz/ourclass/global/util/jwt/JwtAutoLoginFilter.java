@@ -14,8 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAutoLoginFilter extends OncePerRequestFilter {
 
@@ -28,6 +30,8 @@ public class JwtAutoLoginFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
+
+        log.info(request.getRequestURI());
 
         if (request.getMethod().equals("PATCH") &&
             request.getRequestURI().equals("/api/members/token")) {
