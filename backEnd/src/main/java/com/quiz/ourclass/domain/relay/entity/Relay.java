@@ -1,6 +1,5 @@
 package com.quiz.ourclass.domain.relay.entity;
 
-import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,11 +31,11 @@ public class Relay {
     @ManyToOne(fetch = FetchType.LAZY)
     RelayMember currentRunner;
     @ManyToOne(fetch = FetchType.LAZY)
-    Member startMember;
+    RelayMember startRunner;
     @ManyToOne(fetch = FetchType.LAZY)
-    Member lastMember;
+    RelayMember lastRunner;
     @OneToMany(mappedBy = "relay")
-    List<RelayMember> relayMembers;
+    List<RelayMember> relayRunners;
     int totalCount; //총횟수 돌고나면 종료
     long timeout; //일정 시간 안넘기면 종료
     boolean endStatus;

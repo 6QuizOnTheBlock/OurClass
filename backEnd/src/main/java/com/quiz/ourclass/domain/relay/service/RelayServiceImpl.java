@@ -41,7 +41,6 @@ public class RelayServiceImpl implements RelayService {
         }
         Relay relay = Relay.builder()
             .organization(organization)
-            .startMember(member)
             .totalCount(totalCount)
             .timeout(RELAY_TIMEOUT_DAY)
             .build();
@@ -54,6 +53,7 @@ public class RelayServiceImpl implements RelayService {
             .receiveTime(LocalDateTime.now())
             .build();
         relay.setCurrentRunner(relayMember);
+        relay.setStartRunner(relayMember);
         relayMemberRepository.save(relayMember);
         return relay.getId();
     }
