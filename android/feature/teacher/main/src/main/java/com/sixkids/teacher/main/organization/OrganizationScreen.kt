@@ -86,12 +86,8 @@ fun OrganizationListRoute(
 
     OrganizationListScreen(
         uiState = uiState,
-        onNewClassClick = {
-            viewModel.newOrganizationClick()
-        },
-        onProfileClick = {
-            viewModel.profileClick()
-        },
+        onNewClassClick = viewModel::newOrganizationClick,
+        onProfileClick = viewModel::profileClick,
         onClassClick = { classId ->
             viewModel.organizationClick(classId)
         }
