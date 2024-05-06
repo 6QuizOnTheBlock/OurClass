@@ -21,9 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -31,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,14 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.screen.LoadingScreen
-import com.sixkids.designsystem.theme.Blue
-import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.RedDark
@@ -214,7 +208,10 @@ fun SignUpPhotoTopSection(name: String, onDoneClick: () -> Unit) {
         )
 
         Text(
-            text = String.format(stringResource(id = com.sixkids.teacher.main.R.string.profile_welcome), name),
+            text = String.format(
+                stringResource(id = com.sixkids.teacher.main.R.string.profile_welcome),
+                name
+            ),
             style = UlbanTypography.titleMedium,
             modifier = Modifier.padding(top = 20.dp)
         )
@@ -228,11 +225,21 @@ fun BottomSection(
     onExitClick: () -> Unit = { }
 ) {
     Column {
-        WideButton(onDoneClick, stringResource(id = com.sixkids.teacher.main.R.string.profile_done), Blue, BlueDark)
+        UlbanFilledButton(
+            text = stringResource(id = com.sixkids.teacher.main.R.string.profile_done),
+            onClick = onDoneClick,
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        WideButton(onSignOutClick, stringResource(id = com.sixkids.teacher.main.R.string.profile_sign_out), Red, RedDark)
+        UlbanFilledButton(
+            text = stringResource(id = com.sixkids.teacher.main.R.string.profile_sign_out),
+            onClick = onSignOutClick,
+            modifier = Modifier.fillMaxWidth(),
+            color = Red,
+            textColor = RedDark
+        )
 
         Text(
             text = stringResource(id = com.sixkids.teacher.main.R.string.profile_exit),
@@ -241,34 +248,6 @@ fun BottomSection(
                 .padding(10.dp)
                 .align(Alignment.CenterHorizontally)
                 .clickable { onExitClick() }
-        )
-    }
-}
-
-@Composable
-fun WideButton(
-    onButtonClick: () -> Unit,
-    text: String,
-    backgroundColor: Color,
-    textColor: Color
-) {
-    Button(
-        onClick = { onButtonClick() },
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor
-        )
-    )
-    {
-        Text(
-            text = text,
-            style = UlbanTypography.titleSmall.copy(
-                fontSize = 14.sp,
-                color = textColor
-            ),
-            modifier = Modifier.padding(5.dp)
         )
     }
 }
@@ -361,7 +340,7 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
 
 fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File? {
     val directory = context.getExternalFilesDir(null) ?: return null
-    if(bitmap == null) return null
+    if (bitmap == null) return null
     val file = File(directory, fileName)
     var fileOutputStream: FileOutputStream? = null
 
