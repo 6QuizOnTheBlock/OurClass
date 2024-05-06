@@ -159,13 +159,13 @@ public class MemberService {
 
 
     public MemberMeResponse rememberMe() {
-        return Optional.ofNullable(userAccessUtil.getMember())
+        return userAccessUtil.getMember()
             .map(memberMapper::toMemberMeResponse)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     public MemberUpdateResponse updateProfile(MemberUpdateRequest request) {
-        return Optional.ofNullable(userAccessUtil.getMember())
+        return userAccessUtil.getMember()
             .map(member -> updateMemberProfile(member, request.file()))
             .map(memberMapper::toUpdateResponse)
             .orElseThrow(() -> new GlobalException(ErrorCode.AWS_SERVER_ERROR));
