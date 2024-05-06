@@ -6,6 +6,6 @@ import com.sixkids.data.network.ApiResult
 import retrofit2.http.GET
 
 interface OrganizationService {
-    @GET("/organizations")
+    @GET("organizations")
     suspend fun getOrganizationList(): ApiResult<ApiResponse<List<OrganizationResponse>>>
 }
