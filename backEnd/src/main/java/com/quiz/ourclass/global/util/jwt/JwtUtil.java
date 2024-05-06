@@ -15,6 +15,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import java.security.Key;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
@@ -184,6 +185,15 @@ public class JwtUtil {
         saveRefresh(memberId, accessToken, refreshToken);
 
         return TokenDTO.of(accessToken, refreshToken, role);
+    }
+
+    public boolean isTokenExpiringWithin(Date issuedAt, Date expiration, long hour) {
+        // Duration 패키지는 java.time 의 일부 따라서 Date 를 Instant 라는 time 객체로 바꿔줘야함.
+        Duration tokenDuration = Duration.between(issuedAt.toInstant(), expiration.toInstant());
+        Duration targetHour = Duration.ofHours(hour);
+        // 토큰 수명이 목표 시간보다 작거나 같으면 true 반환
+        return tokenDuration.compareTo(targetHour) <= 0;
+
     }
 
 }

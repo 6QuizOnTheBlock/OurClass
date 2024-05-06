@@ -19,6 +19,6 @@ public class JwtLogOutSuccessHandler implements LogoutSuccessHandler {
         Authentication authentication) throws IOException, ServletException {
 
         String name = String.valueOf(request.getAttribute("name"));
-        filterResponse.ok(response, name + "로그아웃을 성공적으로 진행하였습니다.");
+        filterResponse.ok(response, name + "님의 로그아웃을 성공적으로 진행하였습니다.");
     }
 }
