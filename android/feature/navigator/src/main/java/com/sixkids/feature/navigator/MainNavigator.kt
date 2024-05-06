@@ -11,8 +11,8 @@ import androidx.navigation.navOptions
 import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
-import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
+import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
