@@ -6,8 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.sixkids.teacher.challenge.create.ChallengeCreateEffect
 import com.sixkids.teacher.challenge.create.ChallengeCreateRoute
+import com.sixkids.teacher.challenge.create.result.ResultRoute
 import com.sixkids.teacher.challenge.detail.ChallengeDetailRoute
 import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
@@ -25,9 +25,14 @@ fun NavController.navigateCreateChallenge() {
     navigate(ChallengeRoute.createRoute)
 }
 
+fun NavController.navigateChallengeCreatedResult(challengeId: Int) {
+    navigate(ChallengeRoute.resultRoute(challengeId))
+}
+
 fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
     navigateChallengeDetail: (Int) -> Unit,
+    navigateChallengeCreatedResult: (Int) -> Unit,
     navigateCreateChallenge: () -> Unit,
     navigateUp: () -> Unit,
     showSnackbar: (SnackbarToken) -> Unit,
@@ -53,7 +58,17 @@ fun NavGraphBuilder.challengeNavGraph(
     composable(route = ChallengeRoute.createRoute) {
         ChallengeCreateRoute(
             onShowSnackbar = showSnackbar,
-            onNavigateUp = navigateUp
+            onNavigateUp = navigateUp,
+            onNavigateResult = { challengeId ->
+                navigateChallengeCreatedResult(challengeId)
+            }
+        )
+    }
+    composable(
+        route = ChallengeRoute.resultRoute,
+        arguments = listOf(navArgument(CHALLENGE_ID_NAME) { type = NavType.IntType })
+    ) {
+        ResultRoute(
         )
     }
 
@@ -64,6 +79,7 @@ object ChallengeRoute {
     const val defaultRoute = "challenge-history"
     const val createRoute = "challenge-create"
     const val detailRoute = "challenge-detail/{$CHALLENGE_ID_NAME}"
-
+    const val resultRoute = "challenge-create-result/{$CHALLENGE_ID_NAME}"
     fun detailRoute(challengeId: Int) = "challenge-detail/$challengeId"
+    fun resultRoute(challengeId: Int) = "challenge-create-result/$challengeId"
 }

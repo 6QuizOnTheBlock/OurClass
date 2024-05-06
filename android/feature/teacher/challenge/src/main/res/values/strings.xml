@@ -18,4 +18,5 @@
     <string name="please_select_group_type">그룹 유형을 선택해 주세요</string>
     <string name="free_group">학생들이 자율적으로 선택할게요</string>
     <string name="matching_group">그룹을 지정할게요</string>
+    <string name="new_challenge_created">새로운\n함께 달리기가 만들어졌습니다.</string>
 </resources>
