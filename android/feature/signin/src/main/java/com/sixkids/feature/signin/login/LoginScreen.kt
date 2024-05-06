@@ -69,6 +69,10 @@ fun LoginRoute(
         }
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.autoSignIn()
+    }
+
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is LoginEffect.NavigateToSignUp -> navigateToSignUp()

@@ -2,6 +2,7 @@ package com.sixkids.data.api
 
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.MemberInfoResponse
+import com.sixkids.data.model.response.SignInResponse
 import com.sixkids.data.model.response.UpdateProfilePhotoResponse
 import com.sixkids.data.network.ApiResult
 import okhttp3.MultipartBody
@@ -23,4 +24,6 @@ interface MemberService {
         @PartMap data: HashMap<String, RequestBody>
     ): ApiResult<ApiResponse<UpdateProfilePhotoResponse>>
 
+    @PATCH("members/token")
+    suspend fun autoSignIn() : ApiResult<ApiResponse<SignInResponse>>
 }
