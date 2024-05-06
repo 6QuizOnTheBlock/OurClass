@@ -22,10 +22,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun registerFCMToken() {
-
-    }
-
     private fun createNotificationChannel() {
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ID, "Ulban", importance)

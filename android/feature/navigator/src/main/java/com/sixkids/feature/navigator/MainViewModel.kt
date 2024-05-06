@@ -1,6 +1,7 @@
 package com.sixkids.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.user.UpdateFCMTokenUseCase
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-
+    private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     private val mutex = Mutex()
 
@@ -33,15 +34,19 @@ class MainViewModel @Inject constructor(
     }
 
     fun handleException(throwable: Throwable, retry: () -> Unit) {
-        onShowSnackbar(SnackbarToken(
-            message = throwable.message ?: "알 수 없는 에러 입니다.",
-            actionButtonText = "재시도",
-            onClickActionButton = retry
-        ))
+        onShowSnackbar(
+            SnackbarToken(
+                message = throwable.message ?: "알 수 없는 에러 입니다.",
+                actionButtonText = "재시도",
+                onClickActionButton = retry
+            )
+        )
     }
 
     fun onTokenRefresh(result: String) {
-
+        viewModelScope.launch {
+            updateFCMTokenUseCase(result)
+        }
     }
 
 
