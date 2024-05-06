@@ -2,6 +2,7 @@ package com.sixkids.teacher.main.organization
 
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetOrganizationListUseCase
+import com.sixkids.domain.usecase.organization.SaveSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OrganizationViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val getOrganizationListUseCase: GetOrganizationListUseCase
+    private val getOrganizationListUseCase: GetOrganizationListUseCase,
+    private val saveSelectedOrganizationIdUseCase: SaveSelectedOrganizationIdUseCase
 ) : BaseViewModel<ClassListState, ClassListEffect>(ClassListState()) {
 
     fun initData() {
@@ -48,6 +50,9 @@ class OrganizationViewModel @Inject constructor(
     }
 
     fun organizationClick(id: Int){
+        viewModelScope.launch {
+            saveSelectedOrganizationIdUseCase(id)
+        }
         postSideEffect(ClassListEffect.NavigateToHome)
     }
 }
