@@ -31,8 +31,6 @@ public class JwtAutoLoginFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        log.info(request.getRequestURI());
-
         if (request.getMethod().equals("PATCH") &&
             request.getRequestURI().equals("/api/members/token")) {
             String accessToken = jwtUtil.separateBearer(request.getHeader("Authorization"));
