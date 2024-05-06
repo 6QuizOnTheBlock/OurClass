@@ -16,7 +16,7 @@ interface ChallengeService {
     @POST("challenges")
     suspend fun createChallenge(
         @Body challengeCreateRequest: ChallengeCreateRequest
-    ): ApiResult<ApiResponse<Long>>
+    ): ApiResult<ApiResponse<Int>>
 
     @GET("challenges")
     suspend fun getChallengeHistory(
