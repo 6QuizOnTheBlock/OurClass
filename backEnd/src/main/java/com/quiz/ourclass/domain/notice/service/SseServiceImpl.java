@@ -3,6 +3,8 @@ package com.quiz.ourclass.domain.notice.service;
 import com.quiz.ourclass.domain.notice.dto.SseDTO;
 import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.repository.SseRepository;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -22,7 +24,8 @@ public class SseServiceImpl implements SseService {
 
     @Override
     public SseEmitter subscribe(String lastEventId) {
-        long loginUserId = accessUtil.getMember().getId();
+        long loginUserId = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         String emitterId = makeTimeIncludeId(String.valueOf(loginUserId));
         SseEmitter emitter = sseRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 

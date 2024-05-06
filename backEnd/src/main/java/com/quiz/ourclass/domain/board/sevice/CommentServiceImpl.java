@@ -37,7 +37,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public Long write(CommentRequest request) {
-        Member commentWriter = userAccessUtil.getMember();
+        Member commentWriter = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         //게시글 찾기
         Post post = postRepository.findById(request.boardId())
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
@@ -60,7 +61,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Long modify(Long commentId, UpdateCommentRequest request) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         //댓글 조회
         Comment comment = commentRepository.findById(commentId)
@@ -84,7 +86,8 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Boolean delete(Long commentId) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         //댓글 삭제 권한 검증
         Role requesterRole = member.getRole();
@@ -96,7 +99,8 @@ public class CommentServiceImpl implements CommentService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = comment.getPost().getOrganization().getId();
-            userAccessUtil.isMemberOfOrganization(member, orgId);
+            userAccessUtil.isMemberOfOrganization(member, orgId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
         //댓글 삭제
         commentRepository.delete(comment);
@@ -106,12 +110,14 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public Boolean report(Long commentId) {
-        Member member = userAccessUtil.getMember();
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, comment.getPost().getOrganization().getId());
+        userAccessUtil.isMemberOfOrganization(member, comment.getPost().getOrganization().getId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
 
         String reportMember = member.getName();
         String authorMember = comment.getPost().getAuthor().getName();
