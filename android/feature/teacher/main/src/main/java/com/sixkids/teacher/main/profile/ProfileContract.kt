@@ -6,6 +6,7 @@ import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 sealed interface ProfileEffect : SideEffect{
+    data object NavigateToSignIn : ProfileEffect
     data object NavigateToOrganizationList : ProfileEffect
     data class OnShowSnackBar(val tkn: SnackbarToken) : ProfileEffect
 }

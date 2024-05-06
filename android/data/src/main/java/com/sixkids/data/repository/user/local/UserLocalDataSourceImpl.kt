@@ -89,6 +89,17 @@ class UserLocalDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun signOut(): Boolean {
+        return try {
+            dataStore.edit { preferences ->
+                preferences.clear()
+            }
+            true
+        }catch (e: Exception){
+            false
+        }
+    }
+
     companion object {
         val ROLE_KEY = stringPreferencesKey("role")
         val ID_KEY = intPreferencesKey("id")
