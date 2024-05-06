@@ -1,7 +1,6 @@
 package com.sixkids.feature.signin.signup
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -82,12 +81,6 @@ class SignUpPhotoViewModel @Inject constructor(
                 )))
             }
             intent { copy(isLoading = false)}
-        }
-    }
-
-    fun getUserRole(){
-        viewModelScope.launch {
-            val role = getRoleUseCase()
         }
     }
 }

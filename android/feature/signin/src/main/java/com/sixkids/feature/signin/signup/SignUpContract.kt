@@ -1,7 +1,6 @@
 package com.sixkids.feature.signin.signup
 
 import android.graphics.Bitmap
-import androidx.compose.ui.graphics.painter.Painter
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState

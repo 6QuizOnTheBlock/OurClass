@@ -1,6 +1,5 @@
 package com.sixkids.feature.signin.login
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.user.GetRoleUseCase
 import com.sixkids.domain.usecase.user.SignInUseCase
@@ -11,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "HONG"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
