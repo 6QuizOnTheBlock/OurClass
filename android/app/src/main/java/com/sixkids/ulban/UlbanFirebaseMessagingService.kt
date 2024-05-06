@@ -1,4 +1,4 @@
-package com.sixkids.feature.navigator.fcm
+package com.sixkids.ulban
 
 import android.Manifest
 import android.app.NotificationManager
@@ -12,18 +12,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.sixkids.designsystem.R
 import com.sixkids.feature.navigator.MainActivity
-import com.sixkids.designsystem.R as DesignSystemR
 
 private const val TAG = "D107"
-
 class UlbanFirebaseMessagingService : FirebaseMessagingService() {
+
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "onNewToken: $token")
-
     }
-
     override fun onMessageReceived(message: RemoteMessage) {
         var messageTitle = ""
         var messageContent = ""
@@ -38,7 +36,6 @@ class UlbanFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
 
-        Log.d(TAG, "onMessageReceived: $messageTitle, $messageContent")
 
         val mainIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -55,7 +52,7 @@ class UlbanFirebaseMessagingService : FirebaseMessagingService() {
         )
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(DesignSystemR.drawable.announce)
+            .setSmallIcon(R.drawable.announce)
             .setContentTitle(messageTitle)
             .setContentText(messageContent)
             .setAutoCancel(true)
@@ -70,11 +67,9 @@ class UlbanFirebaseMessagingService : FirebaseMessagingService() {
                     Manifest.permission.POST_NOTIFICATIONS,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                Log.d(TAG, "onMessageReceived: no permission")
                 return
             }
         }
-        Log.d(TAG, "onMessageReceived: ${builder.build()}")
 
         notificationManager.notify(107, builder.build())
 
@@ -83,5 +78,6 @@ class UlbanFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         const val CHANNEL_ID = "ULBAN_NOTIFICATION_CHANNEL"
     }
+
 
 }

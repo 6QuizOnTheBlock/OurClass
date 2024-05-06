@@ -30,7 +30,7 @@
         </activity>
 
         <service
-            android:name="com.sixkids.feature.navigator.fcm.UlbanFirebaseMessagingService"
+            android:name=".UlbanFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

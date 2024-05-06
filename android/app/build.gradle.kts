@@ -36,4 +36,6 @@ dependencies {
     implementation(projects.feature.navigator)
     implementation(projects.data)
     implementation(libs.kakao.user)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 }

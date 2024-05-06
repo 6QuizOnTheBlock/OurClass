@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
 ) : BaseViewModel<MainState, MainSideEffect>(MainState()) {
     private val mutex = Mutex()
 
@@ -42,13 +41,6 @@ class MainViewModel @Inject constructor(
             )
         )
     }
-
-    fun onTokenRefresh(result: String) {
-        viewModelScope.launch {
-            updateFCMTokenUseCase(result)
-        }
-    }
-
 
     companion object {
         private const val SHOW_TOAST_LENGTH = 2000L

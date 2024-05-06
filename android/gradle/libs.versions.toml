@@ -133,7 +133,6 @@ lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
-firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -161,3 +160,6 @@ paging = ["paging", "paging-compose"]
 
 # Networking Bundle
 retrofit = ["retrofit", "moshi-converter", "moshi-kotlin", "okhttp", "okhttp-logginginterceptor"]
+
+# Firebase Bundle
+firebase = [ "firebase-analytics", "firebase-messaging"]
