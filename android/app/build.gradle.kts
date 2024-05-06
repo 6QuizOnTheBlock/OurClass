@@ -33,6 +33,9 @@ android {
 
 dependencies {
     implementation(projects.feature.navigator)
-    implementation(libs.kakao.user)
     implementation(projects.data)
+    implementation(libs.kakao.user)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
 }
