@@ -1,8 +1,10 @@
 package com.sixkids.data.model.response
 
 import com.sixkids.model.RunningChallenge
+import com.squareup.moshi.Json
 
 data class RunningChallengeResponse(
+    @Json(name = "challengeSimpleDTO")
     val challenge: ChallengeResponse,
     val waitingCount: Int,
     val doneMemberCount: Int

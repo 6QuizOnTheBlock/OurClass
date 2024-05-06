@@ -5,4 +5,17 @@
     <string name="total_challenge_count">지금까지 %d번 함께 달리기를 진행했어요</string>
     <string name="no_challenge_history">기록이 없어요</string>
     <string name="challenge_report_state">%d개 팀, %d명 학생이 참여했어요.</string>
+    <string name="please_input_point">포인트를 입력해 주세요</string>
+    <string name="point_hint">점수를 입력하세요</string>
+    <string name="please_input_content">내용을 입력해 주세요</string>
+    <string name="please_input_title">제목을 입력해 주세요</string>
+    <string name="please_input_all_info">모든 항목을 입력해주세요.</string>
+    <string name="next">다음</string>
+    <string name="confirm">확인</string>
+    <string name="start_time">언제 시작할까요?</string>
+    <string name="end_time">언제 종료할까요?</string>
+    <string name="please_input_min_head_count">그룹 최소 인원을 설정해 주세요</string>
+    <string name="please_select_group_type">그룹 유형을 선택해 주세요</string>
+    <string name="free_group">학생들이 자율적으로 선택할게요</string>
+    <string name="matching_group">그룹을 지정할게요</string>
 </resources>
