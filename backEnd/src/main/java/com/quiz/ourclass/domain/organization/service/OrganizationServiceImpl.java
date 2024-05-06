@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.organization.service;
 
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
+import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
@@ -10,6 +11,7 @@ import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.mapper.OrganizationMapper;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
@@ -30,6 +32,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final OrganizationMapper organizationMapper;
+    private final MemberMapper memberMapper;
     private final RedisUtil redisUtil;
     private final UserAccessUtil accessUtil;
     private final static String REDIS_ORG_KEY = "ORGANIZATION:";
@@ -109,5 +112,16 @@ public class OrganizationServiceImpl implements OrganizationService {
             .build();
         memberOrganizationRepository.save(memberOrganization);
         return organization.getId();
+    }
+
+    @Override
+    public List<MemberSimpleDTO> getOrganizationMembers(long id) {
+        Organization organization = organizationRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+        return organization.getMemberOrganizations()
+            .stream()
+            .map(MemberOrganization::getMember)
+            .map(memberMapper::memberToMemberSimpleDTO)
+            .toList();
     }
 }
