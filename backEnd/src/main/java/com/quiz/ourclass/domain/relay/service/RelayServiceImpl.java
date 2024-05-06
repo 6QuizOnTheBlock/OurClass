@@ -4,6 +4,8 @@ import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.relay.dto.RelayRequest;
+import com.quiz.ourclass.domain.relay.dto.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.entity.Relay;
 import com.quiz.ourclass.domain.relay.entity.RelayMember;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
@@ -56,5 +58,10 @@ public class RelayServiceImpl implements RelayService {
         relay.setStartRunner(relayMember);
         relayMemberRepository.save(relayMember);
         return relay.getId();
+    }
+
+    @Override
+    public RelaySliceResponse getRelays(RelaySliceRequest relaySliceRequest) {
+        return relayRepository.getRelays(relaySliceRequest);
     }
 }
