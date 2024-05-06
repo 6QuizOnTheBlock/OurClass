@@ -10,8 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Relay {
 
     @Id
@@ -20,7 +30,7 @@ public class Relay {
     @ManyToOne(fetch = FetchType.LAZY)
     Organization organization;
     @ManyToOne(fetch = FetchType.LAZY)
-    Member currentRunner;
+    RelayMember currentRunner;
     @ManyToOne(fetch = FetchType.LAZY)
     Member startMember;
     @ManyToOne(fetch = FetchType.LAZY)

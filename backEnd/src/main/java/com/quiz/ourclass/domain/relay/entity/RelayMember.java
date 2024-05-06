@@ -7,7 +7,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class RelayMember {
 
@@ -22,5 +31,6 @@ public class RelayMember {
     Member nextMember;
     String question;
     int turn;
+    LocalDateTime receiveTime;
     boolean endStatus;
 }
