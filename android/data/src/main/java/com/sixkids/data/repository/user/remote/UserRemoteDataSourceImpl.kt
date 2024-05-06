@@ -63,6 +63,13 @@ class UserRemoteDataSourceImpl @Inject constructor(
             userLocalDataSource.saveUserId(response.getOrNull()?.data?.id ?: 0)
             userLocalDataSource.saveUserName(response.getOrNull()?.data?.name ?: "")
             userLocalDataSource.saveUserProfileImage(response.getOrNull()?.data?.photo ?: "")
+            userLocalDataSource.saveUserInfo(
+                response.getOrNull()?.data?.id ?: 0,
+                response.getOrNull()?.data?.name ?: "",
+                response.getOrNull()?.data?.email ?: "",
+                response.getOrNull()?.data?.photo ?: "",
+                response.getOrNull()?.data?.role ?: ""
+            )
         }
         return response.getOrThrow().data.toModel()
     }
