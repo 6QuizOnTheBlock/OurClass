@@ -66,7 +66,7 @@ class ProfileViewModel @Inject constructor(
     fun onChangeDoneClick(newProfilePhoto: File?) {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
-            var defaultImage: Int = 0
+            var defaultImage = 0
             if (newProfilePhoto == null && uiState.value.changedProfileDefaultPhoto == null) {
                 // 변경사항 없음 뒤로가기
                 postSideEffect(ProfileEffect.NavigateToOrganizationList)

@@ -185,7 +185,7 @@ fun TeacherProfileScreen(
                         .padding(10.dp)
                         .weight(1f)
                         .aspectRatio(1f),
-                    img = com.sixkids.designsystem.R.drawable.camera,
+                    img = R.drawable.camera,
                     onClickPhoto = onClickPhoto
                 )
             }
