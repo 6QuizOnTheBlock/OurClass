@@ -1,7 +1,7 @@
 package com.quiz.ourclass.domain.challenge.controller;
 
-import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
+import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
@@ -32,9 +32,9 @@ public class ChallengeController implements ChallengeControllerDocs {
 
     @GetMapping
     public ResponseEntity<ResultResponse<?>> getChallenges(
-        ChallengSliceRequest challengSliceRequest) {
+        ChallengeSliceRequest challengeSliceRequest) {
         ChallengeSliceResponse challengeSliceResponse = challengeService.getChallenges(
-            challengSliceRequest);
+            challengeSliceRequest);
         return ResponseEntity.ok(ResultResponse.success(challengeSliceResponse));
     }
 

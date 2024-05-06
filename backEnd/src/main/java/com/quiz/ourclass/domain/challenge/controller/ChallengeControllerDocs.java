@@ -1,7 +1,7 @@
 package com.quiz.ourclass.domain.challenge.controller;
 
-import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
+import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
@@ -37,7 +37,7 @@ public interface ChallengeControllerDocs {
         })
     @GetMapping
     ResponseEntity<ResultResponse<?>> getChallenges(
-        ChallengSliceRequest challengSliceRequest
+        ChallengeSliceRequest challengeSliceRequest
     );
 
     @Operation(summary = "함께달리기 생성",

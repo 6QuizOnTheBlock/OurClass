@@ -13,7 +13,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.challenge.dto.ChallengeSimpleDTO;
-import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
+import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.GroupMatchingResponse;
@@ -33,7 +33,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public ChallengeSliceResponse getChallenges(ChallengSliceRequest request) {
+    public ChallengeSliceResponse getChallenges(ChallengeSliceRequest request) {
         Pageable pageable = PageRequest.of(request.page(), request.size());
         BooleanBuilder challengeCondition = getChallengesBooleanBuilder(request);
 
@@ -63,7 +63,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             .last(hasNext).build();
     }
 
-    private static BooleanBuilder getChallengesBooleanBuilder(ChallengSliceRequest request) {
+    private static BooleanBuilder getChallengesBooleanBuilder(ChallengeSliceRequest request) {
         BooleanBuilder challengeCondition = new BooleanBuilder();
         if (request.orgId() != null && request.orgId() > 0) {
             challengeCondition.and(challenge.organization.id.eq(request.orgId()));

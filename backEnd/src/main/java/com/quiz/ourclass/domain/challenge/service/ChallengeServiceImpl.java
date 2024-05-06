@@ -1,8 +1,8 @@
 package com.quiz.ourclass.domain.challenge.service;
 
 import com.quiz.ourclass.domain.challenge.dto.ChallengeSimpleDTO;
-import com.quiz.ourclass.domain.challenge.dto.request.ChallengSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
+import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
@@ -53,8 +53,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final AwsS3ObjectStorage awsS3ObjectStorage;
 
     @Override
-    public ChallengeSliceResponse getChallenges(ChallengSliceRequest challengSliceRequest) {
-        return challengeRepository.getChallenges(challengSliceRequest);
+    public ChallengeSliceResponse getChallenges(ChallengeSliceRequest challengeSliceRequest) {
+        return challengeRepository.getChallenges(challengeSliceRequest);
     }
 
     @Transactional

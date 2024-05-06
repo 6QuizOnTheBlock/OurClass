@@ -3,7 +3,7 @@ package com.quiz.ourclass.domain.challenge.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "함께달리기 목록 조회 요청 DTO")
-public record ChallengSliceRequest(
+public record ChallengeSliceRequest(
     @Schema(description = "학급 id")
     Long orgId,
     @Schema(description = "멤버 id")
