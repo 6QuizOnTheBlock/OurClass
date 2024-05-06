@@ -59,6 +59,7 @@ private const val TAG = "D107"
 fun TeacherProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToOrganizationList: () -> Unit,
+    navigateToSignIn: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -95,6 +96,7 @@ fun TeacherProfileRoute(
         when (it) {
             ProfileEffect.NavigateToOrganizationList -> navigateToOrganizationList()
             is ProfileEffect.OnShowSnackBar -> onShowSnackBar(it.tkn)
+            ProfileEffect.NavigateToSignIn -> navigateToSignIn()
         }
     }
 

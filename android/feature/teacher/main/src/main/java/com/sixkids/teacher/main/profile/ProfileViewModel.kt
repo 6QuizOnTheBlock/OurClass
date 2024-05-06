@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.domain.usecase.user.SignOutUseCase
 import com.sixkids.domain.usecase.user.UpdateUserProfilePhotoUseCase
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
@@ -17,7 +18,8 @@ private const val TAG = "D107"
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val updateUserProfilePhotoUseCase: UpdateUserProfilePhotoUseCase
+    private val updateUserProfilePhotoUseCase: UpdateUserProfilePhotoUseCase,
+    private val signOutUseCase: SignOutUseCase
 ) : BaseViewModel<ProfileState, ProfileEffect>(ProfileState()) {
 
     fun initData() {
@@ -101,6 +103,14 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onSignOutClick() {
-
+        viewModelScope.launch {
+            if(signOutUseCase()){
+                postSideEffect(ProfileEffect.NavigateToSignIn)
+            }else{
+                ProfileEffect.OnShowSnackBar(
+                    SnackbarToken("로그아웃에 실패했습니다. 다시 시도해주세요.")
+                )
+            }
+        }
     }
 }

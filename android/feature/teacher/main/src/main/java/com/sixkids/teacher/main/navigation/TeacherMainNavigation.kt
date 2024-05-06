@@ -23,6 +23,7 @@ fun NavGraphBuilder.teacherOrganizationListNavGraph(
     navigateToNewOrganization: () -> Unit,
     navigateToProfile: () -> Unit,
     navigateToHome: () -> Unit,
+    navigateToSignIn: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -38,6 +39,7 @@ fun NavGraphBuilder.teacherOrganizationListNavGraph(
     composable(route = TeacherMainRoute.profileRoute) {
         TeacherProfileRoute(
             navigateToOrganizationList = onBackClick,
+            navigateToSignIn = navigateToSignIn,
             onShowSnackBar = onShowSnackBar,
             onBackClick = onBackClick
         )

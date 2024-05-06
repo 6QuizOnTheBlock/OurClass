@@ -17,4 +17,6 @@ interface UserLocalDataSource {
 
     suspend fun getUserInfo() : UserInfo
     suspend fun saveUserInfo(id: Int, name: String, email: String, photo: String, role: String)
+
+    suspend fun signOut() : Boolean
 }

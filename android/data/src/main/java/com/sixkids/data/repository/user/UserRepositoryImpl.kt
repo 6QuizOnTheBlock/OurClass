@@ -59,4 +59,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
         return userRemoteDataSource.updateMemberProfilePhoto(file, defaultImage)
     }
+
+    override suspend fun signOut(): Boolean {
+        return userLocalDataSource.signOut()
+    }
 }

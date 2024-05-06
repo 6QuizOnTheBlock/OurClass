@@ -14,4 +14,6 @@ interface UserRepository {
     suspend fun getMemberInfo(): UserInfo
 
     suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
+
+    suspend fun signOut() : Boolean
 }

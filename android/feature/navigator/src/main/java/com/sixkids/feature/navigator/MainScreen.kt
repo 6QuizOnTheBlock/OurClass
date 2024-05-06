@@ -116,6 +116,7 @@ fun MainScreen(
                 navigateToHome = navigator::navigateHome,
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
+                navigateToSignIn = navigator::navigateSignIn,
             )
 
 
