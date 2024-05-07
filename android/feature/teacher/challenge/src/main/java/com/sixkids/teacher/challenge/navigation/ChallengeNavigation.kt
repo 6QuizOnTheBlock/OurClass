@@ -7,11 +7,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sixkids.teacher.challenge.create.ChallengeCreateRoute
-import com.sixkids.teacher.challenge.result.ResultRoute
 import com.sixkids.teacher.challenge.detail.ChallengeDetailRoute
 import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_TITLE_NAME
+import com.sixkids.teacher.challenge.result.ResultRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateChallengeHistory() {
@@ -35,6 +35,11 @@ fun NavController.navigateCreateChallenge() {
 }
 
 fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String) {
+    navigate(ChallengeRoute.resultRoute(challengeId, title)){
+        popUpTo(ChallengeRoute.defaultRoute){
+            inclusive = false
+        }
+    }
     navigate(ChallengeRoute.resultRoute(challengeId, title))
 }
 

@@ -29,6 +29,7 @@ class ResultViewModel @Inject constructor(
                         intent {
                             copy(challenge = it)
                         }
+                        postSideEffect(ResultEffect.ShowResultDialog)
                     }
                     .onFailure {
                         postSideEffect(ResultEffect.HandleException(it) {
@@ -36,8 +37,9 @@ class ResultViewModel @Inject constructor(
                         })
                     }
             }
+        }else{
+            postSideEffect(ResultEffect.ShowResultDialog)
         }
-        postSideEffect(ResultEffect.ShowResultDialog)
     }
 
     fun navigateToChallengeHistory() {
