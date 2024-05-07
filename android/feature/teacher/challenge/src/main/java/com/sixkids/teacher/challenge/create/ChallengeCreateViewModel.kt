@@ -41,8 +41,7 @@ class ChallengeCreateViewModel @Inject constructor(
                 minCount = headCount.toInt(),
                 groups = groupList
             ).onSuccess { challengeId ->
-                postSideEffect(ChallengeCreateEffect.NavigateResult(challengeId))
-//                Log.d("D107", "createChallenge: $challengeId")
+                postSideEffect(ChallengeCreateEffect.NavigateResult(challengeId, title))
             }.onFailure {
                 onShowSnackbar(SnackbarToken("챌린지 생성에 실패했습니다."))
             }

@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
-    onNavigateResult: (Int) -> Unit,
+    onNavigateResult: (Int, String) -> Unit,
     onNavigateUp: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
@@ -32,7 +32,7 @@ fun ChallengeCreateRoute(
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is ChallengeCreateEffect.ShowSnackbar -> onShowSnackbar(it.snackbarToken)
-            is ChallengeCreateEffect.NavigateResult -> onNavigateResult(it.challengeId)
+            is ChallengeCreateEffect.NavigateResult -> onNavigateResult(it.challengeId, it.title)
             ChallengeCreateEffect.NavigateUp -> onNavigateUp()
         }
     }

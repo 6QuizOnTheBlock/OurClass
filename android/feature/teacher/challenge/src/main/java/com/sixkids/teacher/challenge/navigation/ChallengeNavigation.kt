@@ -11,6 +11,7 @@ import com.sixkids.teacher.challenge.result.ResultRoute
 import com.sixkids.teacher.challenge.detail.ChallengeDetailRoute
 import com.sixkids.teacher.challenge.history.ChallengeRoute
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
+import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_TITLE_NAME
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateChallengeHistory() {
@@ -25,14 +26,14 @@ fun NavController.navigateCreateChallenge() {
     navigate(ChallengeRoute.createRoute)
 }
 
-fun NavController.navigateChallengeCreatedResult(challengeId: Int) {
-    navigate(ChallengeRoute.resultRoute(challengeId))
+fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String) {
+    navigate(ChallengeRoute.resultRoute(challengeId, title))
 }
 
 fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
     navigateChallengeDetail: (Int) -> Unit,
-    navigateChallengeCreatedResult: (Int) -> Unit,
+    navigateChallengeCreatedResult: (Int, String) -> Unit,
     navigateCreateChallenge: () -> Unit,
     navigateUp: () -> Unit,
     showSnackbar: (SnackbarToken) -> Unit,
@@ -59,14 +60,17 @@ fun NavGraphBuilder.challengeNavGraph(
         ChallengeCreateRoute(
             onShowSnackbar = showSnackbar,
             onNavigateUp = navigateUp,
-            onNavigateResult = { challengeId ->
-                navigateChallengeCreatedResult(challengeId)
+            onNavigateResult = { challengeId, title ->
+                navigateChallengeCreatedResult(challengeId, title)
             }
         )
     }
     composable(
         route = ChallengeRoute.resultRoute,
-        arguments = listOf(navArgument(CHALLENGE_ID_NAME) { type = NavType.IntType })
+        arguments = listOf(
+            navArgument(CHALLENGE_ID_NAME) { type = NavType.IntType },
+            navArgument(CHALLENGE_TITLE_NAME) { type = NavType.StringType }
+        )
     ) {
         ResultRoute(
             handleException = handleException
@@ -77,10 +81,12 @@ fun NavGraphBuilder.challengeNavGraph(
 
 object ChallengeRoute {
     const val CHALLENGE_ID_NAME = "challengeId"
+    const val CHALLENGE_TITLE_NAME = "challengeTitle"
     const val defaultRoute = "challenge-history"
     const val createRoute = "challenge-create"
     const val detailRoute = "challenge-detail/{$CHALLENGE_ID_NAME}"
-    const val resultRoute = "challenge-create-result/{$CHALLENGE_ID_NAME}"
+    const val resultRoute = "challenge-create-result/{$CHALLENGE_ID_NAME}/{$CHALLENGE_TITLE_NAME}"
     fun detailRoute(challengeId: Int) = "challenge-detail/$challengeId"
-    fun resultRoute(challengeId: Int) = "challenge-create-result/$challengeId"
+    fun resultRoute(challengeId: Int, title: String) =
+        "challenge-create-result/$challengeId/$title"
 }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,10 +41,6 @@ fun ResultRoute(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getChallengeInfo()
-    }
-
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             ResultEffect.ShowResultDialog -> {
@@ -57,7 +52,7 @@ fun ResultRoute(
 
     ResultScreen(
         uiState = uiState,
-        showDialog = viewModel::showResultDialog,
+        onCardClick = viewModel::getChallengeInfo,
     )
 
     with(uiState.challenge) {
@@ -81,7 +76,7 @@ fun ResultRoute(
 fun ResultScreen(
     paddingValues: PaddingValues = PaddingValues(32.dp),
     uiState: ResultState = ResultState(),
-    showDialog: () -> Unit = {}
+    onCardClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -99,7 +94,7 @@ fun ResultScreen(
         UlbanMissionCard(
             title = uiState.challenge.title,
             subTitle = stringResource(R.string.detail_info),
-            onClick = showDialog
+            onClick = onCardClick
         )
         Image(
             modifier = Modifier.size(160.dp),

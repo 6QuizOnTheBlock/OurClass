@@ -125,8 +125,8 @@ class MainNavigator(
         navController.navigateCreateChallenge()
     }
 
-    fun navigateChallengeCreatedResult(challengeId: Int) {
-        navController.navigateChallengeCreatedResult(challengeId)
+    fun navigateChallengeCreatedResult(challengeId: Int, title: String) {
+        navController.navigateChallengeCreatedResult(challengeId, title)
     }
 
     fun navigateTeacherOrganizationList(){
