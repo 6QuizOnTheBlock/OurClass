@@ -2,8 +2,11 @@ package com.quiz.ourclass.global.util.jwt;
 
 
 import com.quiz.ourclass.domain.member.dto.TokenDTO;
+import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Refresh;
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -120,7 +123,7 @@ public class JwtUtil {
 
     /*
      * D. 토큰 유효성 검증
-     * 0: 정상, -1: 만료된 토큰, -2: 유효하지 않은 서명, -3: 지원되지 않는 토큰, -4: 잘못된 JWT 토큰
+     * 0: 정상, -1: 만료된 토큰, -2: 유효하지 않은 서명, -3: 지원되지 않는 토큰, -4: 잘못된 JWT 토큰, -5: 로그아웃한 토큰
      * */
 
     public int validateToken(String token) {
@@ -178,6 +181,9 @@ public class JwtUtil {
             Refresh.of(memberId, accessToken, refreshToken, REFRESH_TOKEN_TIME / 1000));
     }
 
+    /*
+     *  H. 토큰 재발급
+     * */
     public TokenDTO refreshToken(long memberId, String role) {
 
         String accessToken = createToken(memberId, role, true);
@@ -187,13 +193,28 @@ public class JwtUtil {
         return TokenDTO.of(accessToken, refreshToken, role);
     }
 
+    // I. 토큰 만료시간이 타겟 시간보다 적은지 많은지 확인
     public boolean isTokenExpiringWithin(Date issuedAt, Date expiration, long hour) {
         // Duration 패키지는 java.time 의 일부 따라서 Date 를 Instant 라는 time 객체로 바꿔줘야함.
         Duration tokenDuration = Duration.between(issuedAt.toInstant(), expiration.toInstant());
         Duration targetHour = Duration.ofHours(hour);
         // 토큰 수명이 목표 시간보다 작거나 같으면 true 반환
         return tokenDuration.compareTo(targetHour) <= 0;
-
     }
+
+    // J. 회원 탈퇴 시 토큰 삭제
+    public void deleteToken(Member member) {
+        // 1. 블랙 리스트 설정
+        Refresh refresh = refreshRepository.findByMemberId(member.getId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.CANT_FIND_REFRESH));
+        Claims info = getUserInfoFromToken(refresh.getAccessToken());
+        redisUtil.valueSet(
+            redisUtil.generateBlackListKey(refresh.getAccessToken()),
+            info.getSubject(),
+            Duration.ofMillis(info.getExpiration().getTime() - info.getIssuedAt().getTime()));
+        // 2. Redis에서 Refresh Token 지우기
+        refreshRepository.deleteById(member.getId());
+    }
+
 
 }

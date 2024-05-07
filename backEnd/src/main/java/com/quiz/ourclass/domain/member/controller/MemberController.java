@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -106,5 +107,11 @@ public class MemberController implements MemberControllerDocs {
     public ResponseEntity<ResultResponse<?>> updateProfile(
         @ModelAttribute MemberUpdateRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity<ResultResponse<?>> deleteMe() {
+        memberService.deleteMe();
+        return ResponseEntity.ok(ResultResponse.success("멤버 삭제 성공"));
     }
 }

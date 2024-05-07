@@ -18,7 +18,6 @@ public class JwtLogOutHandler implements LogoutHandler {
     private final RedisUtil redisUtil;
     private final JwtUtil jwtUtil;
     private final FilterResponse filterResponse;
-    private final String PREFIX = "AT:";
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response,
@@ -28,7 +27,7 @@ public class JwtLogOutHandler implements LogoutHandler {
         try {
             if (valid == 0) {
                 Claims info = jwtUtil.getUserInfoFromToken(accessToken);
-                redisUtil.valueSet(generateKey(accessToken), info.getSubject(),
+                redisUtil.valueSet(redisUtil.generateBlackListKey(accessToken), info.getSubject(),
                     Duration.ofMillis(
                         info.getExpiration().getTime() - info.getIssuedAt().getTime()));
                 request.setAttribute("name", info.getSubject());
@@ -42,8 +41,5 @@ public class JwtLogOutHandler implements LogoutHandler {
         }
     }
 
-    private String generateKey(String accessToken) {
-        return PREFIX + accessToken;
-    }
 
 }

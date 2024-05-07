@@ -22,6 +22,7 @@ public enum ErrorCode {
     OIDC_INVALID_TOKEN(HttpStatus.BAD_REQUEST, "잘못된 OIDC 토큰 입니다. "),
     CERTIFICATION_FAILED(HttpStatus.SERVICE_UNAVAILABLE, "검증에 실패했습니다."),
     DEFAULT_IMAGES_UNDER_4(HttpStatus.INTERNAL_SERVER_ERROR, "기본 이미지의 개수가 4보다 적습니다."),
+    FAILED_DELETING_MEMBER(HttpStatus.BAD_REQUEST, "멤버 삭제에 실패 했습니다."),
 
 
     //security
