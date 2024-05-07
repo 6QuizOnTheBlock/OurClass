@@ -20,7 +20,7 @@ class OrganizationViewModel @Inject constructor(
     private val getOrganizationListUseCase: GetOrganizationListUseCase,
     private val saveSelectedOrganizationIdUseCase: SaveSelectedOrganizationIdUseCase,
     private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
-) : BaseViewModel<ClassListState, ClassListEffect>(ClassListState()) {
+) : BaseViewModel<OrganizationListState, OrganizationListEffect>(OrganizationListState()) {
 
 
     fun initData() {
