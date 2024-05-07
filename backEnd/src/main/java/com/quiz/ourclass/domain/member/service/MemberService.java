@@ -188,8 +188,7 @@ public class MemberService {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         jwtUtil.deleteToken(member);
-        memberRepository.delete(userAccessUtil.getMember()
-            .orElseThrow(() -> new GlobalException(ErrorCode.FAILED_DELETING_MEMBER)));
+        memberRepository.delete(member);
     }
 
 
