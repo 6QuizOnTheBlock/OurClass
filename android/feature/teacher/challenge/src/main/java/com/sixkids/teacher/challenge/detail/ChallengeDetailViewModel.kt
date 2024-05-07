@@ -1,6 +1,7 @@
 package com.sixkids.teacher.challenge.detail
 
 import androidx.lifecycle.SavedStateHandle
+import com.sixkids.model.AcceptStatus
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.Group
 import com.sixkids.model.MemberSimple
@@ -19,19 +20,24 @@ class ChallengeDetailViewModel @Inject constructor(
 ) {
     private val challengeId = savedStateHandle.get<Int>(CHALLENGE_ID_NAME)!!
 
+
     init {
         intent {
             copy(challengeDetail = ChallengeDetail(
                 title = "4월 22일 함께 달리기$challengeId",
-                description = "문화의 날을 맞아 우리반 친구들 3명이상 만나서 영화를 보자!",
-                startDate = LocalDateTime.now(),
-                endDate = LocalDateTime.now(),
+                content = "문화의 날을 맞아 우리반 친구들 3명이상 만나서 영화를 보자!",
+                startTime = LocalDateTime.now(),
+                endTime = LocalDateTime.now(),
                 reportList = List(10) {
                     Report(
                         content = "4명 다 모여서 쿵푸팬더 4 다같이 봤어요!!",
-                        startDate = LocalDateTime.now(),
-                        endDate = LocalDateTime.now(),
-                        accepted = it % 2 == 0,
+                        startTime = LocalDateTime.now(),
+                        endTime = LocalDateTime.now(),
+                        acceptStatus = when (it % 3) {
+                            0 -> AcceptStatus.BEFORE
+                            1 -> AcceptStatus.APPROVE
+                            else -> AcceptStatus.REFUSE
+                        },
                         file = "https://file2.nocutnews.co.kr/newsroom/image/2024/04/05/202404052218304873_0.jpg",
                         group = Group(
                             leaderId = 1,

@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +35,7 @@ import com.sixkids.designsystem.component.item.UlbanReportItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.AcceptStatus
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.Group
 import com.sixkids.model.MemberSimple
@@ -74,8 +75,8 @@ fun ChallengeDetailScreen(
             leftIcon = com.sixkids.designsystem.R.drawable.hifive,
             title = stringResource(id = R.string.hifive_challenge),
             content = uiState.challengeDetail.title,
-            topDescription = "${uiState.challengeDetail.startDate.formatToMonthDayTime()} ~ ${uiState.challengeDetail.endDate.formatToMonthDayTime()}",
-            bottomDescription = uiState.challengeDetail.description,
+            topDescription = "${uiState.challengeDetail.startTime.formatToMonthDayTime()} ~ ${uiState.challengeDetail.endTime.formatToMonthDayTime()}",
+            bottomDescription = uiState.challengeDetail.content,
             color = Red,
             expanded = !isScrolled,
         )
@@ -99,12 +100,12 @@ fun ChallengeDetailScreen(
                     text = stringResource(
                         id = R.string.challenge_report_state,
                         uiState.challengeDetail.teamCount,
-                        uiState.challengeDetail.userCount
+                        uiState.challengeDetail.headCount
                     ),
                     style = UlbanTypography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }
-            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             if (uiState.challengeDetail.reportList.isEmpty()) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -124,8 +125,8 @@ fun ChallengeDetailScreen(
                 ) {
                     items(uiState.challengeDetail.reportList) { report ->
                         UlbanReportItem(
-                            startDate = report.startDate,
-                            endDate = report.endDate,
+                            startDate = report.startTime,
+                            endDate = report.endTime,
                             file = report.file,
                             memberList = report.group.studentList.map {
                                 object : DisplayableMember {
@@ -138,7 +139,7 @@ fun ChallengeDetailScreen(
                                 }
                             },
                             content = report.content,
-                            accepted = report.accepted,
+                            accepted = report.acceptStatus != AcceptStatus.BEFORE,
                             onAccept = { },
                             onReject = { }
                         )
@@ -158,15 +159,19 @@ fun ChallengeDetailScreenPreview() {
             uiState = ChallengeDetailState(
                 challengeDetail = ChallengeDetail(
                     title = "4월 22일 함께 달리기",
-                    description = "문화의 날을 맞아 우리반 친구들 3명이상 만나서 영화를 보자!",
-                    startDate = LocalDateTime.now(),
-                    endDate = LocalDateTime.now(),
+                    content = "문화의 날을 맞아 우리반 친구들 3명이상 만나서 영화를 보자!",
+                    startTime = LocalDateTime.now(),
+                    endTime = LocalDateTime.now(),
                     reportList = List(10) {
                         Report(
                             content = "4명 다 모여서 쿵푸팬더 4 다같이 봤어요!!",
-                            startDate = LocalDateTime.now(),
-                            endDate = LocalDateTime.now(),
-                            accepted = it % 2 == 0,
+                            startTime = LocalDateTime.now(),
+                            endTime = LocalDateTime.now(),
+                            acceptStatus = when(it % 3) {
+                                0 -> AcceptStatus.APPROVE
+                                1 -> AcceptStatus.REFUSE
+                                else -> AcceptStatus.BEFORE
+                            },
                             file = "https://file2.nocutnews.co.kr/newsroom/image/2024/04/05/202404052218304873_0.jpg",
                             group = Group(
                                 leaderId = 1,
