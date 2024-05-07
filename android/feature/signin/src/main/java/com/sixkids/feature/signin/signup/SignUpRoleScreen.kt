@@ -20,12 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.component.screen.UlbanTopSection
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
@@ -69,33 +71,12 @@ fun SignUpScreen(
             .fillMaxSize()
             .padding(21.dp)
     ) {
-        TopSection(onBackClick)
+        UlbanTopSection(stringResource(id = com.sixkids.signin.R.string.signup_role_title), onBackClick = onBackClick)
         BodySection(
             onCardClick = onTeacherClick,
             modifier = Modifier
                 .weight(1f)
                 .padding(0.dp, 0.dp, 0.dp, 40.dp)
-        )
-    }
-}
-
-@Composable
-fun TopSection(onBackClick: () -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrow_back),
-            contentDescription = "back button",
-            modifier = Modifier.clickable {
-                onBackClick()
-            }
-        )
-
-        Text(
-            text = "어떤 회원으로 가입할까요?",
-            style = UlbanTypography.titleMedium,
-            modifier = Modifier.padding(top = 20.dp)
         )
     }
 }
