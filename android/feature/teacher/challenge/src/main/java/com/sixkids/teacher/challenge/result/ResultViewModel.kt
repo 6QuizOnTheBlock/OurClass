@@ -40,5 +40,8 @@ class ResultViewModel @Inject constructor(
         postSideEffect(ResultEffect.ShowResultDialog)
     }
 
+    fun navigateToChallengeHistory() {
+        postSideEffect(ResultEffect.NavigateToChallengeHistory)
+    }
 
 }

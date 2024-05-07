@@ -18,6 +18,14 @@ fun NavController.navigateChallengeHistory() {
     navigate(ChallengeRoute.defaultRoute)
 }
 
+fun NavController.navigatePopupToHistory() {
+    navigate(ChallengeRoute.defaultRoute) {
+        popUpTo(ChallengeRoute.defaultRoute){
+            inclusive = true
+        }
+    }
+}
+
 fun NavController.navigateChallengeDetail(challengeId: Int) {
     navigate(ChallengeRoute.detailRoute(challengeId))
 }
@@ -32,6 +40,7 @@ fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String
 
 fun NavGraphBuilder.challengeNavGraph(
     padding: PaddingValues,
+    navigateChallengeHistory: () -> Unit,
     navigateChallengeDetail: (Int) -> Unit,
     navigateChallengeCreatedResult: (Int, String) -> Unit,
     navigateCreateChallenge: () -> Unit,
@@ -73,6 +82,7 @@ fun NavGraphBuilder.challengeNavGraph(
         )
     ) {
         ResultRoute(
+            navigateToChallengeHistory = navigateChallengeHistory,
             handleException = handleException
         )
     }

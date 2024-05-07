@@ -98,6 +98,7 @@ fun MainScreen(
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
                 navigateChallengeCreatedResult = navigator::navigateChallengeCreatedResult,
+                navigateChallengeHistory = navigator::navigatePopupToHistory,
                 handleException = viewModel::handleException,
                 showSnackbar = viewModel::onShowSnackbar,
                 navigateUp = navigator::popBackStack,

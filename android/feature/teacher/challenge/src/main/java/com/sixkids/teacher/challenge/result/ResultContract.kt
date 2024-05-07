@@ -12,6 +12,8 @@ data class ResultState(
 
 sealed interface ResultEffect : SideEffect {
     data object ShowResultDialog : ResultEffect
+    data object NavigateToChallengeHistory : ResultEffect
+
     data class HandleException(
         val throwable: Throwable, val retry: () -> Unit
     ) : ResultEffect

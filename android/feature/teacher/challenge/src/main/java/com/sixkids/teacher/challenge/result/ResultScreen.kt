@@ -1,6 +1,7 @@
 package com.sixkids.teacher.challenge.result
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun ResultRoute(
     viewModel: ResultViewModel = hiltViewModel(),
+    navigateToChallengeHistory: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -47,12 +49,14 @@ fun ResultRoute(
                 showDialog = true
             }
             is ResultEffect.HandleException -> handleException(it.throwable, it.retry)
+            ResultEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
         }
     }
 
     ResultScreen(
         uiState = uiState,
         onCardClick = viewModel::getChallengeInfo,
+        onClickConfirm = viewModel::navigateToChallengeHistory
     )
 
     with(uiState.challenge) {
@@ -76,7 +80,8 @@ fun ResultRoute(
 fun ResultScreen(
     paddingValues: PaddingValues = PaddingValues(32.dp),
     uiState: ResultState = ResultState(),
-    onCardClick: () -> Unit = {}
+    onCardClick: () -> Unit = {},
+    onClickConfirm: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -97,7 +102,9 @@ fun ResultScreen(
             onClick = onCardClick
         )
         Image(
-            modifier = Modifier.size(160.dp),
+            modifier = Modifier.size(160.dp).clickable {
+                onClickConfirm()
+            },
             painter = painterResource(id = R.drawable.challenge_created_success),
             contentDescription = "challenge success"
         )

@@ -17,6 +17,7 @@ import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
+import com.sixkids.teacher.challenge.navigation.navigatePopupToHistory
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -115,6 +116,10 @@ class MainNavigator(
 
     fun navigateChallengeHistory() {
         navController.navigateChallengeHistory()
+    }
+
+    fun navigatePopupToHistory() {
+        navController.navigatePopupToHistory()
     }
 
     fun navigateChallengeDetail(challengeId: Int) {
