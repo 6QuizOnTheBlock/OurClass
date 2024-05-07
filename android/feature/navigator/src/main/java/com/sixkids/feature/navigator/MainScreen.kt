@@ -37,6 +37,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
+import com.sixkids.student.board.navigation.studentHomeNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
@@ -73,6 +74,7 @@ fun MainScreen(
                 modifier = Modifier,
                 selectedTab = navigator.currentTab ?: MainNavigationTab.HOME,
                 itemClick = navigator::navigate,
+                bottomTavItems = navigator.bottomTabItems?.value
             )
         }
     ) { innerPadding ->
@@ -128,6 +130,10 @@ fun MainScreen(
                 navigateToSignIn = navigator::navigateSignIn,
             )
 
+            studentHomeNavGraph(
+                padding = innerPadding,
+            )
+
         }
         with(uiState) {
             UlbanSnackbar(
@@ -149,6 +155,7 @@ fun BottomNav(
     modifier: Modifier,
     itemClick: (MainNavigationTab) -> Unit = {},
     selectedTab: MainNavigationTab,
+    bottomTavItems: List<MainNavigationTab>? = null
 ) {
     val selectedItem = rememberUpdatedState(newValue = selectedTab)
 
@@ -166,7 +173,7 @@ fun BottomNav(
                 modifier = modifier,
                 containerColor = Cream,
             ) {
-                MainNavigationTab.entries.forEach { item ->
+                bottomTavItems?.forEach{ item ->
                     NavigationBarItem(
                         icon = {
                             Icon(
