@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,7 +43,10 @@ fun CommentItem(
             containerColor = if (isRecomment) GrayLight else Color.Transparent
         ),
     ) {
-        Column {
+        Column(
+            modifier = modifier
+                .padding(start = 10.dp)
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -82,7 +86,7 @@ fun CommentItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = commentString,
+                text = dateString,
                 style = UlbanTypography.bodySmall.copy(
                     color = Gray
                 )
@@ -98,20 +102,20 @@ fun CommentItemPreview() {
     Column {
         CommentItem(
             writer = "오하빈",
-            dateString = "2021/09/01 12:00",
+            dateString = "09/01 12:00",
             writerImageUrl = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png",
             commentString = "댓글 내용",
             deleteOnclick = {}
         )
         CommentItem(
             writer = "오하빈",
-            dateString = "2021/09/01 12:00",
+            dateString = "09/01 12:00",
             commentString = "댓글 내용",
             writerImageUrl = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png",
         )
         CommentItem(
             writer = "오하빈",
-            dateString = "2021/09/01 12:00",
+            dateString = "09/01 12:00",
             commentString = "댓글 내용",
             writerImageUrl = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png",
             isRecomment = true,

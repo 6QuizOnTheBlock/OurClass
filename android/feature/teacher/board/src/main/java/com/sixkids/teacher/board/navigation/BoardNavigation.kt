@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sixkids.teacher.board.main.BoardMainRoute
 import com.sixkids.teacher.board.post.PostRoute
+import com.sixkids.teacher.board.postdetail.PostDetailRoute
 import com.sixkids.teacher.board.postwrite.PostWriteRoute
 
 fun NavController.navigateBoard(navOptions: NavOptions) {
@@ -19,6 +20,10 @@ fun NavController.navigatePost() {
 
 fun NavController.navigatePostWrite() {
     navigate(BoardRoute.postWriteRoute)
+}
+
+fun NavController.navigatePostDetail() {
+    navigate(BoardRoute.postDetailRoute)
 }
 
 fun NavGraphBuilder.boardNavGraph(
@@ -39,10 +44,17 @@ fun NavGraphBuilder.boardNavGraph(
     composable(BoardRoute.postWriteRoute){
         PostWriteRoute(padding)
     }
+
+    composable(BoardRoute.postDetailRoute){
+        PostDetailRoute(
+            padding = padding
+        )
+    }
 }
 
 object BoardRoute {
     const val defaultRoute = "board"
     const val postRoute = "post"
     const val postWriteRoute = "post_write"
+    const val postDetailRoute = "post_detail"
 }
