@@ -5,13 +5,19 @@ import static com.quiz.ourclass.domain.relay.entity.QRelayMember.relayMember;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.response.RelayMemberResponse;
+import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySimpleResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -65,5 +71,46 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
             relayCondition.and(relay.id.in(subQuery));
         }
         return relayCondition;
+    }
+
+    @Override
+    public RelayResponse getRelayDetail(long id) {
+        RelayResponse relayResponse = jpaQueryFactory.select(Projections.constructor(
+                RelayResponse.class,
+                Projections.constructor(
+                    RelaySimpleResponse.class,
+                    relay.id,
+                    relay.startRunner.receiveTime,
+                    relay.lastRunner.receiveTime,
+                    relay.lastRunner.turn,
+                    relay.lastRunner.curMember.name
+                ),
+                Expressions.constant(new ArrayList<RelayMemberResponse>())
+            ))
+            .from(relay)
+            .join(relay)
+            .where(relay.id.eq(id))
+            .fetchOne();
+
+        List<RelayMemberResponse> runners = jpaQueryFactory.select(Projections.constructor(
+                RelayMemberResponse.class,
+                relayMember.id,
+                relayMember.turn,
+                Projections.constructor(
+                    MemberSimpleDTO.class,
+                    relayMember.curMember.id,
+                    relayMember.curMember.name,
+                    relayMember.curMember.profileImage
+                ),
+                relayMember.receiveTime,
+                relayMember.question,
+                relayMember.endStatus
+            ))
+            .from(relayMember)
+            .join(relayMember.relay, relay)
+            .where(relay.id.eq(id))
+            .fetch();
+        Objects.requireNonNull(relayResponse).runners().addAll(runners);
+        return relayResponse;
     }
 }
