@@ -73,10 +73,10 @@ fun OrganizationListRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            ClassListEffect.NavigateToNewClass -> navigateToNewClass()
-            ClassListEffect.NavigateToProfile -> navigateToProfile()
-            ClassListEffect.NavigateToHome -> navigateToHome()
-            is ClassListEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
+            OrganizationListEffect.NavigateToNewClass -> navigateToNewClass()
+            OrganizationListEffect.NavigateToProfile -> navigateToProfile()
+            OrganizationListEffect.NavigateToHome -> navigateToHome()
+            is OrganizationListEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
     }
 
@@ -98,7 +98,7 @@ fun OrganizationListRoute(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OrganizationListScreen(
-    uiState: ClassListState = ClassListState(),
+    uiState: OrganizationListState = OrganizationListState(),
     onNewClassClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onClassClick: (Int) -> Unit = {}
