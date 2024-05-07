@@ -8,9 +8,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.quiz.ourclass.domain.relay.dto.RelaySimpleDTO;
-import com.quiz.ourclass.domain.relay.dto.RelaySliceRequest;
-import com.quiz.ourclass.domain.relay.dto.RelaySliceResponse;
+import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.response.RelaySimpleResponse;
+import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +26,8 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
         Pageable pageable = PageRequest.of(request.page(), request.size());
         BooleanBuilder relayCondition = getRelaysBooleanBuilder(request);
 
-        List<RelaySimpleDTO> relays = jpaQueryFactory.select(Projections.constructor(
-                RelaySimpleDTO.class,
+        List<RelaySimpleResponse> relays = jpaQueryFactory.select(Projections.constructor(
+                RelaySimpleResponse.class,
                 relay.id,
                 relay.startRunner.receiveTime,
                 relay.lastRunner.receiveTime,

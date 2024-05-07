@@ -1,10 +1,10 @@
-package com.quiz.ourclass.domain.relay.dto;
+package com.quiz.ourclass.domain.relay.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
 @Schema(description = "이어달리기 DTO")
-public record RelaySimpleDTO(
+public record RelaySimpleResponse(
     @Schema(description = "이어달리기 ID")
     long id,
     @Schema(description = "이어달리기 시작 시간")

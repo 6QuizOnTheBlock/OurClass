@@ -1,7 +1,7 @@
 package com.quiz.ourclass.domain.relay.controller;
 
-import com.quiz.ourclass.domain.relay.dto.RelayRequest;
-import com.quiz.ourclass.domain.relay.dto.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
+import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

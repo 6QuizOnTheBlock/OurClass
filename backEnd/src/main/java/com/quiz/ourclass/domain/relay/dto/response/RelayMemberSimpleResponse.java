@@ -1,4 +1,4 @@
-package com.quiz.ourclass.domain.relay.dto;
+package com.quiz.ourclass.domain.relay.dto.response;
 
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import io.swagger.v3.oas.annotations.media.Schema;

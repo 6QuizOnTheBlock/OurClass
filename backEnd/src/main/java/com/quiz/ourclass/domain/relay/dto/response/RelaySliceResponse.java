@@ -1,4 +1,4 @@
-package com.quiz.ourclass.domain.relay.dto;
+package com.quiz.ourclass.domain.relay.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -14,7 +14,7 @@ public record RelaySliceResponse(
     @Schema(description = "마지막 페이지 여부")
     boolean last,
     @Schema(description = "이어달리기 목록")
-    List<RelaySimpleDTO> relays
+    List<RelaySimpleResponse> relays
 ) {
 
 }
