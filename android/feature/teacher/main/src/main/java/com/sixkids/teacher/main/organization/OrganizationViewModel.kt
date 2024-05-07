@@ -1,9 +1,11 @@
 package com.sixkids.teacher.main.organization
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetOrganizationListUseCase
 import com.sixkids.domain.usecase.organization.SaveSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.domain.usecase.user.UpdateFCMTokenUseCase
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,11 +13,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "D107"
 @HiltViewModel
 class OrganizationViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getOrganizationListUseCase: GetOrganizationListUseCase,
-    private val saveSelectedOrganizationIdUseCase: SaveSelectedOrganizationIdUseCase
+    private val saveSelectedOrganizationIdUseCase: SaveSelectedOrganizationIdUseCase,
+    private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
 ) : BaseViewModel<ClassListState, ClassListEffect>(ClassListState()) {
 
     fun initData() {
@@ -55,5 +59,12 @@ class OrganizationViewModel @Inject constructor(
         }
         postSideEffect(ClassListEffect.NavigateToHome)
     }
-}
 
+    fun onTokenRefresh(fcmToken: String) {
+        viewModelScope.launch {
+            updateFCMTokenUseCase(fcmToken).onFailure {
+                Log.d(TAG, "onTokenRefresh: 토큰 갱신 실패 ${it.message}")
+            }
+        }
+    }
+}

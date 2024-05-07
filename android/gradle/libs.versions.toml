@@ -52,6 +52,14 @@ accompanist = "0.34.0"
 #Lottie
 lottie = "6.4.0"
 
+#Google Services
+googleServices = "4.3.14"
+
+# Firebase
+firebaseBom = "33.0.0"
+firebaseMessagingKtx = "24.0.0"
+
+
 [libraries]
 # Dependencies of the included build-logic
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -121,6 +129,11 @@ permissions = { group = "com.google.accompanist", name = "accompanist-permission
 #Lottie
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
+#Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -129,6 +142,7 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 # Plugins defined by this project
 sixkids-android-application = { id = "sixkids.android.application", version = "unspecified" }
@@ -146,3 +160,6 @@ paging = ["paging", "paging-compose"]
 
 # Networking Bundle
 retrofit = ["retrofit", "moshi-converter", "moshi-kotlin", "okhttp", "okhttp-logginginterceptor"]
+
+# Firebase Bundle
+firebase = [ "firebase-analytics", "firebase-messaging"]

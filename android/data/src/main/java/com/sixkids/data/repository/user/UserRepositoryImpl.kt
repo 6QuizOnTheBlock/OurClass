@@ -13,7 +13,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val userLocalDataSource: UserLocalDataSource,
     private val tokenRepository: TokenRepository
-) : UserRepository{
+) : UserRepository {
     override suspend fun signIn(idToken: String): JwtToken {
         try {
             val response = userRemoteDataSource.signIn(idToken)
@@ -22,7 +22,7 @@ class UserRepositoryImpl @Inject constructor(
             tokenRepository.saveRefreshToken(response.refreshToken)
 
             return response
-        }catch (e: Exception){
+        } catch (e: Exception) {
             tokenRepository.saveIdToken(idToken)
             throw e
         }
@@ -43,7 +43,7 @@ class UserRepositoryImpl @Inject constructor(
             tokenRepository.deleteIdToken()
 
             return response
-        }catch (e: Exception){
+        } catch (e: Exception) {
             throw e
         }
     }
@@ -63,6 +63,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun signOut(): Boolean {
         return userLocalDataSource.signOut()
     }
+
+    override suspend fun updateFCMToken(fcmToken: String) =
+        userRemoteDataSource.updateFCMToken(fcmToken)
 
     override suspend fun autoSignIn(): JwtToken {
         try {
