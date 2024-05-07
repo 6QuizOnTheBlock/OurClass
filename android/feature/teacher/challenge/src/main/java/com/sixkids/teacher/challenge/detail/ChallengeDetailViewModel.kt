@@ -26,7 +26,7 @@ class ChallengeDetailViewModel @Inject constructor(
             getChallengeDetailUseCase(challengeId, groupId).onSuccess {
                 intent { copy(challengeDetail = it) }
             }.onFailure {
-//                postSideEffect(ChallengeDetailSideEffect.HandleException(it, ::getChallengeDetail))
+                postSideEffect(ChallengeDetailSideEffect.HandleException(it, ::getChallengeDetail))
             }
             intent { copy(isLoading = false) }
         }
