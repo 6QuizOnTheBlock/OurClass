@@ -25,7 +25,7 @@ public interface RelayControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content),
             @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content)
         })
-    @PostMapping()
+    @PostMapping
     ResponseEntity<ResultResponse<?>> createRelay(
         @RequestBody
         RelayRequest relayRequest

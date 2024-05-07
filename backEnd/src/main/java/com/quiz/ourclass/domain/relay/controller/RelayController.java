@@ -20,7 +20,7 @@ public class RelayController implements RelayControllerDocs {
 
     private final RelayService relayService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ResultResponse<?>> createRelay(@RequestBody RelayRequest relayRequest) {
         long relayId = relayService.createRelay(relayRequest);
         return ResponseEntity.ok(ResultResponse.success(relayId));
