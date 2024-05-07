@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
@@ -133,5 +134,12 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public ChallengeResponse getChallengeDetail(long id, Long groupId) {
         return challengeRepository.getChallengeDetail(id, groupId);
+    }
+
+    @Override
+    public ChallengeSimpleResponse getChallengeSimple(long id) {
+        Challenge challenge = challengeRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_NOT_FOUND));
+        return challengeMapper.challengeToChallengeSimpleResponse(challenge);
     }
 }

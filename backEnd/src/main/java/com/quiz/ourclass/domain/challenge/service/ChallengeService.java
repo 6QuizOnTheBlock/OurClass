@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
@@ -22,4 +23,6 @@ public interface ChallengeService {
     RunningChallengeResponse getRunningChallenge(long organizationId);
 
     ChallengeResponse getChallengeDetail(long id, Long groupId);
+
+    ChallengeSimpleResponse getChallengeSimple(long id);
 }
