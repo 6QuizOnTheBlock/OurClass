@@ -10,6 +10,12 @@ data class MemberInfoResponse(
     val role: String
 )
 
+data class MemberSimpleInfoResponse(
+    val id: Int,
+    val name: String,
+    val photo: String
+)
+
 internal fun MemberInfoResponse.toModel(): UserInfo {
     return UserInfo(
         id = id,
