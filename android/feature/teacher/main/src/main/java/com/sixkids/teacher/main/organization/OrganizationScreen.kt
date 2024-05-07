@@ -274,7 +274,7 @@ fun NewClassButton(
 
 @Composable
 @Preview(showBackground = true)
-fun ClassListScreenPreview() {
+fun OrganizationListScreenPreview() {
     OrganizationListScreen()
 }
 
