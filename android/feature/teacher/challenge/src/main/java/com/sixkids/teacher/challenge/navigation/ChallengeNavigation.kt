@@ -68,7 +68,9 @@ fun NavGraphBuilder.challengeNavGraph(
         route = ChallengeRoute.resultRoute,
         arguments = listOf(navArgument(CHALLENGE_ID_NAME) { type = NavType.IntType })
     ) {
-        ResultRoute()
+        ResultRoute(
+            handleException = handleException
+        )
     }
 
 }

@@ -25,4 +25,8 @@ interface ChallengeRepository {
         minCount: Int,
         groups: List<GroupSimple>
     ): Int
+
+    suspend fun getChallengeSimple(
+        challengeId: Int
+    ): Challenge
 }

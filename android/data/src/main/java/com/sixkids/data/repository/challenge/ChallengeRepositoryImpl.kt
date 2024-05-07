@@ -56,4 +56,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         groups
     )
 
+    override suspend fun getChallengeSimple(challengeId: Int): Challenge
+     = challengeRemoteDataSourceImpl.getChallengeSimple(challengeId)
+
 }

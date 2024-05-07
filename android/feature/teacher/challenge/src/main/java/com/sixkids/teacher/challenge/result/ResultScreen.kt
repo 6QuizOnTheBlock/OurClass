@@ -34,6 +34,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun ResultRoute(
     viewModel: ResultViewModel = hiltViewModel(),
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -50,6 +51,7 @@ fun ResultRoute(
             ResultEffect.ShowResultDialog -> {
                 showDialog = true
             }
+            is ResultEffect.HandleException -> handleException(it.throwable, it.retry)
         }
     }
 
