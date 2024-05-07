@@ -21,7 +21,7 @@ class ChallengeHistoryViewModel @Inject constructor(
 ) {
     var challengeHistory: Flow<PagingData<Challenge>>? = null
 
-    fun navigateChallengeDetail(challengeId: Int) = postSideEffect(
+    fun navigateChallengeDetail(challengeId: Long) = postSideEffect(
         ChallengeHistoryEffect.NavigateToChallengeDetail(challengeId)
     )
 

@@ -27,5 +27,5 @@ interface ChallengeRepository {
         groups: List<GroupSimple>
     ): Long
 
-    suspend fun getChallengeDetail(challengeId: Long, groupId: Long): ChallengeDetail
+    suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail
 }

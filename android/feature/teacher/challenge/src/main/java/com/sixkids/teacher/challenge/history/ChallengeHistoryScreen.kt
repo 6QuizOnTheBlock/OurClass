@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,10 +36,11 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Challenge
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (Long, Long?) -> Unit,
     navigateToCreate: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -53,9 +54,16 @@ fun ChallengeRoute(
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(sideEffect.detailId)
+                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(
+                    sideEffect.challengeId,
+                    sideEffect.groupId
+                )
+
                 ChallengeHistoryEffect.NavigateToCreateChallenge -> navigateToCreate()
-                is ChallengeHistoryEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+                is ChallengeHistoryEffect.HandleException -> handleException(
+                    sideEffect.throwable,
+                    sideEffect.retry
+                )
             }
         }
     }
@@ -74,7 +82,7 @@ fun ChallengeRoute(
 fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
     challengeItems: LazyPagingItems<Challenge>? = null,
-    navigateToDetail: (Int) -> Unit = {},
+    navigateToDetail: (Long) -> Unit = {},
     navigateToCreate: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -127,7 +135,7 @@ fun ChallengeHistoryScreen(
                 ),
                 style = UlbanTypography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
-            Divider(modifier = Modifier.padding(vertical = 4.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
             if (challengeItems == null) {
                 Spacer(modifier = Modifier.weight(1f))

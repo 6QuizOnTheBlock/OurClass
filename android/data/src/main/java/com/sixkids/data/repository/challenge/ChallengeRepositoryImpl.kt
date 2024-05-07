@@ -57,7 +57,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         groups
     )
 
-    override suspend fun getChallengeDetail(challengeId: Long, groupId: Long): ChallengeDetail =
+    override suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail =
         challengeRemoteDataSourceImpl.getChallengeDetail(challengeId, groupId)
 
 }

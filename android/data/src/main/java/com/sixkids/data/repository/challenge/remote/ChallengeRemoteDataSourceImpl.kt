@@ -43,6 +43,6 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
         )
     ).getOrThrow().data
 
-    override suspend fun getChallengeDetail(challengeId: Long, groupId: Long): ChallengeDetail =
+    override suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail =
         challengeService.getChallengeDetail(challengeId, groupId).getOrThrow().data.toModel()
 }

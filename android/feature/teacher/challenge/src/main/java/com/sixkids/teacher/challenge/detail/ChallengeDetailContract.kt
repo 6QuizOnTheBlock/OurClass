@@ -10,4 +10,6 @@ data class ChallengeDetailState(
 ) : UiState
 
 sealed interface ChallengeDetailSideEffect : SideEffect {
+    data class HandleException(val throwable: Throwable, val retry: () -> Unit) :
+        ChallengeDetailSideEffect
 }

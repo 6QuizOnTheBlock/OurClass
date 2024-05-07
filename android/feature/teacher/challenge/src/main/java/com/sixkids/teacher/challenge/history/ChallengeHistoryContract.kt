@@ -11,7 +11,7 @@ data class ChallengeHistoryState(
 ) : UiState
 
 sealed interface ChallengeHistoryEffect : SideEffect {
-    data class NavigateToChallengeDetail(val detailId: Int) : ChallengeHistoryEffect
+    data class NavigateToChallengeDetail(val challengeId: Long, val groupId: Long? = null) : ChallengeHistoryEffect
     data object NavigateToCreateChallenge : ChallengeHistoryEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ChallengeHistoryEffect
 }

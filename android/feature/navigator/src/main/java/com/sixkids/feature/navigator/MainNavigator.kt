@@ -116,8 +116,8 @@ class MainNavigator(
         navController.navigateChallengeHistory()
     }
 
-    fun navigateChallengeDetail(challengeId: Int) {
-        navController.navigateChallengeDetail(challengeId)
+    fun navigateChallengeDetail(challengeId: Long, groupId: Long?) {
+        navController.navigateChallengeDetail(challengeId, groupId)
     }
 
     fun navigateCreateChallenge() {
