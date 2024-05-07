@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.component.screen.LoadingScreen
+import com.sixkids.designsystem.component.screen.UlbanTopSection
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Cream
@@ -131,7 +133,7 @@ fun SignUpPhotoScreen(
                 .fillMaxSize()
                 .padding(21.dp)
         ) {
-            SignUpPhotoTopSection(onBackClick)
+            UlbanTopSection(stringResource(id = com.sixkids.signin.R.string.signup_photo_title), onBackClick)
 
             Spacer(modifier = Modifier.height(60.dp))
 
@@ -182,25 +184,6 @@ fun SignUpPhotoScreen(
         if (uiState.isLoading){
             LoadingScreen()
         }
-    }
-}
-
-@Composable
-fun SignUpPhotoTopSection(onDoneClick: () -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_arrow_back),
-            contentDescription = "back button",
-            modifier = Modifier.clickable { onDoneClick() }
-        )
-
-        Text(
-            text = "프로필 사진을 선택하세요",
-            style = UlbanTypography.titleMedium,
-            modifier = Modifier.padding(top = 20.dp)
-        )
     }
 }
 

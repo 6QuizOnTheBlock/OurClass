@@ -39,14 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.sixkids.designsystem.R
+import com.sixkids.designsystem.R as DesignSystemR
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.screen.LoadingScreen
+import com.sixkids.designsystem.component.screen.UlbanTopSection
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.RedDark
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.teacher.main.R
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import java.io.File
@@ -104,13 +106,13 @@ fun TeacherProfileRoute(
         uiState = uiState,
         onClickPhoto = { resId ->
             when (resId) {
-                R.drawable.camera ->
+                DesignSystemR.drawable.camera ->
                     launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-                R.drawable.teacher_man ->
+                DesignSystemR.drawable.teacher_man ->
                     viewModel.onProfileDefaultPhotoSelected(resId, Gender.MAN)
 
-                R.drawable.teacher_woman ->
+                DesignSystemR.drawable.teacher_woman ->
                     viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
             }
         },
@@ -133,8 +135,8 @@ fun TeacherProfileScreen(
     onSignOutClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
-    val imageMan = R.drawable.teacher_man
-    val imageWoman = R.drawable.teacher_woman
+    val imageMan = DesignSystemR.drawable.teacher_man
+    val imageWoman = DesignSystemR.drawable.teacher_woman
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -142,7 +144,10 @@ fun TeacherProfileScreen(
                 .fillMaxSize()
                 .padding(21.dp)
         ) {
-            SignUpPhotoTopSection(uiState.name, onBackClick)
+            UlbanTopSection(
+                stringResource(id = R.string.profile_welcome, uiState.name),
+                onBackClick
+            )
 
             Spacer(modifier = Modifier.height(60.dp))
 
@@ -182,7 +187,7 @@ fun TeacherProfileScreen(
                         .padding(10.dp)
                         .weight(1f)
                         .aspectRatio(1f),
-                    img = R.drawable.camera,
+                    img = DesignSystemR.drawable.camera,
                     onClickPhoto = onClickPhoto
                 )
             }
@@ -204,7 +209,7 @@ fun SignUpPhotoTopSection(name: String, onDoneClick: () -> Unit) {
         horizontalAlignment = Alignment.Start,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_arrow_back),
+            painter = painterResource(id = DesignSystemR.drawable.ic_arrow_back),
             contentDescription = "back button",
             modifier = Modifier.clickable { onDoneClick() }
         )
@@ -277,7 +282,7 @@ fun SelectedPhotoCard(
             if (originalImage == null && bitmap == null && defaultImage == null) {
                 Image(
                     painter = painterResource(
-                        id = R.drawable.teacher_man
+                        id = DesignSystemR.drawable.teacher_man
                     ),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),

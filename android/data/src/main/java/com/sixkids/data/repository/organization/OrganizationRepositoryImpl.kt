@@ -21,4 +21,8 @@ class OrganizationRepositoryImpl @Inject constructor(
     override suspend fun getSelectedOrganizationId(): Int {
         return organizationLocalDataSource.getSelectedOrganizationId()
     }
+
+    override suspend fun newOrganization(name: String): Long {
+        return organizationRemoteDataSource.newOrganization(name)
+    }
 }

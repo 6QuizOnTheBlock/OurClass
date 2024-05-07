@@ -5,14 +5,14 @@ import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
-sealed interface ClassListEffect: SideEffect{
-    data object NavigateToNewClass : ClassListEffect
-    data object NavigateToProfile : ClassListEffect
-    data object NavigateToHome : ClassListEffect
-    data class OnShowSnackBar(val tkn : SnackbarToken) : ClassListEffect
+sealed interface OrganizationListEffect: SideEffect{
+    data object NavigateToNewClass : OrganizationListEffect
+    data object NavigateToProfile : OrganizationListEffect
+    data object NavigateToHome : OrganizationListEffect
+    data class OnShowSnackBar(val tkn : SnackbarToken) : OrganizationListEffect
 }
 
-data class ClassListState(
+data class OrganizationListState(
     val isLoading: Boolean = false,
     val name: String = "",
     val profilePhoto: String = "",

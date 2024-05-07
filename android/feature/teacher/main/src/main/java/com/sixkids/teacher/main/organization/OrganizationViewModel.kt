@@ -22,6 +22,7 @@ class OrganizationViewModel @Inject constructor(
     private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
 ) : BaseViewModel<ClassListState, ClassListEffect>(ClassListState()) {
 
+
     fun initData() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
@@ -33,31 +34,31 @@ class OrganizationViewModel @Inject constructor(
                 .onSuccess {
                     intent { copy(name = it.name, profilePhoto = it.photo) }
                 }.onFailure {
-                    postSideEffect(ClassListEffect.OnShowSnackBar(SnackbarToken(message = it.message ?: "알 수 없는 오류가 발생했습니다.")))
+                    postSideEffect(OrganizationListEffect.OnShowSnackBar(SnackbarToken(message = it.message ?: "알 수 없는 오류가 발생했습니다.")))
                 }
             val organizationListResult = organizationListJob.await()
                 .onSuccess {
                     intent { copy(organizationList = it) }
                 }.onFailure {
-                    postSideEffect(ClassListEffect.OnShowSnackBar(SnackbarToken(message = it.message ?: "알 수 없는 오류가 발생했습니다.")))
+                    postSideEffect(OrganizationListEffect.OnShowSnackBar(SnackbarToken(message = it.message ?: "알 수 없는 오류가 발생했습니다.")))
                 }
             intent { copy(isLoading = false) }
         }
     }
 
     fun newOrganizationClick(){
-        postSideEffect(ClassListEffect.NavigateToNewClass)
+        postSideEffect(OrganizationListEffect.NavigateToNewClass)
     }
 
     fun profileClick(){
-        postSideEffect(ClassListEffect.NavigateToProfile)
+        postSideEffect(OrganizationListEffect.NavigateToProfile)
     }
 
     fun organizationClick(id: Int){
         viewModelScope.launch {
             saveSelectedOrganizationIdUseCase(id)
         }
-        postSideEffect(ClassListEffect.NavigateToHome)
+        postSideEffect(OrganizationListEffect.NavigateToHome)
     }
 
     fun onTokenRefresh(fcmToken: String) {
