@@ -6,6 +6,7 @@ data class Comment(
     val content: String,
     val createTime: String,
     val updateTime: String,
+    val recomments: List<Recomment>,
 )
 
 data class Recomment(
