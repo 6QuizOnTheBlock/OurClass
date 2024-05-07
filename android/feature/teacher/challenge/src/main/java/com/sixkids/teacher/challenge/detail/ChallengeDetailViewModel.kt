@@ -1,6 +1,7 @@
 package com.sixkids.teacher.challenge.detail
 
 import androidx.lifecycle.SavedStateHandle
+import com.sixkids.domain.usecase.challenge.GetChallengeDetailUseCase
 import com.sixkids.model.AcceptStatus
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.Group
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeDetailViewModel @Inject constructor(
+    private val getChallengeDetailUseCase: GetChallengeDetailUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ChallengeDetailState, ChallengeDetailSideEffect>(
     ChallengeDetailState()

@@ -2,6 +2,7 @@ package com.sixkids.domain.repository
 
 import androidx.paging.PagingData
 import com.sixkids.model.Challenge
+import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
 import com.sixkids.model.RunningChallenge
 import kotlinx.coroutines.flow.Flow
@@ -25,4 +26,6 @@ interface ChallengeRepository {
         minCount: Int,
         groups: List<GroupSimple>
     ): Long
+
+    suspend fun getChallengeDetail(challengeId: Long, groupId: Long): ChallengeDetail
 }

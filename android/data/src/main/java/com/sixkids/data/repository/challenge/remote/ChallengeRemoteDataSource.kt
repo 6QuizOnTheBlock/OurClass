@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.challenge.remote
 
+import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
 import com.sixkids.model.RunningChallenge
 import java.time.LocalDateTime
@@ -17,4 +18,6 @@ interface ChallengeRemoteDataSource {
         minCount: Int,
         groups: List<GroupSimple>
     ): Long
+
+    suspend fun getChallengeDetail(challengeId: Long, groupId: Long): ChallengeDetail
 }
