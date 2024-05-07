@@ -25,4 +25,6 @@ public interface ChallengeService {
     ChallengeResponse getChallengeDetail(long id, Long groupId);
 
     ChallengeSimpleResponse getChallengeSimple(long id);
+
+    void ChallengeClosing();
 }

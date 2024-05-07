@@ -93,12 +93,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public long createReport(ReportRequest reportRequest, MultipartFile file) {
         //TODO: 유저가 해당 그룹 리더가 맞는지 검사 로직 추가필요
+        ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
+        if (group.getChallenge().isEndStatus()) {
+            throw new GlobalException(ErrorCode.CHALLENGE_IS_END);
+        }
         String fileUrl;
         fileUrl = awsS3ObjectStorage.uploadFile(file);
 
         Report report = reportMapper.reportRequestToReport(reportRequest);
-        ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
         report.setFile(fileUrl);
         report.setChallengeGroup(group);
         report.setAcceptStatus(ReportType.BEFORE);
@@ -141,5 +144,17 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_NOT_FOUND));
         return challengeMapper.challengeToChallengeSimpleResponse(challenge);
+    }
+
+    @Transactional
+    @Override
+    public void ChallengeClosing() {
+        List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
+        challenges.forEach(challenge -> {
+            if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
+                challenge.setEndStatus(true);
+                challengeRepository.save(challenge);
+            }
+        });
     }
 }
