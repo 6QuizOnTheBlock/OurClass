@@ -3,6 +3,7 @@ package com.sixkids.data.api
 import com.sixkids.data.model.request.FcmRequest
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.MemberInfoResponse
+import com.sixkids.data.model.response.SignInResponse
 import com.sixkids.data.model.response.UpdateProfilePhotoResponse
 import com.sixkids.data.network.ApiResult
 import okhttp3.MultipartBody
@@ -25,6 +26,9 @@ interface MemberService {
         @Part file: MultipartBody.Part?,
         @PartMap data: HashMap<String, RequestBody>
     ): ApiResult<ApiResponse<UpdateProfilePhotoResponse>>
+
+    @PATCH("members/token")
+    suspend fun autoSignIn() : ApiResult<ApiResponse<SignInResponse>>
 
     @POST("members/fcm")
     suspend fun updateFCMToken(

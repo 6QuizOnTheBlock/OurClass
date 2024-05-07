@@ -66,4 +66,17 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateFCMToken(fcmToken: String) =
         userRemoteDataSource.updateFCMToken(fcmToken)
+
+    override suspend fun autoSignIn(): JwtToken {
+        try {
+            val response = userRemoteDataSource.autoSignIn()
+
+            tokenRepository.saveAccessToken(response.accessToken)
+            tokenRepository.saveRefreshToken(response.refreshToken)
+
+            return response
+        }catch (e: Exception){
+            throw e
+        }
+    }
 }

@@ -99,4 +99,12 @@ class UserRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun updateFCMToken(fcmToken: String) = memberService.updateFCMToken(FcmRequest(fcmToken)).getOrThrow().data
 
+    override suspend fun autoSignIn(): JwtToken {
+        val response = memberService.autoSignIn()
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveRole(response.getOrNull()?.data?.role ?: "error")
+        }
+        return response.getOrThrow().data.toModel()
+    }
+
 }
