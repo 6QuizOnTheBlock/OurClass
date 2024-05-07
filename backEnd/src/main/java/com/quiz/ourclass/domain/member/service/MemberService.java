@@ -18,6 +18,7 @@ import com.quiz.ourclass.domain.member.entity.SocialType;
 import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
+import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -44,6 +45,7 @@ public class MemberService {
     private final UserAccessUtil userAccessUtil;
     private final DefaultImageRepository defaultImageRepository;
     private final MemberMapper memberMapper;
+    private final RefreshRepository refreshRepository;
 
 
     public TokenDTO signUpProcess(MemberSignUpRequest request) {
@@ -180,6 +182,19 @@ public class MemberService {
                 .orElseThrow(() -> new GlobalException(ErrorCode.AWS_SERVER_ERROR)).getPhoto());
         }
         return memberRepository.save(member);
+    }
+
+    public void deleteMe() {
+        // 1. 멤버 특정
+        Member member = userAccessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        // 2. 멤버 Access Token 삭제
+        jwtUtil.deleteToken(member);
+        // 3. 멤버 FCM Token 삭제
+        redisUtil.delete("FCM_" + member.getId());
+        // 4. 멤버 최종 삭제
+        memberRepository.delete(member);
+
     }
 
 

@@ -5,10 +5,13 @@ import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface MemberControllerDocs {
 
 
-    @Operation(summary = "회원가입(기본 정보)",
+    @Operation(summary = "회원가입",
         responses = {
             @ApiResponse(responseCode = "200",
                 description = "회원가입에 성공하였습니다."
@@ -79,6 +82,12 @@ public interface MemberControllerDocs {
     @GetMapping("/")
     public ResponseEntity<ResultResponse<?>> rememberMe();
 
+    @Operation(summary = "프로필 이미지 수정",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message: \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberUpdateResponse.class)))
+        }
+    )
 
     @PatchMapping("/photo")
     public ResponseEntity<ResultResponse<?>> updateProfile(MemberUpdateRequest request);

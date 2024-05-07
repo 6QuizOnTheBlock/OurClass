@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class RedisUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final String PREFIX = "AT:";
 
     public void valueSet(String key, String value, Duration time) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
@@ -41,6 +42,11 @@ public class RedisUtil {
 
     public boolean hasKey(String key) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+
+
+    public String generateBlackListKey(String accessToken) {
+        return PREFIX + accessToken;
     }
 
 }

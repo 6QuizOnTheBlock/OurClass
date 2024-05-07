@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.member.entity;
 
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,16 +9,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE member set deleted_at = CONVERT_TZ(NOW(), 'UTC','Asia/Seoul') WHERE id = ?")
 public class Member {
 
     @Id
@@ -32,6 +36,8 @@ public class Member {
     SocialType socialType;
     @Enumerated(EnumType.STRING)
     Role role;
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
 
     @Builder
     private Member(String email, String name, String profileImage, SocialType socialType,
