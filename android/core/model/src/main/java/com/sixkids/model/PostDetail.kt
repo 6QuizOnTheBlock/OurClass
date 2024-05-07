@@ -5,6 +5,6 @@ data class PostDetail(
     val createTime: String,
     val title: String,
     val content: String,
-    val ImageUri: String,
-    val comments: List<Comment>,
+    val ImageUri: String = "",
+    val comments: List<Comment> = listOf(),
 )
