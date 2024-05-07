@@ -17,5 +17,7 @@ interface UserRepository {
 
     suspend fun signOut() : Boolean
 
+    suspend fun updateFCMToken(fcmToken: String)
+
     suspend fun autoSignIn(): JwtToken
 }

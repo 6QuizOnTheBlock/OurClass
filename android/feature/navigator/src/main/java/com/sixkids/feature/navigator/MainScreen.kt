@@ -1,5 +1,7 @@
 package com.sixkids.feature.navigator
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -18,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +31,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
@@ -54,7 +60,10 @@ fun MainScreen(
                 viewModel.onShowSnackbar(uiState.snackbarToken)
             }
         }
+    }
 
+    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        RequestNotificationPermission()
     }
 
     Scaffold(
@@ -119,9 +128,6 @@ fun MainScreen(
                 navigateToSignIn = navigator::navigateSignIn,
             )
 
-
-
-
         }
         with(uiState) {
             UlbanSnackbar(
@@ -185,4 +191,20 @@ fun BottomNav(
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun RequestNotificationPermission() {
+    val notificationPermissionState = rememberPermissionState(
+        permission = android.Manifest.permission.POST_NOTIFICATIONS
+    )
+
+    LaunchedEffect(Unit) {
+        if(notificationPermissionState.status.isGranted.not()) {
+            notificationPermissionState.launchPermissionRequest()
+        }
+    }
+
 }

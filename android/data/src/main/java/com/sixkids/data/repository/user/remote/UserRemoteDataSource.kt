@@ -14,4 +14,6 @@ interface UserRemoteDataSource {
     suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
 
     suspend fun autoSignIn(): JwtToken
+
+    suspend fun updateFCMToken(fcmToken: String)
 }

@@ -45,6 +45,8 @@ import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
@@ -90,6 +92,19 @@ fun OrganizationListRoute(
         onClassClick = { classId ->
             viewModel.organizationClick(classId)
         }
+    )
+
+
+
+    FirebaseMessaging.getInstance().token.addOnCompleteListener(
+        OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            if (task.result != null) {
+                viewModel.onTokenRefresh(task.result)
+            }
+        },
     )
 
 }
@@ -276,4 +291,3 @@ fun NewClassButton(
 fun OrganizationListScreenPreview() {
     OrganizationListScreen()
 }
-

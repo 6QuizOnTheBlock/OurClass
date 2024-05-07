@@ -6,6 +6,7 @@ import com.sixkids.data.network.TokenAuthenticator
 import com.sixkids.data.network.TokenInterceptor
 import com.sixkids.data.util.LocalDateAdapter
 import com.sixkids.data.util.LocalDateTimeAdapter
+import com.sixkids.data.util.UnitJsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -25,6 +26,7 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = "https://k10d107.p.ssafy.io/api/"
+
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class PublicOkHttpClient
@@ -56,6 +58,7 @@ object NetworkModule {
         Moshi.Builder()
             .add(LocalDateTimeAdapter())
             .add(LocalDateAdapter())
+            .add(UnitJsonAdapter())
             .addLast(KotlinJsonAdapterFactory())
             .build()
 
