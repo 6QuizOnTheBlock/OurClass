@@ -57,6 +57,7 @@ public class RelayServiceImpl implements RelayService {
             .build();
         relay.setCurrentRunner(relayMember);
         relay.setStartRunner(relayMember);
+        relay.setLastRunner(relayMember);
         relayMemberRepository.save(relayMember);
         return relay.getId();
     }
