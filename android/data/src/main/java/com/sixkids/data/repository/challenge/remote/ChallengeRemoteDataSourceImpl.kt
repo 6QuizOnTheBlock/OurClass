@@ -23,7 +23,7 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
         reword: Int,
         minCount: Int,
         groups: List<GroupSimple>,
-    ) = challengeService.createChallenge(
+    ): Int = challengeService.createChallenge(
         ChallengeCreateRequest(
             organizationId = organizationId,
             title = title,
