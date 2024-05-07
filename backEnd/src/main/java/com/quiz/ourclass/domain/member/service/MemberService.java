@@ -185,10 +185,16 @@ public class MemberService {
     }
 
     public void deleteMe() {
+        // 1. 멤버 특정
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        // 2. 멤버 Access Token 삭제
         jwtUtil.deleteToken(member);
+        // 3. 멤버 FCM Token 삭제
+        redisUtil.delete("FCM_" + member.getId());
+        // 4. 멤버 최종 삭제
         memberRepository.delete(member);
+
     }
 
 
