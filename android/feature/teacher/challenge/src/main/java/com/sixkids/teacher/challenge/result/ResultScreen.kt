@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,10 @@ fun ResultRoute(
         mutableStateOf(false)
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getChallengeInfo()
+    }
+
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             ResultEffect.ShowResultDialog -> {
@@ -48,23 +53,25 @@ fun ResultRoute(
         }
     }
 
+    ResultScreen(
+        uiState = uiState,
+        showDialog = viewModel::showResultDialog,
+    )
+
     with(uiState.challenge) {
         if (showDialog) {
             ChallengeDialog(
                 title = title,
                 content = content,
-                startTime = startTime.toString(),
-                endTime = endTime.toString(),
-                point = reword.toString()
+                startTime = startTime,
+                endTime = endTime,
+                point = reword,
+                onConfirmClick = {
+                    showDialog = false
+                }
             )
         }
     }
-
-    ResultScreen(
-        showDialog = viewModel::showResultDialog,
-    )
-
-
 }
 
 
@@ -100,20 +107,6 @@ fun ResultScreen(
     }
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewResultDialogContent() {
-    UlbanTheme {
-        ChallengeDialog(
-            title = "4월 22일 깜짝 미션",
-            content = "문화의 날을 맞아 우리반 친구들 3명 이상 모여 영화를 관람해봐요~",
-            startTime = "4월 22dlf 오후 4시 30분",
-            endTime = "4월 22일 오후 8시 30분",
-            point = "1,000 POINT",
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
