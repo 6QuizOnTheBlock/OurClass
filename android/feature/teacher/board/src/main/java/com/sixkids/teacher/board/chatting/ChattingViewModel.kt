@@ -9,4 +9,11 @@ class ChattingViewModel @Inject constructor(
 
 ) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()){
 
+    fun updateMessage(message: String){
+        intent { copy(message = message) }
+    }
+
+    fun sendMessage(message: String){
+
+    }
 }

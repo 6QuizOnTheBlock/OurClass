@@ -9,4 +9,7 @@ sealed interface ChattingSideEffect : SideEffect{
 
 data class ChattingState(
     val isLoading : Boolean = false,
+    val organizationName: String = "",
+    val memberCount : Int = 0,
+    val message: String = "",
 ) : UiState
