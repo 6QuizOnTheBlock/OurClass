@@ -1,6 +1,5 @@
 package com.sixkids.teacher.challenge.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -26,7 +25,6 @@ fun NavController.navigateCreateChallenge() {
 }
 
 fun NavGraphBuilder.challengeNavGraph(
-    padding: PaddingValues,
     navigateChallengeDetail: (Long, Long?) -> Unit,
     navigateCreateChallenge: () -> Unit,
     navigateUp: () -> Unit,
@@ -54,7 +52,9 @@ fun NavGraphBuilder.challengeNavGraph(
             }
         )
     ) {
-        ChallengeDetailRoute()
+        ChallengeDetailRoute(
+            handleException = handleException,
+        )
     }
 
     composable(route = ChallengeRoute.createRoute) {

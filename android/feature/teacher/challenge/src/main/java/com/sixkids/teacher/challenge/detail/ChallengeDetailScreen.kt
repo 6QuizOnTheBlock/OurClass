@@ -42,6 +42,7 @@ import com.sixkids.model.Group
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.Report
 import com.sixkids.teacher.challenge.R
+import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.ui.util.formatToMonthDayTime
 import java.time.LocalDateTime
 
@@ -49,8 +50,15 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeDetailRoute(
     viewModel: ChallengeDetailViewModel = hiltViewModel(),
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is ChallengeDetailSideEffect.HandleException -> handleException(it.throwable, it.retry)
+        }
+    }
 
     LaunchedEffect(key1 = Unit){
         viewModel.getChallengeDetail()
