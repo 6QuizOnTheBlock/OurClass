@@ -112,6 +112,6 @@ public class MemberController implements MemberControllerDocs {
     @DeleteMapping("/")
     public ResponseEntity<ResultResponse<?>> deleteMe() {
         memberService.deleteMe();
-        return ResponseEntity.ok(ResultResponse.success("멤버 삭제 성공"));
+        return ResponseEntity.ok(ResultResponse.success(null));
     }
 }
