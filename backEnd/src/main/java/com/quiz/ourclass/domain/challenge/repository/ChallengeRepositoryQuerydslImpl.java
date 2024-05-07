@@ -53,13 +53,22 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             .orderBy(challenge.id.desc())
             .fetch();
 
+        Long totalCount = jpaQueryFactory.select(
+                challenge.id.count()
+            )
+            .from(challenge)
+            .where(challengeCondition)
+            .fetchOne();
+
         boolean hasNext = false;
         if (challenges.size() > pageable.getPageSize()) {
             challenges.remove(pageable.getPageSize());
             hasNext = true;
         }
-        return ChallengeSliceResponse.builder().challenges(challenges).page(request.page()).size(
-                request.size())
+        return ChallengeSliceResponse.builder().challenges(challenges)
+            .totalCount(totalCount == null ? 0 : totalCount)
+            .page(request.page())
+            .size(request.size())
             .last(hasNext).build();
     }
 

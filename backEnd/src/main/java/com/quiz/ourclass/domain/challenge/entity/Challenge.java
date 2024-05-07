@@ -25,7 +25,7 @@ public class Challenge {
     Organization organization;
     String title;
     String content;
-    boolean progressStatus;
+    boolean endStatus;
     int reward;
     LocalDateTime startTime;
     LocalDateTime endTime;

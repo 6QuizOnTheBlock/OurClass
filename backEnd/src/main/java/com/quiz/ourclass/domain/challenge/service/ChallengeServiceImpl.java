@@ -60,6 +60,10 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public long createChallenge(ChallengeRequest challengeRequest) {
+        if (challengeRepository.existsByOrganizationIdAndEndStatusIsFalse(
+            challengeRequest.organizationId())) {
+            throw new GlobalException(ErrorCode.EXIST_RUNNING_CHALLENGE);
+        }
         Challenge challenge = challengeMapper.challengeRequestToChallenge(challengeRequest);
         Organization organization = organizationRepository.findById(
                 challengeRequest.organizationId())
@@ -115,7 +119,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public RunningChallengeResponse getRunningChallenge(long organizationId) {
         Organization organization = organizationRepository.findById(organizationId)
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
-        Challenge challenge = challengeRepository.findFirstByOrganizationAndProgressStatusIsTrue(
+        Challenge challenge = challengeRepository.findFirstByOrganizationAndEndStatusIsFalse(
                 organization)
             .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_CHALLENGE_NOT_FOUND));
         int waitingCount = challengeGroupRepository.countByChallengeAndCompleteStatusIsFalse(

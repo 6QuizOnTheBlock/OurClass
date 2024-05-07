@@ -59,6 +59,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             List<Organization> organizations = organizationRepository.findByManager(member);
             return organizations.stream()
                 .map(organizationMapper::organizationToOrganizationResponse)
+                .sorted((o1, o2) -> o2.createTime().compareTo(o1.createTime()))
                 .toList();
         }
         List<MemberOrganization> memberOrganizations = memberOrganizationRepository.findByMember(
@@ -66,6 +67,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         return memberOrganizations.stream()
             .map(MemberOrganization::getOrganization)
             .map(organizationMapper::organizationToOrganizationResponse)
+            .sorted((o1, o2) -> o2.createTime().compareTo(o1.createTime()))
             .toList();
     }
 
