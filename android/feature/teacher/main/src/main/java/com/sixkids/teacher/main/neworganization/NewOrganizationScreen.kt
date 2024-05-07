@@ -2,6 +2,7 @@ package com.sixkids.teacher.main.neworganization
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,6 +55,7 @@ fun NewOrganizationRoute(
 
 @Composable
 fun NewOrganizationScreen(
+    paddingValues: PaddingValues = PaddingValues(20.dp),
     uiState: NewOrganizationState = NewOrganizationState(),
     onNewClassClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
@@ -64,7 +66,7 @@ fun NewOrganizationScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(paddingValues)
     ) {
         Column(
             modifier = Modifier
@@ -82,7 +84,7 @@ fun NewOrganizationScreen(
             )
             UlbanUnderLineTextField(
                 text = uiState.name,
-                hint = "학교명을 입력해주세요",
+                hint = stringResource(id = R.string.new_organization_name_hint),
                 onTextChange = onUpdateName,
                 onIconClick = {
                     onUpdateName("")
@@ -96,7 +98,7 @@ fun NewOrganizationScreen(
             )
             UlbanUnderLineTextField(
                 text = uiState.grade,
-                hint = "학년을 입력해주세요",
+                hint = stringResource(id = R.string.new_organization_grade_hint),
                 inputTextType = InputTextType.GRADE,
                 onTextChange = onUpdateGrade,
                 onIconClick = {
@@ -111,7 +113,7 @@ fun NewOrganizationScreen(
             )
             UlbanUnderLineTextField(
                 text = uiState.classNo,
-                hint = "반을 입력해주세요",
+                hint = stringResource(id = R.string.new_organization_class_hint),
                 inputTextType = InputTextType.CLASS,
                 onTextChange = onUpdateClass,
                 onIconClick = {
