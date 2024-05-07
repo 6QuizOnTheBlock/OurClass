@@ -2,14 +2,18 @@ package com.quiz.ourclass.domain.relay.controller;
 
 import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,5 +43,18 @@ public interface RelayControllerDocs {
         })
     @GetMapping
     ResponseEntity<ResultResponse<?>> getRelays(RelaySliceRequest relaySliceRequest
+    );
+
+    @Operation(summary = "이어달리기 상세 조회",
+        description = "릴레이 참여 주자 내역까지 같이 응답 ",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = RelayResponse.class)))
+        })
+    @GetMapping("/{id}")
+    ResponseEntity<ResultResponse<?>> getRelayDetail(
+        @PathVariable
+        @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
+        long id
     );
 }
