@@ -198,7 +198,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.end_time),
+                        text = stringResource(R.string.please_input_end_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -251,7 +251,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.start_time),
+                        text = stringResource(R.string.please_input_start_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {
