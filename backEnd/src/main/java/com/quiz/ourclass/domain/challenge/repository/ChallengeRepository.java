@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ChallengeRepository extends JpaRepository<Challenge, Long>,
     ChallengeRepositoryQuerydsl {
 
-    Optional<Challenge> findFirstByOrganizationAndProgressStatusIsTrue(Organization organization);
+    Optional<Challenge> findFirstByOrganizationAndEndStatusIsFalse(Organization organization);
+
+    boolean existsByOrganizationIdAndEndStatusIsFalse(long organizationId);
 }
