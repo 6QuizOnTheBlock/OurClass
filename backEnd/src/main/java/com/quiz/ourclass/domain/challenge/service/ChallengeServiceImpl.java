@@ -27,6 +27,7 @@ import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +52,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeMapper challengeMapper;
     private final ChallengeGroupMapper challengeGroupMapper;
     private final ReportMapper reportMapper;
+    private final UserAccessUtil accessUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
 
     @Override
@@ -92,9 +94,13 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public long createReport(ReportRequest reportRequest, MultipartFile file) {
-        //TODO: 유저가 해당 그룹 리더가 맞는지 검사 로직 추가필요
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
             .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
+        if (group.getLeaderId() != member.getId()) {
+            throw new GlobalException(ErrorCode.NOT_CHALLENGE_GROUP_LEADER);
+        }
         if (group.getChallenge().isEndStatus()) {
             throw new GlobalException(ErrorCode.CHALLENGE_IS_END);
         }
