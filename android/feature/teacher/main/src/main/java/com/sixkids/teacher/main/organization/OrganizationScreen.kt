@@ -68,7 +68,6 @@ fun OrganizationListRoute(
     navigateToHome: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
-    val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->

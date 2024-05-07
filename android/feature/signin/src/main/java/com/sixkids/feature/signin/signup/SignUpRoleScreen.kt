@@ -1,6 +1,5 @@
 package com.sixkids.feature.signin.signup
 
-import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,9 +39,6 @@ fun SignUpRoute(
     navigateToSignUpPhoto: (Boolean) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val context = LocalContext.current
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
             is SignUpRoleEffect.NavigateToSignUpPhoto -> navigateToSignUpPhoto(sideEffect.isTeacher)
@@ -50,7 +46,6 @@ fun SignUpRoute(
     }
 
     SignUpScreen(
-        uiState = uiState,
         onTeacherClick = {
             viewModel.onTeacherClick(it)
         },
@@ -62,7 +57,6 @@ fun SignUpRoute(
 
 @Composable
 fun SignUpScreen(
-    uiState: SignUpRoleState = SignUpRoleState(),
     onTeacherClick: (Boolean) -> Unit = {},
     onBackClick : () -> Unit = {}
 ) {
