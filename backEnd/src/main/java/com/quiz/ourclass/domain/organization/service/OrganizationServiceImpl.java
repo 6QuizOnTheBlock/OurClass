@@ -1,5 +1,7 @@
 package com.quiz.ourclass.domain.organization.service;
 
+import com.quiz.ourclass.domain.chat.repository.ChatRoomRepository;
+import com.quiz.ourclass.domain.chat.service.ChatRoomService;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.member.mapper.MemberMapper;
@@ -14,6 +16,7 @@ import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.Duration;
@@ -29,14 +32,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
+    private final ChatRoomService chatRoomService;
     private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final OrganizationMapper organizationMapper;
     private final MemberMapper memberMapper;
     private final RedisUtil redisUtil;
     private final UserAccessUtil accessUtil;
-    private final static String REDIS_ORG_KEY = "ORGANIZATION:";
-    private final static int REDIS_ORG_ALIVE_MINUTE = 10;
 
     @Transactional
     @Override
@@ -48,7 +51,12 @@ public class OrganizationServiceImpl implements OrganizationService {
             .manager(member)
             .createTime(LocalDate.now())
             .build();
-        return organizationRepository.save(organization).getId();
+        Long orgId = organizationRepository.save(organization).getId();
+
+        //단체 채팅방 생성
+        chatRoomService.createChatRoom(organization);
+
+        return orgId;
     }
 
     @Override
@@ -78,12 +86,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         accessUtil.isOrganizationManager(member, id)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
-        String redisKey = REDIS_ORG_KEY + id;
+        String redisKey = ConstantUtil.REDIS_ORG_KEY + id;
         String code = redisUtil.valueGet(redisKey);
         if (code == null || code.isEmpty()) {
             Random random = new Random();
             code = String.valueOf(random.nextInt(1000000));
-            redisUtil.valueSet(redisKey, code, Duration.ofMinutes(REDIS_ORG_ALIVE_MINUTE));
+            redisUtil.valueSet(redisKey, code,
+                Duration.ofMinutes(ConstantUtil.REDIS_ORG_ALIVE_MINUTE));
         }
         return InviteCodeDTO.builder()
             .code(code)
@@ -93,7 +102,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional
     @Override
     public Long joinOrganization(long id, InviteCodeDTO inviteCodeDTO) {
-        String redisKey = REDIS_ORG_KEY + id;
+        String redisKey = ConstantUtil.REDIS_ORG_KEY + id;
         String getCode = redisUtil.valueGet(redisKey);
         if (getCode == null || getCode.isEmpty()) {
             throw new GlobalException(ErrorCode.ORGANIZATION_CODE_NOT_FOUND);

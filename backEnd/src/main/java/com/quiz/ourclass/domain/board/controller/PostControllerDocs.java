@@ -130,7 +130,7 @@ public interface PostControllerDocs {
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = PostListResponse.class))),
-            @ApiResponse(responseCode = "403", description = "(message : \"잘못된 입력 입니다.\")", content = @Content),
+            @ApiResponse(responseCode = "400", description = "(message : \"잘못된 입력 입니다.\")", content = @Content),
         }
     )
     @GetMapping

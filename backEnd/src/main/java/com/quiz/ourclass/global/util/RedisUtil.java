@@ -5,7 +5,6 @@ import java.time.Duration;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,12 +15,11 @@ public class RedisUtil {
     private final String PREFIX = "AT:";
 
     public void valueSet(String key, String value, Duration time) {
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(key, value, time);
+        redisTemplate.opsForValue().set(key, value, time);
     }
 
     public String valueGet(String key) {
-        return (String) redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(key);
     }
 
     public void setAdd(String key, String value) {
@@ -47,6 +45,25 @@ public class RedisUtil {
 
     public String generateBlackListKey(String accessToken) {
         return PREFIX + accessToken;
+    }
+
+    public void addChatRoomUser(Long chatRoomId, String memberId) {
+        String key = buildChatRoomKey(chatRoomId);
+        redisTemplate.opsForSet().add(key, memberId);
+    }
+
+    public Set<String> getChatRoomUsers(Long chatRoomId) {
+        String key = buildChatRoomKey(chatRoomId);
+        return redisTemplate.opsForSet().members(key);
+    }
+
+    public void removeChatRoomUser(Long chatRoomId, String memberId) {
+        String key = buildChatRoomKey(chatRoomId);
+        redisTemplate.opsForSet().remove(key, memberId);
+    }
+
+    private String buildChatRoomKey(Long chatRoomId) {
+        return ConstantUtil.REDIS_CHAT_ROOM_KEY + chatRoomId;
     }
 
 }
