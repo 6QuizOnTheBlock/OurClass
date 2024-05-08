@@ -21,8 +21,12 @@ interface ChallengeRepository {
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>
-    ): Long
+    ): Int
+
+    suspend fun getChallengeSimple(
+        challengeId: Int
+    ): Challenge
 }

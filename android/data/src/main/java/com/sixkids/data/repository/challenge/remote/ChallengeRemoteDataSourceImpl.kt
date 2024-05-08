@@ -4,6 +4,7 @@ import com.sixkids.data.api.ChallengeService
 import com.sixkids.data.model.request.ChallengeCreateRequest
 import com.sixkids.data.model.request.GroupRequest
 import com.sixkids.data.model.response.toModel
+import com.sixkids.model.Challenge
 import com.sixkids.model.GroupSimple
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -20,17 +21,17 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>,
-    ) = challengeService.createChallenge(
+    ): Int = challengeService.createChallenge(
         ChallengeCreateRequest(
             organizationId = organizationId,
             title = title,
             content = content,
             startTime = startTime,
             endTime = endTime,
-            reword = reword,
+            reward = reward,
             minCount = minCount,
             groups = groups.map {
                 GroupRequest(
@@ -41,4 +42,7 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
             }
         )
     ).getOrThrow().data
+
+    override suspend fun getChallengeSimple(challengeId: Int): Challenge
+     = challengeService.getChallengeSimple(challengeId).getOrThrow().data.toModel()
 }

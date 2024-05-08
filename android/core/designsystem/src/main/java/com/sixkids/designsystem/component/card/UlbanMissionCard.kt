@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Card
@@ -81,7 +83,7 @@ fun UlbanMissionCard(
     Box(
         modifier = modifier.clickable {
             onClick()
-        },
+        }
     ) {
         Card(
             shape = customShape,
@@ -89,13 +91,12 @@ fun UlbanMissionCard(
                 containerColor = backGroundColor,
             ),
             modifier = Modifier
+                .padding(40.dp)
                 .width(200.dp)
                 .height(300.dp)
-                .padding(16.dp)
-                .align(Alignment.BottomCenter)
         ) {
             Column {
-                Spacer(modifier = Modifier.height(170.dp))
+                Spacer(modifier = modifier.height(170.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = title,
@@ -118,19 +119,18 @@ fun UlbanMissionCard(
                 }
             }
         }
-        Image(
+        Box(
             modifier = Modifier
-                .padding(bottom = 32.dp, end = 32.dp)
-                .width(250.dp)
-                .height(400.dp)
                 .align(Alignment.TopCenter),
-            painter = painterResource(id = imgRes),
-            contentDescription = null
-        )
-
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                modifier = Modifier.run { size(250.dp).offset(y = -(20.dp)) },
+                painter = painterResource(id = imgRes),
+                contentDescription = null
+            )
+        }
     }
-
-
 }
 
 @Preview(showBackground = true)
