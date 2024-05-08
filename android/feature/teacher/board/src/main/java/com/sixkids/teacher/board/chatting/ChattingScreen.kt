@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,8 +69,12 @@ fun ChattingRoute(
         }
     }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.initChatData()
+    DisposableEffect(key1 = Unit){
+        viewModel.initStomp()
+
+        onDispose{
+            viewModel.cancelStomp()
+        }
     }
 
     ChattingScreen(
