@@ -47,8 +47,7 @@ fun ChallengeRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getRunningChallenge()
-        viewModel.getChallengeHistory()
+        viewModel.initData()
     }
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
