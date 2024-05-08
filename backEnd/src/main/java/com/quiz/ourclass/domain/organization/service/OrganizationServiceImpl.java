@@ -6,6 +6,8 @@ import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
+import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.mapper.OrganizationMapper;
@@ -125,5 +127,16 @@ public class OrganizationServiceImpl implements OrganizationService {
             .map(MemberOrganization::getMember)
             .map(memberMapper::memberToMemberSimpleDTO)
             .toList();
+    }
+
+    @Transactional
+    @Override
+    public UpdateOrganizationResponse updateOrganizationName(
+        long id, UpdateOrganizationRequest updateOrganizationRequest) {
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        Organization organization = accessUtil.isOrganizationManager(member, id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
+        return organization.update(updateOrganizationRequest);
     }
 }
