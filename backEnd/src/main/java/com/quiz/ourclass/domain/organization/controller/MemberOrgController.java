@@ -1,12 +1,15 @@
 package com.quiz.ourclass.domain.organization.controller;
 
+import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
+import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.domain.organization.service.MemberOrgService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,5 +30,13 @@ public class MemberOrgController implements MemberOrgControllerDocs {
         UpdateExpResponse updateExpResponse = memberOrgService.updateMemberExp(
             id, updateExpRequest);
         return ResponseEntity.ok(ResultResponse.success(updateExpResponse));
+    }
+
+    @GetMapping("/{id}/relation")
+    public ResponseEntity<ResultResponse<?>> getMemberRelation(
+        @PathVariable long id, RelationRequest relationRequest) {
+        RelationResponse relationResponse = memberOrgService.getMemberRelation(
+            id, relationRequest);
+        return ResponseEntity.ok(ResultResponse.success(relationResponse));
     }
 }
