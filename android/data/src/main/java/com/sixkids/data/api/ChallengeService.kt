@@ -3,6 +3,7 @@ package com.sixkids.data.api
 import com.sixkids.data.model.request.ChallengeCreateRequest
 import com.sixkids.data.model.response.ChallengeDetailResponse
 import com.sixkids.data.model.response.ChallengeHistoryResponse
+import com.sixkids.data.model.response.ChallengeSimpleResponse
 import com.sixkids.data.model.response.RunningChallengeResponse
 import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
@@ -19,7 +20,7 @@ interface ChallengeService {
     @POST("challenges")
     suspend fun createChallenge(
         @Body challengeCreateRequest: ChallengeCreateRequest
-    ): ApiResult<ApiResponse<Long>>
+    ): ApiResult<ApiResponse<Int>>
 
     @GET("challenges")
     suspend fun getChallengeHistory(
@@ -33,6 +34,11 @@ interface ChallengeService {
     suspend fun getRunningChallenge(
         @Query("organizationId") organizationId: Int,
     ): ApiResult<ApiResponse<RunningChallengeResponse>>
+
+    @GET("challenges/{id}/simple")
+    suspend fun getChallengeSimple(
+        @Path("id") challengeId: Int
+    ): ApiResult<ApiResponse<ChallengeSimpleResponse>>
 
     @GET("challenges/{id}")
     suspend fun getChallengeDetail(

@@ -10,6 +10,11 @@ fun LocalDateTime.formatToMonthDayTime(): String {
     return this.format(formatter)
 }
 
+fun LocalDateTime.formatToMonthDayTimeKorean(): String {
+    val formatter = DateTimeFormatter.ofPattern("M월 d일 a h시 m분")
+    return this.format(formatter)
+}
+
 fun LocalDate.formatToDayMonthYear(): String {
     val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
     return this.format(formatter)

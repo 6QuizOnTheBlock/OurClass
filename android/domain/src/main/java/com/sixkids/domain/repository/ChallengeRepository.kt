@@ -23,10 +23,14 @@ interface ChallengeRepository {
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>
     ): Long
+
+    suspend fun getChallengeSimple(
+        challengeId: Int
+    ): Challenge
 
     suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail
 

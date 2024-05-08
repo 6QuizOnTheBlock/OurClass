@@ -12,10 +12,16 @@ import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
+import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
+import com.sixkids.teacher.board.navigation.navigatePostWrite
+import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
+import com.sixkids.teacher.challenge.navigation.navigatePopupToHistory
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -56,9 +62,27 @@ class MainNavigator(
         }
     }
 
-    fun popBackStack() {
-        navController.popBackStack()
+    /**
+     * Board Navigation
+     */
+
+    fun navigateBoard() {
+        navController.navigate(BoardRoute.defaultRoute){
+            popUpTo(navController.graph.id){
+                inclusive = true
+            }
+        }
     }
+
+    fun navigatePost() {
+        navController.navigatePost()
+    }
+
+    fun navigatePostWrite() {
+        navController.navigatePostWrite()
+    }
+
+
 
     /**
      * Home Navigation
@@ -119,9 +143,20 @@ class MainNavigator(
     fun navigateChallengeDetail(challengeId: Long, groupId: Long?) {
         navController.navigateChallengeDetail(challengeId, groupId)
     }
+        fun navigatePopupToHistory() {
+        navController.navigatePopupToHistory()
+    }
+
+    fun navigateChallengeDetail(challengeId: Int) {
+        navController.navigateChallengeDetail(challengeId)
+    }
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
+    }
+
+    fun navigateChallengeCreatedResult(challengeId: Int, title: String) {
+        navController.navigateChallengeCreatedResult(challengeId, title)
     }
 
     fun navigateTeacherOrganizationList(){
@@ -134,6 +169,14 @@ class MainNavigator(
 
     fun navigateProfile(){
         navController.navigateProfile()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+
+    fun navigateChatting(){
+        navController.navigateChatting()
     }
 
     @Composable
