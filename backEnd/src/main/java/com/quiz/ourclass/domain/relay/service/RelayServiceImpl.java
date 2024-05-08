@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
+import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
 import com.quiz.ourclass.domain.relay.entity.Relay;
 import com.quiz.ourclass.domain.relay.entity.RelayMember;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
@@ -70,5 +71,21 @@ public class RelayServiceImpl implements RelayService {
     @Override
     public RelayResponse getRelayDetail(long id) {
         return relayRepository.getRelayDetail(id);
+    }
+
+    @Override
+    public RunningRelayResponse getRunningRelay(long organizationId) {
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        Relay relay = relayRepository.findByOrganizationIdAndEndStatusIsFalse(organizationId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_RELAY_NOT_FOUND));
+        boolean isMyTurn = relay.getCurrentRunner().getCurMember().equals(member);
+        return RunningRelayResponse.builder()
+            .id(relay.getId())
+            .currentTurn(relay.getCurrentRunner().getTurn())
+            .currentMemberName(relay.getCurrentRunner().getCurMember().getName())
+            .startTime(relay.getStartRunner().getReceiveTime())
+            .myTurnStatus(isMyTurn)
+            .build();
     }
 }
