@@ -8,3 +8,10 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.googleServices) apply false
 }
+
+buildscript{
+    repositories {
+        mavenCentral()
+        maven ( url = "https://jitpack.io" )
+    }
+}
