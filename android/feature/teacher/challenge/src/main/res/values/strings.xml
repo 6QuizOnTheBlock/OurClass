@@ -26,4 +26,5 @@
     <string name="end_time">종료 시간</string>
     <string name="point">포인트</string>
     <string name="end_time_earlier_than_start_time">종료 시간이 시작 시간보다 빠릅니다.</string>
+    <string name="start_time_earlier_than_now">오늘 이전의 날짜로 시작할 수 없습니다.</string>
 </resources>
