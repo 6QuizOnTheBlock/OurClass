@@ -118,10 +118,5 @@ class ChattingViewModel @Inject constructor(
         private const val TMP_NAME_1 = "홍유준"
         private const val TMP_NAME_2 = "윈터"
         private const val TMP_NAME_3 = "장원영"
-
-        private const val TMP_ID_1 = 1
-        private const val TMP_ID_2 = 2
-        private const val TMP_ID_3 = 3
-
     }
 }
