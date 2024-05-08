@@ -6,7 +6,9 @@ import com.sixkids.data.model.response.PostListResponse
 import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
 import okhttp3.MultipartBody
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -35,4 +37,20 @@ interface PostService {
         @Path("id") postId: Long,
     ): ApiResult<ApiResponse<PostDetailResponse>>
 
+    @DELETE("boards/{id}")
+    fun deletePost(
+        @Path("id") postId: Long,
+    ): ApiResult<ApiResponse<Boolean>>
+
+    @PATCH("boards/{id}")
+    fun updatePost(
+        @Path("id") postId: Long,
+        @Part("request") postRequestBody: NewPostRequest,
+        @Part file: MultipartBody.Part?,
+    ): ApiResult<ApiResponse<Long>>
+
+    @POST("boards/{id}/report")
+    fun reportPost(
+        @Path("id") postId: Long,
+    ): ApiResult<ApiResponse<Boolean>>
 }
