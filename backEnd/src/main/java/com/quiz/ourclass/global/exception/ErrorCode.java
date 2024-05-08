@@ -59,6 +59,7 @@ public enum ErrorCode {
     ORGANIZATION_CODE_NOT_FOUND(HttpStatus.BAD_REQUEST, "학급 가입이 불가능한 상태입니다."),
     ORGANIZATION_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "학급 가입코드가 일치하지 않습니다."),
     ALREADY_IN_ORGANIZATION(HttpStatus.BAD_REQUEST, "이미 가입한 학급입니다."),
+    MEMBER_ORGANIZATION_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 가입한 학급입니다."),
 
     //challenge
     REPORT_NOW_FOUND(HttpStatus.NOT_FOUND, "레포트를 찾을 수 없습니다."),
