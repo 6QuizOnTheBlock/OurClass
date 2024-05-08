@@ -4,4 +4,10 @@
     <string name="board_main_announce">알림장</string>
     <string name="board_main_post">자유게시판</string>
     <string name="board_main_chat">채팅</string>
+
+    <string name="board_write_title">글쓰기</string>
+    <string name="board_write_content_title">제목</string>
+    <string name="board_write_content_content">내용을 입력하세요</string>
+    <string name="board_write_anonymous">익명</string>
+    <string name="board_write_submit">게시</string>
 </resources>
