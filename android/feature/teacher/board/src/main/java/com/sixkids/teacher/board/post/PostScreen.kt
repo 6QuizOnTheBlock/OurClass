@@ -20,6 +20,9 @@ import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
 import com.sixkids.teacher.board.post.component.PostItem
+import com.sixkids.ui.util.formatToMonthDayTime
+import com.sixkids.ui.util.formatToMonthDayTimeKorean
+import java.time.LocalDateTime
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
@@ -68,7 +71,7 @@ fun PostScreen(
                         title = item.title,
                         writer = item.writer,
                         commentCount = item.commentCount,
-                        dateString = item.time
+                        dateString = item.time.formatToMonthDayTime()
                     )
                 }
             }
@@ -96,56 +99,56 @@ fun PostRoutePreview() {
                     id = 0,
                     title = "이따 마크 할 사람~~!이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 1,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 2,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 3,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 4,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 5,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 6,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 ),
                 Post(
                     id = 7,
                     title = "이따 마크 할 사람~~!",
                     writer = "오하빈",
-                    time = "2024.04.16 14:30",
+                    time = LocalDateTime.now(),
                     commentCount = 3
                 )
             )
