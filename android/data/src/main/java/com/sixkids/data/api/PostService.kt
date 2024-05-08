@@ -17,7 +17,7 @@ import retrofit2.http.Query
 interface PostService {
 
     @GET("boards")
-    fun getBoards(
+    fun getPosts(
         @Query("organizationId") organizationId: Int,
         @Query("memberId") memberId: Int,
         @Query("page") page: Int,
