@@ -26,6 +26,8 @@ val BlueDark = Color(0XFF152B65)
 val GreenDark = Color(0XFF0B4C3D)
 val PurpleDark = Color(0XFF52148E)
 
+val GrayLight = Color(0XFFF1F1F1)
+
 val LoadingBackground = Color(0xA6000000)
 
 

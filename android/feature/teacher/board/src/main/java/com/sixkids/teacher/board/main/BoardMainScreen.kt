@@ -1,5 +1,6 @@
 package com.sixkids.teacher.board.main
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,21 +25,28 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun BoardMainRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    navigateToPost: () -> Unit,
+    navigateToChatting: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
     ) {
-        BoardMainScreen()
+        BoardMainScreen(
+            postCardOnClick = navigateToPost
+            navigateToChatting = navigateToChatting
+        )
     }
 }
 
 @Composable
 fun BoardMainScreen(
     modifier: Modifier = Modifier,
-    boardMainState: BoardMainState = BoardMainState()
+    boardMainState: BoardMainState = BoardMainState(),
+    postCardOnClick: () -> Unit = {},
+    navigateToChatting: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -69,7 +77,8 @@ fun BoardMainScreen(
             contentName = stringResource(id = R.string.board_main_post),
             contentImageId = UlbanRes.drawable.board,
             cardColor = Blue,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = postCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
@@ -77,7 +86,8 @@ fun BoardMainScreen(
             contentName = stringResource(id = R.string.board_main_chat),
             contentImageId = UlbanRes.drawable.chat,
             cardColor = Orange,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = navigateToChatting
         )
     }
 }

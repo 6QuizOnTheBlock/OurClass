@@ -8,12 +8,15 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
+import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
+import com.sixkids.teacher.board.navigation.navigatePostWrite
+import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -32,7 +35,7 @@ import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = SignInRoute.defaultRoute
+    val startDestination = HomeRoute.defaultRoute
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -58,9 +61,27 @@ class MainNavigator(
         }
     }
 
-    fun popBackStack() {
-        navController.popBackStack()
+    /**
+     * Board Navigation
+     */
+
+    fun navigateBoard() {
+        navController.navigate(BoardRoute.defaultRoute){
+            popUpTo(navController.graph.id){
+                inclusive = true
+            }
+        }
     }
+
+    fun navigatePost() {
+        navController.navigatePost()
+    }
+
+    fun navigatePostWrite() {
+        navController.navigatePostWrite()
+    }
+
+
 
     /**
      * Home Navigation
@@ -144,6 +165,14 @@ class MainNavigator(
 
     fun navigateProfile(){
         navController.navigateProfile()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+    
+    fun navigateChatting(){
+        navController.navigateChatting()
     }
 
     @Composable
