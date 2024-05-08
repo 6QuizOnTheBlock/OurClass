@@ -2,6 +2,7 @@ package com.sixkids.teacher.challenge.create
 
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
+import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.ui.SnackbarToken
@@ -13,11 +14,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeCreateViewModel @Inject constructor(
-    private val createChallengeUseCase: CreateChallengeUseCase
+    private val createChallengeUseCase: CreateChallengeUseCase,
+    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase
 ) : BaseViewModel<ChallengeCreateUiState, ChallengeCreateEffect>(
     ChallengeCreateUiState()
 ) {
 
+    private var isFirstVisited: Boolean = true
+    fun initData() {
+        viewModelScope.launch {
+            if (isFirstVisited.not()) return@launch
+            isFirstVisited = false
+
+            getSelectedOrganizationIdUseCase().onSuccess {
+                intent {
+                    copy(organizationId = organizationId)
+                }
+            }.onFailure {
+                postSideEffect(ChallengeCreateEffect.HandleException(it) { initData() })
+            }
+        }
+
+    }
 
     private var title: String = ""
     private var content: String = ""

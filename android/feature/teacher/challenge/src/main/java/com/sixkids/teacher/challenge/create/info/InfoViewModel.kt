@@ -46,7 +46,7 @@ class InfoViewModel @Inject constructor(
     fun updateEndDate(endDate: LocalDate) {
         intent {
             val selectedTime = LocalDateTime.of(endDate, endTime)
-            postSideEffect(InfoEffect.UpdateStartTime(selectedTime))
+            postSideEffect(InfoEffect.UpdateEndTime(selectedTime))
             copy(endDate = endDate)
         }
     }

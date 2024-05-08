@@ -25,6 +25,7 @@ fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
     onNavigateResult: (Int, String) -> Unit,
     onNavigateUp: () -> Unit,
+    onHandleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -34,6 +35,7 @@ fun ChallengeCreateRoute(
             is ChallengeCreateEffect.ShowSnackbar -> onShowSnackbar(it.snackbarToken)
             is ChallengeCreateEffect.NavigateResult -> onNavigateResult(it.challengeId, it.title)
             ChallengeCreateEffect.NavigateUp -> onNavigateUp()
+            is ChallengeCreateEffect.HandleException -> onHandleException(it.throwable, it.retry)
         }
     }
 

@@ -7,8 +7,8 @@ data class ChallengeSimpleResponse(
     val id: Int,
     val title: String,
     val content: String,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime,
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
     val reward: Int,
 )
 
@@ -17,8 +17,8 @@ fun ChallengeSimpleResponse.toModel(): Challenge {
         id = id,
         title = title,
         content = content,
-        startTime = startDate,
-        endTime = endDate,
+        startTime = startTime,
+        endTime = endTime,
         reword = reward
     )
 }

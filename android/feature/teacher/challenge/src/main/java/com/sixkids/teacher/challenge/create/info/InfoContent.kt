@@ -81,7 +81,18 @@ fun InfoContentRoute(
                 )
             )
 
-            InfoEffect.MoveGroupTypeStep -> moveNextStep()
+            InfoEffect.MoveGroupTypeStep ->
+                if (LocalDateTime.of(uiState.endDate, uiState.endTime)
+                    <= LocalDateTime.of(uiState.startDate, uiState.startTime)
+                ) {
+                    onShowSnackbar(
+                        SnackbarToken(
+                            context.getString(R.string.end_time_earlier_than_start_time)
+                        )
+                    )
+                } else {
+                    moveNextStep()
+                }
         }
     }
 

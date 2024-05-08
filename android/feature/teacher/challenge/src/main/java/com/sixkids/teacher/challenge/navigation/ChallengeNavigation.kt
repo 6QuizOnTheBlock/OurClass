@@ -20,7 +20,7 @@ fun NavController.navigateChallengeHistory() {
 
 fun NavController.navigatePopupToHistory() {
     navigate(ChallengeRoute.defaultRoute) {
-        popUpTo(ChallengeRoute.defaultRoute){
+        popUpTo(ChallengeRoute.defaultRoute) {
             inclusive = true
         }
     }
@@ -35,8 +35,8 @@ fun NavController.navigateCreateChallenge() {
 }
 
 fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String) {
-    navigate(ChallengeRoute.resultRoute(challengeId, title)){
-        popUpTo(ChallengeRoute.defaultRoute){
+    navigate(ChallengeRoute.resultRoute(challengeId, title)) {
+        popUpTo(ChallengeRoute.defaultRoute) {
             inclusive = false
         }
     }
@@ -76,7 +76,8 @@ fun NavGraphBuilder.challengeNavGraph(
             onNavigateUp = navigateUp,
             onNavigateResult = { challengeId, title ->
                 navigateChallengeCreatedResult(challengeId, title)
-            }
+            },
+            onHandleException = handleException
         )
     }
     composable(

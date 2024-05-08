@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.result
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -83,6 +84,9 @@ fun ResultScreen(
     onCardClick: () -> Unit = {},
     onClickConfirm: () -> Unit = {}
 ) {
+    BackHandler {
+        onClickConfirm()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -102,9 +106,11 @@ fun ResultScreen(
             onClick = onCardClick
         )
         Image(
-            modifier = Modifier.size(160.dp).clickable {
-                onClickConfirm()
-            },
+            modifier = Modifier
+                .size(160.dp)
+                .clickable {
+                    onClickConfirm()
+                },
             painter = painterResource(id = R.drawable.challenge_created_success),
             contentDescription = "challenge success"
         )
