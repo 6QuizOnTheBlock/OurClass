@@ -1,5 +1,6 @@
 package com.sixkids.data.model.response
 
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.UserInfo
 
 data class MemberInfoResponse(
@@ -11,7 +12,7 @@ data class MemberInfoResponse(
 )
 
 data class MemberSimpleInfoResponse(
-    val id: Int,
+    val id: Long,
     val name: String,
     val photo: String
 )
@@ -23,5 +24,13 @@ internal fun MemberInfoResponse.toModel(): UserInfo {
         email = email,
         photo = photo,
         role = role
+    )
+}
+
+internal fun MemberSimpleInfoResponse.toModel(): MemberSimple {
+    return MemberSimple(
+        id = id,
+        name = name,
+        photo = photo
     )
 }

@@ -1,5 +1,8 @@
 package com.sixkids.data.model.response
 
+import com.sixkids.model.Comment
+import com.sixkids.model.PostDetail
+import com.sixkids.model.Recomment
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
@@ -35,3 +38,36 @@ data class RecommentResponse(
     val updateTime: LocalDateTime,
     val parentId: Long,
 )
+
+fun PostDetailResponse.toModel(): PostDetail {
+    return PostDetail(
+        createTime = createTime,
+        title = title,
+        content = content,
+        ImageUri = photoUrl,
+        comments = comments.map { it.toModel() },
+        writeMember = writer.toModel()
+    )
+}
+
+fun CommentResponse.toModel(): Comment{
+    return Comment(
+        id = id,
+        content = content,
+        createTime = createTime,
+        updateTime = updateTime,
+        member = writer.toModel(),
+        recomments = recommentList.map { it.toModel() }
+    )
+}
+
+fun RecommentResponse.toModel(): Recomment {
+    return Recomment(
+        id = id,
+        content = content,
+        createTime = createTime,
+        updateTime = updateTime,
+        parentId = parentId,
+        member = writer.toModel()
+    )
+}
