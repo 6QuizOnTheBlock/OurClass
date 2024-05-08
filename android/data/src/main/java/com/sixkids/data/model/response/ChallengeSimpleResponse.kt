@@ -4,7 +4,7 @@ import com.sixkids.model.Challenge
 import java.time.LocalDateTime
 
 data class ChallengeSimpleResponse(
-    val id: Int,
+    val id: Long,
     val title: String,
     val content: String,
     val startTime: LocalDateTime,

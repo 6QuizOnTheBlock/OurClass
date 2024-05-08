@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
-    onNavigateResult: (Int, String) -> Unit,
+    onNavigateResult: (Long, String) -> Unit,
     onNavigateUp: () -> Unit,
     onHandleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit

@@ -3,7 +3,7 @@ package com.sixkids.model
 import java.time.LocalDateTime
 
 data class Challenge(
-    val id: Int = 0,
+    val id: Long = 0,
     val title: String = "",
     val content: String = "",
     val headCount: Int = 0,

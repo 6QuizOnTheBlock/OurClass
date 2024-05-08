@@ -98,7 +98,6 @@ fun MainScreen(
             )
 
             challengeNavGraph(
-                padding = innerPadding,
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
                 navigateChallengeCreatedResult = navigator::navigateChallengeCreatedResult,

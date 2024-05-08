@@ -8,6 +8,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
@@ -35,7 +36,7 @@ import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
 class MainNavigator(
     val navController: NavHostController,
 ) {
-    val startDestination = HomeRoute.defaultRoute
+    val startDestination = SignInRoute.defaultRoute
     private val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
@@ -66,8 +67,8 @@ class MainNavigator(
      */
 
     fun navigateBoard() {
-        navController.navigate(BoardRoute.defaultRoute){
-            popUpTo(navController.graph.id){
+        navController.navigate(BoardRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
                 inclusive = true
             }
         }
@@ -82,19 +83,18 @@ class MainNavigator(
     }
 
 
-
     /**
      * Home Navigation
      */
     fun navigateHome() {
-        navController.navigate(HomeRoute.defaultRoute){
-            popUpTo(navController.graph.id){
+        navController.navigate(HomeRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
                 inclusive = true
             }
         }
     }
 
-    fun navigateRank(){
+    fun navigateRank() {
         navController.navigateRank()
     }
 
@@ -113,8 +113,8 @@ class MainNavigator(
      * Manage Student Navigation
      */
     fun navigateManageStudent() {
-        navController.navigateManageStudent(navOptions{
-            popUpTo(ManageStudentRoute.defaultRoute){
+        navController.navigateManageStudent(navOptions {
+            popUpTo(ManageStudentRoute.defaultRoute) {
                 inclusive = true
             }
         })
@@ -123,15 +123,15 @@ class MainNavigator(
     /**
      * SignIn Navigation
      */
-    fun navigateSignIn(){
+    fun navigateSignIn() {
         navController.navigateSignIn()
     }
 
-    fun navigateSignUp(){
+    fun navigateSignUp() {
         navController.navigateSignUp()
     }
 
-    fun navigateSignUpPhoto(isTeacher: Boolean){
+    fun navigateSignUpPhoto(isTeacher: Boolean) {
         navController.navigateSignUpPhoto(isTeacher)
     }
 
@@ -139,39 +139,39 @@ class MainNavigator(
         navController.navigateChallengeHistory()
     }
 
-    fun navigatePopupToHistory() {
-        navController.navigatePopupToHistory()
+    fun navigateChallengeDetail(challengeId: Long, groupId: Long?) {
+        navController.navigateChallengeDetail(challengeId, groupId)
     }
 
-    fun navigateChallengeDetail(challengeId: Int) {
-        navController.navigateChallengeDetail(challengeId)
+    fun navigatePopupToHistory() {
+        navController.navigatePopupToHistory()
     }
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
     }
 
-    fun navigateChallengeCreatedResult(challengeId: Int, title: String) {
+    fun navigateChallengeCreatedResult(challengeId: Long, title: String) {
         navController.navigateChallengeCreatedResult(challengeId, title)
     }
 
-    fun navigateTeacherOrganizationList(){
+    fun navigateTeacherOrganizationList() {
         navController.navigateTeacherOrganizationList()
     }
 
-    fun navigateNewOrganization(){
+    fun navigateNewOrganization() {
         navController.navigateNewOrganization()
     }
 
-    fun navigateProfile(){
+    fun navigateProfile() {
         navController.navigateProfile()
     }
 
     fun popBackStack() {
         navController.popBackStack()
     }
-    
-    fun navigateChatting(){
+
+    fun navigateChatting() {
         navController.navigateChatting()
     }
 

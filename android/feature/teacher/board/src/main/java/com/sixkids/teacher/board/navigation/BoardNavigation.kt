@@ -28,48 +28,52 @@ fun NavController.navigatePostDetail() {
     navigate(BoardRoute.postDetailRoute)
 }
 
-fun NavController.navigateChatting(){
+fun NavController.navigateChatting() {
     navigate(BoardRoute.chattingRoute)
 }
 
 fun NavGraphBuilder.boardNavGraph(
     padding: PaddingValues,
     navigateToPost: () -> Unit,
-    onBackClick : () -> Unit,
+    onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
-    navigateToChatting : () -> Unit
+    navigateToChatting: () -> Unit
 ) {
-    composable(route = BoardRoute.defaultRoute){
+    composable(route = BoardRoute.defaultRoute) {
         BoardMainRoute(
             padding = padding,
             navigateToPost = navigateToPost,
-            navigateToChatting : () -> Unit
+            navigateToChatting = navigateToChatting,
         )
     }
 
-    composable(BoardRoute.postRoute){
+    composable(BoardRoute.postRoute) {
         PostRoute(padding)
     }
 
-    composable(BoardRoute.postWriteRoute){
+    composable(BoardRoute.postWriteRoute) {
         PostWriteRoute(padding)
     }
 
-    composable(BoardRoute.postDetailRoute){
+    composable(BoardRoute.postDetailRoute) {
         PostDetailRoute(
             padding = padding
         )
     }
-    
-    composable(route = BoardRoute.defaultRoute){
-        BoardMainRoute(padding, navigateToChatting)
+
+    composable(route = BoardRoute.defaultRoute) {
+        BoardMainRoute(
+            padding = padding,
+            navigateToPost = navigateToPost,
+            navigateToChatting = navigateToChatting
+        )
     }
 
-    composable(route = BoardRoute.chattingRoute){
-         ChattingRoute(
-             onBackClick = onBackClick,
-             onShowSnackBar = onShowSnackBar
-         )
+    composable(route = BoardRoute.chattingRoute) {
+        ChattingRoute(
+            onBackClick = onBackClick,
+            onShowSnackBar = onShowSnackBar
+        )
     }
 }
 

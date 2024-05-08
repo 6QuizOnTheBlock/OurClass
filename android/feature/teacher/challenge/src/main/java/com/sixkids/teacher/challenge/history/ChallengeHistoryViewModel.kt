@@ -20,12 +20,21 @@ class ChallengeHistoryViewModel @Inject constructor(
     ChallengeHistoryState()
 ) {
     var challengeHistory: Flow<PagingData<Challenge>>? = null
+    private var isFirstVisited: Boolean = true
 
-    fun navigateChallengeDetail(challengeId: Int) = postSideEffect(
+    fun initData() = viewModelScope.launch {
+        if (isFirstVisited.not()) return@launch
+        isFirstVisited = false
+
+        getChallengeHistory()
+        getRunningChallenge()
+    }
+
+    fun navigateChallengeDetail(challengeId: Long) = postSideEffect(
         ChallengeHistoryEffect.NavigateToChallengeDetail(challengeId)
     )
 
-    fun getChallengeHistory() {
+    private fun getChallengeHistory() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             challengeHistory = getChallengeHistoryUseCase(1)
@@ -34,14 +43,19 @@ class ChallengeHistoryViewModel @Inject constructor(
         }
     }
 
-    fun getRunningChallenge() {
+    private fun getRunningChallenge() {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
             getRunningChallengeUseCase(1)
                 .onSuccess {
                     intent { copy(isLoading = false, runningChallenge = it) }
                 }.onFailure {
-                    postSideEffect(ChallengeHistoryEffect.HandleException(it, ::getRunningChallenge))
+                    postSideEffect(
+                        ChallengeHistoryEffect.HandleException(
+                            it,
+                            ::getRunningChallenge
+                        )
+                    )
                 }
         }
 
