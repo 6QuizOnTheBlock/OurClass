@@ -44,11 +44,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     public void isMemberAuthorizedToJoinRoom(Long userId, Long chatRoomId) {
-        chatRoomRepository.findById(chatRoomId)
+        boolean checkMemberInGroup = chatRoomRepository.findById(chatRoomId)
             .map(chatRoom -> chatRoom.getOrganization().getMemberOrganizations()
                 .stream()
                 .anyMatch(orgMembers -> orgMembers.getMember().getId() == userId))
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+        if (!checkMemberInGroup) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
     }
 }
 

@@ -23,6 +23,8 @@ public interface ChatControllerDocs {
                 """, content = @Content),
             @ApiResponse(responseCode = "404", description = """
                 (message : "멤버가 존재하지 않습니다.")
+                                
+                (message : "채팅방을 찾을 수 없습니다.")
                 """, content = @Content),
         }
     )
