@@ -19,7 +19,7 @@ interface PostService {
     @GET("boards")
     suspend fun getPosts(
         @Query("organizationId") organizationId: Int,
-        @Query("memberId") memberId: Int,
+        @Query("memberId") memberId: Int? = null,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("postCategory") postCategory: String,
