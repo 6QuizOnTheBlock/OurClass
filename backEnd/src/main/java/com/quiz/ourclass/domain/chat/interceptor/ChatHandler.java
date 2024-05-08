@@ -1,6 +1,6 @@
 package com.quiz.ourclass.domain.chat.interceptor;
 
-import com.quiz.ourclass.domain.chat.service.ChatRoomServiceImpl;
+import com.quiz.ourclass.domain.chat.service.ChatRoomService;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class ChatHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
-    private final ChatRoomServiceImpl chatRoomServiceImpl;
+    private final ChatRoomService chatRoomService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -59,7 +59,7 @@ public class ChatHandler implements ChannelInterceptor {
         Long roomId = getChatRoomId(accessor);
 
         //멤버가 단체에 속해있는지 확인 (채팅방 접근 권한)
-        chatRoomServiceImpl.isMemberAuthorizedToJoinRoom(Long.valueOf(memberId), roomId);
+        chatRoomService.isMemberAuthorizedToJoinRoom(Long.valueOf(memberId), roomId);
 
         // Redis 통해 채팅방 입장 처리
         redisUtil.addChatRoomUser(roomId, memberId);
