@@ -70,6 +70,7 @@ public enum ErrorCode {
     NOT_CHALLENGE_GROUP_LEADER(HttpStatus.BAD_REQUEST, "레포트 제출은 그룹 리더만 가능합니다."),
 
     //relay
+    RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),
     ;
 

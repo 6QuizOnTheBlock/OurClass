@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
+import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
 import com.quiz.ourclass.domain.relay.service.RelayService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -38,5 +40,13 @@ public class RelayController implements RelayControllerDocs {
     public ResponseEntity<ResultResponse<?>> getRelayDetail(@PathVariable long id) {
         RelayResponse relay = relayService.getRelayDetail(id);
         return ResponseEntity.ok(ResultResponse.success(relay));
+    }
+
+    @GetMapping("/running")
+    public ResponseEntity<ResultResponse<?>> getRunningRelay(
+        @RequestParam(required = true) long organizationId) {
+        RunningRelayResponse runningChallengeResponse = relayService.getRunningRelay(
+            organizationId);
+        return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
     }
 }
