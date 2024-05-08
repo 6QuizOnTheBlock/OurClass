@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.service.OrganizationService;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
@@ -64,6 +65,12 @@ public class OrganizationController implements OrganizationControllerDocs {
         UpdateOrganizationResponse updateOrganizationResponse = organizationService.updateOrganizationName(
             id, updateOrganizationRequest);
         return ResponseEntity.ok(ResultResponse.success(updateOrganizationResponse));
+    }
+
+    @GetMapping("/{id}/rank")
+    public ResponseEntity<ResultResponse<?>> getRanking(@PathVariable long id) {
+        List<MemberRankPoint> memberRankPoints = organizationService.getRanking(id);
+        return ResponseEntity.ok(ResultResponse.success(memberRankPoints));
     }
 }
 

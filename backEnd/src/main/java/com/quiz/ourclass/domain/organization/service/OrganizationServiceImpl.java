@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
@@ -138,5 +139,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization organization = accessUtil.isOrganizationManager(member, id)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
         return organization.update(updateOrganizationRequest);
+    }
+
+    @Override
+    public List<MemberRankPoint> getRanking(long id) {
+        List<MemberOrganization> members = memberOrganizationRepository
+            .findByOrganizationIdOrderByExpDesc(id);
+        return members.stream()
+            .map(member -> MemberRankPoint.builder()
+                .name(member.getMember().getName())
+                .point(member.getExp())
+                .build()).toList();
     }
 }
