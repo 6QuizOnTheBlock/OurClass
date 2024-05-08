@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
@@ -26,6 +27,7 @@ import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +52,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ChallengeMapper challengeMapper;
     private final ChallengeGroupMapper challengeGroupMapper;
     private final ReportMapper reportMapper;
+    private final UserAccessUtil accessUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
 
     @Override
@@ -91,13 +94,20 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public long createReport(ReportRequest reportRequest, MultipartFile file) {
-        //TODO: 유저가 해당 그룹 리더가 맞는지 검사 로직 추가필요
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
+        if (group.getLeaderId() != member.getId()) {
+            throw new GlobalException(ErrorCode.NOT_CHALLENGE_GROUP_LEADER);
+        }
+        if (group.getChallenge().isEndStatus()) {
+            throw new GlobalException(ErrorCode.CHALLENGE_IS_END);
+        }
         String fileUrl;
         fileUrl = awsS3ObjectStorage.uploadFile(file);
 
         Report report = reportMapper.reportRequestToReport(reportRequest);
-        ChallengeGroup group = challengeGroupRepository.findById(reportRequest.groupId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_GROUP_NOT_FOUND));
         report.setFile(fileUrl);
         report.setChallengeGroup(group);
         report.setAcceptStatus(ReportType.BEFORE);
@@ -133,5 +143,24 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public ChallengeResponse getChallengeDetail(long id, Long groupId) {
         return challengeRepository.getChallengeDetail(id, groupId);
+    }
+
+    @Override
+    public ChallengeSimpleResponse getChallengeSimple(long id) {
+        Challenge challenge = challengeRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHALLENGE_NOT_FOUND));
+        return challengeMapper.challengeToChallengeSimpleResponse(challenge);
+    }
+
+    @Transactional
+    @Override
+    public void ChallengeClosing() {
+        List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
+        challenges.forEach(challenge -> {
+            if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
+                challenge.setEndStatus(true);
+                challengeRepository.save(challenge);
+            }
+        });
     }
 }

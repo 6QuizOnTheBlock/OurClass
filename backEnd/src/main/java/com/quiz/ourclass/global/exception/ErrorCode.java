@@ -65,6 +65,8 @@ public enum ErrorCode {
     CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "함께달리기를 찾을 수 없습니다."),
     RUNNING_CHALLENGE_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 함께달리기가 없습니다."),
     EXIST_RUNNING_CHALLENGE(HttpStatus.BAD_REQUEST, "종료되지 않은 함께달리기가 존재합니다."),
+    CHALLENGE_IS_END(HttpStatus.BAD_REQUEST, "종료된 함께달리기입니다."),
+    NOT_CHALLENGE_GROUP_LEADER(HttpStatus.BAD_REQUEST, "레포트 제출은 그룹 리더만 가능합니다."),
 
     //relay
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),

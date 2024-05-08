@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.challenge.dto.request.ChallengeRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ChallengeSliceRequest;
 import com.quiz.ourclass.domain.challenge.dto.request.ReportRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
@@ -119,4 +120,16 @@ public interface ChallengeControllerDocs {
         @RequestParam(required = false)
         @Parameter(description = "그룹 ID", required = false, in = ParameterIn.QUERY)
         Long groupId);
+
+    @Operation(summary = "함께달리기 요약 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = ChallengeSimpleResponse.class)))
+        })
+    @GetMapping("/{id}/simple")
+    ResponseEntity<ResultResponse<?>> getChallengeSimple(
+        @PathVariable
+        @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.PATH)
+        long id
+    );
 }
