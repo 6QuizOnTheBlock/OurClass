@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8085
   servlet:
     encoding:
       charset: UTF-8
@@ -73,9 +73,6 @@ oicd:
 
 firebase:
   path: ENC(gG1P3HSYoou6l49cHkZr2vgFevWbm5rbFncRaN8C2f0=)
-
-mongo:
-  url: ENC(TLGJX23/lF2COdzLDoIcr4P4kCsoJl8KucKoH5+lU4oeDROZyhG9VpUOSKsAkQQq7nuqX4qQR8XusHudSk9wactw0CnlTIy7)
 
 kafka:
   url: ENC(S/qv76amkPMXZ2qL1ncBy/Td9LnfF2VtIxp3WlrB2cQ=)
