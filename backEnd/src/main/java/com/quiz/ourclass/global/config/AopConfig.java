@@ -32,6 +32,7 @@ public class AopConfig {
     public void ControllerMethod() {
     }
 
+    // 컨트롤러 내의 모든 매소드에 대하여 Logging을 실행한다. 다만 어노테이션이 붙은 매소드는 실행하지 않는다.
     @Around("ControllerMethod() && !@annotation(com.quiz.ourclass.global.config.annotation.LogExclusion)")
     public Object logging(ProceedingJoinPoint pjp) throws Throwable {
         // 시작시간 check
@@ -63,9 +64,10 @@ public class AopConfig {
 
     private String getObjectDetails(Object arg) {
         StringBuilder details = new StringBuilder();
+        // 파라미터의 클래스 Reflection 을 들고 와서 그 필드들을 하나 하나 까본다.
         Field[] fields = arg.getClass().getDeclaredFields();
-
         for (Field field : fields) {
+            // 식별 타입이 뭔지 확인한다. private final 상수 선언 시 확인에서 제외한다.
             // private final 멤버 변수는 보안상 오류가 나므로 생략한다.
             int modifiers = field.getModifiers();
             if (Modifier.isPrivate(modifiers) && Modifier.isFinal(modifiers)) {
@@ -88,6 +90,7 @@ public class AopConfig {
         return details.toString();
     }
 
+    // Header 내용을 확인한다.
     private StringBuilder getHeaderDetail() {
 
         StringBuilder ans = new StringBuilder();
