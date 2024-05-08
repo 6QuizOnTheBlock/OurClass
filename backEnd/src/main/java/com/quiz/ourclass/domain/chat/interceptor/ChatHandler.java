@@ -16,7 +16,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
 // 우선 순위를 높게 설정해서 SecurityFilter 보다 앞서 실행되게 해준다.
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 99)
 @Component
 @RequiredArgsConstructor
 @Slf4j
