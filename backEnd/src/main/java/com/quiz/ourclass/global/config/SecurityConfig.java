@@ -2,6 +2,8 @@ package com.quiz.ourclass.global.config;
 
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
 import com.quiz.ourclass.global.dto.FilterResponse;
+import com.quiz.ourclass.global.exception.CustomAccessDeniedHandler;
+import com.quiz.ourclass.global.exception.CustomAuthenticationEntryPoint;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtAuthFilter;
 import com.quiz.ourclass.global.util.jwt.JwtAutoLoginFilter;
@@ -46,12 +48,19 @@ public class SecurityConfig {
     private final RedisUtil redisUtil;
     private final RefreshRepository refreshRepository;
     private final FilterResponse filterResponse;
+    private final JwtLogOutHandler jwtLogOutHandler;
+    private final JwtLogOutSuccessHandler jwtLogOutSuccessHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAutoLoginFilter jwtAutoLoginFilter;
+    private final TokenRefreshFilter tokenRefreshFilter;
     private final String[] whiteList = {
         "/ws-stomp/**", // * 웹 소켓 연결 및 테스팅이 완료되면 삭제
         "/health-check",
         "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/swagger-resources/**",
-        "/webjars/**", "/error", "/members/**"
-
+        "/webjars/**", "/error", "/members/", "/members/sign-in", "/members/developer-At",
+        "/members/default-image"
     };
 
     private final String[] teacherList = {};
@@ -112,8 +121,8 @@ public class SecurityConfig {
         http.logout(auth ->                                     // (6)
             auth
                 .logoutUrl("/members/logout")
-                .addLogoutHandler(new JwtLogOutHandler(redisUtil, jwtUtil, filterResponse))
-                .logoutSuccessHandler(new JwtLogOutSuccessHandler(filterResponse))
+                .addLogoutHandler(jwtLogOutHandler)
+                .logoutSuccessHandler(jwtLogOutSuccessHandler)
         );
 
         http
@@ -133,20 +142,15 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
             );                                                  // (9)
 
-        http.addFilterAt(
-            new JwtAuthFilter(jwtUtil, filterResponse),
-            UsernamePasswordAuthenticationFilter.class
-        );        // (10)
+        http.exceptionHandling(auth ->
+            auth.authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)); // (10)
 
-        http.addFilterBefore(
-            new TokenRefreshFilter(jwtUtil, refreshRepository, filterResponse),
-            UsernamePasswordAuthenticationFilter.class
-        );
+        http.addFilterAt(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);        // (11)
 
-        http.addFilterAfter(
-            new JwtAutoLoginFilter(jwtUtil, redisUtil, filterResponse, refreshRepository),
-            LogoutFilter.class
-        );
+        http.addFilterBefore(tokenRefreshFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterAfter(jwtAutoLoginFilter, LogoutFilter.class);
 
         return http.build();
     }
