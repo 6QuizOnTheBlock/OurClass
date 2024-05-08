@@ -3,6 +3,8 @@ package com.sixkids.teacher.challenge.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.GetChallengeDetailUseCase
+import com.sixkids.domain.usecase.challenge.GradingReportUseCase
+import com.sixkids.model.AcceptStatus
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.CHALLENGE_ID_NAME
 import com.sixkids.teacher.challenge.navigation.ChallengeRoute.GROUP_ID_NAME
 import com.sixkids.ui.base.BaseViewModel
@@ -13,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengeDetailViewModel @Inject constructor(
     private val getChallengeDetailUseCase: GetChallengeDetailUseCase,
+    private val gradingReportUseCase: GradingReportUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ChallengeDetailState, ChallengeDetailSideEffect>(
     ChallengeDetailState()
@@ -29,6 +32,31 @@ class ChallengeDetailViewModel @Inject constructor(
                 postSideEffect(ChallengeDetailSideEffect.HandleException(it, ::getChallengeDetail))
             }
             intent { copy(isLoading = false) }
+        }
+    }
+
+    fun gradingReport(reportId: Long, acceptStatus: AcceptStatus) {
+        viewModelScope.launch {
+            intent { copy(isLoading = true) }
+            gradingReportUseCase(reportId, acceptStatus).onSuccess {
+                intent { copy(isLoading = false, challengeDetail = challengeDetail.copy(
+                    reportList = challengeDetail.reportList.map { report ->
+                        if (report.id == reportId) {
+                            report.copy(acceptStatus = acceptStatus)
+                        } else {
+                            report
+                        }
+                    }
+
+                )) }
+            }.onFailure {
+                postSideEffect(ChallengeDetailSideEffect.HandleException(it) {
+                    gradingReport(
+                        reportId,
+                        acceptStatus
+                    )
+                })
+            }
         }
     }
 }

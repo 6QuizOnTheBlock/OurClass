@@ -8,6 +8,7 @@ import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -38,4 +39,10 @@ interface ChallengeService {
         @Path("id") challengeId: Long,
         @Query("groupId") memberId: Long?,
     ): ApiResult<ApiResponse<ChallengeDetailResponse>>
+
+    @PATCH("challenges/reports/{id}")
+    suspend fun gradingChallenge(
+        @Path("id") reportId: Long,
+        @Query("reportType") acceptStatus: String,
+    ): ApiResult<ApiResponse<Unit>>
 }

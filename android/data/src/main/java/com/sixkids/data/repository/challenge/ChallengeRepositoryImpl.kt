@@ -8,6 +8,7 @@ import com.sixkids.data.repository.challenge.remote.ChallengeHistoryPagingSource
 import com.sixkids.data.repository.challenge.remote.ChallengeHistoryPagingSource.Companion.DEFAULT_SIZE
 import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSourceImpl
 import com.sixkids.domain.repository.ChallengeRepository
+import com.sixkids.model.AcceptStatus
 import com.sixkids.model.Challenge
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
@@ -60,4 +61,6 @@ class ChallengeRepositoryImpl @Inject constructor(
     override suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail =
         challengeRemoteDataSourceImpl.getChallengeDetail(challengeId, groupId)
 
+    override suspend fun gradingChallenge(reportId: Long, acceptStatus: AcceptStatus) =
+        challengeRemoteDataSourceImpl.gradingChallenge(reportId, acceptStatus)
 }

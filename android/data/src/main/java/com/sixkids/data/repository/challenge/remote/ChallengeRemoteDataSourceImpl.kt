@@ -4,6 +4,7 @@ import com.sixkids.data.api.ChallengeService
 import com.sixkids.data.model.request.ChallengeCreateRequest
 import com.sixkids.data.model.request.GroupRequest
 import com.sixkids.data.model.response.toModel
+import com.sixkids.model.AcceptStatus
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
 import java.time.LocalDateTime
@@ -45,4 +46,7 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail =
         challengeService.getChallengeDetail(challengeId, groupId).getOrThrow().data.toModel()
+
+    override suspend fun gradingChallenge(reportId: Long, acceptStatus: AcceptStatus) =
+        challengeService.gradingChallenge(reportId, acceptStatus.name).getOrThrow().data
 }

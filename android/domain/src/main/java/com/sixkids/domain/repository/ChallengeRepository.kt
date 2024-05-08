@@ -1,6 +1,7 @@
 package com.sixkids.domain.repository
 
 import androidx.paging.PagingData
+import com.sixkids.model.AcceptStatus
 import com.sixkids.model.Challenge
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
@@ -28,4 +29,6 @@ interface ChallengeRepository {
     ): Long
 
     suspend fun getChallengeDetail(challengeId: Long, groupId: Long?): ChallengeDetail
+
+    suspend fun gradingChallenge(reportId: Long, acceptStatus: AcceptStatus)
 }

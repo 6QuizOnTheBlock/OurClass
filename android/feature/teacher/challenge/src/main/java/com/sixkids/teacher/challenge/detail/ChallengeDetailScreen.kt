@@ -66,6 +66,8 @@ fun ChallengeDetailRoute(
 
     ChallengeDetailScreen(
         uiState = uiState,
+        approveReport = { viewModel.gradingReport(it, AcceptStatus.APPROVE) },
+        refuseReport = { viewModel.gradingReport(it, AcceptStatus.REFUSE) }
     )
 }
 
@@ -73,6 +75,8 @@ fun ChallengeDetailRoute(
 @Composable
 fun ChallengeDetailScreen(
     uiState: ChallengeDetailState = ChallengeDetailState(),
+    approveReport: (Long) -> Unit = {},
+    refuseReport: (Long) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -154,8 +158,12 @@ fun ChallengeDetailScreen(
                             },
                             content = report.content,
                             accepted = report.acceptStatus != AcceptStatus.BEFORE,
-                            onAccept = { },
-                            onReject = { }
+                            onAccept = {
+                                approveReport(report.id)
+                            },
+                            onReject = {
+                                refuseReport(report.id)
+                            }
                         )
                     }
                 }
@@ -169,53 +177,6 @@ fun ChallengeDetailScreen(
 @Composable
 fun ChallengeDetailScreenPreview() {
     UlbanTheme {
-        ChallengeDetailScreen(
-            uiState = ChallengeDetailState(
-                challengeDetail = ChallengeDetail(
-                    title = "4월 22일 함께 달리기",
-                    content = "문화의 날을 맞아 우리반 친구들 3명이상 만나서 영화를 보자!",
-                    startTime = LocalDateTime.now(),
-                    endTime = LocalDateTime.now(),
-                    reportList = List(10) {
-                        Report(
-                            content = "4명 다 모여서 쿵푸팬더 4 다같이 봤어요!!",
-                            startTime = LocalDateTime.now(),
-                            endTime = LocalDateTime.now(),
-                            acceptStatus = when(it % 3) {
-                                0 -> AcceptStatus.APPROVE
-                                1 -> AcceptStatus.REFUSE
-                                else -> AcceptStatus.BEFORE
-                            },
-                            file = "https://file2.nocutnews.co.kr/newsroom/image/2024/04/05/202404052218304873_0.jpg",
-                            group = Group(
-                                leaderId = 1,
-                                studentList = listOf(
-                                    MemberSimple(
-                                        id = 1,
-                                        name = "김규리",
-                                        photo = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSGfpQ3m-QWiXgCBJJbrcUFdNdWAhj7rcUqjeNUC6eKcXZDAtWm"
-                                    ),
-                                    MemberSimple(
-                                        id = 2,
-                                        name = "오하빈",
-                                        photo = "https://health.chosun.com/site/data/img_dir/2023/07/17/2023071701753_0.jpg"
-                                    ),
-                                    MemberSimple(
-                                        id = 3,
-                                        name = "차성원",
-                                        photo = "https://ichef.bbci.co.uk/ace/ws/800/cpsprodpb/E172/production/_126241775_getty_cats.png"
-                                    ),
-                                    MemberSimple(
-                                        id = 4,
-                                        name = "정철주",
-                                        photo = "https://image.newsis.com/2023/07/12/NISI20230712_0001313626_web.jpg?rnd=20230712163021"
-                                    )
-                                )
-                            )
-                        )
-                    }
-                )
-            )
-        )
+        ChallengeDetailScreen()
     }
 }
