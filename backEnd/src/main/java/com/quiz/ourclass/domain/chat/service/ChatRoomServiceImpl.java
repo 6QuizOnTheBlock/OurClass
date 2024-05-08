@@ -47,7 +47,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRoomRepository.findById(chatRoomId)
             .map(chatRoom -> chatRoom.getOrganization().getMemberOrganizations()
                 .stream()
-                .anyMatch(orgMembers -> orgMembers.getId() == userId))
+                .anyMatch(orgMembers -> orgMembers.getMember().getId() == userId))
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
     }
 }
