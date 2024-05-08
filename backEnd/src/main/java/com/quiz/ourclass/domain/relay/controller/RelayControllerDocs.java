@@ -28,8 +28,10 @@ public interface RelayControllerDocs {
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = Long.class))),
-            @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content),
-            @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content)
+            @ApiResponse(responseCode = "404", description = """
+                (message : "학급을 찾을 수 없습니다.")
+                (message : "멤버가 존재하지 않습니다.")
+                """, content = @Content)
         })
     @PostMapping
     ResponseEntity<ResultResponse<?>> createRelay(
@@ -65,8 +67,10 @@ public interface RelayControllerDocs {
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = RunningRelayResponse.class))),
-            @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content),
-            @ApiResponse(responseCode = "404", description = "(message : \"진행중인 이어달리기가 없습니다.\")", content = @Content)
+            @ApiResponse(responseCode = "404", description = """
+                (message : "멤버가 존재하지 않습니다.")
+                (message : "진행중인 이어달리기가 없습니다.")
+                """, content = @Content)
         })
     @GetMapping("/running")
     ResponseEntity<ResultResponse<?>> getRunningRelay(
