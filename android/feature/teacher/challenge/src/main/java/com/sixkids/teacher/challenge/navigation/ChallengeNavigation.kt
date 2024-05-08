@@ -30,7 +30,7 @@ fun NavController.navigatePopupToHistory() {
     }
 }
 
-fun NavController.navigateChallengeDetail(challengeId: Int) {
+fun NavController.navigateChallengeDetail(challengeId: Long) {
     navigate(ChallengeRoute.detailRoute(challengeId))
 }
 
@@ -38,7 +38,7 @@ fun NavController.navigateCreateChallenge() {
     navigate(ChallengeRoute.createRoute)
 }
 
-fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String) {
+fun NavController.navigateChallengeCreatedResult(challengeId: Long, title: String) {
     navigate(ChallengeRoute.resultRoute(challengeId, title)) {
         popUpTo(ChallengeRoute.defaultRoute) {
             inclusive = false
@@ -50,7 +50,7 @@ fun NavController.navigateChallengeCreatedResult(challengeId: Int, title: String
 fun NavGraphBuilder.challengeNavGraph(
     navigateChallengeDetail: (Long, Long?) -> Unit,
     navigateChallengeHistory: () -> Unit,
-    navigateChallengeCreatedResult: (Int, String) -> Unit,
+    navigateChallengeCreatedResult: (Long, String) -> Unit,
     navigateCreateChallenge: () -> Unit,
     navigateUp: () -> Unit,
     showSnackbar: (SnackbarToken) -> Unit,
@@ -115,6 +115,6 @@ object ChallengeRoute {
     const val createRoute = "challenge-create"
     const val detailRoute = "challenge-detail?challengeId={$CHALLENGE_ID_NAME}&groupId={${GROUP_ID_NAME}}"
     const val resultRoute = "challenge-create-result?challengeId?={$CHALLENGE_ID_NAME}&title={$CHALLENGE_TITLE_NAME}"
-    fun detailRoute(challengeId: Long, groupId: Long?) = "challenge-detail?challengeId=$challengeId&groupId=$groupId"
-    fun resultRoute(challengeId: Int, title: String) = "challenge-create-result?challengeId=$challengeId&title=$title"
+    fun detailRoute(challengeId: Long, groupId: Long? = null) = "challenge-detail?challengeId=$challengeId&groupId=$groupId"
+    fun resultRoute(challengeId: Long, title: String) = "challenge-create-result?challengeId=$challengeId&title=$title"
 }

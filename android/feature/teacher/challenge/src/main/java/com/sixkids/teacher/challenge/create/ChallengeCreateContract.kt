@@ -15,7 +15,7 @@ data class ChallengeCreateUiState(
 
 sealed interface ChallengeCreateEffect : SideEffect {
     data object NavigateUp : ChallengeCreateEffect
-    data class NavigateResult(val challengeId: Int, val title: String) : ChallengeCreateEffect
+    data class NavigateResult(val challengeId: Long, val title: String) : ChallengeCreateEffect
     data class ShowSnackbar(val snackbarToken: SnackbarToken) : ChallengeCreateEffect
 
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) :

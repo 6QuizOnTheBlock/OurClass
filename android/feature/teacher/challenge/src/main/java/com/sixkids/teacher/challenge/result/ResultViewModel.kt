@@ -22,7 +22,7 @@ class ResultViewModel @Inject constructor(
 
     private val challengeId = savedStateHandle.get<Int>(ChallengeRoute.CHALLENGE_ID_NAME)!!
     fun getChallengeInfo() {
-        if(uiState.value.challenge.id == 0) {
+        if(uiState.value.challenge.id == 0L) {
             viewModelScope.launch {
                 getChallengeSimpleUseCase(challengeId)
                     .onSuccess {

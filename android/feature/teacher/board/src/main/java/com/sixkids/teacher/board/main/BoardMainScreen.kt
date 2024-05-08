@@ -1,6 +1,5 @@
 package com.sixkids.teacher.board.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +34,7 @@ fun BoardMainRoute(
             .padding(padding)
     ) {
         BoardMainScreen(
-            postCardOnClick = navigateToPost
+            postCardOnClick = navigateToPost,
             navigateToChatting = navigateToChatting
         )
     }
