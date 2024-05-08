@@ -17,7 +17,7 @@ import retrofit2.http.Query
 interface PostService {
 
     @GET("boards")
-    fun getPosts(
+    suspend fun getPosts(
         @Query("organizationId") organizationId: Int,
         @Query("memberId") memberId: Int,
         @Query("page") page: Int,
@@ -26,31 +26,31 @@ interface PostService {
     ): ApiResult<ApiResponse<PostListResponse>>
 
     @POST("boards")
-    fun createPost(
+    suspend fun createPost(
         @Query("organizationId") organizationId: Long,
         @Part("request") postRequestBody: NewPostRequest,
         @Part file: MultipartBody.Part?,
     ): ApiResult<ApiResponse<Long>>
 
     @GET("boards/{id}")
-    fun getPostDetail(
+    suspend fun getPostDetail(
         @Path("id") postId: Long,
     ): ApiResult<ApiResponse<PostDetailResponse>>
 
     @DELETE("boards/{id}")
-    fun deletePost(
+    suspend fun deletePost(
         @Path("id") postId: Long,
     ): ApiResult<ApiResponse<Boolean>>
 
     @PATCH("boards/{id}")
-    fun updatePost(
+    suspend fun updatePost(
         @Path("id") postId: Long,
         @Part("request") postRequestBody: NewPostRequest,
         @Part file: MultipartBody.Part?,
     ): ApiResult<ApiResponse<Long>>
 
     @POST("boards/{id}/report")
-    fun reportPost(
+    suspend fun reportPost(
         @Path("id") postId: Long,
     ): ApiResult<ApiResponse<Boolean>>
 }

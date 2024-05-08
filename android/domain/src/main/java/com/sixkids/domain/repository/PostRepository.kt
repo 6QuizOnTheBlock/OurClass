@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 interface PostRepository {
+
     suspend fun getPosts(
         organizationId: Int,
         memberId: Int,
@@ -44,4 +45,5 @@ interface PostRepository {
     suspend fun reportPost(
         postId: Long,
     ): Boolean
+
 }
