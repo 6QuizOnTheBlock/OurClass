@@ -11,8 +11,6 @@ interface PostRepository {
     suspend fun getPosts(
         organizationId: Int,
         memberId: Int,
-        page: Int,
-        size: Int,
         postCategory: String,
     ): Flow<PagingData<Post>>
 
