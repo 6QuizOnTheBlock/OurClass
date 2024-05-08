@@ -22,7 +22,7 @@ class PostRepositoryImpl @Inject constructor(
 ) : PostRepository {
     override suspend fun getPosts(
         organizationId: Int,
-        memberId: Int,
+        memberId: Int?,
         postCategory: String
     ): Flow<PagingData<Post>> {
         return Pager(

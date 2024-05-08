@@ -10,7 +10,7 @@ interface PostRepository {
 
     suspend fun getPosts(
         organizationId: Int,
-        memberId: Int,
+        memberId: Int? = null,
         postCategory: String,
     ): Flow<PagingData<Post>>
 
