@@ -9,6 +9,7 @@ import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
+import com.quiz.ourclass.global.config.annotation.LogExclusion;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,6 +82,7 @@ public class MemberController implements MemberControllerDocs {
     }
 
     /* 8. 기본 이미지 업데이트 */
+
     @PatchMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request) {
@@ -89,6 +91,7 @@ public class MemberController implements MemberControllerDocs {
     }
 
     /* 8. 기본 이미지 조회 */
+    @LogExclusion
     @GetMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> getDefaultImages() {
         return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));

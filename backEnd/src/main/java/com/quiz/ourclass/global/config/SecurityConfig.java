@@ -12,8 +12,7 @@ import com.quiz.ourclass.global.util.jwt.JwtLogOutSuccessHandler;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import com.quiz.ourclass.global.util.jwt.TokenRefreshFilter;
 import jakarta.servlet.DispatcherType;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +25,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -90,28 +91,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable);            // (3)
 
         http
-            .cors((corsCustomizer -> corsCustomizer.configurationSource(request -> { // (4)
-
-                CorsConfiguration configuration = new CorsConfiguration();
-
-                // a. 우리 프로젝트 리소스를 쓸 수 있는 다른 출처의 목록
-                configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-
-                // b. 다른 출처가 사용할 수 있는 매소드 목록
-                configuration.setAllowedMethods(
-                    Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-
-                // c. 다른 출처로 요청을 보낼 경우, header, 쿠키 등이 안 담겨오는데, 이러한 내용들도 같이 들어오게 한다.
-                configuration.setAllowCredentials(true);
-
-                // d. 다른 출처의 요청에 들어 있어도 되는 Header의 목록을 명시한다.
-                configuration.setAllowedHeaders(Arrays.asList("*"));
-
-                // e. 응답 헤더에 들어가는 값들을 명시한다. 여기 명시해주지 않으면 header에 값을 집어 넣더라도 안된다.
-                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                return configuration;
-            })));
+            .cors(
+                (corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource())));
 
         http
             .headers((headers) -> headers.frameOptions(
@@ -155,5 +136,19 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+// CORS 설정
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+        configuration.addAllowedHeader("*"); // 모든 헤더 허용
+        configuration.setAllowCredentials(true); // 자격 증명 허용 설정
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 구성 적용
+        return source;
+    }
 
 }

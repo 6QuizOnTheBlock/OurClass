@@ -26,7 +26,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         String exception = String.valueOf(request.getAttribute("exception"));
 
         // 에러 반환
-        if (exception != null) {
+        if (!exception.equals("null")) {
             // 1. 토큰이 인증에 불충분한 경우
             if (ErrorCode.valueOf(exception).equals(ErrorCode.EXPIRED_TOKEN)) {
                 filterResponse.error(response, ErrorCode.EXPIRED_TOKEN);
@@ -43,6 +43,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             // 2. 그 외의 인증 오류에 대한 핸들링
             log.error("토큰 외의 인증 에러 입니다. 내용은 다음과 같습니다. \n {}", authException.getMessage());
             filterResponse.error(response, ErrorCode.ANOTHER_AUTH_ERROR);
+        } else {
+            filterResponse.error(response, ErrorCode.EMPTY_TOKEN);
         }
     }
 }
