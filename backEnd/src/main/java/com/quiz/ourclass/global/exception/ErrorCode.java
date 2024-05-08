@@ -15,6 +15,7 @@ public enum ErrorCode {
     NOT_FOUND_DEFAULT_IMAGE(HttpStatus.NOT_FOUND, "해당 번호의 기본 이미지를 찾을 수 없습니다."),
     PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 입력 값입니다."),
+    ANOTHER_AUTH_ERROR(HttpStatus.UNAUTHORIZED, "토큰 외의 Auth 에러입니다."),
 
     //member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),

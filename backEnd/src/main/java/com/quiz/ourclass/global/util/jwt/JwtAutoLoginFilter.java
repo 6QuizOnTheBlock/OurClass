@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class JwtAutoLoginFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;

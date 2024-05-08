@@ -11,7 +11,9 @@ import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class JwtLogOutHandler implements LogoutHandler {
 

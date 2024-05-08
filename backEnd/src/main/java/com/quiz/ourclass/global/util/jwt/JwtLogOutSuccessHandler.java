@@ -8,7 +8,9 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class JwtLogOutSuccessHandler implements LogoutSuccessHandler {
 
@@ -19,6 +21,6 @@ public class JwtLogOutSuccessHandler implements LogoutSuccessHandler {
         Authentication authentication) throws IOException, ServletException {
 
         String name = String.valueOf(request.getAttribute("name"));
-        filterResponse.ok(response, name + "님의 로그아웃을 성공적으로 진행하였습니다.");
+        filterResponse.ok(response, "고유번호" + name + "번 님의 로그아웃을 성공적으로 진행하였습니다.");
     }
 }
