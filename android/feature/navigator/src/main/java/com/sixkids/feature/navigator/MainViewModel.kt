@@ -1,6 +1,7 @@
 package com.sixkids.feature.navigator
 
 import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.user.UpdateFCMTokenUseCase
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

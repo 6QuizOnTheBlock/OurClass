@@ -35,9 +35,8 @@ fun UlbanDatePickerDialog(
 
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
-        initialSelectedDateMillis = selectedDate.plusDays(1)
-            .atStartOfDay(ZoneId.systemDefault()).toInstant()
-            .toEpochMilli()
+        initialSelectedDateMillis = selectedDate.atStartOfDay().atZone(ZoneId.systemDefault())
+            .toInstant().toEpochMilli(),
     )
 
 

@@ -14,7 +14,7 @@ class CreateChallengeUseCase @Inject constructor(
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reward: Int,
+        reword: Int,
         minCount: Int,
         groups: List<GroupSimple> = emptyList(),
     ) = runCatching {
@@ -24,7 +24,7 @@ class CreateChallengeUseCase @Inject constructor(
             content = content,
             startTime = startTime,
             endTime = endTime,
-            reward = reward,
+            reword = reword,
             minCount = minCount,
             groups = groups
         )

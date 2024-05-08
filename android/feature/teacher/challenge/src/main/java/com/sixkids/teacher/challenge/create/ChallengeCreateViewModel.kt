@@ -1,8 +1,8 @@
 package com.sixkids.teacher.challenge.create
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
-import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.ui.SnackbarToken
@@ -14,28 +14,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChallengeCreateViewModel @Inject constructor(
-    private val createChallengeUseCase: CreateChallengeUseCase,
-    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase
+    private val createChallengeUseCase: CreateChallengeUseCase
 ) : BaseViewModel<ChallengeCreateUiState, ChallengeCreateEffect>(
     ChallengeCreateUiState()
 ) {
 
-    private var isFirstVisited: Boolean = true
-    fun initData() {
-        viewModelScope.launch {
-            if (isFirstVisited.not()) return@launch
-            isFirstVisited = false
-
-            getSelectedOrganizationIdUseCase().onSuccess {
-                intent {
-                    copy(organizationId = organizationId)
-                }
-            }.onFailure {
-                postSideEffect(ChallengeCreateEffect.HandleException(it) { initData() })
-            }
-        }
-
-    }
 
     private var title: String = ""
     private var content: String = ""
@@ -55,11 +38,12 @@ class ChallengeCreateViewModel @Inject constructor(
                 content = content,
                 startTime = startTime,
                 endTime = endTime,
-                reward = point.toInt(),
+                reword = point.toInt(),
                 minCount = headCount.toInt(),
                 groups = groupList
             ).onSuccess { challengeId ->
-                postSideEffect(ChallengeCreateEffect.NavigateResult(challengeId, title))
+//                moveToResult(challengeId)
+                Log.d("D107", "createChallenge: $challengeId")
             }.onFailure {
                 onShowSnackbar(SnackbarToken("챌린지 생성에 실패했습니다."))
             }
@@ -94,6 +78,12 @@ class ChallengeCreateViewModel @Inject constructor(
         }
     }
 
+
+    fun moveToResult() {
+        intent {
+            copy(step = ChallengeCreateStep.RESULT)
+        }
+    }
 
     fun onShowSnackbar(snackbarToken: SnackbarToken) {
         postSideEffect(ChallengeCreateEffect.ShowSnackbar(snackbarToken))

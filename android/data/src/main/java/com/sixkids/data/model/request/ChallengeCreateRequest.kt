@@ -9,7 +9,7 @@ data class ChallengeCreateRequest(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val minCount: Int,
-    val reward: Int,
+    val reword: Int,
     val groups: List<GroupRequest>
 )
 

@@ -23,9 +23,7 @@ import java.time.LocalDateTime
 @Composable
 fun ChallengeCreateRoute(
     viewModel: ChallengeCreateViewModel = hiltViewModel(),
-    onNavigateResult: (Int, String) -> Unit,
     onNavigateUp: () -> Unit,
-    onHandleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -33,9 +31,7 @@ fun ChallengeCreateRoute(
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is ChallengeCreateEffect.ShowSnackbar -> onShowSnackbar(it.snackbarToken)
-            is ChallengeCreateEffect.NavigateResult -> onNavigateResult(it.challengeId, it.title)
             ChallengeCreateEffect.NavigateUp -> onNavigateUp()
-            is ChallengeCreateEffect.HandleException -> onHandleException(it.throwable, it.retry)
         }
     }
 
@@ -48,6 +44,7 @@ fun ChallengeCreateRoute(
         updatePoint = viewModel::updatePoint,
         updateCount = viewModel::updateCount,
         updateGroupType = viewModel::updateGroupType,
+        moveToResult = viewModel::moveToResult,
         onMoveNextStep = viewModel::moveNextStep,
         onMovePrevStep = viewModel::movePrevStep,
         onShowSnackbar = viewModel::onShowSnackbar,
@@ -66,6 +63,7 @@ fun ChallengeCreateScreen(
     onShowSnackbar: (SnackbarToken) -> Unit = {},
     updateCount: (String) -> Unit = {},
     updateGroupType: (GroupType) -> Unit = {},
+    moveToResult: () -> Unit = {},
     onMoveNextStep: () -> Unit = {},
     onMovePrevStep: () -> Unit = {},
     createChallenge: () -> Unit = {},
@@ -99,6 +97,7 @@ fun ChallengeCreateScreen(
                 ChallengeCreateStep.GROUP_TYPE -> GroupTypeRoute(
                     updateMinCount = updateCount,
                     updateGroupType = updateGroupType,
+                    moveToResult = moveToResult,
 //                    moveNextStep = onMoveNextStep,
                     moveNextStep = {
                         onShowSnackbar(SnackbarToken("그룹 지정 로직은 미구현 입니다."))

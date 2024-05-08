@@ -10,16 +10,11 @@ data class ChallengeCreateUiState(
     val buttonEnabled: Boolean = false,
     @StringRes val buttonText: Int? = null,
     val step: ChallengeCreateStep = ChallengeCreateStep.INFO,
-    val organizationId: Int = 0,
 ) : UiState
 
 sealed interface ChallengeCreateEffect : SideEffect {
     data object NavigateUp : ChallengeCreateEffect
-    data class NavigateResult(val challengeId: Int, val title: String) : ChallengeCreateEffect
     data class ShowSnackbar(val snackbarToken: SnackbarToken) : ChallengeCreateEffect
-
-    data class HandleException(val throwable: Throwable, val retry: () -> Unit) :
-        ChallengeCreateEffect
 }
 
 enum class ChallengeCreateStep {

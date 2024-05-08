@@ -42,21 +42,18 @@ class ChallengeRepositoryImpl @Inject constructor(
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reward: Int,
+        reword: Int,
         minCount: Int,
         groups: List<GroupSimple>
-    ): Int = challengeRemoteDataSourceImpl.createChallenge(
+    ) = challengeRemoteDataSourceImpl.createChallenge(
         organizationId,
         title,
         content,
         startTime,
         endTime,
-        reward,
+        reword,
         minCount,
         groups
     )
-
-    override suspend fun getChallengeSimple(challengeId: Int): Challenge
-     = challengeRemoteDataSourceImpl.getChallengeSimple(challengeId)
 
 }

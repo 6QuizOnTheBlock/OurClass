@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class GetSelectedOrganizationIdUseCase @Inject constructor(
     private val organizationRepository: OrganizationRepository
-) {
-    suspend operator fun invoke() = runCatching {
-        organizationRepository.getSelectedOrganizationId()
+){
+    suspend operator fun invoke(): Int {
+        return organizationRepository.getSelectedOrganizationId()
     }
 }
