@@ -1,5 +1,6 @@
 package com.sixkids.data.network
 
+import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
@@ -9,10 +10,10 @@ class ApiResultCallAdapterFactory : CallAdapter.Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,
-        retrofit: Retrofit
+        retrofit: Retrofit,
     ): CallAdapter<*, *>? {
         val wrapperType = getParameterUpperBound(0, returnType as ParameterizedType)
-        if (getRawType(returnType) != ApiResult::class.java) {
+        if (getRawType(returnType) != Call::class.java) {
             return null
         }
 

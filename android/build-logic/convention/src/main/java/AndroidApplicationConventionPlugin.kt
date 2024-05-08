@@ -13,6 +13,7 @@ internal class AndroidApplicationConventionPlugin : Plugin<Project>{
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("sixkids.android.hilt")
+                apply("com.google.gms.google-services")
             }
 
             extensions.configure<ApplicationExtension>{

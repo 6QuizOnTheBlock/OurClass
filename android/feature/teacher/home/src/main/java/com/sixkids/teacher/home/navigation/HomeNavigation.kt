@@ -9,7 +9,7 @@ import com.sixkids.teacher.home.main.HomeMainRoute
 import com.sixkids.teacher.home.rank.RankRoute
 
 fun NavController.navigateHome(navOptions: NavOptions) {
-    navigate(HomeRoute.defaultRoute,navOptions)
+    navigate(HomeRoute.defaultRoute, navOptions)
 }
 
 fun NavController.navigateRank() {
@@ -18,20 +18,23 @@ fun NavController.navigateRank() {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
-    navigateToRank: () -> Unit
+    navigateToRank: () -> Unit,
+    navigateToChallenge: () -> Unit,
 ) {
-    composable(route = HomeRoute.defaultRoute){
+    composable(route = HomeRoute.defaultRoute) {
         HomeMainRoute(
             padding,
-            navigateToRank
+            navigateToRank,
+            navigateToChallenge
         )
     }
-    composable(route = HomeRoute.rankRoute){
+    composable(route = HomeRoute.rankRoute) {
         RankRoute(padding)
     }
 }
 
-object HomeRoute{
+
+object HomeRoute {
     const val defaultRoute = "home"
     const val rankRoute = "rank"
 }
