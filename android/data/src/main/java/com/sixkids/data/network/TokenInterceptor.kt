@@ -18,8 +18,6 @@ class TokenInterceptor @Inject constructor(
         val token = runBlocking {
             tokenRepository.getAccessToken()
         }
-        //TODO: 로그인 구현 전 까지는 직접 토큰을 넣어 줘야 동작
-//        val token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiaWF0IjoxNzE0NTQxNDY5LCJleHAiOjE3MTQ2Mjc4Njl9.c2PIwJ7llRGVJ79skEin0ylSiwECfuXY2v1o0aekLmHWNxibaBt2XcXEkaVsb41lBEJTdJmDWm0HVig_wTzQGw"
         val request = chain.request().newBuilder().apply {
             addHeader(AUTHORIZATION_HEADER, "$TOKEN_TYPE $token")
         }

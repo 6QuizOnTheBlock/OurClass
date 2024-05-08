@@ -16,4 +16,8 @@ interface UserRepository {
     suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
 
     suspend fun signOut() : Boolean
+
+    suspend fun updateFCMToken(fcmToken: String)
+
+    suspend fun autoSignIn(): JwtToken
 }

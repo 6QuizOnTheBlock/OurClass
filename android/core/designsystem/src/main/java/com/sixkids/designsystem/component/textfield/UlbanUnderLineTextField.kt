@@ -90,6 +90,31 @@ fun UlbanUnderLineTextField(
                         postfix = stringResource(id = R.string.people_postfix)
                     )
                 }
+
+                InputTextType.GRADE -> {
+                    UlbanNumberTextField(
+                        modifier = Modifier
+                            .weight(1f),
+                        text = text,
+                        onTextChange = onTextChange,
+                        hint = hint,
+                        textStyle = textStyle,
+                        keyboardActions = keyboardActions,
+                        postfix = stringResource(id = R.string.grade_postfix)
+                    )
+                }
+                InputTextType.CLASS -> {
+                    UlbanNumberTextField(
+                        modifier = Modifier
+                            .weight(1f),
+                        text = text,
+                        onTextChange = onTextChange,
+                        hint = hint,
+                        textStyle = textStyle,
+                        keyboardActions = keyboardActions,
+                        postfix = stringResource(id = R.string.class_postfix)
+                    )
+                }
             }
             if (text.isNotEmpty()) {
                 Icon(
@@ -115,6 +140,8 @@ enum class InputTextType {
     TEXT,
     POINT,
     PEOPLE,
+    GRADE,
+    CLASS
 }
 
 @Preview(showBackground = true)

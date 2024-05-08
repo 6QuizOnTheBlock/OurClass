@@ -15,6 +15,7 @@ import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -158,6 +159,10 @@ class MainNavigator(
 
     fun popBackStack() {
         navController.popBackStack()
+    }
+    
+    fun navigateChatting(){
+        navController.navigateChatting()
     }
 
     @Composable

@@ -3,6 +3,7 @@ package com.sixkids.teacher.main.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.sixkids.teacher.main.neworganization.NewOrganizationRoute
 import com.sixkids.teacher.main.organization.OrganizationListRoute
 import com.sixkids.teacher.main.profile.TeacherProfileRoute
 import com.sixkids.ui.SnackbarToken
@@ -42,6 +43,14 @@ fun NavGraphBuilder.teacherOrganizationListNavGraph(
             navigateToSignIn = navigateToSignIn,
             onShowSnackBar = onShowSnackBar,
             onBackClick = onBackClick
+        )
+    }
+
+    composable(route = TeacherMainRoute.newOrganizationRoute) {
+        NewOrganizationRoute(
+            navigateToOrganizationList = onBackClick,
+            onBackClick = onBackClick,
+            onShowSnackBar = onShowSnackBar,
         )
     }
 

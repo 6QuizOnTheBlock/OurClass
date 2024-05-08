@@ -2,6 +2,7 @@ package com.sixkids.data.repository.user.remote
 
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
+import com.sixkids.data.model.request.FcmRequest
 import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
@@ -94,6 +95,16 @@ class UserRemoteDataSourceImpl @Inject constructor(
         }
 
         return response.getOrThrow().data.photoImageUrl
+    }
+
+    override suspend fun updateFCMToken(fcmToken: String) = memberService.updateFCMToken(FcmRequest(fcmToken)).getOrThrow().data
+
+    override suspend fun autoSignIn(): JwtToken {
+        val response = memberService.autoSignIn()
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveRole(response.getOrNull()?.data?.role ?: "error")
+        }
+        return response.getOrThrow().data.toModel()
     }
 
 }

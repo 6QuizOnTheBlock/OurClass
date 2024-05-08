@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.sixkids.android.application)
 }
 
-fun getProperty(propertyKey: String): String = gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
+fun getProperty(propertyKey: String): String =
+    gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 
 android {
     namespace = "com.sixkids.ulban"
@@ -26,13 +27,15 @@ android {
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", "\"${nativeAppKey}\"")
     }
 
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 }
 
 dependencies {
     implementation(projects.feature.navigator)
-    implementation(libs.kakao.user)
     implementation(projects.data)
+    implementation(libs.kakao.user)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 }

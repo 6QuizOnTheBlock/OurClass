@@ -7,4 +7,6 @@ interface OrganizationRepository {
 
     suspend fun saveSelectedOrganizationId(organizationId: Int)
     suspend fun getSelectedOrganizationId(): Int
+
+    suspend fun newOrganization(name: String): Long
 }
