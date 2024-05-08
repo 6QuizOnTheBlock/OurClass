@@ -13,12 +13,14 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
+import com.sixkids.teacher.challenge.navigation.navigatePopupToHistory
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -137,12 +139,20 @@ class MainNavigator(
         navController.navigateChallengeHistory()
     }
 
+    fun navigatePopupToHistory() {
+        navController.navigatePopupToHistory()
+    }
+
     fun navigateChallengeDetail(challengeId: Int) {
         navController.navigateChallengeDetail(challengeId)
     }
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
+    }
+
+    fun navigateChallengeCreatedResult(challengeId: Int, title: String) {
+        navController.navigateChallengeCreatedResult(challengeId, title)
     }
 
     fun navigateTeacherOrganizationList(){

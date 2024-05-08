@@ -47,7 +47,6 @@ fun GroupTypeRoute(
     viewModel: GroupTypeViewModel = hiltViewModel(),
     updateMinCount: (String) -> Unit,
     updateGroupType: (GroupType) -> Unit,
-    moveToResult: () -> Unit,
     moveNextStep: () -> Unit,
     createChallenge: () -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
@@ -64,7 +63,6 @@ fun GroupTypeRoute(
                 )
             )
 
-            is GroupTypeEffect.MoveToResult -> moveToResult()
             is GroupTypeEffect.MoveToMatchingStep -> moveNextStep()
             is GroupTypeEffect.UpdateGroupType -> updateGroupType(it.type)
             is GroupTypeEffect.UpdateMinCount -> updateMinCount(it.minCount)

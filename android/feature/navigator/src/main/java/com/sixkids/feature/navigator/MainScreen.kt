@@ -101,6 +101,8 @@ fun MainScreen(
                 padding = innerPadding,
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
+                navigateChallengeCreatedResult = navigator::navigateChallengeCreatedResult,
+                navigateChallengeHistory = navigator::navigatePopupToHistory,
                 handleException = viewModel::handleException,
                 showSnackbar = viewModel::onShowSnackbar,
                 navigateUp = navigator::popBackStack,
@@ -131,6 +133,7 @@ fun MainScreen(
                 onBackClick = navigator::popBackStack,
                 navigateToSignIn = navigator::navigateSignIn,
             )
+
 
         }
         with(uiState) {
