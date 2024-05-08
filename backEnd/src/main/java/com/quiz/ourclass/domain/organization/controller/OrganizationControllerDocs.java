@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -111,5 +112,17 @@ public interface OrganizationControllerDocs {
         long id,
         @RequestBody
         UpdateOrganizationRequest updateOrganizationRequest
+    );
+
+    @Operation(summary = "학급 포인트 랭킹 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberRankPoint.class)))
+        })
+    @GetMapping("/{id}/rank")
+    ResponseEntity<ResultResponse<?>> getRanking(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id
     );
 }
