@@ -17,7 +17,7 @@ public record ChallengeRequest(
     @Schema(description = "함께달리기 종료시간")
     LocalDateTime endTime,
     @Schema(description = "보상 경험치")
-    int reword,
+    int reward,
     @Schema(description = "그룹 당 최소인원")
     int minCount,
     @Schema(description = "함께달리기 참여 그룹")
