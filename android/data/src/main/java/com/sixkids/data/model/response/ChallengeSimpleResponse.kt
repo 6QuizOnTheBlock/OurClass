@@ -19,6 +19,6 @@ fun ChallengeSimpleResponse.toModel(): Challenge {
         content = content,
         startTime = startTime,
         endTime = endTime,
-        reword = reward
+        reward = reward
     )
 }

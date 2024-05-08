@@ -42,7 +42,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>
     ): Int = challengeRemoteDataSourceImpl.createChallenge(
@@ -51,7 +51,7 @@ class ChallengeRepositoryImpl @Inject constructor(
         content,
         startTime,
         endTime,
-        reword,
+        reward,
         minCount,
         groups
     )

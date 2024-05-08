@@ -55,7 +55,7 @@ class ChallengeCreateViewModel @Inject constructor(
                 content = content,
                 startTime = startTime,
                 endTime = endTime,
-                reword = point.toInt(),
+                reward = point.toInt(),
                 minCount = headCount.toInt(),
                 groups = groupList
             ).onSuccess { challengeId ->

@@ -67,7 +67,7 @@ fun ResultRoute(
                 content = content,
                 startTime = startTime,
                 endTime = endTime,
-                point = reword,
+                point = reward,
                 onConfirmClick = {
                     showDialog = false
                 }

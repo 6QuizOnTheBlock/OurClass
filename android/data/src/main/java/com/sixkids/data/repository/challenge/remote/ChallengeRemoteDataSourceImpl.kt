@@ -21,7 +21,7 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>,
     ): Int = challengeService.createChallenge(
@@ -31,7 +31,7 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
             content = content,
             startTime = startTime,
             endTime = endTime,
-            reword = reword,
+            reward = reward,
             minCount = minCount,
             groups = groups.map {
                 GroupRequest(

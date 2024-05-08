@@ -14,7 +14,7 @@ interface ChallengeRemoteDataSource {
         content: String,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
-        reword: Int,
+        reward: Int,
         minCount: Int,
         groups: List<GroupSimple>
     ): Int
