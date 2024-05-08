@@ -67,12 +67,15 @@ public interface OrganizationControllerDocs {
                 content = @Content(schema = @Schema(implementation = Long.class))),
             @ApiResponse(responseCode = "400", description = """
                 (message : "학급 가입이 불가능한 상태입니다.")
+                                
                 (message : "학급 가입코드가 일치하지 않습니다.")
+                                
                 (message : "이미 가입한 학급입니다.")
                 """, content = @Content),
             @ApiResponse(responseCode = "403", description = "(message : \"해당 학급의 관리자가 아닙니다.\")", content = @Content),
             @ApiResponse(responseCode = "404", description = """
                 (message : "멤버가 존재하지 않습니다.")
+                                
                 (message : "학급을 찾을 수 없습니다.")
                 """, content = @Content)
         })

@@ -32,7 +32,9 @@ public interface GroupControllerDocs {
     @Operation(summary = "함께달리기 그룹 초대 응답",
         description = """
             그룹 블루투스 매칭 중 초대에 수락 or 거부 응답을 보냅니다.
+                        
             수락 시 해당 대기방 참여.
+                        
             그룹 리더에게 SSE(INVITE_RESPONSE) 전송.""",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
