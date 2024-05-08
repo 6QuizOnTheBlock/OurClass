@@ -59,6 +59,9 @@ googleServices = "4.3.14"
 firebaseBom = "33.0.0"
 firebaseMessagingKtx = "24.0.0"
 
+# Stomp
+stomp = "2.0.5"
+
 
 [libraries]
 # Dependencies of the included build-logic
@@ -133,6 +136,9 @@ lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+
+#Stomp
+stomp = { group = "com.github.NaikSoftware", name = "StompProtocolAndroid", version.ref = "stomp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -93,12 +93,17 @@ fun MainScreen(
 
             boardNavGraph(
                 padding = innerPadding,
+                navigateToPost = navigator::navigatePost,
+                onBackClick = navigator::popBackStack,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToChatting = navigator::navigateChatting,
             )
 
             challengeNavGraph(
-                padding = innerPadding,
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
+                navigateChallengeCreatedResult = navigator::navigateChallengeCreatedResult,
+                navigateChallengeHistory = navigator::navigatePopupToHistory,
                 handleException = viewModel::handleException,
                 showSnackbar = viewModel::onShowSnackbar,
                 navigateUp = navigator::popBackStack,
@@ -133,7 +138,6 @@ fun MainScreen(
             studentHomeNavGraph(
                 padding = innerPadding,
             )
-
         }
         with(uiState) {
             UlbanSnackbar(

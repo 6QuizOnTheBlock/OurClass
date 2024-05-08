@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create.info
 
+import androidx.annotation.StringRes
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 import java.time.LocalDate
@@ -11,8 +12,8 @@ data class InfoState(
     val content: String = "",
     val startDate: LocalDate = LocalDate.now(),
     val endDate: LocalDate = LocalDate.now(),
-    val startTime: LocalTime = LocalTime.now(),
-    val endTime: LocalTime = LocalTime.now(),
+    val startTime: LocalTime = LocalTime.now().plusMinutes(5),
+    val endTime: LocalTime = LocalTime.now().plusMinutes(5),
     val point: String = "",
     val step: InfoStep = InfoStep.TITLE,
     val stepVisibilityList: List<Boolean> = emptyList()
@@ -26,7 +27,7 @@ sealed interface InfoEffect : SideEffect {
     data class UpdateEndTime(val endTime: LocalDateTime) : InfoEffect
     data class UpdatePoint(val point: String) : InfoEffect
     data object MoveGroupTypeStep : InfoEffect
-    data object ShowInputErrorSnackbar : InfoEffect
+    data class ShowInputErrorSnackbar(@StringRes val messageRes: Int) : InfoEffect
 }
 
 enum class InfoStep {

@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create.info
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import com.sixkids.designsystem.R as DesignSystemR
 
+private const val TAG = "D107"
+
 @Composable
 fun InfoContentRoute(
     viewModel: InfoViewModel = hiltViewModel(),
@@ -68,6 +71,15 @@ fun InfoContentRoute(
     }
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(key1 = uiState.startTime, key2 = uiState.startDate) {
+        Log.d(TAG, "LaunchedEffect: start : ${uiState.startDate} ${uiState.startTime}")
+    }
+
+    LaunchedEffect(key1 = uiState.endTime, key2 = uiState.endDate) {
+        Log.d(TAG, "LaunchedEffect: end : ${uiState.endDate} ${uiState.endTime}")
+    }
+
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is InfoEffect.UpdateTitle -> updateTitle(it.title)
@@ -77,11 +89,13 @@ fun InfoContentRoute(
             is InfoEffect.UpdatePoint -> updatePoint(it.point)
             is InfoEffect.ShowInputErrorSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.please_input_all_info)
+                    message = context.getString(it.messageRes)
                 )
             )
 
-            InfoEffect.MoveGroupTypeStep -> moveNextStep()
+            InfoEffect.MoveGroupTypeStep -> {
+                moveNextStep()
+            }
         }
     }
 
@@ -133,6 +147,7 @@ fun InfoContent(
             moveNextStep()
         }
     }
+
 
 
     LaunchedEffect(key1 = uiState.step) {
@@ -198,7 +213,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.end_time),
+                        text = stringResource(R.string.please_input_end_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -251,7 +266,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.start_time),
+                        text = stringResource(R.string.please_input_start_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {

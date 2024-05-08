@@ -16,10 +16,16 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.student.board.navigation.StudentHomeRoute
 import com.sixkids.student.board.navigation.navigateStudentHome
+import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
+import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
+import com.sixkids.teacher.board.navigation.navigatePostWrite
+import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
+import com.sixkids.teacher.challenge.navigation.navigatePopupToHistory
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.home.navigation.navigateHome
 import com.sixkids.teacher.home.navigation.navigateRank
@@ -75,23 +81,40 @@ class MainNavigator(
         }
     }
 
-    fun popBackStack() {
-        navController.popBackStack()
+    /**
+     * Board Navigation
+     */
+
+    fun navigateBoard() {
+        navController.navigate(BoardRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
     }
+
+    fun navigatePost() {
+        navController.navigatePost()
+    }
+
+    fun navigatePostWrite() {
+        navController.navigatePostWrite()
+    }
+
 
     /**
      * Home Navigation
      */
     fun navigateHome() {
         bottomTabItems = teacherTab() // 바텀 네비게이션 탭 초기화
-        navController.navigate(HomeRoute.defaultRoute){
-            popUpTo(navController.graph.id){
+        navController.navigate(HomeRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
                 inclusive = true
             }
         }
     }
 
-    fun navigateRank(){
+    fun navigateRank() {
         navController.navigateRank()
     }
 
@@ -110,8 +133,8 @@ class MainNavigator(
      * Manage Student Navigation
      */
     fun navigateManageStudent() {
-        navController.navigateManageStudent(navOptions{
-            popUpTo(ManageStudentRoute.defaultRoute){
+        navController.navigateManageStudent(navOptions {
+            popUpTo(ManageStudentRoute.defaultRoute) {
                 inclusive = true
             }
         })
@@ -132,15 +155,15 @@ class MainNavigator(
     /**
      * SignIn Navigation
      */
-    fun navigateSignIn(){
+    fun navigateSignIn() {
         navController.navigateSignIn()
     }
 
-    fun navigateSignUp(){
+    fun navigateSignUp() {
         navController.navigateSignUp()
     }
 
-    fun navigateSignUpPhoto(isTeacher: Boolean){
+    fun navigateSignUpPhoto(isTeacher: Boolean) {
         navController.navigateSignUpPhoto(isTeacher)
     }
 
@@ -148,25 +171,41 @@ class MainNavigator(
         navController.navigateChallengeHistory()
     }
 
-    fun navigateChallengeDetail(challengeId: Int) {
-        navController.navigateChallengeDetail(challengeId)
+    fun navigateChallengeDetail(challengeId: Long, groupId: Long?) {
+        navController.navigateChallengeDetail(challengeId, groupId)
+    }
+
+    fun navigatePopupToHistory() {
+        navController.navigatePopupToHistory()
     }
 
     fun navigateCreateChallenge() {
         navController.navigateCreateChallenge()
     }
 
-    fun navigateTeacherOrganizationList(){
+    fun navigateChallengeCreatedResult(challengeId: Long, title: String) {
+        navController.navigateChallengeCreatedResult(challengeId, title)
+    }
+
+    fun navigateTeacherOrganizationList() {
         bottomTabItems = teacherTab() // 바텀 네비게이션 탭 초기화
         navController.navigateTeacherOrganizationList()
     }
 
-    fun navigateNewOrganization(){
+    fun navigateNewOrganization() {
         navController.navigateNewOrganization()
     }
 
-    fun navigateProfile(){
+    fun navigateProfile() {
         navController.navigateProfile()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+
+    fun navigateChatting() {
+        navController.navigateChatting()
     }
 
     @Composable
