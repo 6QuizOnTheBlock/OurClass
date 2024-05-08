@@ -77,7 +77,7 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")"),
             @ApiResponse(responseCode = "404", description = "(message : \"레포트를 찾을 수 없습니다.\")", content = @Content)
         })
-    @PatchMapping(value = "/reports/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/reports/{id}")
     public ResponseEntity<ResultResponse<?>> confirmReport(
         @Schema(description = "레포트 id")
         @PathVariable

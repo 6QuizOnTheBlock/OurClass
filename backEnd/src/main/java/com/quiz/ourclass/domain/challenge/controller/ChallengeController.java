@@ -52,7 +52,7 @@ public class ChallengeController implements ChallengeControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(reportId));
     }
 
-    @PatchMapping(value = "/reports/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/reports/{id}")
     public ResponseEntity<ResultResponse<?>> confirmReport(@PathVariable long id,
         ReportType reportType) {
         challengeService.confirmReport(id, reportType);
