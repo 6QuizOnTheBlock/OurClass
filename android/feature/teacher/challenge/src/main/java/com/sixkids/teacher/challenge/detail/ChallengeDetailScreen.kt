@@ -37,14 +37,9 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.AcceptStatus
-import com.sixkids.model.ChallengeDetail
-import com.sixkids.model.Group
-import com.sixkids.model.MemberSimple
-import com.sixkids.model.Report
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.ui.util.formatToMonthDayTime
-import java.time.LocalDateTime
 
 
 @Composable
@@ -60,7 +55,7 @@ fun ChallengeDetailRoute(
         }
     }
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         viewModel.getChallengeDetail()
     }
 
