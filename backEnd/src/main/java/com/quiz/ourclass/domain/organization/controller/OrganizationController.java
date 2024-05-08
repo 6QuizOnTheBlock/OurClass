@@ -3,6 +3,9 @@ package com.quiz.ourclass.domain.organization.controller;
 import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
+import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
+import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.service.OrganizationService;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -10,6 +13,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +57,20 @@ public class OrganizationController implements OrganizationControllerDocs {
     public ResponseEntity<ResultResponse<?>> getOrganizationMembers(@PathVariable long id) {
         List<MemberSimpleDTO> members = organizationService.getOrganizationMembers(id);
         return ResponseEntity.ok(ResultResponse.success(members));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResultResponse<?>> updateOrganizationName(@PathVariable long id,
+        @RequestBody UpdateOrganizationRequest updateOrganizationRequest) {
+        UpdateOrganizationResponse updateOrganizationResponse = organizationService.updateOrganizationName(
+            id, updateOrganizationRequest);
+        return ResponseEntity.ok(ResultResponse.success(updateOrganizationResponse));
+    }
+
+    @GetMapping("/{id}/rank")
+    public ResponseEntity<ResultResponse<?>> getRanking(@PathVariable long id) {
+        List<MemberRankPoint> memberRankPoints = organizationService.getRanking(id);
+        return ResponseEntity.ok(ResultResponse.success(memberRankPoints));
     }
 }
 
