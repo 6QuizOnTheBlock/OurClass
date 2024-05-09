@@ -1,5 +1,6 @@
 package com.sixkids.teacher.board.postwrite
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
@@ -56,6 +57,8 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.board.R
 import com.sixkids.teacher.board.postwrite.component.PageTitle
 import com.sixkids.ui.SnackbarToken
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import com.sixkids.designsystem.R as UlbanRes
 
@@ -106,7 +109,9 @@ fun PostWriteRoute(
         PostWriteScreen(
             postWriteState = uiState,
             cancelOnClick = { viewModel.onBack() },
-            submitOnClick = { viewModel.onPost() },
+            submitOnClick = { viewModel.onPost(
+                uiState.photo?.let { saveBitmapToFile(context, it, "post_photo.jpg") }
+            ) },
             titleValueChange = { viewModel.onTitleChanged(it) },
             contentValueChange = { viewModel.onContentChanged(it) },
             anonymousCheckedChange = { viewModel.onAnonymousChecked(it) },
@@ -215,6 +220,30 @@ fun PostWriteScreen(
             )
         }
     }
+}
+
+fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File? {
+    val directory = context.getExternalFilesDir(null) ?: return null
+
+    val file = File(directory, fileName)
+    var fileOutputStream: FileOutputStream? = null
+
+    try {
+        fileOutputStream = FileOutputStream(file)
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        fileOutputStream.flush()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    } finally {
+        try {
+            fileOutputStream?.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    return file
 }
 
 @Preview(showBackground = true)
