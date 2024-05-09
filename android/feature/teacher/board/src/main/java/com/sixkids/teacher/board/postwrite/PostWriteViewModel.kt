@@ -7,6 +7,7 @@ import com.sixkids.domain.usecase.post.NewPostUseCase
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +25,7 @@ class PostWriteViewModel @Inject constructor(
     fun onAddPhoto(bitmap: Bitmap) = intent { copy(photo = bitmap) }
     fun showToast(message: String) = postSideEffect(PostWriteEffect.OnShowSnackbar(message))
 
-    fun onPost() {
+    fun onPost(photo: File?) {
         viewModelScope.launch {
             intent { copy(isLoading = true) }
 
@@ -39,7 +40,7 @@ class PostWriteViewModel @Inject constructor(
                     content = currentState.content,
                     secretStatus = currentState.anonymousChecked,
                     postCategory = "FREE",
-                    file = null
+                    file = photo
                 ).onSuccess {
                     postSideEffect(PostWriteEffect.OnShowSnackbar("게시글 작성에 성공했어요 :)"))
                     postSideEffect(PostWriteEffect.NavigateBack)
