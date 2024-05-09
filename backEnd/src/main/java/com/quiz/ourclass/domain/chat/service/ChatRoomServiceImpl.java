@@ -44,7 +44,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     public void isMemberAuthorizedToJoinRoom(Long userId, Long chatRoomId) {
-        boolean checkMemberInGroup = chatRoomRepository.findById(chatRoomId)
+        boolean checkMemberInGroup = chatRoomRepository.findByOrganization_Id(chatRoomId)
             .map(chatRoom -> chatRoom.getOrganization().getMemberOrganizations()
                 .stream()
                 .anyMatch(orgMembers -> orgMembers.getMember().getId() == userId))

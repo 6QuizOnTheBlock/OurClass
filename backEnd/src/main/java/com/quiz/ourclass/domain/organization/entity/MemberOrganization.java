@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.organization.entity;
 
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
+import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,4 +30,9 @@ public class MemberOrganization {
     Member member;
     double sincerityPoint;
     int exp;
+
+    public UpdateExpResponse updateExp(UpdateExpRequest updateExpRequest) {
+        this.exp += updateExpRequest.exp();
+        return UpdateExpResponse.builder().exp(exp).build();
+    }
 }

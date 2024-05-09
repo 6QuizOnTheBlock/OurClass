@@ -4,9 +4,11 @@ package com.quiz.ourclass.global.util;
 import java.time.Duration;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RedisUtil {
@@ -49,6 +51,7 @@ public class RedisUtil {
 
     public void addChatRoomUser(Long chatRoomId, String memberId) {
         String key = buildChatRoomKey(chatRoomId);
+        log.info("redis insert room id : {}", key);
         redisTemplate.opsForSet().add(key, memberId);
     }
 

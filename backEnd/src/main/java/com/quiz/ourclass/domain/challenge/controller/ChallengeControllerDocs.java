@@ -96,7 +96,8 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = RunningChallengeResponse.class))),
             @ApiResponse(responseCode = "404", description = """
-                (message : "학급을 찾을 수 없습니다.")"
+                (message : "학급을 찾을 수 없습니다.")
+                                
                 (message : "진행중인 함께달리기가 없습니다.")
                 """, content = @Content)
         })
