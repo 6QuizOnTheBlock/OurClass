@@ -41,10 +41,7 @@ public class AopConfig {
         Object[] args = pjp.getArgs();
         StringBuilder logMsg = new StringBuilder();
         // request 값 확인
-        for (Object arg : args) {
-            logMsg.append(arg.getClass().getSimpleName()).append(" [");
-            logMsg.append(getObjectDetails(arg)).append("] ");
-        }
+
         log.info("-----------> REQUEST <Header>: {} \n <Body>: {}({}) ={}"
             , getHeaderDetail()
             , pjp.getSignature().getDeclaringTypeName()
@@ -100,7 +97,7 @@ public class AopConfig {
             HttpServletRequest request = attrs.getRequest();
             ans.append(" 요청주소: ").append(request.getRequestURL().toString())
                 .append(" 요청Method: ").append(request.getMethod())
-                .append(" IP 주소(이상하면 벤 하셈ㅋ): ").append(request.getRemoteAddr());
+                .append(" IP 주소: ").append(request.getRemoteAddr());
 
 
         } else {
