@@ -63,6 +63,7 @@ firebaseMessagingKtx = "24.0.0"
 stomp = "1.6.6"
 rxjava = "2.2.5"
 rxandroid = "2.1.0"
+annotationJvm = "1.7.1"
 
 
 [libraries]
@@ -143,6 +144,7 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 stomp = { group = "com.github.NaikSoftware", name = "StompProtocolAndroid", version.ref = "stomp" }
 rxjava = { group = "io.reactivex.rxjava2", name = "rxjava", version = "rxjava" }
 rxandroid = { group = "io.reactivex.rxjava2", name = "rxandroid", version = "rxandroid" }
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
