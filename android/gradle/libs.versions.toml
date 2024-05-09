@@ -167,7 +167,7 @@ sixkids-android-hilt = { id = "sixkids.android.hilt", version = "unspecified" }
 compose = ["androidx-activity-compose", "androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-ui-test-junit4", "androidx-material3", "androidx-navigation-compose", "androidx-hilt-navigation-compose", "androidx-lifecycle-compose"]
 compose-debug = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
 paging = ["paging", "paging-compose"]
-stomp = ["stomp", "rxjava", "rxandroid"]
+stomp = ["stomp", "rxjava"]
 
 # Networking Bundle
 retrofit = ["retrofit", "moshi-converter", "moshi-kotlin", "okhttp", "okhttp-logginginterceptor"]
