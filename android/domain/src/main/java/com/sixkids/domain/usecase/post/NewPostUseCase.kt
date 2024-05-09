@@ -15,12 +15,14 @@ class NewPostUseCase @Inject constructor(
         secretStatus: Boolean,
         postCategory: String,
         file: File?
-    ) = postRepository.createPost(
-        organizationId,
-        title,
-        content,
-        secretStatus,
-        postCategory,
-        file
-    )
+    ) = runCatching {
+        postRepository.createPost(
+            organizationId,
+            title,
+            content,
+            secretStatus,
+            postCategory,
+            file
+        )
+    }
 }

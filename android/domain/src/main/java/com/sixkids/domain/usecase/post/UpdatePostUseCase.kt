@@ -14,12 +14,14 @@ class UpdatePostUseCase @Inject constructor(
         secretStatus: Boolean,
         postCategory: String,
         file: File?
-    ) = postRepository.updatePost(
-        postId,
-        title,
-        content,
-        secretStatus,
-        postCategory,
-        file
-    )
+    ) = runCatching {
+        postRepository.updatePost(
+            postId,
+            title,
+            content,
+            secretStatus,
+            postCategory,
+            file
+        )
+    }
 }
