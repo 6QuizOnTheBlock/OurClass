@@ -7,5 +7,7 @@ class DeletePostUseCase @Inject constructor(
     private val postRepository: PostRepository
 
 ){
-    suspend operator fun invoke(postId: Long) = postRepository.deletePost(postId)
+    suspend operator fun invoke(postId: Long) = runCatching {
+        postRepository.deletePost(postId)
+    }
 }

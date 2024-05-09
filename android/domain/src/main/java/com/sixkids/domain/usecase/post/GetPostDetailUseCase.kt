@@ -6,5 +6,7 @@ import javax.inject.Inject
 class GetPostDetailUseCase @Inject constructor(
     private val postRepository: PostRepository
 ) {
-    suspend operator fun invoke(postId: Long) = postRepository.getPostDetail(postId)
+    suspend operator fun invoke(postId: Long) = runCatching {
+        postRepository.getPostDetail(postId)
+    }
 }
