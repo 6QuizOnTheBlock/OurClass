@@ -51,7 +51,7 @@ public class AopConfig {
         ResponseEntity<ResultResponse<?>> result = (ResponseEntity<ResultResponse<?>>) pjp.proceed();
         // 끝시간 check
         afterTime = System.currentTimeMillis();
-        if (result.getBody() != null) {
+        if (result != null) {
             log.info("-----------> RESPONSE : {}({}) = {} ({}ms)"
                 , pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName(),
                 result.getBody().getData(),
