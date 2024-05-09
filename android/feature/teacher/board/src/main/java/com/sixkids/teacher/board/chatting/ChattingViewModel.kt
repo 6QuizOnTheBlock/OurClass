@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
-import com.sixkids.model.Chat
 import com.sixkids.model.ChatMessage
 import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
@@ -21,7 +20,6 @@ import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.StompSession
 import org.hildan.krossbow.stomp.conversions.convertAndSend
 import org.hildan.krossbow.stomp.conversions.moshi.withMoshi
-import org.hildan.krossbow.stomp.headers.StompHeaders
 import org.hildan.krossbow.stomp.headers.StompSendHeaders
 import org.hildan.krossbow.stomp.use
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
