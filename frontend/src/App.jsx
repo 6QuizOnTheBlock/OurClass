@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-// import './App.css'
+
+import { Button } from "./components/ui/button";
+import { Calendar } from "./components/ui/calendar";
 import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="text-3xl font-bold underline">
-        안녕
+      <div className="flex justify-center items-center min-h-screen">
+        <Button variant="zosh" size="xl">Code With Zosh</Button>
+        <Calendar/>
       </div>
       <p className="read-the-docs">
        
