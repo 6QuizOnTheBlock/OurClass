@@ -126,7 +126,7 @@ public interface PostControllerDocs {
 
     @Operation(
         summary = "게시글 목록 조회",
-        description = "쿼리 입력으로 들어온 값 기준으로 게시글 목록을 조회합니다. (page 0부터 시작입니다!)",
+        description = "쿼리 입력으로 들어온 값 기준으로 게시글 목록을 조회합니다. (page 0부터 시작입니다!) (size 1부터 시작입니다!)",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = PostListResponse.class))),

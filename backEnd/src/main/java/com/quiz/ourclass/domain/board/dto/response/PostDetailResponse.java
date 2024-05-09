@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Schema(description = "게시글 상세 정보 반환 DTO")
+@Schema(description = "게시글 상세 정보 응답 DTO")
 public record PostDetailResponse(
     @Schema(description = "게시글 작성자 정보")
     MemberSimpleDTO member,

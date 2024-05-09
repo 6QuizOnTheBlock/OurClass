@@ -18,6 +18,7 @@ public class Chat {
     private Long roomId;
     private Long memberId;
     private String memberName;
+    private String memberImageUrl;
     private String content;
     private LocalDateTime sendDateTime;
     private long readCount;

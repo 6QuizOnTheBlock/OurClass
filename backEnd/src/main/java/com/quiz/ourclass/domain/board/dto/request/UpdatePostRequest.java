@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.board.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "게시글 수정 요청 DTO")
 public record UpdatePostRequest(
     @Schema(description = "게시글 제목", example = "ㅈㄱㄴ")
     String title,

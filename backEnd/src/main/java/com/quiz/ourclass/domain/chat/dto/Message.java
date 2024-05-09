@@ -25,6 +25,7 @@ public class Message implements Serializable {
     private Long roomId;
     private Long memberId;
     private String memberName;
+    private String memberImageUrl;
     @NotNull
     private String content;
     private Long sendDateTime;
