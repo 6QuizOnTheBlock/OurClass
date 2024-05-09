@@ -43,6 +43,7 @@ import com.sixkids.designsystem.R as UlbanRes
 fun PostRoute(
     viewModel: PostViewModel = hiltViewModel(),
     navigateToDetail: (postId:Long) -> Unit,
+    navigateToWrite: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     padding: PaddingValues
 ) {
@@ -74,7 +75,7 @@ fun PostRoute(
             postState = uiState,
             postItems = viewModel.postList?.collectAsLazyPagingItems(),
             postItemOnclick = navigateToDetail,
-            fabClick = {  }
+            fabClick = navigateToWrite
         )
     }
 }

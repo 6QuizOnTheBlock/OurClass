@@ -22,6 +22,7 @@ import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigateChatting
+import com.sixkids.teacher.board.navigation.navigatePostDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -102,7 +103,7 @@ class MainNavigator(
     }
 
     fun navigatePostDetail(postId: Long) {
-        navController.navigate(BoardRoute.postDetailRoute(postId))
+        navController.navigatePostDetail(postId)
     }
 
 

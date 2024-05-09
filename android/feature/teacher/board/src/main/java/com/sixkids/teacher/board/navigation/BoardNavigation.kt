@@ -38,6 +38,7 @@ fun NavGraphBuilder.boardNavGraph(
     padding: PaddingValues,
     navigateToPost: () -> Unit,
     navigateToPostDetail: (Long) -> Unit,
+    navigateToPostWrite: () -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     navigateToChatting: () -> Unit
@@ -56,12 +57,17 @@ fun NavGraphBuilder.boardNavGraph(
         PostRoute(
             padding = padding,
             navigateToDetail = navigateToPostDetail,
+            navigateToWrite = navigateToPostWrite,
             onShowSnackBar = onShowSnackBar
         )
     }
 
     composable(BoardRoute.postWriteRoute) {
-        PostWriteRoute(padding)
+        PostWriteRoute(
+            padding = padding,
+            navigateBack = onBackClick,
+            onShowSnackBar = onShowSnackBar
+        )
     }
 
     composable(

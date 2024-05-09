@@ -98,6 +98,7 @@ fun MainScreen(
                 onBackClick = navigator::popBackStack,
                 onShowSnackBar = viewModel::onShowSnackbar,
                 navigateToChatting = navigator::navigateChatting,
+                navigateToPostWrite = navigator::navigatePostWrite,
             )
 
             challengeNavGraph(
