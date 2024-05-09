@@ -31,22 +31,22 @@ public class ChatHandler implements ChannelInterceptor {
     public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // StompCommand 따라서 로직을 분기해서 처리하는 메서드를 호출한다.
-        String memberId = verifyAccessToken(getAccessToken(accessor));
         log.info("StompAccessor = {}", accessor);
-        handleMessage(Objects.requireNonNull(accessor.getCommand()), accessor, memberId);
+        handleMessage(Objects.requireNonNull(accessor.getCommand()), accessor);
         return message;
     }
 
     private void handleMessage(
-        StompCommand stompCommand, StompHeaderAccessor accessor, String memberId
+        StompCommand stompCommand, StompHeaderAccessor accessor
     ) {
         switch (stompCommand) {
             case CONNECT:
-                log.info("Connect Token : {}", getAccessToken(accessor));
+                String memberId = verifyAccessToken(getAccessToken(accessor));
                 connectToChatRoom(accessor, memberId);
                 break;
             case SUBSCRIBE:
             case SEND:
+                verifyAccessToken(getAccessToken(accessor));
                 break;
         }
     }
