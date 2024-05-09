@@ -12,6 +12,7 @@ data class ChattingState(
     val isLoading : Boolean = false,
     val organizationName: String = "",
     val memberCount : Int = 0,
+    val memberId: Int = 0,
     val message: String = "",
     val chatList: List<Chat> = emptyList()
 ) : UiState
