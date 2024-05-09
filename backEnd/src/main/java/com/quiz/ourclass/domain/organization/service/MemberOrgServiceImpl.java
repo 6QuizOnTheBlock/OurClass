@@ -3,10 +3,12 @@ package com.quiz.ourclass.domain.organization.service;
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
+import com.quiz.ourclass.domain.organization.dto.response.RelationSimpleResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
@@ -15,9 +17,11 @@ import com.quiz.ourclass.domain.organization.repository.MemberOrganizationReposi
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
 import com.quiz.ourclass.domain.relay.repository.RelayRepository;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
     private final ChallengeRepository challengeRepository;
     private final RelayRepository relayRepository;
     private final PostRepository postRepository;
+    private final MemberMapper memberMapper;
 
     @Transactional
     @Override
@@ -95,5 +100,20 @@ public class MemberOrgServiceImpl implements MemberOrgService {
             .relayCount(relayCount)
             .postCount(postCount)
             .build();
+    }
+
+    @Override
+    public List<RelationSimpleResponse> getMemberRelations(long id, long memberId, Long limit) {
+        List<Relationship> relations = relationshipRepository.getMemberRelations(
+            id, memberId, limit);
+        return relations.stream().map(relationship -> {
+            Member target = relationship.getMember1().getId() == memberId
+                ? relationship.getMember2() : relationship.getMember1();
+            MemberSimpleDTO memberSimpleDTO = memberMapper.memberToMemberSimpleDTO(target);
+            return RelationSimpleResponse.builder()
+                .member(memberSimpleDTO)
+                .relationPoint(relationship.getRelationPoint())
+                .build();
+        }).toList();
     }
 }
