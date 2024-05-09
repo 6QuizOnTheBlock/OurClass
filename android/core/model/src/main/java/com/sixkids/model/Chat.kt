@@ -1,7 +1,6 @@
 package com.sixkids.model
 
 data class Chat(
-    val roomId : Long,
     val memberId: Long,
     val memberName: String,
     val memberImageUrl: String,
