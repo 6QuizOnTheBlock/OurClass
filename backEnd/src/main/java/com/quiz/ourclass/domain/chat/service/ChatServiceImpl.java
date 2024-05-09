@@ -72,10 +72,6 @@ public class ChatServiceImpl implements ChatService {
             .map(chatMapper::chatToChatDTO)
             .toList();
 
-        return MessageResponse.builder()
-            .roomId(roomId)
-            .messages(chatDTOList)
-            .hasNext(chats.hasNext())
-            .build();
+        return chatMapper.messagesToMessageResponse(roomId, chats.hasNext(), chatDTOList);
     }
 }
