@@ -5,8 +5,10 @@ import com.quiz.ourclass.domain.chat.dto.Message;
 import com.quiz.ourclass.domain.chat.dto.request.MessageSliceRequest;
 import com.quiz.ourclass.domain.chat.dto.response.MessageResponse;
 import com.quiz.ourclass.domain.chat.entity.Chat;
+import com.quiz.ourclass.domain.chat.entity.ChatRoom;
 import com.quiz.ourclass.domain.chat.mapper.ChatMapper;
 import com.quiz.ourclass.domain.chat.repository.ChatRepository;
+import com.quiz.ourclass.domain.chat.repository.ChatRoomRepository;
 import com.quiz.ourclass.domain.chat.service.message.MessageSend;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
@@ -32,6 +34,7 @@ public class ChatServiceImpl implements ChatService {
 
     private final MemberRepository memberRepository;
     private final ChatRepository chatRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final ChatMapper chatMapper;
     private final RedisUtil redisUtil;
     private final JwtUtil jwtUtil;
@@ -57,7 +60,11 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public MessageResponse chatListView(MessageSliceRequest request) {
         Pageable pageable = PageRequest.of(request.page(), request.size());
-        Long roomId = request.roomId();
+
+        ChatRoom chatRoom = chatRoomRepository.findById(request.roomId())
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+
+        long roomId = chatRoom.getId();
         Page<Chat> chats = chatRepository.findByRoomIdOrderByIdDesc(
             roomId, pageable
         );
