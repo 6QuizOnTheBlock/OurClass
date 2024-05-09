@@ -55,7 +55,8 @@ fun NavGraphBuilder.boardNavGraph(
     ) {
         PostRoute(
             padding = padding,
-            navigateToDetail = navigateToPostDetail
+            navigateToDetail = navigateToPostDetail,
+            onShowSnackBar = onShowSnackBar
         )
     }
 

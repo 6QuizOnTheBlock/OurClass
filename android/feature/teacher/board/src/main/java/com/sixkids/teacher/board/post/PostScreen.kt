@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,7 +21,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
 import com.sixkids.designsystem.component.screen.LoadingScreen
@@ -29,6 +33,7 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
 import com.sixkids.teacher.board.post.component.PostItem
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.util.formatToMonthDayTime
 import com.sixkids.ui.util.formatToMonthDayTimeKorean
 import java.time.LocalDateTime
@@ -38,14 +43,39 @@ import com.sixkids.designsystem.R as UlbanRes
 fun PostRoute(
     viewModel: PostViewModel = hiltViewModel(),
     navigateToDetail: (postId:Long) -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit,
     padding: PaddingValues
 ) {
+    
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getPostList()
+    }
+
+    LaunchedEffect(key1 = viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                PostEffect.NavigateToPostDetail -> {}
+                PostEffect.NavigateToWritePost -> {}
+                is PostEffect.OnShowSnackBar -> {
+                    onShowSnackBar(SnackbarToken(message = sideEffect.message))
+                }
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .padding(padding)
             .fillMaxSize()
     ) {
-        PostScreen()
+        PostScreen(
+            postState = uiState,
+            postItems = viewModel.postList?.collectAsLazyPagingItems(),
+            postItemOnclick = navigateToDetail,
+            fabClick = {  }
+        )
     }
 }
 
