@@ -18,6 +18,8 @@ import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.GroupMatchingResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ReportResponse;
+import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,5 +151,15 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
         return ChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
             .reports(reportResponses)
             .build();
+    }
+
+    @Override
+    public Long countParticipateChallenge(Member member, Organization organization) {
+        return jpaQueryFactory
+            .select(challengeGroup.count())
+            .from(challengeGroup)
+            .where(challengeGroup.challenge.organization.eq(organization))
+            .where(challengeGroup.groupMembers.any().member.eq(member))
+            .fetchOne();
     }
 }

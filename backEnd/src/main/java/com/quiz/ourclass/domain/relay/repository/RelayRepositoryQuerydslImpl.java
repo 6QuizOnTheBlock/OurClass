@@ -9,6 +9,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.domain.relay.dto.response.RelayMemberResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
@@ -112,5 +114,15 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
             .fetch();
         Objects.requireNonNull(relayResponse).runners().addAll(runners);
         return relayResponse;
+    }
+
+    @Override
+    public Long countParticipateRelay(Member member, Organization organization) {
+        return jpaQueryFactory
+            .select(relayMember.relay.count())
+            .from(relayMember)
+            .where(relayMember.relay.organization.eq(organization))
+            .where(relayMember.curMember.eq(member))
+            .fetchOne();
     }
 }

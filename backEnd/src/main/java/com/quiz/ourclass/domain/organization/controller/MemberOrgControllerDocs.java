@@ -2,7 +2,9 @@ package com.quiz.ourclass.domain.organization.controller;
 
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
+import com.quiz.ourclass.domain.organization.dto.response.RelationSimpleResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "MemberOrgControllerDocs", description = "회원관리 API")
 public interface MemberOrgControllerDocs {
@@ -49,5 +52,37 @@ public interface MemberOrgControllerDocs {
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
         RelationRequest relationRequest
+    );
+
+    @Operation(summary = "학급 상세 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberDetailResponse.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"학급 멤버를 찾을 수 없습니다.\")", content = @Content)
+        })
+    @GetMapping("/{id}")
+    ResponseEntity<ResultResponse<?>> getMemberDetail(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id,
+        @Parameter(description = "멤버 ID", required = true, in = ParameterIn.QUERY)
+        long memberId
+    );
+
+    @Operation(summary = "멤버 친한친구 순서로 관계 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = RelationSimpleResponse.class)))
+        })
+    @GetMapping("/{id}/relations")
+    ResponseEntity<ResultResponse<?>> getMemberRelations(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id,
+        @Parameter(description = "멤버 ID", required = true, in = ParameterIn.QUERY)
+        long memberId,
+        @RequestParam(required = false)
+        @Parameter(description = "상위 n개만 조회 시 추가", required = false, in = ParameterIn.QUERY)
+        Long limit
     );
 }
