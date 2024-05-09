@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/filters")
 @RequiredArgsConstructor
-public class ChatFilterController {
+public class ChatFilterController implements ChatFilterControllerDocs {
 
     private final ChatFilterService chatFilterService;
 
