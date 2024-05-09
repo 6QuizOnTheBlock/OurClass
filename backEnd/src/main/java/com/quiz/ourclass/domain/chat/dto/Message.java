@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -19,8 +18,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Message implements Serializable {
 
-    @Setter
-    private String id;
     @NotNull
     private Long roomId;
     private Long memberId;
