@@ -11,7 +11,7 @@ data class ChallengeHistoryResponse(
 )
 
 data class ChallengeResponse(
-    val id: Int = 0,
+    val id: Long = 0,
     val title: String = "",
     val content: String = "",
     val headCount: Int = 0,

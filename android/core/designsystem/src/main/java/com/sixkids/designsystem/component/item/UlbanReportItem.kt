@@ -56,9 +56,8 @@ fun UlbanReportItem(
         shape = CardDefaults.outlinedShape
     ) {
         Column(
-            modifier = modifier.padding(
-                padding
-            )
+            modifier = modifier
+                .padding(padding)
         ) {
             Spacer(modifier = modifier.padding(4.dp))
             Row {
@@ -79,8 +78,9 @@ fun UlbanReportItem(
                 model = file,
                 contentDescription = "과제 사진",
                 modifier = modifier
+                    .fillMaxWidth()
                     .height(240.dp)
-                    .padding(vertical =  8.dp)
+                    .padding(vertical = 8.dp)
             )
             MemberSimpleList(
                 modifier = modifier.padding(vertical = 8.dp),

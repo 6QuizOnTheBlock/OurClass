@@ -15,7 +15,6 @@ sealed interface GroupTypeEffect : SideEffect {
 
     data class UpdateMinCount(val minCount: String) : GroupTypeEffect
     data class UpdateGroupType(val type: GroupType) : GroupTypeEffect
-    data object MoveToResult : GroupTypeEffect
     data object MoveToMatchingStep : GroupTypeEffect
     data object CreateChallenge : GroupTypeEffect
     data object ShowInputErrorSnackbar : GroupTypeEffect

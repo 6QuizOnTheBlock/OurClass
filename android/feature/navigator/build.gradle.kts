@@ -14,6 +14,10 @@ dependencies {
     implementation(projects.feature.signin)
     implementation(projects.feature.teacher.managestudent)
     implementation(projects.feature.teacher.main)
+    implementation(projects.feature.student.board)
+    implementation(projects.feature.student.home)
+    implementation(projects.feature.student.challenge)
+    implementation(projects.feature.student.relay)
 
     implementation(libs.permissions)
 }
