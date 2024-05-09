@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.sixkids.teacher.board.chatting.ChattingRoute
 import com.sixkids.teacher.board.main.BoardMainRoute
 import com.sixkids.teacher.board.post.PostRoute
@@ -24,8 +26,8 @@ fun NavController.navigatePostWrite() {
     navigate(BoardRoute.postWriteRoute)
 }
 
-fun NavController.navigatePostDetail() {
-    navigate(BoardRoute.postDetailRoute)
+fun NavController.navigatePostDetail(postId: Long) {
+    navigate(BoardRoute.postDetailRoute(postId))
 }
 
 fun NavController.navigateChatting() {
@@ -35,6 +37,7 @@ fun NavController.navigateChatting() {
 fun NavGraphBuilder.boardNavGraph(
     padding: PaddingValues,
     navigateToPost: () -> Unit,
+    navigateToPostDetail: (Long) -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     navigateToChatting: () -> Unit
@@ -47,15 +50,23 @@ fun NavGraphBuilder.boardNavGraph(
         )
     }
 
-    composable(BoardRoute.postRoute) {
-        PostRoute(padding)
+    composable(
+        route = BoardRoute.postRoute,
+    ) {
+        PostRoute(
+            padding = padding,
+            navigateToDetail = navigateToPostDetail
+        )
     }
 
     composable(BoardRoute.postWriteRoute) {
         PostWriteRoute(padding)
     }
 
-    composable(BoardRoute.postDetailRoute) {
+    composable(
+        route = BoardRoute.postDetailRoute,
+        arguments = listOf(navArgument(BoardRoute.postDetailARG) { type = NavType.LongType })
+    ) {
         PostDetailRoute(
             padding = padding
         )
@@ -78,9 +89,13 @@ fun NavGraphBuilder.boardNavGraph(
 }
 
 object BoardRoute {
+    const val postDetailARG = "postId"
+
     const val defaultRoute = "board"
     const val postRoute = "post"
     const val postWriteRoute = "post_write"
-    const val postDetailRoute = "post_detail"
+    const val postDetailRoute = "post_detail/{$postDetailARG}"
     const val chattingRoute = "chatting"
+
+    fun postDetailRoute(postId: Long) = "post_detail/$postId"
 }
