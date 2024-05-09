@@ -51,11 +51,12 @@ public class AopConfig {
         ResponseEntity<ResultResponse<?>> result = (ResponseEntity<ResultResponse<?>>) pjp.proceed();
         // 끝시간 check
         afterTime = System.currentTimeMillis();
-        log.info("-----------> RESPONSE : {}({}) = {} ({}ms)"
-            , pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName(),
-            result.getBody().getData(),
-            (afterTime - beforeTime) / 1000.0);
-
+        if (result.getBody() != null) {
+            log.info("-----------> RESPONSE : {}({}) = {} ({}ms)"
+                , pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName(),
+                result.getBody().getData(),
+                (afterTime - beforeTime) / 1000.0);
+        }
         return result;
     }
 
