@@ -6,19 +6,23 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Setter
+@Builder
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatFilter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    long id;
+    @ManyToOne(fetch = FetchType.LAZY)
     Organization organization;
     String badWord;
 }

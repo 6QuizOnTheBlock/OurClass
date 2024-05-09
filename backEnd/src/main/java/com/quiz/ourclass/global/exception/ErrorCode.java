@@ -76,7 +76,8 @@ public enum ErrorCode {
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),
 
     //chat
-    CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다.");
+    CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
+    ALREADY_REGISTER_WORD(HttpStatus.CONFLICT, "이미 등록된 단어가 있습니다.");
 
     private final HttpStatus status;
     private final String message;

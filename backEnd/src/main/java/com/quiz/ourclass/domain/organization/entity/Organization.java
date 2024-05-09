@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.organization.entity;
 
 import com.quiz.ourclass.domain.board.entity.Post;
+import com.quiz.ourclass.domain.chat.entity.ChatFilter;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
@@ -31,10 +32,12 @@ public class Organization {
     String name;
     @ManyToOne(fetch = FetchType.LAZY)
     Member manager;
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
     private List<MemberOrganization> memberOrganizations;
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
     private List<Post> posts;
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
+    private List<ChatFilter> chatFilters;
     int memberCount;
     LocalDate createTime;
 
