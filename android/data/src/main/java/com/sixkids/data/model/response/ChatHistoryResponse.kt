@@ -2,6 +2,12 @@ package com.sixkids.data.model.response
 
 import com.sixkids.model.Chat
 
+data class ChatHistoryResponse(
+    val roomId: Long,
+    val hasNext: Boolean,
+    val messages: List<MessageResponse>
+)
+
 data class MessageResponse(
     val memberId: Long,
     val memberName: String,
@@ -11,7 +17,7 @@ data class MessageResponse(
     val readCount: Int
 )
 
-internal fun MessageResponse.toModel() : Chat{
+internal fun MessageResponse.toModel() : Chat {
     return Chat(
         memberId = memberId,
         memberName = memberName,
