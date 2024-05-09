@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Builder;
 
 @Builder
-@Schema(description = "게시글 목록 DTO")
+@Schema(description = "게시글 목록 응답 DTO")
 public record PostListResponse(
 
     @Schema(description = "페이지", example = "1")

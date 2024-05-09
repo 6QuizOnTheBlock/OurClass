@@ -38,7 +38,7 @@ public interface ChatControllerDocs {
         @PathVariable(value = "id") Long id
     );
 
-    @Operation(summary = "채팅방 나가기 (퇴장 하기)",
+    @Operation(summary = "채팅 메시지 조회",
         description = "쿼리 입력으로 들어온 값 기준으로 채팅 메시지를 조회합니다. (page 0부터 시작입니다!) (size 1부터 시작입니다!)",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",

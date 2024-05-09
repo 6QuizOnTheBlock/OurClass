@@ -5,6 +5,7 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "게시글 목록 요청 DTO")
 public record PostSliceRequest(
     @Schema(description = "단체 PK", example = "1")
     Long organizationId,
