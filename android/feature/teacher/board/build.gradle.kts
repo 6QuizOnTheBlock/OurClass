@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(libs.okhttp)
     implementation(libs.bundles.stomp)
+    implementation(libs.paging.compose)
 }
