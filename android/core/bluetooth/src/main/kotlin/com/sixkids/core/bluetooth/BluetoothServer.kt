@@ -58,7 +58,7 @@ class BluetoothServer(context: Context, private val memberId: Long) {
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
-    private fun stopAdvertising() {
+    fun stopAdvertising() {
         val advertiser: BluetoothLeAdvertiser = bluetooth.adapter.bluetoothLeAdvertiser
             ?: throw Exception("This device doesn't support Bluetooth advertising")
 
