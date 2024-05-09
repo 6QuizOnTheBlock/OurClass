@@ -6,7 +6,8 @@
     <application>
         <service
             android:name=".HCEService"
-            android:permission="android.permission.BIND_NFC_SERVICE">
+            android:permission="android.permission.BIND_NFC_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE" />
             </intent-filter>

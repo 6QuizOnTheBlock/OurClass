@@ -12,19 +12,27 @@ class HCEService : HostApduService() {
         // Check if APDU matches the SELECT APDU defined above
         return if (commandApdu contentEquals SELECT_APDU) {
             // Data to be sent to B screen
-            "Hello from A".toByteArray() + SUCCESS_SW
+            val newData = data.toByteArray()
+            setData("")
+            newData + SUCCESS_SW
         } else {
             FAIL_SW
         }
     }
 
     override fun onDeactivated(p0: Int) {
-        TODO("Not yet implemented")
     }
 
     companion object {
         val SELECT_APDU = byteArrayOf(0x00.toByte(), 0xA4.toByte(), 0x04.toByte(), 0x00.toByte(), 0x07.toByte(), 0xF0.toByte(), 0x01.toByte(), 0x02.toByte(), 0x03.toByte(), 0x04.toByte(), 0x05.toByte(), 0x06.toByte())
         val SUCCESS_SW = byteArrayOf(0x90.toByte(), 0x00.toByte()) // Status word (SW) for success
         val FAIL_SW = byteArrayOf(0x6F.toByte(), 0x00.toByte())
+
+
+        private var data: String = ""
+
+        fun setData(data: String) {
+            this.data = data
+        }
     }
 }
