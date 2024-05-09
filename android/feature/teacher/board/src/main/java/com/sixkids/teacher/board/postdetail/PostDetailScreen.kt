@@ -30,6 +30,8 @@ import com.sixkids.model.PostDetail
 import com.sixkids.model.Recomment
 import com.sixkids.teacher.board.postdetail.component.CommentItem
 import com.sixkids.teacher.board.postdetail.component.PostWriterInfo
+import com.sixkids.ui.util.formatToMonthDayTime
+import java.time.LocalDateTime
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
@@ -64,7 +66,7 @@ fun PostDetailScreen(
             PostWriterInfo(
                 height = 60.dp,
                 writer = postDetailState.postDetail.writeMember.name,
-                dateString = postDetailState.postDetail.createTime,
+                dateString = postDetailState.postDetail.createTime.formatToMonthDayTime(),
                 writerImageUrl = postDetailState.postDetail.writeMember.photo
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -96,7 +98,7 @@ fun PostDetailScreen(
         for (comment in postDetailState.postDetail.comments) {
             CommentItem(
                 writer = comment.member.name,
-                dateString = comment.createTime,
+                dateString = comment.createTime.formatToMonthDayTime(),
                 writerImageUrl = comment.member.photo,
                 commentString = comment.content
             )
@@ -109,7 +111,7 @@ fun PostDetailScreen(
                     )
                     CommentItem(
                         writer = recomment.member.name,
-                        dateString = recomment.createTime,
+                        dateString = recomment.createTime.formatToMonthDayTime(),
                         writerImageUrl = recomment.member.photo,
                         commentString = recomment.content,
                         isRecomment = true
@@ -138,8 +140,8 @@ val recommentDummy = Recomment(
         photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
     ),
     content = "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
-    createTime = "01/01 00:00",
-    updateTime = "01/01 00:00",
+    createTime = LocalDateTime.now(),
+    updateTime = LocalDateTime.now(),
     1,
 )
 
@@ -151,8 +153,8 @@ val commentDummy = Comment(
         photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
     ),
     "내용내용내용 내용내용내용내용내용내용내용내용내용 내용내용내용내용내용내용내용내용내용",
-    "01/01 00:00",
-    "01/01 00:00",
+    LocalDateTime.now(),
+    LocalDateTime.now(),
     listOf(recommentDummy, recommentDummy)
 )
 
@@ -165,7 +167,7 @@ val postDetailStateDummy = PostDetailState(
             name = "작성자",
             photo = "https://picsum.photos/200/300"
         ),
-        createTime = "01/01 00:00",
+        createTime = LocalDateTime.now(),
         ImageUri = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s",
         comments = listOf(commentDummy, commentDummy)
     )
