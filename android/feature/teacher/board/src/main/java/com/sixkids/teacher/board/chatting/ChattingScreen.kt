@@ -107,6 +107,7 @@ fun ChattingScreen(
             )
 
             ChatSection(
+                uiState.memberId,
                 uiState.chatList,
                 modifier = Modifier
                     .weight(1f)
@@ -155,13 +156,13 @@ fun TopSection(
 }
 
 @Composable
-fun ChatSection(chatList: List<Chat>, modifier: Modifier = Modifier) {
+fun ChatSection(memberId: Int, chatList: List<Chat>, modifier: Modifier = Modifier) {
     val scrollState = rememberLazyListState()
 
     Column(modifier = modifier) {
         LazyColumn(state = scrollState, modifier = Modifier.weight(1f)) {
             items(chatList) { chat ->
-                if (chat.memberId == 1L) {
+                if (chat.memberId == memberId.toLong()) {
                     MyChat(chat)
                 } else {
                     OtherChat(chat)
@@ -191,7 +192,7 @@ fun OtherChat(chat: Chat) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
-                model = chat.memberProfilePhoto,
+                model = chat.memberImageUrl,
                 contentDescription = "profile photo",
                 modifier = Modifier
                     .size(32.dp)
