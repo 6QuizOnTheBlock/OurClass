@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.organization.controller;
 
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -49,5 +50,20 @@ public interface MemberOrgControllerDocs {
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
         RelationRequest relationRequest
+    );
+
+    @Operation(summary = "학급 상세 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberDetailResponse.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"학급 멤버를 찾을 수 없습니다.\")", content = @Content)
+        })
+    @GetMapping("/{id}")
+    ResponseEntity<ResultResponse<?>> getMemberDetail(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id,
+        @Parameter(description = "멤버 ID", required = true, in = ParameterIn.QUERY)
+        long memberId
     );
 }
