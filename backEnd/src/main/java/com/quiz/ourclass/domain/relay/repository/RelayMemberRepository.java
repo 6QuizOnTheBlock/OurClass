@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RelayMemberRepository extends JpaRepository<RelayMember, Long> {
 
+    int countByCurMemberIdAndNextMemberId(long curMemberId, long nextMemberId);
 }

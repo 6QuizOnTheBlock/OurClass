@@ -1,4 +1,4 @@
-package com.quiz.ourclass.domain.member.entity;
+package com.quiz.ourclass.domain.organization.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -87,8 +87,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     public InviteCodeDTO getOrganizationCode(long id) {
         Member member = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
-        accessUtil.isOrganizationManager(member, id)
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_MANAGER));
+        if (accessUtil.isOrganizationManager(member, id).isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_MANAGER);
+        }
         String redisKey = ConstantUtil.REDIS_ORG_KEY + id;
         String code = redisUtil.valueGet(redisKey);
         if (code == null || code.isEmpty()) {
