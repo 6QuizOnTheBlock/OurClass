@@ -45,7 +45,6 @@ public class ChatHandler implements ChannelInterceptor {
                 break;
             case SUBSCRIBE:
             case SEND:
-                verifyAccessToken(getAccessToken(accessor));
                 break;
         }
     }
