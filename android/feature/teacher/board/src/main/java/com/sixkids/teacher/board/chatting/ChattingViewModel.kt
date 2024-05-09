@@ -1,122 +1,114 @@
 package com.sixkids.teacher.board.chatting
 
-import com.sixkids.model.Chat
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.user.GetATKUseCase
+import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.StompCommand
+import ua.naiksoftware.stomp.dto.StompHeader
+import ua.naiksoftware.stomp.dto.StompMessage
 import javax.inject.Inject
+
+private const val TAG = "D107"
 
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
+    private val getATKUseCase: GetATKUseCase,
+    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase
+) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()) {
 
-) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()){
-    private val tmpChatList = mutableListOf<Chat>(
-        Chat(
-            id = "1",
-            roomId = 1,
-            memberId = 3,
-            memberName = TMP_NAME_3,
-            memberProfilePhoto = TMP_IMAGE_3,
-            content = "안녕하세요 장원영입니다. 만나서 반갑습니다. 잘 부탁드립니다.",
-            sendDateTime = System.currentTimeMillis()
-        ),
-        Chat(
-            id = "2",
-            roomId = 1,
-            memberId = 2,
-            memberName = TMP_NAME_2,
-            memberProfilePhoto = TMP_IMAGE_2,
-            content = "안녕하세요 저는 윈터입니다. 만나서 반갑습니다. 저도 잘 부탁드립니다.",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "3",
-            roomId = 1,
-            memberId = 1,
-            memberName = TMP_NAME_1,
-            memberProfilePhoto = TMP_IMAGE_1,
-            content = "그래, 원영이 윈터 반갑고~",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "4",
-            roomId = 1,
-            memberId = 1,
-            memberName = TMP_NAME_1,
-            memberProfilePhoto = TMP_IMAGE_1,
-            content = "오빠도 잘 부탁한다 얘들아 ㅋㅋ",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "5",
-            roomId = 1,
-            memberId = 3,
-            memberName = TMP_NAME_3,
-            memberProfilePhoto = TMP_IMAGE_3,
-            content = "오빠 내일 뭐해?",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "6",
-            roomId = 1,
-            memberId = 3,
-            memberName = TMP_NAME_3,
-            memberProfilePhoto = TMP_IMAGE_3,
-            content = "내일 싸피 끝나고 술 한 잔 할래?",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "7",
-            roomId = 1,
-            memberId = 1,
-            memberName = TMP_NAME_1,
-            memberProfilePhoto = TMP_IMAGE_1,
-            content = "오빠는 언제든지 콜이야~",
-            sendDateTime = System.currentTimeMillis()
-        ),Chat(
-            id = "8",
-            roomId = 1,
-            memberId = 2,
-            memberName = TMP_NAME_2,
-            memberProfilePhoto = TMP_IMAGE_2,
-            content = "헐 오빠 저도 같이 마시면 안돼요?",
-            sendDateTime = System.currentTimeMillis()
-        ),
-        Chat(
-            id = "8",
-            roomId = 1,
-            memberId = 2,
-            memberName = TMP_NAME_2,
-            memberProfilePhoto = TMP_IMAGE_2,
-            content = "제발요 ㅠㅠ",
-            sendDateTime = System.currentTimeMillis()
-        ),
-    )
+    private val stompUrl = "ws://k10d107.p.ssafy.io:8085/api/ws-stomp/websocket"
+    private var roomId = 1
+    private lateinit var tkn: String
+    private lateinit var userInfo: UserInfo
 
-    fun initChatData(){
-        intent { copy(chatList = tmpChatList) }
+    private lateinit var stomp: StompClient
+    private lateinit var stompConnection: Disposable
+    private lateinit var topic: Disposable
+
+
+
+    @SuppressLint("CheckResult")
+    fun initStomp() {
+        viewModelScope.launch {
+            try {
+                // Stomp 연결
+                val tknJob = async { getATKUseCase().getOrThrow() }
+                val roomIdJob = async { getSelectedOrganizationIdUseCase().getOrThrow() }
+
+                stomp = Stomp.over(
+                    Stomp.ConnectionProvider.OKHTTP,
+                    stompUrl
+                )
+
+                tkn = tknJob.await()
+//                roomId = roomIdJob.await()
+
+                val connectionHeaderList = arrayListOf<StompHeader>()
+                connectionHeaderList.add(StompHeader("Authorization", tkn))
+                connectionHeaderList.add(StompHeader("roomId", roomId.toString()))
+
+                stomp.connect(connectionHeaderList)
+
+                // 채팅방 구독
+                val topicHeaderList = arrayListOf<StompHeader>()
+                topicHeaderList.add(StompHeader("Authorization", tkn))
+                stomp.topic("/subscribe/public/$roomId", topicHeaderList).subscribe { topicMessage ->
+                    Log.d(TAG, topicMessage.getPayload())
+                }
+
+            } catch (e: Exception) {
+                Log.d(TAG, "initStomp: ${e.message}")
+            }
+        }
     }
 
-    fun updateMessage(message: String){
+    fun updateMessage(message: String) {
         intent { copy(message = message) }
     }
 
-    fun sendMessage(message: String){
-        tmpChatList.add(
-            Chat(
-                id = "${tmpChatList.size + 1}",
-                roomId = 1,
-                memberId = 1,
-                memberName = TMP_NAME_1,
-                memberProfilePhoto = TMP_IMAGE_1,
-                content = message,
-                sendDateTime = System.currentTimeMillis()
+    fun sendMessage(message: String) {
+        val payload = JSONObject().apply {
+            put("roomId", roomId)
+            put("content", message)
+            put("senderProfilePhoto", userInfo.photo)
+        }
+
+        val senderHeaderList = arrayListOf<StompHeader>()
+        senderHeaderList.add(StompHeader("Authorization", tkn))
+        senderHeaderList.add(StompHeader("destination", "/publish/chat/message"))
+
+        stomp.send(
+            StompMessage(
+                StompCommand.SEND,
+                senderHeaderList,
+                payload.toString()
             )
-        )
-        intent { copy(chatList = tmpChatList, message = "") }
+        ).subscribe()
+
+        intent { copy( message = "") }
     }
 
-    companion object{
-        private const val TMP_IMAGE_1 = "https://ulvanbucket.s3.ap-northeast-2.amazonaws.com/d39f2842-3ad1-4471-8a2a-4ef8cb20951f_profile.jpg"
-        private const val TMP_IMAGE_2 = "https://ulvanbucket.s3.ap-northeast-2.amazonaws.com/87058e2e-b7e3-4061-bf8a-8641a338f6d5_profile.jpg"
-        private const val TMP_IMAGE_3 = "https://ulvanbucket.s3.ap-northeast-2.amazonaws.com/58658948-0ccf-41f5-b61a-90608e09229f_profile.jpg"
-
-        private const val TMP_NAME_1 = "홍유준"
-        private const val TMP_NAME_2 = "윈터"
-        private const val TMP_NAME_3 = "장원영"
+    fun cancelStomp() {
+        try {
+            stompConnection.dispose()
+            topic.dispose()
+        }catch (e: Exception) {
+            Log.d(TAG, "cancelStomp: ${e.message}")
+        }
     }
+
+
 }

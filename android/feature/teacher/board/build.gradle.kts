@@ -7,4 +7,6 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
+    implementation(libs.bundles.stomp)
 }
