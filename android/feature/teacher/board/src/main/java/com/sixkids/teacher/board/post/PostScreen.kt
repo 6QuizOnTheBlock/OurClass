@@ -3,20 +3,29 @@ package com.sixkids.teacher.board.post
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
+import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
 import com.sixkids.teacher.board.post.component.PostItem
@@ -27,6 +36,8 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun PostRoute(
+    viewModel: PostViewModel = hiltViewModel(),
+    navigateToDetail: (postId:Long) -> Unit,
     padding: PaddingValues
 ) {
     Box(
@@ -43,8 +54,12 @@ fun PostRoute(
 fun PostScreen(
     modifier: Modifier = Modifier,
     postState: PostState = PostState(),
+    postItems: LazyPagingItems<Post>? = null,
+    postItemOnclick: (postId: Long) -> Unit = {},
     fabClick: () -> Unit = {}
 ) {
+    val listState = rememberLazyListState()
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -60,19 +75,34 @@ fun PostScreen(
                 bottomDescription = "",
                 color = Blue
             )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            ) {
-                items(postState.postList.size) {
-                    val item = postState.postList[it]
-                    PostItem(
-                        title = item.title,
-                        writer = item.writer,
-                        commentCount = item.commentCount,
-                        dateString = item.time.formatToMonthDayTime()
-                    )
+            
+            if (postItems == null){
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.board_post_no_items),
+                    textAlign = TextAlign.Center,
+                    style = UlbanTypography.bodyLarge,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    state = listState,
+                ) {
+                    items(postItems.itemCount) { index ->
+                        postItems[index]?.let { post ->
+                            PostItem(
+                                title = post.title,
+                                writer = post.writer,
+                                dateString = post.time.formatToMonthDayTimeKorean(),
+                                commentCount = post.commentCount,
+                                onClick = { postItemOnclick(post.id) }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -85,6 +115,9 @@ fun PostScreen(
             iconColor = BlueDark,
             onClick = fabClick
         )
+        if (postState.isLoding){
+            LoadingScreen()
+        }
     }
 }
 
@@ -92,66 +125,5 @@ fun PostScreen(
 @Preview(showBackground = true)
 @Composable
 fun PostRoutePreview() {
-    PostScreen(
-        postState = PostState(
-            postList = listOf(
-                Post(
-                    id = 0,
-                    title = "이따 마크 할 사람~~!이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 1,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 2,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 3,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 4,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 5,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 6,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                ),
-                Post(
-                    id = 7,
-                    title = "이따 마크 할 사람~~!",
-                    writer = "오하빈",
-                    time = LocalDateTime.now(),
-                    commentCount = 3
-                )
-            )
-        )
-    )
+    PostScreen()
 }
