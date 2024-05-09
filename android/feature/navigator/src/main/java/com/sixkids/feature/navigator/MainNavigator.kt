@@ -104,6 +104,10 @@ class MainNavigator(
         navController.navigatePostWrite()
     }
 
+    fun navigatePostDetail(postId: Long) {
+        navController.navigate(BoardRoute.postDetailRoute(postId))
+    }
+
 
     /**
      * Home Navigation
