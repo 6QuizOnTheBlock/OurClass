@@ -11,7 +11,7 @@ import androidx.annotation.RequiresPermission
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BluetoothServer(context: Context) {
+class BluetoothServer(context: Context, private val memberId: Long) {
     private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
             as? BluetoothManager ?: throw Exception("This device doesn't support Bluetooth")
 
@@ -28,7 +28,7 @@ class BluetoothServer(context: Context) {
             return
         }
 
-        bluetooth.adapter.name = "블루투스 테스트"
+        bluetooth.adapter.name = "sixkids-${memberId}"
 
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
