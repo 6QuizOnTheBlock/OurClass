@@ -4,6 +4,7 @@ import com.quiz.ourclass.domain.chat.service.ChatRoomService;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import java.util.Objects;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -27,12 +28,12 @@ public class ChatHandler implements ChannelInterceptor {
     private final ChatRoomService chatRoomService;
 
     @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+    public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // StompCommand 따라서 로직을 분기해서 처리하는 메서드를 호출한다.
         String memberId = verifyAccessToken(getAccessToken(accessor));
         log.info("StompAccessor = {}", accessor);
-        handleMessage(accessor.getCommand(), accessor, memberId);
+        handleMessage(Objects.requireNonNull(accessor.getCommand()), accessor, memberId);
         return message;
     }
 
@@ -41,6 +42,7 @@ public class ChatHandler implements ChannelInterceptor {
     ) {
         switch (stompCommand) {
             case CONNECT:
+                log.info("Connect Token : {}", getAccessToken(accessor));
                 connectToChatRoom(accessor, memberId);
                 break;
             case SUBSCRIBE:
@@ -65,9 +67,10 @@ public class ChatHandler implements ChannelInterceptor {
     }
 
     private String verifyAccessToken(String accessToken) {
-        if (jwtUtil.validateToken(accessToken) == -1) {
-            throw new IllegalStateException("토큰이 만료되었습니다.");
-        }
+        log.info("토큰 검증 전 : {}", accessToken);
+        //토큰 검증
+        jwtUtil.validateToken(accessToken);
+        log.info("토큰 검증 후 : {}", accessToken);
         return jwtUtil.getUserInfoFromToken(accessToken).getSubject();
     }
 
