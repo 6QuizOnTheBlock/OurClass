@@ -28,7 +28,7 @@ public class MemberOrganization {
     Organization organization;
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
-    double sincerityPoint;
+    double isolationPoint;
     int exp;
 
     public UpdateExpResponse updateExp(UpdateExpRequest updateExpRequest) {

@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.organization.controller;
 
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.domain.organization.service.MemberOrgService;
@@ -38,5 +39,12 @@ public class MemberOrgController implements MemberOrgControllerDocs {
         RelationResponse relationResponse = memberOrgService.getMemberRelation(
             id, relationRequest);
         return ResponseEntity.ok(ResultResponse.success(relationResponse));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResultResponse<?>> getMemberDetail(
+        @PathVariable long id, long memberId) {
+        MemberDetailResponse memberDetail = memberOrgService.getMemberDetail(id, memberId);
+        return ResponseEntity.ok(ResultResponse.success(memberDetail));
     }
 }
