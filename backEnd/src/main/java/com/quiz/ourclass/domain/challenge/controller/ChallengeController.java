@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningMemberChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.challenge.service.ChallengeService;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -66,6 +67,14 @@ public class ChallengeController implements ChallengeControllerDocs {
         RunningChallengeResponse runningChallengeResponse = challengeService.getRunningChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
+    }
+
+    @GetMapping("/running/member")
+    public ResponseEntity<ResultResponse<?>> getRunningMemberChallenge(
+        @RequestParam(required = true) long organizationId) {
+        RunningMemberChallengeResponse runningMemberChallenge = challengeService.getRunningMemberChallenge(
+            organizationId);
+        return ResponseEntity.ok(ResultResponse.success(runningMemberChallenge));
     }
 
     @GetMapping("/{id}")
