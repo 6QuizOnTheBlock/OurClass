@@ -16,13 +16,15 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.student.board.navigation.StudentHomeRoute
 import com.sixkids.student.board.navigation.navigateStudentHome
-import com.sixkids.student.challeng.navigation.navigateStudentChallengeHistory
+import com.sixkids.student.navigation.navigateStudentChallengeHistory
+import com.sixkids.student.navigation.navigateStudentGroupCreate
+import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
-import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
-import com.sixkids.teacher.board.navigation.navigatePostWrite
-import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigateChatting
+import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigatePostWrite
+import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
 import com.sixkids.teacher.challenge.navigation.navigateCreateChallenge
@@ -148,9 +150,23 @@ class MainNavigator(
         bottomTabItems = studentTab() // 바텀 네비게이션 탭 초기화
         navController.navigateStudentHome(navOptions{
             popUpTo(StudentHomeRoute.defaultRoute){
-                inclusive = true
+                //TODO : inclusive true로 변경
+//                inclusive = true
+                inclusive = false
             }
         })
+    }
+
+    /**
+     * Student Group Navigation
+     */
+    //TODO : memberId 추가
+    fun navigateStudentGroupCreate(memberId: Long) {
+        navController.navigateStudentGroupCreate()
+    }
+
+    fun navigateStudentGroupJoin(memberId: Long) {
+        navController.navigateStudentGroupJoin()
     }
 
     /**

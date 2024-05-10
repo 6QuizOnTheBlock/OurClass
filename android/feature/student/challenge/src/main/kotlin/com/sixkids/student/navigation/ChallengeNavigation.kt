@@ -1,4 +1,4 @@
-package com.sixkids.student.challeng.navigation
+package com.sixkids.student.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -9,6 +9,8 @@ import com.sixkids.student.challeng.history.ChallengeRoute
 fun NavController.navigateStudentChallengeHistory(navOptions: NavOptions) {
     navigate(ChallengeRoute.defaultRoute, navOptions)
 }
+
+
 
 fun NavGraphBuilder.studentChallengeNavGraph(
     navigateChallengeDetail: (Long, Long?) -> Unit,
@@ -26,7 +28,6 @@ fun NavGraphBuilder.studentChallengeNavGraph(
             handleException = handleException
         )
     }
-
 
 }
 

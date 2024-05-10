@@ -38,7 +38,8 @@ import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.student.board.navigation.studentHomeNavGraph
-import com.sixkids.student.challeng.navigation.studentChallengeNavGraph
+import com.sixkids.student.navigation.studentChallengeNavGraph
+import com.sixkids.student.navigation.studentGroupNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
@@ -64,7 +65,7 @@ fun MainScreen(
         }
     }
 
-    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         RequestNotificationPermission()
     }
 
@@ -142,8 +143,12 @@ fun MainScreen(
             )
             studentChallengeNavGraph(
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
-                navigateToCreateGroup = {  },
-                navigateToJoinGroup = {  },
+                navigateToCreateGroup = navigator::navigateStudentGroupCreate,
+                navigateToJoinGroup = navigator::navigateStudentGroupJoin,
+                handleException = viewModel::handleException,
+            )
+
+            studentGroupNavGraph(
                 handleException = viewModel::handleException,
             )
         }
@@ -185,7 +190,7 @@ fun BottomNav(
                 modifier = modifier,
                 containerColor = Cream,
             ) {
-                bottomTavItems?.forEach{ item ->
+                bottomTavItems?.forEach { item ->
                     NavigationBarItem(
                         icon = {
                             Icon(
@@ -221,7 +226,7 @@ fun RequestNotificationPermission() {
     )
 
     LaunchedEffect(Unit) {
-        if(notificationPermissionState.status.isGranted.not()) {
+        if (notificationPermissionState.status.isGranted.not()) {
             notificationPermissionState.launchPermissionRequest()
         }
     }
