@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
+import com.quiz.ourclass.domain.organization.dto.response.OrganizationSummaryResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -124,6 +125,18 @@ public interface OrganizationControllerDocs {
         })
     @GetMapping("/{id}/rank")
     ResponseEntity<ResultResponse<?>> getRanking(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id
+    );
+
+    @Operation(summary = "학급 통계 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = OrganizationSummaryResponse.class)))
+        })
+    @GetMapping("/{id}/summary")
+    ResponseEntity<ResultResponse<?>> getSummary(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id
