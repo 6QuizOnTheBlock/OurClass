@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,5 +61,21 @@ public interface ChatFilterControllerDocs {
         @PathVariable(value = "chatFilterId") Long chatFilterId,
         @Parameter(name = "request", description = "수정할 단어", required = true, in = ParameterIn.DEFAULT)
         @RequestBody ChatFilterRequest request
+    );
+
+    @Operation(summary = "채팅 필터링 단어 삭제",
+        description = "입력으로 들어온 단어를 필터링 단어 PK에 맞게 삭제합니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = Long.class))),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "단어를 찾을 수 없습니다.")
+                """, content = @Content),
+        }
+    )
+    @DeleteMapping("/{chatFilterId}")
+    ResponseEntity<ResultResponse<?>> delete(
+        @Parameter(name = "chatFilterId", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
+        @PathVariable(value = "chatFilterId") Long chatFilterId
     );
 }

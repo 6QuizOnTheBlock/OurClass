@@ -46,6 +46,16 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         return true;
     }
 
+    @Override
+    public Boolean delete(Long chatFilterId) {
+        ChatFilter chatFilter = chatFilterRepository.findById(chatFilterId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_FILTER_NOTFOUND_WORD));
+
+        chatFilterRepository.delete(chatFilter);
+
+        return true;
+    }
+
     private Organization organizationCheck(Long organizationId) {
         return organizationRepository.findById(organizationId)
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
