@@ -41,6 +41,7 @@ public class Message implements Serializable {
             .roomId(roomId)
             .memberId(memberId)
             .memberName(memberName)
+            .memberImageUrl(memberImageUrl)
             .content(content)
             .sendDateTime(sendDateTime)
             .readCount(readCount)
