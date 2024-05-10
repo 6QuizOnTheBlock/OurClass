@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.organization.controller;
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
+import com.quiz.ourclass.domain.organization.dto.response.OrganizationHomeResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationSimpleResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
@@ -85,5 +86,18 @@ public interface MemberOrgControllerDocs {
         @RequestParam(required = false)
         @Parameter(description = "상위 n개만 조회 시 추가", required = false, in = ParameterIn.QUERY)
         Long limit
+    );
+
+    @Operation(summary = "학생 학급 홈 조회.",
+        description = "친한 친구 기준 3명 함께 보여줌",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = OrganizationHomeResponse.class)))
+        })
+    @GetMapping("/{id}/home")
+    ResponseEntity<ResultResponse<?>> getOrganizationHome(
+        @PathVariable
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
+        long id
     );
 }
