@@ -12,23 +12,23 @@ import retrofit2.http.Path
 
 interface CommentService {
     @POST("comments")
-    fun createComment(
+    suspend fun createComment(
         @Body request: NewCommentRequest
     ): ApiResult<ApiResponse<Long>>
 
     @DELETE("comments/{id}")
-    fun deleteComment(
+    suspend fun deleteComment(
         @Path("id") id: Long
     ): ApiResult<ApiResponse<Boolean>>
 
     @PATCH("comments/{id}")
-    fun updateComment(
+    suspend fun updateComment(
         @Path("id") id: Long,
         @Body request: UpdateCommentRequest
     ): ApiResult<ApiResponse<Long>>
 
     @POST("comments/{id}/report")
-    fun reportComment(
+    suspend fun reportComment(
         @Path("id") id: Long
     ): ApiResult<ApiResponse<Boolean>>
 }
