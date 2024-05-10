@@ -38,6 +38,7 @@ import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
 import com.sixkids.student.board.navigation.studentHomeNavGraph
+import com.sixkids.student.challeng.navigation.studentChallengeNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
@@ -124,6 +125,7 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 navigateToTeacherOrganizationList = navigator::navigateTeacherOrganizationList,
+                navigateToStudentHome = navigator::navigateStudentHome,
             )
 
             teacherOrganizationListNavGraph(
@@ -137,6 +139,12 @@ fun MainScreen(
 
             studentHomeNavGraph(
                 padding = innerPadding,
+            )
+            studentChallengeNavGraph(
+                navigateChallengeDetail = navigator::navigateChallengeDetail,
+                navigateToCreateGroup = {  },
+                navigateToJoinGroup = {  },
+                handleException = viewModel::handleException,
             )
         }
         with(uiState) {

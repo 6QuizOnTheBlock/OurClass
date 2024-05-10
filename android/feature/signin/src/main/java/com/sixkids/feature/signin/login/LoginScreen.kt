@@ -58,6 +58,7 @@ fun LoginRoute(
     navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit,
     navigateToTeacherOrganizationList: () -> Unit,
+    navigateToStudentHome: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
     val context = LocalContext.current
@@ -79,6 +80,7 @@ fun LoginRoute(
             LoginEffect.NavigateToHome -> navigateToHome()
             is LoginEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
             LoginEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
+            LoginEffect.NavigateToStudentHome -> navigateToStudentHome()
         }
     }
 

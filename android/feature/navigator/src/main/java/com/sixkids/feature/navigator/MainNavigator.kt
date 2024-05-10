@@ -16,6 +16,7 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.student.board.navigation.StudentHomeRoute
 import com.sixkids.student.board.navigation.navigateStudentHome
+import com.sixkids.student.challeng.navigation.navigateStudentChallengeHistory
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
@@ -77,7 +78,7 @@ class MainNavigator(
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
             MainNavigationTab.STUDENT_BOARD -> {}
             MainNavigationTab.STUDENT_RELAY -> {}
-            MainNavigationTab.STUDENT_CHALLENGE -> {}
+            MainNavigationTab.STUDENT_CHALLENGE -> navController.navigateStudentChallengeHistory(studentNavOptions)
         }
     }
 
