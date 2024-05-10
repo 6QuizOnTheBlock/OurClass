@@ -70,6 +70,7 @@ public interface MemberOrgControllerDocs {
     );
 
     @Operation(summary = "멤버 친한친구 순서로 관계 조회",
+        description = "limit 파라미터 없으면 전체조회, 있으면 상위 limit 갯수만큼 조회",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = RelationSimpleResponse.class)))
