@@ -11,6 +11,7 @@ import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
 import com.quiz.ourclass.domain.challenge.entity.GroupMember;
+import com.quiz.ourclass.domain.challenge.entity.GroupType;
 import com.quiz.ourclass.domain.challenge.entity.Report;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.challenge.mapper.ChallengeGroupMapper;
@@ -78,6 +79,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                 ChallengeGroup group = challengeGroupMapper.groupMatchingRequestToChallengeGroup(
                     request);
                 group.setChallenge(challenge);
+                group.setGroupType(GroupType.DESIGN);
                 challengeGroupRepository.save(group);
                 List<Member> members = request.students().stream()
                     .map(memberRepository::findById).filter(Optional::isPresent).map(Optional::get)
