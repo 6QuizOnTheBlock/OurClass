@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberOrganizationRepository extends JpaRepository<MemberOrganization, Long> {
+public interface MemberOrganizationRepository extends JpaRepository<MemberOrganization, Long>,
+    MemberOrganizationRepositoryQuerydsl {
 
     List<MemberOrganization> findByMember(Member member);
 
