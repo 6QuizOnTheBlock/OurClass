@@ -30,9 +30,15 @@ public class MemberOrganization {
     Member member;
     double isolationPoint;
     int exp;
+    int challengeCount;
+    int relayCount;
 
     public UpdateExpResponse updateExp(UpdateExpRequest updateExpRequest) {
         this.exp += updateExpRequest.exp();
         return UpdateExpResponse.builder().exp(exp).build();
+    }
+
+    public void updateChallengeCount() {
+        this.challengeCount += 1;
     }
 }

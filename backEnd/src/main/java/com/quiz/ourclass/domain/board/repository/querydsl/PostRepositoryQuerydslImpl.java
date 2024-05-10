@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.board.repository.querydsl;
 
 import static com.quiz.ourclass.domain.board.entity.QComment.comment;
 import static com.quiz.ourclass.domain.board.entity.QPost.post;
+import static com.quiz.ourclass.domain.member.entity.QMember.member;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -11,6 +12,8 @@ import com.quiz.ourclass.domain.board.dto.PostListDTO;
 import com.quiz.ourclass.domain.board.dto.request.PostSliceRequest;
 import com.quiz.ourclass.domain.board.dto.response.PostListResponse;
 import com.quiz.ourclass.domain.board.entity.Post;
+import com.quiz.ourclass.domain.organization.dto.response.MemberPlayCountResponse;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -63,6 +66,27 @@ public class PostRepositoryQuerydslImpl implements PostRepositoryQuerydsl {
             .hasNextPage(hasNext)
             .posts(posts)
             .build();
+    }
+
+    @Override
+    public List<MemberPlayCountResponse> countPostsByOrganizationIdGroupByMember(
+        Long organizationId) {
+        return queryFactory.select(Projections.constructor(
+                MemberPlayCountResponse.class,
+                Projections.constructor(
+                    MemberSimpleDTO.class,
+                    member.id,
+                    member.name,
+                    member.profileImage
+                ),
+                post.count().intValue()
+            ))
+            .from(post)
+            .join(post.author, member)
+            .where(post.organization.id.eq(organizationId))
+            .groupBy(member.id)
+            .orderBy(post.count().desc())
+            .fetch();
     }
 
     private static BooleanBuilder getPostsBooleanBuilder(PostSliceRequest request) {

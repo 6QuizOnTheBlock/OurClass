@@ -1,6 +1,6 @@
 package com.quiz.ourclass.domain.organization.service;
 
-import com.quiz.ourclass.domain.chat.repository.ChatRoomRepository;
+import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.chat.service.ChatRoomService;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.entity.Role;
@@ -9,7 +9,9 @@ import com.quiz.ourclass.domain.organization.dto.InviteCodeDTO;
 import com.quiz.ourclass.domain.organization.dto.OrganizationRequest;
 import com.quiz.ourclass.domain.organization.dto.OrganizationResponse;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateOrganizationRequest;
+import com.quiz.ourclass.domain.organization.dto.response.MemberPlayCountResponse;
 import com.quiz.ourclass.domain.organization.dto.response.MemberRankPoint;
+import com.quiz.ourclass.domain.organization.dto.response.OrganizationSummaryResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
@@ -38,7 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final ChatRoomService chatRoomService;
     private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
-    private final ChatRoomRepository chatRoomRepository;
+    private final PostRepository postRepository;
     private final OrganizationMapper organizationMapper;
     private final MemberMapper memberMapper;
     private final RedisUtil redisUtil;
@@ -160,5 +162,20 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .name(member.getMember().getName())
                 .point(member.getExp())
                 .build()).toList();
+    }
+
+    @Override
+    public OrganizationSummaryResponse getSummary(long id) {
+        List<MemberPlayCountResponse> challengeCount = memberOrganizationRepository
+            .getChallengeCountByOrganizationId(id);
+        List<MemberPlayCountResponse> relayCount = memberOrganizationRepository
+            .getRelayCountByOrganizationId(id);
+        List<MemberPlayCountResponse> postCount = postRepository.countPostsByOrganizationIdGroupByMember(
+            id);
+        return OrganizationSummaryResponse.builder()
+            .challengeCounts(challengeCount)
+            .relayCounts(relayCount)
+            .postCounts(postCount)
+            .build();
     }
 }

@@ -1,7 +1,9 @@
 package com.quiz.ourclass.domain.relay.service;
 
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
@@ -28,6 +30,7 @@ public class RelayServiceImpl implements RelayService {
     private final RelayRepository relayRepository;
     private final RelayMemberRepository relayMemberRepository;
     private final OrganizationRepository organizationRepository;
+    private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final static Long RELAY_TIMEOUT_DAY = 1L;
 
@@ -60,6 +63,11 @@ public class RelayServiceImpl implements RelayService {
         relay.setStartRunner(relayMember);
         relay.setLastRunner(relayMember);
         relayMemberRepository.save(relayMember);
+        MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
+                organization, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
+        memberOrganization.updateChallengeCount();
+        memberOrganizationRepository.save(memberOrganization);
         return relay.getId();
     }
 
