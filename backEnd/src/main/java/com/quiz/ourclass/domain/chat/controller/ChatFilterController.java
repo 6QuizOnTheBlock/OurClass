@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.chat.service.ChatFilterService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,13 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     ) {
         Boolean isModify = chatFilterService.modify(organizationId, chatFilterId, request);
         return ResponseEntity.ok(ResultResponse.success(isModify));
+    }
+
+    @DeleteMapping("/{chatFilterId}")
+    public ResponseEntity<ResultResponse<?>> delete(
+        @PathVariable(value = "chatFilterId") Long chatFilterId
+    ) {
+        Boolean isDelete = chatFilterService.delete(chatFilterId);
+        return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
 }

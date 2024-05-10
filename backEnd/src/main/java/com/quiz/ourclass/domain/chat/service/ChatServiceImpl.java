@@ -65,7 +65,7 @@ public class ChatServiceImpl implements ChatService {
             .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_ROOM_NOT_FOUND));
 
         long roomId = chatRoom.getId();
-        Page<Chat> chats = chatRepository.findByRoomIdOrderByIdDesc(
+        Page<Chat> chats = chatRepository.findByRoomIdOrderByIdAsc(
             roomId, pageable
         );
         List<ChatDTO> chatDTOList = chats.stream()
