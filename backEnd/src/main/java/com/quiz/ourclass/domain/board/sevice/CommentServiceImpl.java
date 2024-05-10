@@ -59,6 +59,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment).getId();
     }
 
+    @Transactional
     @Override
     public Long modify(Long commentId, UpdateCommentRequest request) {
         Member member = userAccessUtil.getMember()
@@ -84,6 +85,7 @@ public class CommentServiceImpl implements CommentService {
      * 단체 담당자는 해당 단체의 댓글 삭제 가능
      * 작성자 본인은 본인의 댓글 삭제 가능
      */
+    @Transactional
     @Override
     public Boolean delete(Long commentId) {
         Member member = userAccessUtil.getMember()
@@ -102,6 +104,10 @@ public class CommentServiceImpl implements CommentService {
             userAccessUtil.isMemberOfOrganization(member, orgId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
+
+        //자식 댓글 삭제하기
+        commentRepository.deleteByParentId(comment.getId());
+
         //댓글 삭제
         commentRepository.delete(comment);
         return true;
