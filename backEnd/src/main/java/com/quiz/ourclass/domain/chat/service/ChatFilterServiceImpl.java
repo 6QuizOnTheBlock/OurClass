@@ -75,8 +75,6 @@ public class ChatFilterServiceImpl implements ChatFilterService {
             .map(chatFilterMapper::chatFilterToChatFilterDTO)
             .toList();
 
-        chatFilterPage.hasNext();
-
         return chatFilterMapper.chatFilterDTOListToChatFilterResponse(words,
             chatFilterPage.hasNext());
     }
