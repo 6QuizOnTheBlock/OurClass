@@ -8,9 +8,11 @@ import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningMemberChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
 import com.quiz.ourclass.domain.challenge.entity.GroupMember;
+import com.quiz.ourclass.domain.challenge.entity.GroupType;
 import com.quiz.ourclass.domain.challenge.entity.Report;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.challenge.mapper.ChallengeGroupMapper;
@@ -78,6 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                 ChallengeGroup group = challengeGroupMapper.groupMatchingRequestToChallengeGroup(
                     request);
                 group.setChallenge(challenge);
+                group.setGroupType(GroupType.DESIGN);
                 challengeGroupRepository.save(group);
                 List<Member> members = request.students().stream()
                     .map(memberRepository::findById).filter(Optional::isPresent).map(Optional::get)
@@ -138,6 +141,29 @@ public class ChallengeServiceImpl implements ChallengeService {
             challenge);
         return RunningChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
             .waitingCount(waitingCount).build();
+    }
+
+    @Override
+    public RunningMemberChallengeResponse getRunningMemberChallenge(long organizationId) {
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        Organization organization = organizationRepository.findById(organizationId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+        Challenge challenge = challengeRepository.findFirstByOrganizationAndEndStatusIsFalse(
+                organization)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_CHALLENGE_NOT_FOUND));
+        Optional<ChallengeGroup> group = challengeGroupRepository.findDistinctChallengeGroupByChallengeAndGroupMembersMember(
+            challenge, member);
+        ChallengeSimpleDTO challengeSimpleDTO = challengeMapper.challengeToChallengeSimpleDTO(
+            challenge);
+        if (group.isEmpty()) {
+            return RunningMemberChallengeResponse.builder()
+                .challengeSimpleDTO(challengeSimpleDTO)
+                .type(GroupType.FREE).build();
+        }
+        ChallengeGroup challengeGroup = group.get();
+        boolean leaderStatus = challengeGroup.getLeaderId() == member.getId();
+        return challengeMapper.groupToRunningMember(challengeSimpleDTO, group.get(), leaderStatus);
     }
 
     @Override
