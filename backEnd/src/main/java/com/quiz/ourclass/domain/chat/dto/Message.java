@@ -4,7 +4,6 @@ import com.quiz.ourclass.domain.chat.entity.Chat;
 import com.quiz.ourclass.domain.member.entity.Member;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import lombok.AllArgsConstructor;
@@ -43,9 +42,7 @@ public class Message implements Serializable {
             .memberId(memberId)
             .memberName(memberName)
             .content(content)
-            .sendDateTime(
-                Instant.ofEpochMilli(sendDateTime).atZone(ZoneId.of("Asia/Seoul"))
-                    .toLocalDateTime())
+            .sendDateTime(sendDateTime)
             .readCount(readCount)
             .build();
     }

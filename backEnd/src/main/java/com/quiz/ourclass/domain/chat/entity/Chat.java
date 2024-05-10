@@ -1,7 +1,6 @@
 package com.quiz.ourclass.domain.chat.entity;
 
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +19,6 @@ public class Chat {
     private String memberName;
     private String memberImageUrl;
     private String content;
-    private LocalDateTime sendDateTime;
+    private Long sendDateTime;
     private long readCount;
 }

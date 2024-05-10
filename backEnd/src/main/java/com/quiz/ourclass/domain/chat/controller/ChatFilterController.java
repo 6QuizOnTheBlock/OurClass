@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.chat.service.ChatFilterService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,5 +26,15 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     ) {
         Long badWordId = chatFilterService.register(organizationId, request);
         return ResponseEntity.ok(ResultResponse.success(badWordId));
+    }
+
+    @PatchMapping("/{organizationId}/{chatFilterId}")
+    public ResponseEntity<ResultResponse<?>> modify(
+        @PathVariable(value = "organizationId") Long organizationId,
+        @PathVariable(value = "chatFilterId") Long chatFilterId,
+        @RequestBody ChatFilterRequest request
+    ) {
+        Boolean isModify = chatFilterService.modify(organizationId, chatFilterId, request);
+        return ResponseEntity.ok(ResultResponse.success(isModify));
     }
 }
