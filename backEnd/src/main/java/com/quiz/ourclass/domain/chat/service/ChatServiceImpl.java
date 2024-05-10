@@ -65,12 +65,13 @@ public class ChatServiceImpl implements ChatService {
             .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_ROOM_NOT_FOUND));
 
         long roomId = chatRoom.getId();
-        Page<Chat> chats = chatRepository.findByRoomIdOrderByIdAsc(
+        Page<Chat> chats = chatRepository.findByRoomIdOrderByIdDesc(
             roomId, pageable
         );
         List<ChatDTO> chatDTOList = chats.stream()
             .map(chatMapper::chatToChatDTO)
-            .toList();
+            .toList()
+            .reversed();
 
         return chatMapper.messagesToMessageResponse(roomId, chats.hasNext(), chatDTOList);
     }

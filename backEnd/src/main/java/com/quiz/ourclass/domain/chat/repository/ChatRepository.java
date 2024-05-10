@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ChatRepository extends MongoRepository<Chat, String> {
 
-    Page<Chat> findByRoomIdOrderByIdAsc(Long chatRoomId, Pageable pageable);
+    Page<Chat> findByRoomIdOrderByIdDesc(Long chatRoomId, Pageable pageable);
 }
