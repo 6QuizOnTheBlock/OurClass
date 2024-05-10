@@ -1,5 +1,7 @@
 package com.quiz.ourclass.domain.organization.service;
 
+import static com.quiz.ourclass.global.util.ConstantUtil.HOME_FRIEND_COUNT;
+
 import com.quiz.ourclass.domain.board.repository.PostRepository;
 import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
@@ -7,12 +9,14 @@ import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
+import com.quiz.ourclass.domain.organization.dto.response.OrganizationHomeResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationSimpleResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.mapper.MemberOrganizationMapper;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
@@ -40,6 +44,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
     private final RelayRepository relayRepository;
     private final PostRepository postRepository;
     private final MemberMapper memberMapper;
+    private final MemberOrganizationMapper memberOrganizationMapper;
 
     @Transactional
     @Override
@@ -104,16 +109,33 @@ public class MemberOrgServiceImpl implements MemberOrgService {
 
     @Override
     public List<RelationSimpleResponse> getMemberRelations(long id, long memberId, Long limit) {
+        return getFriendlyResponse(id, memberId, limit);
+    }
+
+    @Override
+    public OrganizationHomeResponse getOrganizationHome(long id) {
+        Member member = accessUtil.getMember().orElseThrow();
+        MemberOrganization memberOrganization = accessUtil.isMemberOfOrganization(member, id)
+            .orElseThrow();
+        List<RelationSimpleResponse> friendlyResponse = getFriendlyResponse(id, member.getId(),
+            HOME_FRIEND_COUNT);
+        return memberOrganizationMapper.memberOrgToOrganizationHome(memberOrganization,
+            friendlyResponse);
+    }
+
+    private List<RelationSimpleResponse> getFriendlyResponse(long organizationId, long memberId,
+        Long limit) {
         List<Relationship> relations = relationshipRepository.getMemberRelations(
-            id, memberId, limit);
-        return relations.stream().map(relationship -> {
-            Member target = relationship.getMember1().getId() == memberId
-                ? relationship.getMember2() : relationship.getMember1();
-            MemberSimpleDTO memberSimpleDTO = memberMapper.memberToMemberSimpleDTO(target);
-            return RelationSimpleResponse.builder()
-                .member(memberSimpleDTO)
-                .relationPoint(relationship.getRelationPoint())
-                .build();
-        }).toList();
+            organizationId, memberId, limit);
+        return relations.stream()
+            .map(relationship -> {
+                Member target = relationship.getMember1().getId() == memberId
+                    ? relationship.getMember2() : relationship.getMember1();
+                MemberSimpleDTO memberSimpleDTO = memberMapper.memberToMemberSimpleDTO(target);
+                return RelationSimpleResponse.builder()
+                    .member(memberSimpleDTO)
+                    .relationPoint(relationship.getRelationPoint())
+                    .build();
+            }).toList();
     }
 }

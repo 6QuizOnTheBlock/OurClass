@@ -7,4 +7,5 @@ public abstract class ConstantUtil {
     public static final int REDIS_ORG_ALIVE_MINUTE = 10;
     public static final String REDIS_CHAT_ROOM_KEY = "chatRoom:";
     public static final String MONGO_DB_NAME = "chat";
+    public static final long HOME_FRIEND_COUNT = 3L;
 }

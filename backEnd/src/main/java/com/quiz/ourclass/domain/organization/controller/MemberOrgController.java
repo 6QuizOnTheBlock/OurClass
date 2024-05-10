@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.organization.controller;
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
+import com.quiz.ourclass.domain.organization.dto.response.OrganizationHomeResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationResponse;
 import com.quiz.ourclass.domain.organization.dto.response.RelationSimpleResponse;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
@@ -57,5 +58,11 @@ public class MemberOrgController implements MemberOrgControllerDocs {
         List<RelationSimpleResponse> relations = memberOrgService.getMemberRelations(
             id, memberId, limit);
         return ResponseEntity.ok(ResultResponse.success(relations));
+    }
+
+    @GetMapping("/{id}/home")
+    public ResponseEntity<ResultResponse<?>> getOrganizationHome(@PathVariable long id) {
+        OrganizationHomeResponse homeResponse = memberOrgService.getOrganizationHome(id);
+        return ResponseEntity.ok(ResultResponse.success(homeResponse));
     }
 }
