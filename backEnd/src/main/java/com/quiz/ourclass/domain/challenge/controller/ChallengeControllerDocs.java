@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.challenge.dto.response.ChallengeResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSimpleResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.ChallengeSliceResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.RunningChallengeResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.RunningMemberChallengeResponse;
 import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -103,6 +104,29 @@ public interface ChallengeControllerDocs {
         })
     @GetMapping("/running")
     public ResponseEntity<ResultResponse<?>> getRunningChallenge(
+        @RequestParam(required = true)
+        @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
+        long organizationId
+    );
+
+    @Operation(summary = "학생용 진행중인 함께달리기 조회",
+        description = """
+            진행중인 것이 없다면 404를 응답합니다.
+                        
+                        지정된 그룹이 없으면 관련 필드가 null응답,
+                        지정된 그룹이 있지만 블루투스 체킹 전은 생성시간 null응답.
+            """,
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = RunningMemberChallengeResponse.class))),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "학급을 찾을 수 없습니다.")
+                                
+                (message : "진행중인 함께달리기가 없습니다.")
+                """, content = @Content)
+        })
+    @GetMapping("/running/member")
+    ResponseEntity<ResultResponse<?>> getRunningMemberChallenge(
         @RequestParam(required = true)
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
