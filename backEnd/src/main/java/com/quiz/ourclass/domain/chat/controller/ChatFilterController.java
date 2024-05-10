@@ -1,11 +1,14 @@
 package com.quiz.ourclass.domain.chat.controller;
 
 import com.quiz.ourclass.domain.chat.dto.request.ChatFilterRequest;
+import com.quiz.ourclass.domain.chat.dto.request.ChatFilterSliceRequest;
+import com.quiz.ourclass.domain.chat.dto.response.ChatFilterResponse;
 import com.quiz.ourclass.domain.chat.service.ChatFilterService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,21 +32,29 @@ public class ChatFilterController implements ChatFilterControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(badWordId));
     }
 
-    @PatchMapping("/{organizationId}/{chatFilterId}")
+    @PatchMapping("/{organizationId}/{id}")
     public ResponseEntity<ResultResponse<?>> modify(
         @PathVariable(value = "organizationId") Long organizationId,
-        @PathVariable(value = "chatFilterId") Long chatFilterId,
+        @PathVariable(value = "id") Long id,
         @RequestBody ChatFilterRequest request
     ) {
-        Boolean isModify = chatFilterService.modify(organizationId, chatFilterId, request);
+        Boolean isModify = chatFilterService.modify(organizationId, id, request);
         return ResponseEntity.ok(ResultResponse.success(isModify));
     }
 
-    @DeleteMapping("/{chatFilterId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResultResponse<?>> delete(
-        @PathVariable(value = "chatFilterId") Long chatFilterId
+        @PathVariable(value = "id") Long id
     ) {
-        Boolean isDelete = chatFilterService.delete(chatFilterId);
+        Boolean isDelete = chatFilterService.delete(id);
         return ResponseEntity.ok(ResultResponse.success(isDelete));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResultResponse<?>> select(
+        ChatFilterSliceRequest request
+    ) {
+        ChatFilterResponse response = chatFilterService.select(request);
+        return ResponseEntity.ok(ResultResponse.success(response));
     }
 }
