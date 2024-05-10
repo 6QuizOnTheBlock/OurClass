@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Gray
 import com.sixkids.designsystem.theme.GrayLight
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -30,6 +32,7 @@ import com.sixkids.designsystem.R as UlbanRes
 @Composable
 fun CommentItem(
     modifier: Modifier = Modifier,
+    selected: Boolean = false,
     writer: String = "",
     dateString: String = "00/00 00:00",
     writerImageUrl: String = "",
@@ -40,7 +43,10 @@ fun CommentItem(
 ){
     Card(
         colors = CardDefaults.cardColors(
-            containerColor = if (isRecomment) GrayLight else Color.Transparent
+            containerColor =
+            if (selected) { Blue}
+            else if (isRecomment) {GrayLight}
+            else {Color.Transparent}
         ),
     ) {
         Column(
@@ -105,7 +111,8 @@ fun CommentItemPreview() {
             dateString = "09/01 12:00",
             writerImageUrl = "https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png",
             commentString = "댓글 내용",
-            deleteOnclick = {}
+            deleteOnclick = {},
+            selected = true
         )
         CommentItem(
             writer = "오하빈",
