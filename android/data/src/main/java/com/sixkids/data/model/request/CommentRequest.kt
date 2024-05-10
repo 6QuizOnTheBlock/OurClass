@@ -1,7 +1,7 @@
 package com.sixkids.data.model.request
 
 data class NewCommentRequest(
-    val postId: Long,
+    val boardId: Long,
     val content: String,
     val parentId: Long,
 )
