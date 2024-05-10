@@ -12,7 +12,6 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class QuizServiceImpl implements QuizService {
         }
         return quizGames.stream()
             .map(quizGameMapper::toQuizGameDTO)
-            .collect(Collectors.toList());
+            .toList();
     }
 
 }
