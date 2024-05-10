@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Comment
 import com.sixkids.model.MemberSimple
@@ -53,74 +54,82 @@ fun PostDetailScreen(
     postDeleteOnclick: () -> Unit = {}
 ) {
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(20.dp)
-            .verticalScroll(ScrollState(0)),
-    ) {
-        // 작성자 정보
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+    Box {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(20.dp)
+                .verticalScroll(ScrollState(0)),
         ) {
-            PostWriterInfo(
-                height = 60.dp,
-                writer = postDetailState.postDetail.writeMember.name,
-                dateString = postDetailState.postDetail.createTime.formatToMonthDayTime(),
-                writerImageUrl = postDetailState.postDetail.writeMember.photo
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                modifier = Modifier
-                    .size(30.dp)
-                    .clickable { postDeleteOnclick() },
-                imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_delete),
-                contentDescription = "더보기"
-            )
-        }
+            // 작성자 정보
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                PostWriterInfo(
+                    height = 60.dp,
+                    writer = postDetailState.postDetail.writeMember.name,
+                    dateString = postDetailState.postDetail.createTime.formatToMonthDayTime(),
+                    writerImageUrl = postDetailState.postDetail.writeMember.photo
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clickable { postDeleteOnclick() },
+                    imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_delete),
+                    contentDescription = "더보기"
+                )
+            }
 
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = postDetailState.postDetail.title,
-            style = UlbanTypography.titleLarge
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = postDetailState.postDetail.content,
-            style = UlbanTypography.bodyLarge
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        HorizontalDivider(
-            thickness = 2.dp,
-            color = Color.Black
-        )
-        // 댓글 목록
-        for (comment in postDetailState.postDetail.comments) {
-            CommentItem(
-                writer = comment.member.name,
-                dateString = comment.createTime.formatToMonthDayTime(),
-                writerImageUrl = comment.member.photo,
-                commentString = comment.content
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = postDetailState.postDetail.title,
+                style = UlbanTypography.titleLarge
             )
-            for (recomment in comment.recomments) {
-                Row {
-                    Icon(
-                        modifier = Modifier.padding(4.dp),
-                        imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_recomment),
-                        contentDescription = null
-                    )
-                    CommentItem(
-                        writer = recomment.member.name,
-                        dateString = recomment.createTime.formatToMonthDayTime(),
-                        writerImageUrl = recomment.member.photo,
-                        commentString = recomment.content,
-                        isRecomment = true
-                    )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = postDetailState.postDetail.content,
+                style = UlbanTypography.bodyLarge
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = Color.Black
+            )
+            // 댓글 목록
+            for (comment in postDetailState.postDetail.comments) {
+                CommentItem(
+                    writer = comment.member.name,
+                    dateString = comment.createTime.formatToMonthDayTime(),
+                    writerImageUrl = comment.member.photo,
+                    commentString = comment.content
+                )
+                // 대댓글 목록
+                for (recomment in comment.recomments) {
+                    Row {
+                        Icon(
+                            modifier = Modifier.padding(4.dp),
+                            imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_recomment),
+                            contentDescription = null
+                        )
+                        CommentItem(
+                            writer = recomment.member.name,
+                            dateString = recomment.createTime.formatToMonthDayTime(),
+                            writerImageUrl = recomment.member.photo,
+                            commentString = recomment.content,
+                            isRecomment = true
+                        )
+                    }
+
                 }
-
             }
         }
+
+        if (postDetailState.isLoading) {
+            LoadingScreen()
+        }
     }
+
 }
 
 @Preview(showBackground = true)
@@ -159,6 +168,7 @@ val commentDummy = Comment(
 )
 
 val postDetailStateDummy = PostDetailState(
+    isLoading = false,
     postDetail = PostDetail(
         title = "제목",
         content = "내용내용내용내용내용내용내용내용내용내용내용내용내용",
