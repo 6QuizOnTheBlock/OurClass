@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.GetChallengeHistoryUseCase
 import com.sixkids.domain.usecase.challenge.GetRunningChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengeHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getChallengeHistoryUseCase: GetChallengeHistoryUseCase,
     private val getRunningChallengeUseCase: GetRunningChallengeUseCase
 ) : BaseViewModel<ChallengeHistoryState, ChallengeHistoryEffect>(
@@ -20,32 +23,37 @@ class ChallengeHistoryViewModel @Inject constructor(
 ) {
     private var isFirstVisited: Boolean = true
     private var organizationId: Long = 0
-
+    private lateinit var userInfo: UserInfo
     fun initData() = viewModelScope.launch {
         if (isFirstVisited.not()) return@launch
         isFirstVisited = false
 
         intent { copy(isLoading = true) }
-        getSelectedOrganizationIdUseCase().flatMap { organizationId ->
-            this@ChallengeHistoryViewModel.organizationId = organizationId.toLong()
-            val challengeHistory = getChallengeHistoryUseCase(organizationId)
-            intent { copy(challengeHistory = challengeHistory) }
-            getRunningChallengeUseCase(organizationId)
-        }.onSuccess {
-            intent { copy(isLoading = false, runningChallenge = it) }
-        }.onFailure {
-            when (it) {
-                is NoSuchElementException -> {
-                    intent { copy(isLoading = false, runningChallenge = null) }
-                }
 
-                else -> {
-                    postSideEffect(
-                        ChallengeHistoryEffect.HandleException(it, ::initData)
-                    )
+        getUserInfoUseCase().flatMap { userInfo ->
+            this@ChallengeHistoryViewModel.userInfo = userInfo
+            getSelectedOrganizationIdUseCase().flatMap { organizationId ->
+                this@ChallengeHistoryViewModel.organizationId = organizationId.toLong()
+                val challengeHistory = getChallengeHistoryUseCase(organizationId, userInfo.id)
+                intent { copy(challengeHistory = challengeHistory) }
+                getRunningChallengeUseCase(organizationId)
+            }.onSuccess {
+                intent { copy(isLoading = false, runningChallenge = it) }
+            }.onFailure {
+                when (it) {
+                    is NoSuchElementException -> {
+                        intent { copy(isLoading = false, runningChallenge = null) }
+                    }
+
+                    else -> {
+                        postSideEffect(
+                            ChallengeHistoryEffect.HandleException(it, ::initData)
+                        )
+                    }
                 }
             }
         }
+
         intent { copy(isLoading = false) }
     }
 

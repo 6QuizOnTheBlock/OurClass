@@ -128,7 +128,7 @@ fun ChallengeHistoryScreen(
                 topDescription = "${currentChallenge.startTime.formatToMonthDayTime()} ~ ${currentChallenge.endTime.formatToMonthDayTime()}",
                 bottomDescription = currentChallenge.content,
                 color = Red,
-                onclick = { navigateToDetail(currentChallenge.id) },
+                onclick =  showDialog ,
                 totalCnt = currentChallenge.totalMemberCount,
                 successCnt = currentChallenge.doneMemberCount,
                 badgeCount = currentChallenge.waitingCount,
@@ -165,6 +165,7 @@ fun ChallengeHistoryScreen(
                 Spacer(modifier = Modifier.weight(1f))
             } else {
                 LazyColumn(
+                    modifier = Modifier.weight(1f),
                     state = listState,
                     contentPadding = PaddingValues(vertical = 4.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
