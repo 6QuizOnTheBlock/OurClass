@@ -44,7 +44,7 @@ fun PostDetailResponse.toModel(): PostDetail {
         createTime = createTime,
         title = title,
         content = content,
-        ImageUri = photoUrl,
+        imageUri = photoUrl,
         comments = comments.map { it.toModel() },
         writeMember = writer.toModel()
     )

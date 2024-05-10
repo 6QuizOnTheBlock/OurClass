@@ -75,7 +75,8 @@ fun NavGraphBuilder.boardNavGraph(
         arguments = listOf(navArgument(BoardRoute.postDetailARG) { type = NavType.LongType })
     ) {
         PostDetailRoute(
-            padding = padding
+            padding = padding,
+            onShowSnackBar = onShowSnackBar
         )
     }
 
