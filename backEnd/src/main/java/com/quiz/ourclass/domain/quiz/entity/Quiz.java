@@ -37,7 +37,7 @@ public class Quiz {
 
 
     @Enumerated(EnumType.STRING)
-    Qtype qtype;
+    Quiztype quiztype;
 
 
 }

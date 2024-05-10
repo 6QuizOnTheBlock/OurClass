@@ -17,13 +17,4 @@ public record MakingQuizRequest(
 
 ) {
 
-    @Override
-    public String toString() {
-        return "MakingQuizRequest{" +
-            "orgId=" + orgId +
-            ", quizCount=" + quizCount +
-            ", limitTime=" + limitTime +
-            ", quizList=" + quizList +
-            '}';
-    }
 }

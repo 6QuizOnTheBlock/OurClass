@@ -6,6 +6,7 @@ import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,14 @@ public class QuizController {
 
     public final QuizServiceImpl quizService;
 
-    @PutMapping("/")
+    @PutMapping("")
     public ResponseEntity<ResultResponse<?>> makingQuiz(@RequestBody MakingQuizRequest request) {
         quizService.makingQuiz(request);
         return ResponseEntity.ok(ResultResponse.success(null));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<ResultResponse<?>> getQuizList() {
+        return null;
     }
 }

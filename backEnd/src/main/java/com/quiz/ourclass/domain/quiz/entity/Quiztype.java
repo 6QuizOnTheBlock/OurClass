@@ -1,5 +1,5 @@
 package com.quiz.ourclass.domain.quiz.entity;
 
-public enum Qtype {
+public enum Quiztype {
     SUBJECTIVE, MULTIPLE
 }
