@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "MemberOrgControllerDocs", description = "회원관리 API")
+@Tag(name = "MemberOrgControllerDocs", description = "학급 멤버 API")
 public interface MemberOrgControllerDocs {
 
     @Operation(summary = "학급 멤버 포인트 수정",
@@ -54,7 +54,7 @@ public interface MemberOrgControllerDocs {
         RelationRequest relationRequest
     );
 
-    @Operation(summary = "학급 상세 조회",
+    @Operation(summary = "학급 멤버 상세 조회",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = MemberDetailResponse.class))),
