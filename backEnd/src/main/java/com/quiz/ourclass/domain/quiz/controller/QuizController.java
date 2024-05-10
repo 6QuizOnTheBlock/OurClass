@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/quizzes")
 @RequiredArgsConstructor
 @Slf4j
-public class QuizController {
+public class QuizController implements QuizControllerDocs {
 
     public final QuizServiceImpl quizService;
 
