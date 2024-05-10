@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.quiz.service;
 
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
 import com.quiz.ourclass.domain.quiz.entity.QuizGame;
 import com.quiz.ourclass.domain.quiz.mapper.QuizGameMapper;
@@ -10,6 +11,7 @@ import com.quiz.ourclass.domain.quiz.repository.jpa.QuizRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class QuizServiceImpl {
+public class QuizServiceImpl implements QuizService {
 
     public final UserAccessUtil accessUtil;
     public final OrganizationRepository organizationRepository;
@@ -40,6 +42,19 @@ public class QuizServiceImpl {
         request.quizList().stream()
             .map(quizDTO -> quizGameMapper.toQuiz(quizGame, quizDTO))
             .forEach(quizRepository::save);
+    }
+
+    @Override
+    public List<QuizGameDTO> getQuizList(long orgId) {
+        // List 는 반환 값이 아무것도 없더라도 null을 반환하지 않고, 안에 값이 없는 Empty 상태가 된다.
+        List<QuizGame> quizGames = quizGameRepository.findAllByOrganization_Id(orgId);
+        // 따라서 empty 상태일 경우, Error 를 반환한다.
+        if (quizGames.isEmpty()) {
+            throw new GlobalException(ErrorCode.NO_QUIZ_GAME);
+        }
+        return quizGames.stream()
+            .map(quizGameMapper::toQuizGameDTO)
+            .toList();
     }
 
 }
