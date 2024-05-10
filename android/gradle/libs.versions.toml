@@ -62,6 +62,7 @@ firebaseMessagingKtx = "24.0.0"
 # Krossbow
 krossbow = "7.0.0"
 
+annotationJvm = "1.7.1"
 
 
 [libraries]
@@ -142,6 +143,8 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 krossbow-stomp-core = { group = "org.hildan.krossbow", name = "krossbow-stomp-core", version.ref = "krossbow" }
 krossbow-websocket-okhttp = { group = "org.hildan.krossbow", name = "krossbow-websocket-okhttp", version.ref = "krossbow" }
 krossbow-stomp-moshi = { group = "org.hildan.krossbow", name = "krossbow-stomp-moshi", version.ref = "krossbow" }
+
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
