@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        'monoplexKRNerd-Bold':['MonoplexKRNerd-Bold']
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
