@@ -28,7 +28,10 @@ class LoginViewModel @Inject constructor(
                         .onSuccess {
                             when(it){
                                 "TEACHER" -> postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)
-                                "STUDENT" -> {}
+//                                "STUDENT" -> {postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)}
+                                //TODO 임시로 학생 홈으로 이동
+                                "STUDENT" -> {postSideEffect(LoginEffect.NavigateToStudentHome)}
+
                             }
                         }.onFailure {
                             Log.d(TAG, "autoSignIn: ${it.message}")

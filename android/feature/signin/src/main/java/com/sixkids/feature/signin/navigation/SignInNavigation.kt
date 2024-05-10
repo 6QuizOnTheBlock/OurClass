@@ -29,6 +29,7 @@ fun NavGraphBuilder.signInNavGraph(
     navigateSignUpPhoto: (Boolean) -> Unit,
     navigateToHome: () -> Unit,
     navigateToTeacherOrganizationList: () -> Unit,
+    navigateToStudentHome: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick : () -> Unit
 ) {
@@ -37,7 +38,8 @@ fun NavGraphBuilder.signInNavGraph(
             navigateToSignUp = navigateToSignUp,
             navigateToHome = navigateToHome,
             onShowSnackBar = onShowSnackBar,
-            navigateToTeacherOrganizationList = navigateToTeacherOrganizationList
+            navigateToTeacherOrganizationList = navigateToTeacherOrganizationList,
+            navigateToStudentHome = navigateToStudentHome
         )
     }
 
