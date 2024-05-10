@@ -28,12 +28,13 @@ public class ChatFilterController implements ChatFilterControllerDocs {
         return ResponseEntity.ok(ResultResponse.success(badWordId));
     }
 
-    @PatchMapping("/{chatFilterId}")
+    @PatchMapping("/{organizationId}/{chatFilterId}")
     public ResponseEntity<ResultResponse<?>> modify(
+        @PathVariable(value = "organizationId") Long organizationId,
         @PathVariable(value = "chatFilterId") Long chatFilterId,
         @RequestBody ChatFilterRequest request
     ) {
-        Boolean isModify = chatFilterService.modify(chatFilterId, request);
+        Boolean isModify = chatFilterService.modify(organizationId, chatFilterId, request);
         return ResponseEntity.ok(ResultResponse.success(isModify));
     }
 }

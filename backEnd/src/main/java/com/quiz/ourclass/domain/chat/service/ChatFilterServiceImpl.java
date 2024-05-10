@@ -23,12 +23,8 @@ public class ChatFilterServiceImpl implements ChatFilterService {
     @Transactional
     @Override
     public Long register(Long organizationId, ChatFilterRequest request) {
-        Organization organization = organizationRepository.findById(organizationId)
-            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
-
-        if (chatFilterRepository.findByBadWord(request.badWord()).isPresent()) {
-            throw new GlobalException(ErrorCode.ALREADY_REGISTER_WORD);
-        }
+        Organization organization = organizationCheck(organizationId);
+        duplicateWordCheck(organization, request.badWord());
 
         return chatFilterRepository.save(
             chatFilterMapper.RequestToChatFilter(organization, request.badWord())
@@ -36,10 +32,9 @@ public class ChatFilterServiceImpl implements ChatFilterService {
     }
 
     @Override
-    public Boolean modify(Long chatFilterId, ChatFilterRequest request) {
-        if (chatFilterRepository.findByBadWord(request.badWord()).isPresent()) {
-            throw new GlobalException(ErrorCode.ALREADY_REGISTER_WORD);
-        }
+    public Boolean modify(Long organizationId, Long chatFilterId, ChatFilterRequest request) {
+        Organization organization = organizationCheck(organizationId);
+        duplicateWordCheck(organization, request.badWord());
 
         ChatFilter chatFilter = chatFilterRepository.findById(chatFilterId)
             .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_FILTER_NOTFOUND_WORD));
@@ -49,6 +44,17 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         );
 
         return true;
+    }
+
+    private Organization organizationCheck(Long organizationId) {
+        return organizationRepository.findById(organizationId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+    }
+
+    private void duplicateWordCheck(Organization organization, String badWord) {
+        if (chatFilterRepository.findByOrganizationAndBadWord(organization, badWord).isPresent()) {
+            throw new GlobalException(ErrorCode.ALREADY_REGISTER_WORD);
+        }
     }
 
 

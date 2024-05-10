@@ -47,11 +47,15 @@ public interface ChatFilterControllerDocs {
                 """, content = @Content),
             @ApiResponse(responseCode = "404", description = """        
                 (message : "단어를 찾을 수 없습니다.")
+                                
+                (message : "단체를 찾을 수 없습니다.")
                 """, content = @Content),
         }
     )
-    @PatchMapping("/{chatFilterId}")
+    @PatchMapping("/{organizationId}/{chatFilterId}")
     ResponseEntity<ResultResponse<?>> modify(
+        @Parameter(name = "organizationId", description = "단체 ID", required = true, in = ParameterIn.PATH)
+        @PathVariable(value = "organizationId") Long organizationId,
         @Parameter(name = "chatFilterId", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "chatFilterId") Long chatFilterId,
         @Parameter(name = "request", description = "수정할 단어", required = true, in = ParameterIn.DEFAULT)
