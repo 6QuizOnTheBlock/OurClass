@@ -27,6 +27,7 @@ import org.hildan.krossbow.stomp.headers.StompSendHeaders
 import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import javax.inject.Inject
+import com.sixkids.teacher.board.BuildConfig
 
 private const val TAG = "D107"
 
@@ -57,7 +58,6 @@ class ChattingViewModel @Inject constructor(
                 val tknJob = async { getATKUseCase().getOrThrow() }
                 val roomIdJob = async { getSelectedOrganizationIdUseCase().getOrThrow() }
                 val userInfoJob = async { getUserInfoUseCase().getOrThrow() }
-
                 tkn = tknJob.await()
 //                roomId = roomIdJob.await()
                 userInfo = userInfoJob.await()
@@ -76,7 +76,7 @@ class ChattingViewModel @Inject constructor(
                 val client = StompClient(wsClient)
 
                 stompSession = client.connect(
-                    STOMP_URL,
+                    BuildConfig.STOMP_ENDPOINT,
                     customStompConnectHeaders = mapOf(
                         HEADER_AUTHORIZATION to tkn,
                         HEADER_ROOM_ID to roomId.toString()
@@ -136,7 +136,6 @@ class ChattingViewModel @Inject constructor(
         const val HEADER_AUTHORIZATION = "Authorization"
         const val HEADER_ROOM_ID = "roomId"
 
-        const val STOMP_URL = "wss://k10d107.p.ssafy.io/api/ws-stomp/websocket"
         const val SEND_URL = "/publish/chat/message"
         const val SUBSCRIBE_URL = "/subscribe/public/"
     }
