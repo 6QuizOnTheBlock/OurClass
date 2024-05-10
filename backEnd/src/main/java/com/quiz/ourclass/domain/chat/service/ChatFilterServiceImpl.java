@@ -1,6 +1,9 @@
 package com.quiz.ourclass.domain.chat.service;
 
+import com.quiz.ourclass.domain.chat.dto.ChatFilterDTO;
 import com.quiz.ourclass.domain.chat.dto.request.ChatFilterRequest;
+import com.quiz.ourclass.domain.chat.dto.request.ChatFilterSliceRequest;
+import com.quiz.ourclass.domain.chat.dto.response.ChatFilterResponse;
 import com.quiz.ourclass.domain.chat.entity.ChatFilter;
 import com.quiz.ourclass.domain.chat.mapper.ChatFilterMapper;
 import com.quiz.ourclass.domain.chat.repository.ChatFilterRepository;
@@ -8,7 +11,11 @@ import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +61,24 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         chatFilterRepository.delete(chatFilter);
 
         return true;
+    }
+
+    @Override
+    public ChatFilterResponse select(ChatFilterSliceRequest request) {
+        Organization organization = organizationCheck(request.organizationId());
+        Pageable pageable = PageRequest.of(request.page(), request.size());
+
+        Page<ChatFilter> chatFilterPage =
+            chatFilterRepository.findByOrganizationOrderById(organization, pageable);
+
+        List<ChatFilterDTO> words = chatFilterPage.stream()
+            .map(chatFilterMapper::chatFilterToChatFilterDTO)
+            .toList();
+
+        chatFilterPage.hasNext();
+
+        return chatFilterMapper.chatFilterDTOListToChatFilterResponse(words,
+            chatFilterPage.hasNext());
     }
 
     private Organization organizationCheck(Long organizationId) {

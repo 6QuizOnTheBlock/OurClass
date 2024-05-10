@@ -53,12 +53,12 @@ public interface ChatFilterControllerDocs {
                 """, content = @Content),
         }
     )
-    @PatchMapping("/{organizationId}/{chatFilterId}")
+    @PatchMapping("/{organizationId}/{id}")
     ResponseEntity<ResultResponse<?>> modify(
         @Parameter(name = "organizationId", description = "단체 ID", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "organizationId") Long organizationId,
-        @Parameter(name = "chatFilterId", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
-        @PathVariable(value = "chatFilterId") Long chatFilterId,
+        @Parameter(name = "id", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
+        @PathVariable(value = "id") Long id,
         @Parameter(name = "request", description = "수정할 단어", required = true, in = ParameterIn.DEFAULT)
         @RequestBody ChatFilterRequest request
     );
@@ -73,9 +73,9 @@ public interface ChatFilterControllerDocs {
                 """, content = @Content),
         }
     )
-    @DeleteMapping("/{chatFilterId}")
+    @DeleteMapping("/{id}")
     ResponseEntity<ResultResponse<?>> delete(
-        @Parameter(name = "chatFilterId", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
-        @PathVariable(value = "chatFilterId") Long chatFilterId
+        @Parameter(name = "id", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
+        @PathVariable(value = "id") Long chatFilterId
     );
 }
