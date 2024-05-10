@@ -38,6 +38,7 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         ).getId();
     }
 
+    @Transactional
     @Override
     public Boolean modify(Long organizationId, Long chatFilterId, ChatFilterRequest request) {
         Organization organization = organizationCheck(organizationId);
@@ -53,6 +54,7 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         return true;
     }
 
+    @Transactional
     @Override
     public Boolean delete(Long chatFilterId) {
         ChatFilter chatFilter = chatFilterRepository.findById(chatFilterId)
