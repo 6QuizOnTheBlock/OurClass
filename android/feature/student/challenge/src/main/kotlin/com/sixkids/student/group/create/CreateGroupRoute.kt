@@ -1,7 +1,9 @@
 package com.sixkids.student.group.create
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -11,7 +13,11 @@ fun CreateGroupRoute() {
 
 @Composable
 fun CreateGroupScreen() {
-    Text(text = "Create Group Screen")
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+    }
 }
 
 @Preview(showBackground = true)
