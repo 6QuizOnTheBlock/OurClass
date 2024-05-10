@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.chat.service;
 
 import com.quiz.ourclass.domain.chat.dto.request.ChatFilterRequest;
 import com.quiz.ourclass.domain.chat.entity.ChatFilter;
+import com.quiz.ourclass.domain.chat.mapper.ChatFilterMapper;
 import com.quiz.ourclass.domain.chat.repository.ChatFilterRepository;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
@@ -17,6 +18,7 @@ public class ChatFilterServiceImpl implements ChatFilterService {
 
     private final OrganizationRepository organizationRepository;
     private final ChatFilterRepository chatFilterRepository;
+    private final ChatFilterMapper chatFilterMapper;
 
     @Transactional
     @Override
@@ -28,11 +30,26 @@ public class ChatFilterServiceImpl implements ChatFilterService {
             throw new GlobalException(ErrorCode.ALREADY_REGISTER_WORD);
         }
 
-        ChatFilter chatFilter = ChatFilter.builder()
-            .badWord(request.badWord())
-            .organization(organization)
-            .build();
-
-        return chatFilterRepository.save(chatFilter).getId();
+        return chatFilterRepository.save(
+            chatFilterMapper.RequestToChatFilter(organization, request.badWord())
+        ).getId();
     }
+
+    @Override
+    public Boolean modify(Long chatFilterId, ChatFilterRequest request) {
+        if (chatFilterRepository.findByBadWord(request.badWord()).isPresent()) {
+            throw new GlobalException(ErrorCode.ALREADY_REGISTER_WORD);
+        }
+
+        ChatFilter chatFilter = chatFilterRepository.findById(chatFilterId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.CHAT_FILTER_NOTFOUND_WORD));
+
+        chatFilterRepository.save(
+            chatFilterMapper.updateChatFilterFromRequest(request, chatFilter)
+        );
+
+        return true;
+    }
+
+
 }
