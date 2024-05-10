@@ -72,6 +72,9 @@ public enum ErrorCode {
     CHALLENGE_IS_END(HttpStatus.BAD_REQUEST, "종료된 함께달리기입니다."),
     NOT_CHALLENGE_GROUP_LEADER(HttpStatus.BAD_REQUEST, "레포트 제출은 그룹 리더만 가능합니다."),
 
+    //quiz
+    NO_QUIZ_GAME(HttpStatus.NOT_FOUND, "해당 단체에서 생성한 퀴즈가 없습니다."),
+
     //relay
     RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),
