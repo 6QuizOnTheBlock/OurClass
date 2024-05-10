@@ -6,19 +6,28 @@ import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.model.Chat
+import com.sixkids.model.ChatMessage
 import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import ua.naiksoftware.stomp.Stomp
-import ua.naiksoftware.stomp.StompClient
-import ua.naiksoftware.stomp.dto.StompCommand
-import ua.naiksoftware.stomp.dto.StompHeader
-import ua.naiksoftware.stomp.dto.StompMessage
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.stomp.StompSession
+import org.hildan.krossbow.stomp.conversions.convertAndSend
+import org.hildan.krossbow.stomp.conversions.moshi.withMoshi
+import org.hildan.krossbow.stomp.frame.StompFrame
+import org.hildan.krossbow.stomp.headers.StompSendHeaders
+import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import javax.inject.Inject
+import com.sixkids.teacher.board.BuildConfig
 
 private const val TAG = "D107"
 
@@ -29,16 +38,17 @@ class ChattingViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase
 ) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()) {
 
-    private val stompUrl = "ws://k10d107.p.ssafy.io:8085/api/ws-stomp/websocket"
     private var roomId = 1
     private lateinit var tkn: String
     private lateinit var userInfo: UserInfo
 
-    private lateinit var stomp: StompClient
-    private lateinit var stompConnection: Disposable
-    private lateinit var topic: Disposable
+    private lateinit var stompSession: StompSession
+    private val moshi: Moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
+    private lateinit var newChatMessage: Flow<StompFrame.Message>
 
-
+    private lateinit var chattingList: List<Chat>
 
     @SuppressLint("CheckResult")
     fun initStomp() {
@@ -47,26 +57,44 @@ class ChattingViewModel @Inject constructor(
                 // Stomp 연결
                 val tknJob = async { getATKUseCase().getOrThrow() }
                 val roomIdJob = async { getSelectedOrganizationIdUseCase().getOrThrow() }
-
-                stomp = Stomp.over(
-                    Stomp.ConnectionProvider.OKHTTP,
-                    stompUrl
-                )
-
+                val userInfoJob = async { getUserInfoUseCase().getOrThrow() }
                 tkn = tknJob.await()
 //                roomId = roomIdJob.await()
+                userInfo = userInfoJob.await()
 
-                val connectionHeaderList = arrayListOf<StompHeader>()
-                connectionHeaderList.add(StompHeader("Authorization", tkn))
-                connectionHeaderList.add(StompHeader("roomId", roomId.toString()))
+                intent { copy(memberId = userInfo.id) }
 
-                stomp.connect(connectionHeaderList)
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        }
+                    )
+                    .build()
 
-                // 채팅방 구독
-                val topicHeaderList = arrayListOf<StompHeader>()
-                topicHeaderList.add(StompHeader("Authorization", tkn))
-                stomp.topic("/subscribe/public/$roomId", topicHeaderList).subscribe { topicMessage ->
-                    Log.d(TAG, topicMessage.getPayload())
+                val wsClient = OkHttpWebSocketClient(okHttpClient)
+                val client = StompClient(wsClient)
+
+                stompSession = client.connect(
+                    BuildConfig.STOMP_ENDPOINT,
+                    customStompConnectHeaders = mapOf(
+                        HEADER_AUTHORIZATION to tkn,
+                        HEADER_ROOM_ID to roomId.toString()
+                    )
+                ).withMoshi(moshi)
+
+                newChatMessage = stompSession.subscribe(
+                    StompSubscribeHeaders(
+                        destination = "$SUBSCRIBE_URL$roomId",
+                        customHeaders = mapOf(
+                            HEADER_AUTHORIZATION to tkn
+                        )
+                    )
+                )
+
+                newChatMessage.collect {
+                    val chatMessage = moshi.adapter(Chat::class.java).fromJson(it.bodyAsText)
+                    intent { copy(chatList = chatList + chatMessage!!) }
                 }
 
             } catch (e: Exception) {
@@ -80,35 +108,36 @@ class ChattingViewModel @Inject constructor(
     }
 
     fun sendMessage(message: String) {
-        val payload = JSONObject().apply {
-            put("roomId", roomId)
-            put("content", message)
-            put("senderProfilePhoto", userInfo.photo)
-        }
-
-        val senderHeaderList = arrayListOf<StompHeader>()
-        senderHeaderList.add(StompHeader("Authorization", tkn))
-        senderHeaderList.add(StompHeader("destination", "/publish/chat/message"))
-
-        stomp.send(
-            StompMessage(
-                StompCommand.SEND,
-                senderHeaderList,
-                payload.toString()
+        viewModelScope.launch {
+            stompSession.withMoshi(moshi).convertAndSend(
+                StompSendHeaders(
+                    destination = SEND_URL,
+                    customHeaders = mapOf(
+                        HEADER_AUTHORIZATION to tkn
+                    )
+                ),
+                ChatMessage(roomId.toLong(), userInfo.photo, message)
             )
-        ).subscribe()
-
-        intent { copy( message = "") }
+        }
+        intent { copy(message = "") }
     }
 
     fun cancelStomp() {
         try {
-            stompConnection.dispose()
-            topic.dispose()
-        }catch (e: Exception) {
+            viewModelScope.launch {
+                stompSession.disconnect()
+            }
+        } catch (e: Exception) {
             Log.d(TAG, "cancelStomp: ${e.message}")
         }
     }
 
+    companion object {
+        const val HEADER_AUTHORIZATION = "Authorization"
+        const val HEADER_ROOM_ID = "roomId"
+
+        const val SEND_URL = "/publish/chat/message"
+        const val SUBSCRIBE_URL = "/subscribe/public/"
+    }
 
 }
