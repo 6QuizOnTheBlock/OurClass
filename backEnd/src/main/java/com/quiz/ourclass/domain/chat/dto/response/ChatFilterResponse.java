@@ -11,7 +11,7 @@ public record ChatFilterResponse(
     @Schema(description = "다음 페이지 존재 여부", example = "true")
     Boolean hasNext,
 
-    @Schema(description = "필터링 단어 PK", example = "1")
+    @Schema(description = "필터링 단어 PK")
     List<ChatFilterDTO> words
 ) {
 
