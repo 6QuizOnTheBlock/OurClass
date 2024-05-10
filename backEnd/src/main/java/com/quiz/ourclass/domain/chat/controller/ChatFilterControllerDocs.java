@@ -2,7 +2,7 @@ package com.quiz.ourclass.domain.chat.controller;
 
 import com.quiz.ourclass.domain.chat.dto.request.ChatFilterRequest;
 import com.quiz.ourclass.domain.chat.dto.request.ChatFilterSliceRequest;
-import com.quiz.ourclass.domain.chat.dto.response.MessageResponse;
+import com.quiz.ourclass.domain.chat.dto.response.ChatFilterResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +45,7 @@ public interface ChatFilterControllerDocs {
         description = "입력으로 들어온 단어를 필터링 단어 PK에 맞게 수정합니다.",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = Long.class))),
+                content = @Content(schema = @Schema(implementation = Boolean.class))),
             @ApiResponse(responseCode = "400", description = """        
                 (message : "이미 등록된 단어가 있습니다.")
                 """, content = @Content),
@@ -70,7 +70,7 @@ public interface ChatFilterControllerDocs {
         description = "입력으로 들어온 단어를 필터링 단어 PK에 맞게 삭제합니다.",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = Long.class))),
+                content = @Content(schema = @Schema(implementation = Boolean.class))),
             @ApiResponse(responseCode = "404", description = """
                 (message : "단어를 찾을 수 없습니다.")
                 """, content = @Content),
@@ -86,7 +86,7 @@ public interface ChatFilterControllerDocs {
         description = "쿼리 입력으로 들어온 값 기준으로 채팅 필터링 단어를 조회합니다. (page 0부터 시작입니다!) (size 1부터 시작입니다!)",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = MessageResponse.class))),
+                content = @Content(schema = @Schema(implementation = ChatFilterResponse.class))),
             @ApiResponse(responseCode = "400", description = """
                 (message : "잘못된 요청입니다.")
                 """, content = @Content),
