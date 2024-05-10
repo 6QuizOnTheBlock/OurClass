@@ -24,7 +24,9 @@ import com.quiz.ourclass.domain.challenge.repository.GroupMemberRepository;
 import com.quiz.ourclass.domain.challenge.repository.ReportRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -50,6 +52,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final MemberRepository memberRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final OrganizationRepository organizationRepository;
+    private final MemberOrganizationRepository memberOrganizationRepository;
     private final ReportRepository reportRepository;
     private final ChallengeMapper challengeMapper;
     private final ChallengeGroupMapper challengeGroupMapper;
@@ -125,6 +128,17 @@ public class ChallengeServiceImpl implements ChallengeService {
         Report report = reportRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.REPORT_NOW_FOUND));
         report.setAcceptStatus(reportType);
+        Organization organization = report.getChallengeGroup().getChallenge().getOrganization();
+        if (reportType.equals(ReportType.APPROVE)) {
+            report.getChallengeGroup().getGroupMembers().forEach(groupMember -> {
+                Member member = groupMember.getMember();
+                MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
+                    organization, member).orElseThrow(
+                    () -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
+                memberOrganization.updateChallengeCount();
+                memberOrganizationRepository.save(memberOrganization);
+            });
+        }
         reportRepository.save(report);
     }
 
