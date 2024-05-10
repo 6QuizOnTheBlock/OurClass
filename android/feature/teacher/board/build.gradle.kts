@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.sixkids.android.feature.compose)
 }
@@ -34,6 +37,5 @@ dependencies {
     implementation(libs.krossbow.stomp. core)
     implementation(libs.krossbow.websocket.okhttp)
     implementation(libs.krossbow.stomp.moshi)
-    implementation(libs.bundles.stomp)
     implementation(libs.paging.compose)
 }
