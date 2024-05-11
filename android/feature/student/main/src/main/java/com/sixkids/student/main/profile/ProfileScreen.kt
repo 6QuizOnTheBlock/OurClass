@@ -1,4 +1,4 @@
-package com.sixkids.feature.signin.signup
+package com.sixkids.student.main.profile
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -21,13 +21,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -35,19 +33,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sixkids.designsystem.R
+import coil.compose.AsyncImage
+import com.sixkids.designsystem.R as DesignSystemR
+import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.component.screen.UlbanTopSection
-import com.sixkids.designsystem.theme.Blue
-import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Cream
+import com.sixkids.designsystem.theme.Red
+import com.sixkids.designsystem.theme.RedDark
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.student.main.R
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import java.io.File
@@ -57,15 +58,19 @@ import java.io.IOException
 private const val TAG = "D107"
 
 @Composable
-fun SignUpPhotoRoute(
-    viewModel: SignUpPhotoViewModel = hiltViewModel(),
-    navigateToTeacherOrganizationList: () -> Unit,
+fun StudentProfileRoute(
+    viewModel: ProfileViewModel = hiltViewModel(),
     navigateToStudentOrganizationList: () -> Unit,
+    navigateToSignIn: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.initData()
+    }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -75,7 +80,12 @@ fun SignUpPhotoRoute(
                 val bitmap = if (Build.VERSION.SDK_INT < 28) {
                     MediaStore.Images.Media.getBitmap(context.contentResolver, it)
                 } else {
-                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, it))
+                    ImageDecoder.decodeBitmap(
+                        ImageDecoder.createSource(
+                            context.contentResolver,
+                            it
+                        )
+                    )
                 }
                 viewModel.onProfilePhotoSelected(bitmap)
             } catch (e: IOException) {
@@ -86,62 +96,65 @@ fun SignUpPhotoRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is SignUpPhotoEffect.OnShowSnackBar -> onShowSnackBar(it.tkn)
-            SignUpPhotoEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
-            SignUpPhotoEffect.NavigateToStudentOrganizationList -> navigateToStudentOrganizationList()
+            ProfileEffect.NavigateToOrganizationList -> navigateToStudentOrganizationList()
+            is ProfileEffect.OnShowSnackBar -> onShowSnackBar(it.tkn)
+            ProfileEffect.NavigateToSignIn -> navigateToSignIn()
         }
     }
 
-    SignUpPhotoScreen(
+    StudentProfileScreen(
         uiState = uiState,
-        isTeacher = viewModel.isTeacher,
         onClickPhoto = { resId ->
-            when(resId){
-                R.drawable.camera ->
+            when (resId) {
+                DesignSystemR.drawable.camera ->
                     launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                R.drawable.teacher_man ->
+
+                DesignSystemR.drawable.teacher_man ->
                     viewModel.onProfileDefaultPhotoSelected(resId, Gender.MAN)
-                R.drawable.student_boy ->
-                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.MAN)
-                R.drawable.teacher_woman ->
-                    viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
-                R.drawable.student_girl ->
+
+                DesignSystemR.drawable.teacher_woman ->
                     viewModel.onProfileDefaultPhotoSelected(resId, Gender.WOMAN)
             }
         },
         onDoneClick = {
-            viewModel.signUp(
-                saveBitmapToFile(context, uiState.profileUserPhoto, "profile.jpg")
+            viewModel.onChangeDoneClick(
+                saveBitmapToFile(context, uiState.changedProfileUserPhoto, "profile.jpg")
             )
         },
-        onBackClick = {
-            onBackClick()
-        }
+        onSignOutClick = viewModel::onSignOutClick,
+        onBackClick = onBackClick
     )
+
 }
+
 @Composable
-fun SignUpPhotoScreen(
-    uiState: SignUpPhotoState = SignUpPhotoState(),
-    isTeacher: Boolean = true,
+fun StudentProfileScreen(
+    uiState: ProfileState = ProfileState(),
     onClickPhoto: (Int) -> Unit = {},
-    onDoneClick : () -> Unit = {},
-    onBackClick : () -> Unit = {}
+    onDoneClick: () -> Unit = {},
+    onSignOutClick: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
-    val imageMan = if (isTeacher) R.drawable.teacher_man else R.drawable.student_boy
-    val imageWoman = if (isTeacher) R.drawable.teacher_woman else R.drawable.student_girl
-    Box(modifier = Modifier.fillMaxSize()){
+    val imageMan = DesignSystemR.drawable.student_boy
+    val imageWoman = DesignSystemR.drawable.student_girl
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(21.dp)
         ) {
-            UlbanTopSection(stringResource(id = com.sixkids.signin.R.string.signup_photo_title), onBackClick)
+            UlbanTopSection(
+                stringResource(id = R.string.student_profile_welcome, uiState.name),
+                onBackClick
+            )
 
             Spacer(modifier = Modifier.height(60.dp))
 
             SelectedPhotoCard(
-                uiState.profileDefaultPhoto ?: imageMan,
-                uiState.profileUserPhoto,
+                uiState.changedProfileDefaultPhoto,
+                uiState.originalProfilePhoto,
+                uiState.changedProfileUserPhoto,
                 modifier = Modifier
                     .padding(10.dp)
                     .size(180.dp)
@@ -174,50 +187,68 @@ fun SignUpPhotoScreen(
                         .padding(10.dp)
                         .weight(1f)
                         .aspectRatio(1f),
-                    img = R.drawable.camera,
+                    img = DesignSystemR.drawable.camera,
                     onClickPhoto = onClickPhoto
                 )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
-            DoneButton(onDoneClick)
+            BottomSection(onDoneClick = onDoneClick, onSignOutClick = onSignOutClick)
+
         }
-        if (uiState.isLoading){
+        if (uiState.isLoading) {
             LoadingScreen()
         }
     }
 }
 
 @Composable
-fun DoneButton(
-    onDoneClick: () -> Unit
+fun BottomSection(
+    onDoneClick: () -> Unit,
+    onSignOutClick: () -> Unit,
+    onExitClick: () -> Unit = { }
 ) {
-    Button(
-        onClick = { onDoneClick() },
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Blue
+    Column {
+        UlbanFilledButton(
+            text = stringResource(id = R.string.profile_done),
+            onClick = onDoneClick,
+            modifier = Modifier.fillMaxWidth()
         )
-    )
-    {
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        UlbanFilledButton(
+            text = stringResource(id = R.string.profile_sign_out),
+            onClick = onSignOutClick,
+            modifier = Modifier.fillMaxWidth(),
+            color = Red,
+            textColor = RedDark
+        )
+
         Text(
-            text = "완료",
-            style = UlbanTypography.titleSmall.copy(
-                fontSize = 14.sp,
-                color = BlueDark
-            ),
-            modifier = Modifier.padding(5.dp)
+            text = stringResource(id = R.string.profile_exit),
+            style = UlbanTypography.titleSmall.copy(textDecoration = TextDecoration.Underline),
+            modifier = Modifier
+                .padding(10.dp)
+                .align(Alignment.CenterHorizontally)
+                .clickable { onExitClick() }
         )
     }
 }
 
 @Composable
-fun SelectedPhotoCard(defaultImage: Int, bitmap: Bitmap?, modifier: Modifier = Modifier) {
+fun SelectedPhotoCard(
+    defaultImage: Int?,
+    originalImage: String?,
+    bitmap: Bitmap?,
+    modifier: Modifier = Modifier
+) {
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp
+        ),
         colors = CardDefaults.cardColors(
             containerColor = Cream
         ),
@@ -226,23 +257,42 @@ fun SelectedPhotoCard(defaultImage: Int, bitmap: Bitmap?, modifier: Modifier = M
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
-            if (bitmap != null) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "selected photo",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
+            if (originalImage == null && bitmap == null && defaultImage == null) {
                 Image(
                     painter = painterResource(
-                        id = defaultImage
+                        id = DesignSystemR.drawable.teacher_man
                     ),
                     contentDescription = "selected photo",
                     modifier = Modifier.fillMaxSize(),
                 )
-            }
 
+            } else if (originalImage != null) {
+                if (bitmap == null && defaultImage == null) {
+                    AsyncImage(
+                        model = originalImage,
+                        contentDescription = "original image",
+                        modifier = Modifier.fillMaxWidth(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    if (bitmap != null) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "selected photo",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(
+                                id = defaultImage!!
+                            ),
+                            contentDescription = "selected photo",
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -250,7 +300,10 @@ fun SelectedPhotoCard(defaultImage: Int, bitmap: Bitmap?, modifier: Modifier = M
 @Composable
 fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Unit) {
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp, pressedElevation = 8.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp
+        ),
         colors = CardDefaults.cardColors(
             containerColor = Cream
         ),
@@ -272,13 +325,13 @@ fun PhotoCard(modifier: Modifier = Modifier, img: Int, onClickPhoto: (Int) -> Un
 
 fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File? {
     val directory = context.getExternalFilesDir(null) ?: return null
-
+    if (bitmap == null) return null
     val file = File(directory, fileName)
     var fileOutputStream: FileOutputStream? = null
 
     try {
         fileOutputStream = FileOutputStream(file)
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
     } catch (e: Exception) {
         e.printStackTrace()
@@ -296,8 +349,8 @@ fun saveBitmapToFile(context: Context, bitmap: Bitmap?, fileName: String): File?
 
 @Composable
 @Preview(showBackground = true)
-fun SignUpPhotoScreenPreview() {
+fun TeacherProfileScreenPreview() {
     UlbanTheme {
-        SignUpPhotoScreen()
+        StudentProfileScreen()
     }
 }
