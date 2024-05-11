@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postlist
+package com.sixkids.teacher.board.post.postlist
 
 import com.sixkids.model.Post
 import com.sixkids.ui.base.SideEffect

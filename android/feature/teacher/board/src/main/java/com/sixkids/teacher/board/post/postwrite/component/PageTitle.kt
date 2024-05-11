@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postwrite.component
+package com.sixkids.teacher.board.post.postwrite.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

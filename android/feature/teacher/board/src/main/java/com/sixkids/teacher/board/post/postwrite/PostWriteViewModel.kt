@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postwrite
+package com.sixkids.teacher.board.post.postwrite
 
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope

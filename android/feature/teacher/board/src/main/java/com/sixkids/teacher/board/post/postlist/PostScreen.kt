@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postlist
+package com.sixkids.teacher.board.post.postlist
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +31,7 @@ import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
-import com.sixkids.teacher.board.postlist.component.PostItem
+import com.sixkids.teacher.board.post.postlist.component.PostItem
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.util.formatToMonthDayTimeKorean
 import com.sixkids.designsystem.R as UlbanRes

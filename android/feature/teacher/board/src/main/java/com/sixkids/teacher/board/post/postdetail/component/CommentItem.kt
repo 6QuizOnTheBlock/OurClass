@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postdetail.component
+package com.sixkids.teacher.board.post.postdetail.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

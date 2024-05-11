@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postlist
+package com.sixkids.teacher.board.post.postlist
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData

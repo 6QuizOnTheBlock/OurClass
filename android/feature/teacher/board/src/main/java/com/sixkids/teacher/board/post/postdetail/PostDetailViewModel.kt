@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postdetail
+package com.sixkids.teacher.board.post.postdetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -67,7 +67,11 @@ class PostDetailViewModel @Inject constructor(
                         intent { copy(commentText = "", selectedCommentId = null) }
                         getPostDetail()
                     }.onFailure {
-                        postSideEffect(PostDetailEffect.OnShowSnackbar(it.message ?: "댓글 작성에 실패했어요"))
+                        postSideEffect(
+                            PostDetailEffect.OnShowSnackbar(
+                                it.message ?: "댓글 작성에 실패했어요"
+                            )
+                        )
                     }
                     intent { copy(isLoading = false) }
                 }
@@ -83,7 +87,11 @@ class PostDetailViewModel @Inject constructor(
                         intent { copy(commentText = "", selectedCommentId = null)}
                         getPostDetail()
                     }.onFailure {
-                        postSideEffect(PostDetailEffect.OnShowSnackbar(it.message ?: "댓글 작성에 실패했어요"))
+                        postSideEffect(
+                            PostDetailEffect.OnShowSnackbar(
+                                it.message ?: "댓글 작성에 실패했어요"
+                            )
+                        )
                     }
                     intent { copy(isLoading = false) }
                 }

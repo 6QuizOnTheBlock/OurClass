@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postwrite
+package com.sixkids.teacher.board.post.postwrite
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -58,7 +58,7 @@ import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.board.R
-import com.sixkids.teacher.board.postwrite.component.PageTitle
+import com.sixkids.teacher.board.post.postwrite.component.PageTitle
 import com.sixkids.ui.SnackbarToken
 import java.io.File
 import java.io.FileOutputStream

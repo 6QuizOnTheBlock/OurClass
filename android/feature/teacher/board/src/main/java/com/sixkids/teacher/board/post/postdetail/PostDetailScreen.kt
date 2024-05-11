@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.postdetail
+package com.sixkids.teacher.board.post.postdetail
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
@@ -36,9 +36,9 @@ import com.sixkids.model.Comment
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.PostDetail
 import com.sixkids.model.Recomment
-import com.sixkids.teacher.board.postdetail.component.CommentItem
-import com.sixkids.teacher.board.postdetail.component.CommentTextField
-import com.sixkids.teacher.board.postdetail.component.PostWriterInfo
+import com.sixkids.teacher.board.post.postdetail.component.CommentItem
+import com.sixkids.teacher.board.post.postdetail.component.CommentTextField
+import com.sixkids.teacher.board.post.postdetail.component.PostWriterInfo
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.util.formatToMonthDayTime
 import java.time.LocalDateTime

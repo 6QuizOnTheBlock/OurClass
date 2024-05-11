@@ -9,9 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sixkids.teacher.board.chatting.ChattingRoute
 import com.sixkids.teacher.board.main.BoardMainRoute
-import com.sixkids.teacher.board.postlist.PostRoute
-import com.sixkids.teacher.board.postdetail.PostDetailRoute
-import com.sixkids.teacher.board.postwrite.PostWriteRoute
+import com.sixkids.teacher.board.post.postlist.PostRoute
+import com.sixkids.teacher.board.post.postdetail.PostDetailRoute
+import com.sixkids.teacher.board.post.postwrite.PostWriteRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateBoard(navOptions: NavOptions) {
