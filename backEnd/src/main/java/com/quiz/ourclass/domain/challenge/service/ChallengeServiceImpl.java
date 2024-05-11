@@ -28,6 +28,7 @@ import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.global.config.scheduler.SchedulingService;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -59,6 +60,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ReportMapper reportMapper;
     private final UserAccessUtil accessUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
+    private final SchedulingService schedulingService;
 
     @Override
     public ChallengeSliceResponse getChallenges(ChallengeSliceRequest challengeSliceRequest) {
@@ -78,6 +80,8 @@ public class ChallengeServiceImpl implements ChallengeService {
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
         challenge.setOrganization(organization);
         challengeRepository.save(challenge);
+        schedulingService.scheduleTask(challenge, this::challengeClosing, challenge.getEndTime());
+
         if (!challengeRequest.groups().isEmpty()) {
             challengeRequest.groups().forEach(request -> {
                 ChallengeGroup group = challengeGroupMapper.groupMatchingRequestToChallengeGroup(
@@ -192,15 +196,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeMapper.challengeToChallengeSimpleResponse(challenge);
     }
 
-    @Transactional
-    @Override
-    public void ChallengeClosing() {
-        List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
-        challenges.forEach(challenge -> {
-            if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
-                challenge.setEndStatus(true);
-                challengeRepository.save(challenge);
-            }
-        });
+    private void challengeClosing(Challenge challenge) {
+        challenge.setEndStatus(true);
+        challengeRepository.save(challenge);
     }
 }
