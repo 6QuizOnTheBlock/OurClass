@@ -1,4 +1,4 @@
-package com.quiz.ourclass.global.config.scheduler;
+package com.quiz.ourclass.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

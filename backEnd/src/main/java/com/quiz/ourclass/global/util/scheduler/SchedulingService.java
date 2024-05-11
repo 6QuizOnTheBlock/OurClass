@@ -1,4 +1,4 @@
-package com.quiz.ourclass.global.config.scheduler;
+package com.quiz.ourclass.global.util.scheduler;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
