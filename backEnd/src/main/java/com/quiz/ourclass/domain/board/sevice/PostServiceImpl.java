@@ -162,6 +162,7 @@ public class PostServiceImpl implements PostService {
             userAccessUtil.isMemberOfOrganization(member, orgId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
+        commentRepository.deleteByPostId(post.getId());
         postRepository.delete(post);
         return true;
     }
