@@ -101,32 +101,34 @@ fun AnnounceListScreen(
                 color = Orange
             )
 
-            if (postItems == null){
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = com.sixkids.teacher.board.R.string.board_announce_no_item),
-                    textAlign = TextAlign.Center,
-                    style = UlbanTypography.bodyLarge,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    state = listState,
-                ) {
-                    items(postItems.itemCount) { index ->
-                        postItems[index]?.let { post ->
-                            PostItem(
-                                title = post.title,
-                                writer = post.writer,
-                                dateString = post.time.formatToMonthDayTimeKorean(),
-                                commentCount = post.commentCount,
-                                dividerColor = OrangeDark,
-                                onClick = { postItemOnclick(post.id) }
-                            )
+            if (postItems != null){
+                if (postItems.itemCount == 0){
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = com.sixkids.teacher.board.R.string.board_announce_no_item),
+                        textAlign = TextAlign.Center,
+                        style = UlbanTypography.bodyLarge,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        state = listState,
+                    ) {
+                        items(postItems.itemCount) { index ->
+                            postItems[index]?.let { post ->
+                                PostItem(
+                                    title = post.title,
+                                    writer = post.writer,
+                                    dateString = post.time.formatToMonthDayTimeKorean(),
+                                    commentCount = post.commentCount,
+                                    dividerColor = OrangeDark,
+                                    onClick = { postItemOnclick(post.id) }
+                                )
+                            }
                         }
                     }
                 }

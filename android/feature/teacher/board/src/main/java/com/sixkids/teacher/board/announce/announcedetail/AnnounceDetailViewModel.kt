@@ -29,7 +29,7 @@ class AnnounceDetailViewModel @Inject constructor(
     private val reportCommentUseCase: ReportCommentUseCase
 ) : BaseViewModel<AnnounceDetailState, AnnounceDetailEffect>(AnnounceDetailState()){
 
-    private val postId: Long = savedStateHandle.get<Long>(BoardRoute.postDetailARG)!!
+    private val postId: Long = savedStateHandle.get<Long>(BoardRoute.announceDetailARG)!!
 
     fun onCommentTextChanged(commentText: String) = intent { copy(commentText = commentText) }
     fun onSelectedCommentId(commentId: Long?) = intent {

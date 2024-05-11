@@ -26,7 +26,8 @@ import com.sixkids.designsystem.R as UlbanRes
 fun BoardMainRoute(
     padding: PaddingValues,
     navigateToPost: () -> Unit,
-    navigateToChatting: () -> Unit
+    navigateToChatting: () -> Unit,
+    navigateToAnnounce: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -35,7 +36,8 @@ fun BoardMainRoute(
     ) {
         BoardMainScreen(
             postCardOnClick = navigateToPost,
-            navigateToChatting = navigateToChatting
+            navigateToChatting = navigateToChatting,
+            announceCardOnClick = navigateToAnnounce
         )
     }
 }
@@ -45,7 +47,8 @@ fun BoardMainScreen(
     modifier: Modifier = Modifier,
     boardMainState: BoardMainState = BoardMainState(),
     postCardOnClick: () -> Unit = {},
-    navigateToChatting: () -> Unit = {}
+    navigateToChatting: () -> Unit = {},
+    announceCardOnClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -68,7 +71,8 @@ fun BoardMainScreen(
             contentName = stringResource(id = R.string.board_main_announce),
             contentImageId = UlbanRes.drawable.announce,
             cardColor = Orange,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = announceCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(

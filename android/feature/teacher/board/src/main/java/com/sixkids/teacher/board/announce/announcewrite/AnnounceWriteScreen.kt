@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.screen.LoadingScreen
+import com.sixkids.designsystem.theme.GrayLight
 import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.OrangeDark
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -150,7 +151,9 @@ fun AnnounceWriteScreen(
                 placeholder = {
                     Text(
                         text = stringResource(id = R.string.board_write_content_title),
-                        style = UlbanTypography.bodyLarge
+                        style = UlbanTypography.bodyLarge.copy(
+                            color = Color.Gray
+                        )
                     )
                 },
                 textStyle = UlbanTypography.bodyLarge
@@ -190,7 +193,9 @@ fun AnnounceWriteScreen(
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.board_write_content_content),
-                            style = UlbanTypography.bodyLarge
+                            style = UlbanTypography.bodyLarge.copy(
+                                color = Color.Gray
+                            )
                         )
                     },
                     textStyle = UlbanTypography.bodyLarge

@@ -16,16 +16,16 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.student.board.navigation.StudentHomeRoute
 import com.sixkids.student.board.navigation.navigateStudentHome
-import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.teacher.board.navigation.BoardRoute
+import com.sixkids.teacher.board.navigation.navigateAnnounce
+import com.sixkids.teacher.board.navigation.navigateAnnounceDetail
+import com.sixkids.teacher.board.navigation.navigateAnnounceWrite
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigatePostWrite
-import com.sixkids.teacher.board.navigation.navigatePost
-import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePostDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
@@ -109,6 +109,18 @@ class MainNavigator(
 
     fun navigatePostDetail(postId: Long) {
         navController.navigatePostDetail(postId)
+    }
+
+    fun navigateAnnounce() {
+        navController.navigateAnnounce()
+    }
+
+    fun navigateAnnounceWrite() {
+        navController.navigateAnnounceWrite()
+    }
+
+    fun navigateAnnounceDetail(announceId: Long) {
+        navController.navigateAnnounceDetail(announceId)
     }
 
 

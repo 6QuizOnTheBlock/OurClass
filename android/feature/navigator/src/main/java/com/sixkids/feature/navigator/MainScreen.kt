@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
@@ -83,8 +84,8 @@ fun MainScreen(
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) },
         )
         {
             homeNavGraph(
@@ -101,6 +102,9 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 navigateToChatting = navigator::navigateChatting,
                 navigateToPostWrite = navigator::navigatePostWrite,
+                navigateToAnnounceDetail = navigator::navigateAnnounceDetail,
+                navigateToAnnounceWrite = navigator::navigateAnnounceWrite,
+                navigateToAnnounceList = navigator::navigateAnnounce,
             )
 
             challengeNavGraph(

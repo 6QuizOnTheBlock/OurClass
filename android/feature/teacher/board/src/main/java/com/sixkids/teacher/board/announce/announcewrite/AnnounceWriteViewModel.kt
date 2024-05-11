@@ -7,16 +7,21 @@ import com.sixkids.domain.usecase.post.NewPostUseCase
 import com.sixkids.model.PostCategory
 import com.sixkids.teacher.board.post.postwrite.PostWriteEffect
 import com.sixkids.ui.base.BaseViewModel
+import com.sixkids.ui.util.formatToMonthDayKorean
+import com.sixkids.ui.util.formatToMonthDayTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class AnnounceWriteViewModel @Inject constructor(
     private val newPostUseCase: NewPostUseCase,
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase
-): BaseViewModel<AnnounceWriteState, AnnounceWriteEffect>(AnnounceWriteState()){
+): BaseViewModel<AnnounceWriteState, AnnounceWriteEffect>(AnnounceWriteState(
+    title = LocalDateTime.now().formatToMonthDayKorean()
+)){
 
     private var organizationId: Int? = null
 
