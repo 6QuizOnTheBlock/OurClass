@@ -70,7 +70,7 @@ class SignUpPhotoViewModel @Inject constructor(
                     .onSuccess {
                         when(it){
                             "TEACHER" -> postSideEffect(SignUpPhotoEffect.NavigateToTeacherOrganizationList)
-//                            "STUDENT" -> postSideEffect(SignUpPhotoEffect.NavigateToStudentOrganizationList)
+                            "STUDENT" -> postSideEffect(SignUpPhotoEffect.NavigateToStudentOrganizationList)
                         }
                     }.onFailure {
 

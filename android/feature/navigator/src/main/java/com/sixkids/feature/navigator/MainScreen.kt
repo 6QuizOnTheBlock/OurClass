@@ -127,7 +127,6 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 navigateToTeacherOrganizationList = navigator::navigateTeacherOrganizationList,
-                navigateToStudentHome = navigator::navigateStudentHome,
                 navigateToStudentOrganizationList = navigator::navigateStudentOrganizationList,
             )
 

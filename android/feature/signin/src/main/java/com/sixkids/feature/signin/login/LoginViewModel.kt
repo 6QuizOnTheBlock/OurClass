@@ -28,10 +28,9 @@ class LoginViewModel @Inject constructor(
                         .onSuccess {
                             when(it){
                                 "TEACHER" -> postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)
-//                                "STUDENT" -> {postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)}
-                                //TODO 임시로 학생 홈으로 이동
-                                "STUDENT" -> {postSideEffect(LoginEffect.NavigateToStudentHome)}
-
+                                "STUDENT" -> {
+                                    Log.d(TAG, "autoSignIn: STUDENT")
+                                    postSideEffect(LoginEffect.NavigateToStudentOrganizationList)}
                             }
                         }.onFailure {
                             Log.d(TAG, "autoSignIn: ${it.message}")
@@ -51,7 +50,7 @@ class LoginViewModel @Inject constructor(
                         .onSuccess {
                             when(it){
                                 "TEACHER" -> postSideEffect(LoginEffect.NavigateToTeacherOrganizationList)
-                                "STUDENT" -> {}
+                                "STUDENT" -> {postSideEffect(LoginEffect.NavigateToStudentOrganizationList)}
                             }
                         }.onFailure {
                             postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken("로그인에 실패했습니다")))
