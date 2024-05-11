@@ -1,9 +1,16 @@
 package com.sixkids.teacher.board.announce.announcewrite
 
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,16 +29,20 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Orange
@@ -39,10 +50,65 @@ import com.sixkids.designsystem.theme.OrangeDark
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.board.R
 import com.sixkids.teacher.board.post.postwrite.component.PageTitle
+import com.sixkids.teacher.board.post.postwrite.saveBitmapToFile
+import com.sixkids.ui.SnackbarToken
+import java.io.IOException
 
 @Composable
-fun AnnounceWriteRoute() {
+fun AnnounceWriteRoute(
+    viewModel: AnnounceWriteViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    navigateBack: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+    val photoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let {
+            try {
+                val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    ImageDecoder.decodeBitmap(
+                        ImageDecoder.createSource(
+                            context.contentResolver,
+                            it
+                        )
+                    )
+                }
+                viewModel.onAddPhoto(bitmap)
+            } catch (e: IOException) {
+                viewModel.showToast("사진 호출에 실패했습니다.")
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                AnnounceWriteEffect.NavigateBack -> navigateBack()
+                is AnnounceWriteEffect.OnShowSnackbar -> {
+                    onShowSnackBar(SnackbarToken(message = sideEffect.message))
+                }
+            }
+        }
+    }
+
+    AnnounceWriteScreen(
+        announceWriteState = uiState,
+        cancelOnClick = { viewModel.onBack() },
+        submitOnClick = {
+            viewModel.onPostAnnounce(
+                uiState.photo?.let { saveBitmapToFile(context, it, "post_photo.jpg") }
+            )
+        },
+        titleValueChange = { viewModel.onTitleChanged(it) },
+        contentValueChange = { viewModel.onContentChanged(it) },
+        addPhotoOnClick = { photoLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+    )
 }
 
 @Composable
