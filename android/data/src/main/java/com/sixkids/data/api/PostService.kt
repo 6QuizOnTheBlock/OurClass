@@ -8,6 +8,7 @@ import com.sixkids.data.network.ApiResult
 import okhttp3.MultipartBody
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -25,6 +26,7 @@ interface PostService {
         @Query("postCategory") postCategory: String,
     ): ApiResult<ApiResponse<PostListResponse>>
 
+    @Multipart
     @POST("boards")
     suspend fun createPost(
         @Query("organizationId") organizationId: Long,
@@ -42,6 +44,7 @@ interface PostService {
         @Path("id") postId: Long,
     ): ApiResult<ApiResponse<Boolean>>
 
+    @Multipart
     @PATCH("boards/{id}")
     suspend fun updatePost(
         @Path("id") postId: Long,

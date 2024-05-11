@@ -14,7 +14,7 @@ data class MemberInfoResponse(
 data class MemberSimpleInfoResponse(
     val id: Long,
     val name: String,
-    val photo: String
+    val photo: String?
 )
 
 internal fun MemberInfoResponse.toModel(): UserInfo {
@@ -31,6 +31,6 @@ internal fun MemberSimpleInfoResponse.toModel(): MemberSimple {
     return MemberSimple(
         id = id,
         name = name,
-        photo = photo
+        photo = photo?: ""
     )
 }

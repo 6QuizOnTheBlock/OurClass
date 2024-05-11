@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.feature.student.home)
     implementation(projects.feature.student.challenge)
     implementation(projects.feature.student.relay)
+    implementation(projects.feature.student.main)
 
     implementation(libs.permissions)
 }
