@@ -33,7 +33,7 @@ class AnnounceListViewModel @Inject constructor(
             if (organizationId != null){
                 postList = getPostListUseCase(
                     organizationId = organizationId!!,
-                    postCategory = PostCategory.FREE
+                    postCategory = PostCategory.NOTICE
                 ).cachedIn(viewModelScope)
             } else {
                 postSideEffect(AnnounceListEffect.OnShowSnackBar("학급 정보를 불러오지 못했어요 ;("))
