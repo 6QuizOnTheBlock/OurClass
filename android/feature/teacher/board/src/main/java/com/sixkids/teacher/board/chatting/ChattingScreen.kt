@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.component.textfield.UlbanBasicTextField
 import com.sixkids.designsystem.theme.Cream
@@ -55,6 +57,8 @@ import java.text.SimpleDateFormat
 import java.util.TimeZone
 import com.sixkids.designsystem.R as DesignSystemR
 
+private const val TAG = "D107"
+
 @Composable
 fun ChattingRoute(
     viewModel: ChattingViewModel = hiltViewModel(),
@@ -69,10 +73,10 @@ fun ChattingRoute(
         }
     }
 
-    DisposableEffect(key1 = Unit){
+    DisposableEffect(key1 = Unit) {
         viewModel.initStomp()
 
-        onDispose{
+        onDispose {
             viewModel.cancelStomp()
         }
     }
@@ -84,7 +88,8 @@ fun ChattingRoute(
         onSendClick = viewModel::sendMessage,
         onPhotoClick = {
             //사진
-        }
+        },
+        chatItems = viewModel.originalChatList?.collectAsLazyPagingItems()
     )
 }
 
@@ -94,7 +99,8 @@ fun ChattingScreen(
     onUpdateMessage: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
     onSendClick: (String) -> Unit = {},
-    onPhotoClick: () -> Unit = {}
+    onPhotoClick: () -> Unit = {},
+    chatItems: LazyPagingItems<Chat>? = null
 ) {
     Box(
         modifier = Modifier
@@ -108,6 +114,7 @@ fun ChattingScreen(
 
             ChatSection(
                 uiState.memberId,
+                chatItems = chatItems,
                 uiState.chatList,
                 modifier = Modifier
                     .weight(1f)
@@ -156,27 +163,52 @@ fun TopSection(
 }
 
 @Composable
-fun ChatSection(memberId: Int, chatList: List<Chat>, modifier: Modifier = Modifier) {
+fun ChatSection(
+    memberId: Int,
+    chatItems: LazyPagingItems<Chat>? = null,
+    chatList: List<Chat>,
+    modifier: Modifier = Modifier
+) {
+//    Log.d(TAG, "ChatSection: ")
     val scrollState = rememberLazyListState()
 
-    Column(modifier = modifier) {
-        LazyColumn(state = scrollState, modifier = Modifier.weight(1f)) {
-            items(chatList) { chat ->
-                if (chat.memberId == memberId.toLong()) {
-                    MyChat(chat)
-                } else {
-                    OtherChat(chat)
+    if (chatItems == null) {
+        Text(text = "데이터 없음")
+    } else {
+        Column(modifier = modifier) {
+            LazyColumn(
+                state = scrollState, modifier = Modifier.weight(1f),
+
+            ) {
+                items(chatItems.itemCount) { idx ->
+                    if (chatItems[idx]?.memberId == memberId.toLong()) {
+                        MyChat(chatItems[idx]!!)
+                    } else {
+                        OtherChat(chatItems[idx]!!)
+                    }
                 }
+
+                items(chatList) { chat ->
+                    if (chat.memberId == memberId.toLong()) {
+                        MyChat(chat)
+                    } else {
+                        OtherChat(chat)
+                    }
+                }
+
+
             }
         }
     }
+    val serverChatSize = chatItems?.itemCount ?: 0
+    val socketChatSize = chatList.size
+    val totalChatSize = serverChatSize + socketChatSize
 
-    if (chatList.isNotEmpty()) {
-        LaunchedEffect(chatList.size) {
-            scrollState.scrollToItem(chatList.size - 1)
+    if (totalChatSize > 0) {
+        LaunchedEffect(totalChatSize) {
+            scrollState.scrollToItem(totalChatSize - 1)
         }
     }
-
 }
 
 @Composable
@@ -334,22 +366,3 @@ fun ChattingScreenPreview() {
     }
 }
 
-
-/*
-@Composable
-@Preview(showBackground = true)
-fun MyChatPreview() {
-    UlbanTheme {
-        MyChat()
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun OtherChatPreview() {
-    UlbanTheme {
-        OtherChat()
-    }
-}
-
- */
