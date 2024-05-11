@@ -1,6 +1,7 @@
 package com.sixkids.domain.repository
 
 import com.sixkids.model.JwtToken
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.UserInfo
 import java.io.File
 
@@ -12,6 +13,8 @@ interface UserRepository {
     suspend fun getRole(): String
 
     suspend fun getMemberInfo(): UserInfo
+
+    suspend fun getMemberSimpleInfo(id: Long): MemberSimple
 
     suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String
 

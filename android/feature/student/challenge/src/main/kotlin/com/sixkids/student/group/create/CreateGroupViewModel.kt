@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
+import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.model.MemberSimple
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 class CreateGroupViewModel @Inject constructor(
     private val bluetoothScanner: BluetoothScanner,
+    private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
@@ -22,22 +24,18 @@ class CreateGroupViewModel @Inject constructor(
         viewModelScope.launch {
             bluetoothScanner.foundDevices.collect { devices ->
                 if (devices.isEmpty()) return@collect
-                val (name, id) = devices.first().split("-")
-                if (uiState.value.selectedMembers.none { it.id == id.toLong() }) {
-                    intent {
-                        copy(
-                            foundMembers = foundMembers.toMutableList().apply {
-                                add(
-                                    //TODO: 사용자 정보 받아오는 API 구현 필
-                                    MemberSimple(
-                                        id = id.toLong(),
-                                        name = name,
-                                        photo = "https://static01.nyt.com/images/2021/09/14/science/07CAT-STRIPES/07CAT-STRIPES-jumbo.jpg?quality=75&auto=webp"
-                                    )
-                                )
-                            }
-                        )
-                    }
+//                val id = devices.last().split("-").last()
+                val id = 9L
+                if (uiState.value.selectedMembers.none { it.id == id }) {
+                    getMemberSimpleUseCase(id).onSuccess { member ->
+                        intent {
+                            copy(
+                                foundMembers = foundMembers.toMutableList().apply {
+                                    add(member)
+                                }
+                            )
+                        }
+                    }.onFailure {  }
                 }
             }
         }

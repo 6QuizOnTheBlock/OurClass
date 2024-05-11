@@ -7,6 +7,7 @@ import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.model.JwtToken
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.UserInfo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -74,6 +75,9 @@ class UserRemoteDataSourceImpl @Inject constructor(
         }
         return response.getOrThrow().data.toModel()
     }
+
+    override suspend fun getMemberSimple(id: Long): MemberSimple =
+        memberService.getMemberInfoById(id).getOrThrow().data.toModel()
 
     override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
         val data = HashMap<String, RequestBody>()
