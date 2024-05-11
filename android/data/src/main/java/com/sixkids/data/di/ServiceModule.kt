@@ -73,6 +73,7 @@ object ServiceModule {
         @NetworkModule.AuthRetrofit retrofit: Retrofit
     ): CommentService {
         return retrofit.create(CommentService::class.java)
+    }
 
     @Singleton
     @Provides
