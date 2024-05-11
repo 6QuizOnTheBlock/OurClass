@@ -48,8 +48,8 @@ object RelayRoute {
 
     const val defaultRoute = "relay-history"
     const val createRoute = "relay-create"
-    const val detailRoute = "relay-detail?challengeId={$RELAY_ID_NAME}&groupId={${RELAY_TITLE_NAME}}"
+    const val detailRoute = "relay-detail?relayId={$RELAY_ID_NAME}&groupId={${RELAY_TITLE_NAME}}"
     const val joinRoute = "relay-join"
 
-    fun detailRoute(relayId: Long, groupId: Long? = null) = "challenge-detail?challengeId=$relayId&groupId=$groupId"
+    fun detailRoute(relayId: Long, groupId: Long? = null) = "relay-detail?relayId=$relayId&groupId=$groupId"
 }
