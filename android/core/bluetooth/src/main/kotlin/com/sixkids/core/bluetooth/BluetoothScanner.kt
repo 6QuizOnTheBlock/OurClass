@@ -56,4 +56,8 @@ class BluetoothScanner(context: Context) {
         isScanning.value = false
     }
 
+    fun removeDevice(deviceName: String) {
+        foundDevices.update { it - deviceName }
+    }
+
 }

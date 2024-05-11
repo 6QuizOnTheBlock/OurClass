@@ -11,7 +11,7 @@ import androidx.annotation.RequiresPermission
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BluetoothServer(context: Context, private val memberId: Long) {
+class BluetoothServer(context: Context) {
     private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
             as? BluetoothManager ?: throw Exception("This device doesn't support Bluetooth")
 
@@ -19,7 +19,7 @@ class BluetoothServer(context: Context, private val memberId: Long) {
 
 
     @RequiresPermission(allOf = [Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT])
-    suspend fun startAdvertising() {
+    suspend fun startAdvertising(memberId: Long) {
         val advertiser: BluetoothLeAdvertiser = bluetooth.adapter.bluetoothLeAdvertiser
             ?: throw Exception("This device doesn't support Bluetooth advertising")
 
