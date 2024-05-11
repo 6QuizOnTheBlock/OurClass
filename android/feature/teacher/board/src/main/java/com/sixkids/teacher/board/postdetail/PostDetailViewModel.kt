@@ -64,6 +64,8 @@ class PostDetailViewModel @Inject constructor(
                         content = currentState.commentText,
                     ).onSuccess {
                         postSideEffect(PostDetailEffect.OnShowSnackbar("댓글이 작성되었습니다"))
+                        intent { copy(commentText = "", selectedCommentId = null) }
+                        getPostDetail()
                     }.onFailure {
                         postSideEffect(PostDetailEffect.OnShowSnackbar(it.message ?: "댓글 작성에 실패했어요"))
                     }
@@ -78,6 +80,8 @@ class PostDetailViewModel @Inject constructor(
                         currentState.selectedCommentId!!
                     ).onSuccess {
                         postSideEffect(PostDetailEffect.OnShowSnackbar("댓글이 작성되었습니다"))
+                        intent { copy(commentText = "", selectedCommentId = null)}
+                        getPostDetail()
                     }.onFailure {
                         postSideEffect(PostDetailEffect.OnShowSnackbar(it.message ?: "댓글 작성에 실패했어요"))
                     }

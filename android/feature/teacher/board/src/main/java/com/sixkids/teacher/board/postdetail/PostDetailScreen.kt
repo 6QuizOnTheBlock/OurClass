@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,7 +36,6 @@ import com.sixkids.model.Comment
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.PostDetail
 import com.sixkids.model.Recomment
-import com.sixkids.teacher.board.post.PostEffect
 import com.sixkids.teacher.board.postdetail.component.CommentItem
 import com.sixkids.teacher.board.postdetail.component.CommentTextField
 import com.sixkids.teacher.board.postdetail.component.PostWriterInfo
@@ -88,6 +87,8 @@ fun PostDetailScreen(
     postDeleteOnclick: () -> Unit = {}
 ) {
 
+    val scrollState = rememberScrollState()
+
     BackHandler(
         enabled = postDetailState.selectedCommentId != null,
         onBack = {onClickComment(postDetailState.selectedCommentId?: 0)}
@@ -99,7 +100,7 @@ fun PostDetailScreen(
                 modifier = modifier
                     .weight(1f)
                     .padding(20.dp)
-                    .verticalScroll(ScrollState(0)),
+                    .verticalScroll(scrollState),
             ) {
                 // 작성자 정보
                 Row(
@@ -148,10 +149,14 @@ fun PostDetailScreen(
                 // 댓글 목록
                 for (comment in postDetailState.postDetail.comments) {
                     CommentItem(
+                        selected = postDetailState.selectedCommentId == comment.id,
                         writer = comment.member.name,
                         dateString = comment.createTime.formatToMonthDayTime(),
                         writerImageUrl = comment.member.photo,
-                        commentString = comment.content
+                        commentString = comment.content,
+                        recommentOnclick = {
+                            onClickComment(comment.id)
+                        }
                     )
                     // 대댓글 목록
                     for (recomment in comment.recomments) {
