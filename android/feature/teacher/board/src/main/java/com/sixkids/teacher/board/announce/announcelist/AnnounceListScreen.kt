@@ -21,8 +21,6 @@ import com.sixkids.designsystem.R
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
 import com.sixkids.designsystem.component.screen.LoadingScreen
-import com.sixkids.designsystem.theme.Blue
-import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.OrangeDark
 import com.sixkids.designsystem.theme.UlbanTypography
