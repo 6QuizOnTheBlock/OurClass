@@ -198,13 +198,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeMapper.challengeToChallengeSimpleResponse(challenge);
     }
 
-    private void challengeClosing(Challenge challenge) {
+    protected void challengeClosing(Challenge challenge) {
         challenge.setEndStatus(true);
         challengeRepository.save(challenge);
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    private void challengeClosingReload() {
+    protected void challengeClosingReload() {
         List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
         challenges.forEach(challenge -> {
             if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
