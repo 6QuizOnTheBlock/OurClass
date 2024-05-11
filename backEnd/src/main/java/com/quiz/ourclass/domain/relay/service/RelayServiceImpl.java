@@ -91,6 +91,7 @@ public class RelayServiceImpl implements RelayService {
         return RunningRelayResponse.builder()
             .id(relay.getId())
             .currentTurn(relay.getCurrentRunner().getTurn())
+            .totalTurn(relay.getTotalCount())
             .currentMemberName(relay.getCurrentRunner().getCurMember().getName())
             .startTime(relay.getStartRunner().getReceiveTime())
             .myTurnStatus(isMyTurn)
