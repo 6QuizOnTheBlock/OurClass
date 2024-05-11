@@ -6,6 +6,7 @@ import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
+import com.quiz.ourclass.domain.relay.dto.response.SendRelayResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,5 +101,24 @@ public interface RelayControllerDocs {
         long id,
         @RequestBody
         ReceiveRelayRequest receiveRelayRequest
+    );
+
+    @Operation(summary = "이어달리기 전달",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = SendRelayResponse.class))),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "멤버가 존재하지 않습니다.")
+                                
+                (message : "이어달리기를 찾을 수 없습니다.")
+                                
+                (message : "이어달리기 주자를 찾을 수 없습니다.")
+                """, content = @Content)
+        })
+    @PostMapping("/{id}/send")
+    ResponseEntity<ResultResponse<?>> sendRelay(
+        @PathVariable
+        @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
+        long id
     );
 }
