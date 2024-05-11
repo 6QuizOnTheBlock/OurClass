@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="relay_challenge">이어 달리기</string>
+    <string name="relay_create">새로운\n이어 달리기\n만들기</string>
+    <string name="relay_running_myturn">이어 달리기\n답변하기</string>
+    <string name="relay_running_not_myturn">이어 달리기가\n진행 중입니다!</string>
+    <string name="relay_answer_myturn">질문에 답변하고\n친구에게 전달 해봐요!</string>
+    <string name="relay_answer_not_myturn">여기를 터치해서\n이어 달리기를 이어 받아 봐요!</string>
+    <string name="relay_relay_count">지금까지  %d번 이어 달리기를 진행했어요</string>
+    <string name="relay_no_history">기록이 없어요</string>
+</resources>
