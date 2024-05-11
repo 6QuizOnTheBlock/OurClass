@@ -92,12 +92,13 @@ fun AppBarDetailInfo(
                 }
             }
         }
+        Spacer(modifier = modifier.height(4.dp))
         Text(
             text = title,
             style = AppBarTypography.titleSmall,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(12.dp))
         Text(
             text = bottomDescription,
             style = AppBarTypography.bodyMedium,

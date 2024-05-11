@@ -21,6 +21,10 @@ import com.sixkids.student.main.navigation.navigateStudentOrganizationList
 import com.sixkids.student.main.navigation.navigateStudentProfile
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
+import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
+import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
+import com.sixkids.student.relay.navigation.navigateStudentRelayHistory
+import com.sixkids.student.relay.navigation.navigateStudentRelayJoin
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateAnnounce
 import com.sixkids.teacher.board.navigation.navigateAnnounceDetail
@@ -86,7 +90,7 @@ class MainNavigator(
             // 학생 바텀 네비게이션 탭
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
             MainNavigationTab.STUDENT_BOARD -> {}
-            MainNavigationTab.STUDENT_RELAY -> {}
+            MainNavigationTab.STUDENT_RELAY -> navController.navigateStudentRelayHistory(studentNavOptions)
             MainNavigationTab.STUDENT_CHALLENGE -> {}
         }
     }
@@ -216,6 +220,32 @@ class MainNavigator(
         navController.navigateSignUpPhoto(isTeacher)
     }
 
+    /**
+     * Student Relay Navigation
+     */
+    fun navigateStudentRelayHistory() {
+        navController.navigate(HomeRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
+
+    fun navigateStudentRelayDetail(relayId: Long, groupId: Long?) {
+        navController.navigateStudentRelayDetail(relayId, groupId)
+    }
+
+    fun navigateStudentRelayCreate() {
+        navController.navigateStudentRelayCreate()
+    }
+
+    fun navigateStudentRelayJoin() {
+        navController.navigateStudentRelayJoin()
+    }
+
+    /**
+     * Challenge Navigation
+     */
     fun navigateChallengeHistory() {
         navController.navigateChallengeHistory()
     }
