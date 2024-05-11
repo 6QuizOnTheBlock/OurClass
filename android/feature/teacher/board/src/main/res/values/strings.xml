@@ -14,4 +14,6 @@
     <string name="board_post_no_items">게시글이 없어용!</string>
 
     <string name="board_detail_comment_hint">댓글을 입력하세요</string>
+    
+    <string name="board_announce_no_item">알림장이 없어용!</string>
 </resources>
