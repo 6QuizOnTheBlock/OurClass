@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.post
+package com.sixkids.teacher.board.postlist
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -7,7 +7,6 @@ import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.post.GetPostListUseCase
 import com.sixkids.model.Post
 import com.sixkids.model.PostCategory
-import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

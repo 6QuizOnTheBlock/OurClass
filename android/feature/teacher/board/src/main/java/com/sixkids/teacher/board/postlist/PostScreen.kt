@@ -1,10 +1,9 @@
-package com.sixkids.teacher.board.post
+package com.sixkids.teacher.board.postlist
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,11 +31,9 @@ import com.sixkids.designsystem.theme.BlueDark
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
-import com.sixkids.teacher.board.post.component.PostItem
+import com.sixkids.teacher.board.postlist.component.PostItem
 import com.sixkids.ui.SnackbarToken
-import com.sixkids.ui.util.formatToMonthDayTime
 import com.sixkids.ui.util.formatToMonthDayTimeKorean
-import java.time.LocalDateTime
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable

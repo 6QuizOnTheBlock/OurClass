@@ -1,4 +1,4 @@
-package com.sixkids.teacher.board.post.component
+package com.sixkids.teacher.board.postlist.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Icon

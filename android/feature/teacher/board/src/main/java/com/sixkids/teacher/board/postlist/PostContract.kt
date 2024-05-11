@@ -1,7 +1,6 @@
-package com.sixkids.teacher.board.post
+package com.sixkids.teacher.board.postlist
 
 import com.sixkids.model.Post
-import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
