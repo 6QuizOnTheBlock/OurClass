@@ -13,8 +13,8 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 
 @Composable
-fun MultiLayeredCircles() {
-    Canvas(modifier = Modifier ){
+fun MultiLayeredCircles(modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier ){
         val strokeWidth = 2.dp.toPx()
         val radiusIncrement = 46.dp.toPx() // 각 원의 반지름 증가량
 
