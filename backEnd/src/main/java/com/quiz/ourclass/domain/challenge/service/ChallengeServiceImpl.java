@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -199,5 +201,15 @@ public class ChallengeServiceImpl implements ChallengeService {
     private void challengeClosing(Challenge challenge) {
         challenge.setEndStatus(true);
         challengeRepository.save(challenge);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    private void challengeClosingReload() {
+        List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
+        challenges.forEach(challenge -> {
+            if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
+                challengeClosing(challenge);
+            }
+        });
     }
 }
