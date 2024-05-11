@@ -5,6 +5,7 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
+import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,25 @@ import javax.inject.Inject
 class CreateGroupViewModel @Inject constructor(
     private val bluetoothScanner: BluetoothScanner,
     private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
+    private val loadUserInfoUseCase: LoadUserInfoUseCase,
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
+    fun loadUserInfo() {
+        viewModelScope.launch {
+            loadUserInfoUseCase().onSuccess { member ->
+                intent {
+                    copy(
+                        leader = MemberSimple(
+                            id = member.id.toLong(),
+                            name = member.name,
+                            photo = member.photo
+                        )
+                    )
+                }
+            }.onFailure {
+                postSideEffect(CreateGroupEffect.HandleException(it, ::loadUserInfo))
+            }
+        }
+    }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun startScan() {
@@ -35,7 +54,7 @@ class CreateGroupViewModel @Inject constructor(
                                 }
                             )
                         }
-                    }.onFailure {  }
+                    }.onFailure { }
                 }
             }
         }

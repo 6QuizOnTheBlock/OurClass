@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,7 +34,14 @@ fun CreateGroupRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.loadUserInfo()
         viewModel.startScan()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopScan()
+        }
     }
 
 
@@ -77,6 +85,8 @@ fun CreateGroupScreen(
         }
 
         GroupWaiting(
+            groupSize = uiState.groupSize,
+            leader = uiState.leader,
             memberList = uiState.selectedMembers.map {
                 MemberIconItem(
                     memberId = it.id,

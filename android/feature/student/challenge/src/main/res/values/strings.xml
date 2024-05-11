@@ -9,4 +9,6 @@
     <string name="join_group">그룹\n참여하기</string>
     <string name="done">완료</string>
     <string name="invite_friend">근처에 있는 친구를 초대해 보세요</string>
+    <string name="friend_waiting_message">%d명의 친구들을 더 모아보세요</string>
+    <string name="can_create_group">그룹을 만들 수 있어요</string>
 </resources>

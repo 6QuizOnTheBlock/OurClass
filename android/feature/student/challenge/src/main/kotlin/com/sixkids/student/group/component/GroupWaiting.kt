@@ -23,10 +23,11 @@ import com.sixkids.student.challenge.R
 
 @Composable
 fun GroupWaiting(
+    leader: MemberSimple = MemberSimple(),
     memberList: List<MemberIconItem> = emptyList(),
     onDoneClick: () -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
-    donButtonEnable: Boolean = false
+    groupSize: Int = 0
 ) {
     Card(
         modifier = Modifier
@@ -43,18 +44,33 @@ fun GroupWaiting(
             containerColor = Cream
         )
     ) {
+        val remainingMember = groupSize - memberList.size - 1
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = "2명의 친구들을 더 모아보세요",
+                text = if(remainingMember != 0) {
+                    stringResource(R.string.friend_waiting_message, remainingMember)
+                } else {
+                    stringResource(R.string.can_create_group)
+                },
                 style = UlbanTypography.bodyMedium
             )
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
+                if(leader.id != 0L) {
+                    item {
+                        MemberIcon(
+                            member = leader,
+                            showX = false,
+                            isActive = true,
+                            onRemoveClick = {}
+                        )
+                    }
+                }
                 items(memberList) { item ->
                     MemberIcon(
                         member = MemberSimple(
@@ -72,7 +88,7 @@ fun GroupWaiting(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.done),
                 onClick = onDoneClick,
-                enabled = donButtonEnable
+                enabled = remainingMember == 0
             )
         }
     }
@@ -91,6 +107,11 @@ data class MemberIconItem(
 @Composable
 fun GroupWaitingPreview() {
     GroupWaiting(
+        leader = MemberSimple(
+            id = 1,
+            name = "leader",
+            photo = ""
+        ),
         memberList = List(4) {
             MemberIconItem(
                 memberId = it.toLong(),
@@ -99,6 +120,7 @@ fun GroupWaitingPreview() {
                 showX = false,
                 isActive = it % 2 == 0
             )
-        }
+        },
+        groupSize = 5
     )
 }
