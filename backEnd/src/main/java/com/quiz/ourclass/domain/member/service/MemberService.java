@@ -19,6 +19,7 @@ import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
@@ -197,5 +198,9 @@ public class MemberService {
 
     }
 
-
+    public MemberSimpleDTO select(Long id) {
+        Member member = memberRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        return memberMapper.memberToMemberSimpleDTO(member);
+    }
 }
