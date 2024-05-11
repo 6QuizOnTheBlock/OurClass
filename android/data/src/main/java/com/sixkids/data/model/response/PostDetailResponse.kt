@@ -10,11 +10,11 @@ data class PostDetailResponse(
     @Json(name = "member")
     val writer: MemberSimpleInfoResponse,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime,
+    val updateTime: LocalDateTime?,
     val title: String,
     val content: String,
     @Json(name = "path")
-    val photoUrl: String,
+    val photoUrl: String?,
     val comments: List<CommentResponse>,
 )
 
@@ -24,7 +24,7 @@ data class CommentResponse(
     val writer: MemberSimpleInfoResponse,
     val content: String,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime,
+    val updateTime: LocalDateTime?,
     @Json(name = "children")
     val recommentList: List<RecommentResponse>,
 )
@@ -35,7 +35,7 @@ data class RecommentResponse(
     val writer: MemberSimpleInfoResponse,
     val content: String,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime,
+    val updateTime: LocalDateTime?,
     val parentId: Long,
 )
 
@@ -44,7 +44,7 @@ fun PostDetailResponse.toModel(): PostDetail {
         createTime = createTime,
         title = title,
         content = content,
-        ImageUri = photoUrl,
+        imageUri = photoUrl ?: "",
         comments = comments.map { it.toModel() },
         writeMember = writer.toModel()
     )

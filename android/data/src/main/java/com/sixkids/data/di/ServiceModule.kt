@@ -1,6 +1,7 @@
 package com.sixkids.data.di
 
 import com.sixkids.data.api.ChallengeService
+import com.sixkids.data.api.CommentService
 import com.sixkids.data.api.ChattingService
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.OrganizationService
@@ -64,6 +65,14 @@ object ServiceModule {
         @NetworkModule.AuthRetrofit retrofit: Retrofit
     ): PostService {
         return retrofit.create(PostService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCommentService(
+        @NetworkModule.AuthRetrofit retrofit: Retrofit
+    ): CommentService {
+        return retrofit.create(CommentService::class.java)
     }
 
     @Singleton

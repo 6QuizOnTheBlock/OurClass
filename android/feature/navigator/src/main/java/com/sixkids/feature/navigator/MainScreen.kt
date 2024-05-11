@@ -97,9 +97,11 @@ fun MainScreen(
             boardNavGraph(
                 padding = innerPadding,
                 navigateToPost = navigator::navigatePost,
+                navigateToPostDetail = navigator::navigatePostDetail,
                 onBackClick = navigator::popBackStack,
                 onShowSnackBar = viewModel::onShowSnackbar,
                 navigateToChatting = navigator::navigateChatting,
+                navigateToPostWrite = navigator::navigatePostWrite,
             )
 
             challengeNavGraph(

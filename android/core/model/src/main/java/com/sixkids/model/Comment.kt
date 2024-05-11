@@ -7,7 +7,7 @@ data class Comment(
     val member: MemberSimple,
     val content: String,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime,
+    val updateTime: LocalDateTime?,
     val recomments: List<Recomment>,
 )
 
@@ -16,6 +16,6 @@ data class Recomment(
     val member: MemberSimple,
     val content: String,
     val createTime: LocalDateTime,
-    val updateTime: LocalDateTime,
+    val updateTime: LocalDateTime?,
     val parentId: Long,
 )

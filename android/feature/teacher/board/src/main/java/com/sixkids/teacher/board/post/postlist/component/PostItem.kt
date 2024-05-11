@@ -1,15 +1,14 @@
-package com.sixkids.teacher.board.post.component
+package com.sixkids.teacher.board.post.postlist.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,10 +25,11 @@ fun PostItem(
     title: String,
     writer: String,
     commentCount: Int,
-    dateString: String
+    dateString: String,
+    onClick: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.clickable { onClick() }
     ) {
         Text(
             text = title,

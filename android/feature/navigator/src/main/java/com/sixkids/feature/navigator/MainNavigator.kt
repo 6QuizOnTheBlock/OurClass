@@ -27,6 +27,9 @@ import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigatePostWrite
+import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigateChatting
+import com.sixkids.teacher.board.navigation.navigatePostDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
@@ -83,7 +86,7 @@ class MainNavigator(
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
             MainNavigationTab.STUDENT_BOARD -> {}
             MainNavigationTab.STUDENT_RELAY -> {}
-            MainNavigationTab.STUDENT_CHALLENGE -> navController.navigateStudentChallengeHistory(studentNavOptions)
+            MainNavigationTab.STUDENT_CHALLENGE -> {}
         }
     }
 
@@ -120,6 +123,9 @@ class MainNavigator(
 
     fun navigateJoinOrganization(){
         navController.navigateJoinOrganization()
+
+    fun navigatePostDetail(postId: Long) {
+        navController.navigatePostDetail(postId)
     }
 
 
@@ -168,9 +174,7 @@ class MainNavigator(
         bottomTabItems = studentTab() // 바텀 네비게이션 탭 초기화
         navController.navigateStudentHome(navOptions{
             popUpTo(StudentHomeRoute.defaultRoute){
-                //TODO : inclusive true로 변경
-//                inclusive = true
-                inclusive = false
+                inclusive = true
             }
         })
     }
