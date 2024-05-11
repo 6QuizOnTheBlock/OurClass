@@ -111,21 +111,6 @@ class MainNavigator(
         navController.navigatePostWrite()
     }
 
-    /**
-     * Student Main Navigation
-     */
-    fun navigateStudentOrganizationList(){
-        navController.navigateStudentOrganizationList()
-    }
-
-    fun navigateStudentProfile(){
-        navController.navigateStudentProfile()
-    }
-
-    fun navigateJoinOrganization() {
-        navController.navigateJoinOrganization()
-    }
-
     fun navigatePostDetail(postId: Long) {
         navController.navigatePostDetail(postId)
     }
@@ -140,6 +125,21 @@ class MainNavigator(
 
     fun navigateAnnounceDetail(announceId: Long) {
         navController.navigateAnnounceDetail(announceId)
+    }
+
+    /**
+     * Student Main Navigation
+     */
+    fun navigateStudentOrganizationList(){
+        navController.navigateStudentOrganizationList()
+    }
+
+    fun navigateStudentProfile(){
+        navController.navigateStudentProfile()
+    }
+
+    fun navigateJoinOrganization() {
+        navController.navigateJoinOrganization()
     }
 
 
