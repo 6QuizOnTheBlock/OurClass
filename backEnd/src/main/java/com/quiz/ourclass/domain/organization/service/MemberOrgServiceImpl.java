@@ -86,7 +86,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
             .memberName(targetMember.getName())
             .relationPoint(relationship.getRelationPoint())
             .groupCount(relationship.getGroupCount())
-            .tagCount(relationship.getTagCount())
+            .tagGreetingCount(relationship.getTagGreetingCount())
             .receiveCount(receiveCount)
             .sendCount(sendCount).build();
     }
@@ -130,7 +130,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
 
     @Transactional
     @Override
-    public void tagGreeting(TagGreetingRequest tagGreetingRequest) {
+    public int tagGreeting(TagGreetingRequest tagGreetingRequest) {
         Member loginMember = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         long member1 = Math.min(loginMember.getId(), tagGreetingRequest.memberId());
@@ -141,6 +141,8 @@ public class MemberOrgServiceImpl implements MemberOrgService {
         TagGreeting tagGreeting = TagGreeting.builder()
             .relationship(relationship).date(LocalDateTime.now()).build();
         tagGreetingRepository.save(tagGreeting);
+        int tagGreetingCount = relationship.updateTagGreetingCount();
+        return tagGreetingCount;
     }
 
     private List<RelationSimpleResponse> getFriendlyResponse(long organizationId, long memberId,

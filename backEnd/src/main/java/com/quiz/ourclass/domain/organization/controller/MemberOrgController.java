@@ -71,7 +71,7 @@ public class MemberOrgController implements MemberOrgControllerDocs {
     @PostMapping("/tag")
     public ResponseEntity<ResultResponse<?>> tagGreet(
         @RequestBody TagGreetingRequest tagGreetingRequest) {
-        memberOrgService.tagGreeting(tagGreetingRequest);
-        return ResponseEntity.ok(ResultResponse.success(null));
+        int tagGreetingCount = memberOrgService.tagGreeting(tagGreetingRequest);
+        return ResponseEntity.ok(ResultResponse.success(tagGreetingCount));
     }
 }

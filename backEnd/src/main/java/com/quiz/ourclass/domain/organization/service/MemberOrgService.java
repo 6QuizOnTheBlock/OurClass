@@ -22,5 +22,5 @@ public interface MemberOrgService {
 
     OrganizationHomeResponse getOrganizationHome(long id);
 
-    void tagGreeting(TagGreetingRequest tagGreetingRequest);
+    int tagGreeting(TagGreetingRequest tagGreetingRequest);
 }

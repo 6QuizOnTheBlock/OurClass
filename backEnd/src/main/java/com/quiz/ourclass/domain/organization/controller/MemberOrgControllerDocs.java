@@ -103,10 +103,10 @@ public interface MemberOrgControllerDocs {
         long id
     );
 
-    @Operation(summary = "태깅 인사.",
+    @Operation(summary = "태깅 인사. 두 멤버 간의 태깅인사 횟수 반환",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = TagGreetingRequest.class))),
+                content = @Content(schema = @Schema(implementation = Integer.class))),
             @ApiResponse(responseCode = "404", description = "(message : \"두 멤버간의 관계를 찾을 수 없습니다.\")", content = @Content)
         })
     @PostMapping("/tag")
