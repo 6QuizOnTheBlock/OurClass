@@ -23,23 +23,6 @@ fun JoinGroupScreen(
 //fun MemberItemPreview() {
 //    MemberItem()
 //}
-//@Composable
-//fun MultiLayeredCircles() {
-//    Canvas(modifier = Modifier ){
-//        val strokeWidth = 2.dp.toPx()
-//        val radiusIncrement = 46.dp.toPx() // 각 원의 반지름 증가량
-//
-//        val colors = listOf(Red, Orange, Green, Blue) // 원의 색상 리스트
-//
-//        for (i in colors.indices) {
-//            drawCircle(
-//                color = colors[i],
-//                radius = radiusIncrement * (i + 1),
-//                style = Stroke(width = strokeWidth)
-//            )
-//        }
-//    }
-//}
 
 
 @Preview(showBackground = true)
