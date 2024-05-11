@@ -19,17 +19,14 @@ import com.sixkids.student.board.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
 import com.sixkids.student.main.navigation.navigateStudentOrganizationList
 import com.sixkids.student.main.navigation.navigateStudentProfile
-import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePost
-import com.sixkids.teacher.board.navigation.navigatePostWrite
-import com.sixkids.teacher.board.navigation.navigatePost
-import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePostDetail
+import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory
@@ -121,8 +118,9 @@ class MainNavigator(
         navController.navigateStudentProfile()
     }
 
-    fun navigateJoinOrganization(){
+    fun navigateJoinOrganization() {
         navController.navigateJoinOrganization()
+    }
 
     fun navigatePostDetail(postId: Long) {
         navController.navigatePostDetail(postId)
