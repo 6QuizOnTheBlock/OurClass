@@ -37,5 +37,6 @@ dependencies {
     implementation(libs.krossbow.stomp. core)
     implementation(libs.krossbow.websocket.okhttp)
     implementation(libs.krossbow.stomp.moshi)
-    implementation(libs.paging.compose)
+    
+    implementation(libs.bundles.paging)
 }

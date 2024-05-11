@@ -10,6 +10,8 @@ import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSource
 import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSourceImpl
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSource
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSourceImpl
+import com.sixkids.data.repository.chatting.remote.ChattingRemoteDataSource
+import com.sixkids.data.repository.chatting.remote.ChattingRemoteDataSourceImpl
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourceImpl
 import com.sixkids.data.repository.post.remote.PostRemoteDataSource
@@ -56,4 +58,9 @@ abstract class DataSourceModule {
     abstract fun bindCommentRemoteDataSource(
         commentRemoteDataSource: CommentRemoteDataSourceImpl
     ): CommentRemoteDataSource
+  
+    @Binds
+    abstract fun bindChattingRemoteDataSource(
+        chattingRemoteDataSource: ChattingRemoteDataSourceImpl
+    ): ChattingRemoteDataSource
 }

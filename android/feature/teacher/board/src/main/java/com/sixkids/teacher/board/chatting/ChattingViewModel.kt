@@ -3,9 +3,14 @@ package com.sixkids.teacher.board.chatting
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.sixkids.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.Chat
 import com.sixkids.model.ChatMessage
 import com.sixkids.model.UserInfo
@@ -35,10 +40,11 @@ private const val TAG = "D107"
 class ChattingViewModel @Inject constructor(
     private val getATKUseCase: GetATKUseCase,
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val loadUserInfoUseCase: LoadUserInfoUseCase,
+    private val getChattingHistoryUseCase: GetChattingHistoryUseCase
 ) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()) {
 
-    private var roomId = 1
+    private var roomId = 1L
     private lateinit var tkn: String
     private lateinit var userInfo: UserInfo
 
@@ -50,56 +56,77 @@ class ChattingViewModel @Inject constructor(
 
     private lateinit var chattingList: List<Chat>
 
+    var originalChatList: Flow<PagingData<Chat>>? = null
+
     @SuppressLint("CheckResult")
     fun initStomp() {
         viewModelScope.launch {
             try {
-                // Stomp 연결
-                val tknJob = async { getATKUseCase().getOrThrow() }
-                val roomIdJob = async { getSelectedOrganizationIdUseCase().getOrThrow() }
-                val userInfoJob = async { getUserInfoUseCase().getOrThrow() }
-                tkn = tknJob.await()
-//                roomId = roomIdJob.await()
-                userInfo = userInfoJob.await()
+                loadLocalData()
 
-                intent { copy(memberId = userInfo.id) }
+                originalChatList =
+                    getChattingHistoryUseCase(roomId).cachedIn(viewModelScope)
 
-                val okHttpClient = OkHttpClient.Builder()
-                    .addInterceptor(
-                        HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
-                        }
-                    )
-                    .build()
 
-                val wsClient = OkHttpWebSocketClient(okHttpClient)
-                val client = StompClient(wsClient)
-
-                stompSession = client.connect(
-                    BuildConfig.STOMP_ENDPOINT,
-                    customStompConnectHeaders = mapOf(
-                        HEADER_AUTHORIZATION to tkn,
-                        HEADER_ROOM_ID to roomId.toString()
-                    )
-                ).withMoshi(moshi)
-
-                newChatMessage = stompSession.subscribe(
-                    StompSubscribeHeaders(
-                        destination = "$SUBSCRIBE_URL$roomId",
-                        customHeaders = mapOf(
-                            HEADER_AUTHORIZATION to tkn
-                        )
-                    )
-                )
-
-                newChatMessage.collect {
-                    val chatMessage = moshi.adapter(Chat::class.java).fromJson(it.bodyAsText)
-                    intent { copy(chatList = chatList + chatMessage!!) }
-                }
 
             } catch (e: Exception) {
                 Log.d(TAG, "initStomp: ${e.message}")
             }
+        }
+    }
+
+    private fun loadLocalData() {
+        viewModelScope.launch {
+            val tknJob = async { getATKUseCase().getOrThrow() }
+            val roomIdJob = async { getSelectedOrganizationIdUseCase().getOrThrow() }
+            val userInfoJob = async { loadUserInfoUseCase().getOrThrow() }
+
+            tkn = tknJob.await()
+//                roomId = roomIdJob.await()
+            userInfo = userInfoJob.await()
+
+             connectStomp()
+
+            intent { copy(memberId = userInfo.id) }
+        }
+    }
+
+    suspend fun connectStomp(){
+        viewModelScope.launch {
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+                .build()
+
+            val client = StompClient(OkHttpWebSocketClient(okHttpClient))
+
+            stompSession = client.connect(
+                BuildConfig.STOMP_ENDPOINT,
+                customStompConnectHeaders = mapOf(
+                    HEADER_AUTHORIZATION to tkn,
+                    HEADER_ROOM_ID to roomId.toString()
+                )
+            ).withMoshi(moshi)
+
+            newChatMessage = stompSession.subscribe(
+                StompSubscribeHeaders(
+                    destination = "$SUBSCRIBE_URL$roomId",
+                    customHeaders = mapOf(
+                        HEADER_AUTHORIZATION to tkn
+                    )
+                )
+            )
+
+
+            newChatMessage.collect {
+                val chatMessage = moshi.adapter(Chat::class.java).fromJson(it.bodyAsText)
+                intent { copy(chatList = chatList + chatMessage!!) }
+            }
+
+
         }
     }
 
@@ -109,6 +136,7 @@ class ChattingViewModel @Inject constructor(
 
     fun sendMessage(message: String) {
         viewModelScope.launch {
+            Log.d(TAG, "sendMessage: ${userInfo.photo}")
             stompSession.withMoshi(moshi).convertAndSend(
                 StompSendHeaders(
                     destination = SEND_URL,
@@ -116,7 +144,7 @@ class ChattingViewModel @Inject constructor(
                         HEADER_AUTHORIZATION to tkn
                     )
                 ),
-                ChatMessage(roomId.toLong(), userInfo.photo, message)
+                ChatMessage(roomId, userInfo.photo, message)
             )
         }
         intent { copy(message = "") }
