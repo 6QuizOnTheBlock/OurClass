@@ -62,7 +62,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
         MemberOrganization memberOrganization = memberOrganizationRepository.findByMemberIdAndOrganizationId(
                 updateExpRequest.memberId(), id)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
-        return memberOrganization.updateExp(updateExpRequest);
+        return memberOrganization.updateExp(updateExpRequest.exp());
     }
 
     @Override

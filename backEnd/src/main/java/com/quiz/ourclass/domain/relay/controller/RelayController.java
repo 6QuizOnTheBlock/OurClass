@@ -1,7 +1,9 @@
 package com.quiz.ourclass.domain.relay.controller;
 
+import com.quiz.ourclass.domain.relay.dto.request.ReceiveRelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
+import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
@@ -48,5 +50,13 @@ public class RelayController implements RelayControllerDocs {
         RunningRelayResponse runningChallengeResponse = relayService.getRunningRelay(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
+    }
+
+    @PostMapping("/{id}/receive")
+    public ResponseEntity<ResultResponse<?>> receiveRelay(@PathVariable long id,
+        @RequestBody ReceiveRelayRequest receiveRelayRequest) {
+        ReceiveRelayResponse receiveRelayResponse = relayService.receiveRelay(
+            id, receiveRelayRequest);
+        return ResponseEntity.ok(ResultResponse.success(receiveRelayResponse));
     }
 }
