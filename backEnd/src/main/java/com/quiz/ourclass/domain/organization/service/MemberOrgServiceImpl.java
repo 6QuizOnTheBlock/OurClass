@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
+import com.quiz.ourclass.domain.organization.dto.request.TagGreetingRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.OrganizationHomeResponse;
@@ -16,15 +17,18 @@ import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.entity.TagGreeting;
 import com.quiz.ourclass.domain.organization.mapper.MemberOrganizationMapper;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
+import com.quiz.ourclass.domain.organization.repository.TagGreetingRepository;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
 import com.quiz.ourclass.domain.relay.repository.RelayRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +47,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
     private final ChallengeRepository challengeRepository;
     private final RelayRepository relayRepository;
     private final PostRepository postRepository;
+    private final TagGreetingRepository tagGreetingRepository;
     private final MemberMapper memberMapper;
     private final MemberOrganizationMapper memberOrganizationMapper;
 
@@ -121,6 +126,21 @@ public class MemberOrgServiceImpl implements MemberOrgService {
             HOME_FRIEND_COUNT);
         return memberOrganizationMapper.memberOrgToOrganizationHome(memberOrganization,
             friendlyResponse);
+    }
+
+    @Transactional
+    @Override
+    public void tagGreeting(TagGreetingRequest tagGreetingRequest) {
+        Member loginMember = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        long member1 = Math.min(loginMember.getId(), tagGreetingRequest.memberId());
+        long member2 = Math.min(tagGreetingRequest.memberId(), loginMember.getId());
+        Relationship relationship = relationshipRepository.findByOrganizationIdAndMember1IdAndMember2Id(
+                tagGreetingRequest.organizationId(), member1, member2)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELATION_NOT_FOUND));
+        TagGreeting tagGreeting = TagGreeting.builder()
+            .relationship(relationship).date(LocalDateTime.now()).build();
+        tagGreetingRepository.save(tagGreeting);
     }
 
     private List<RelationSimpleResponse> getFriendlyResponse(long organizationId, long memberId,
