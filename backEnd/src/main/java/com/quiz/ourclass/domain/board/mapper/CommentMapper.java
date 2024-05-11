@@ -14,8 +14,10 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
 
+    @Mapping(source = "member.profileImage", target = "member.photo")
     CommentChildrenDTO commentToCommentChildrenDTO(Comment comment);
 
+    @Mapping(source = "comment.member.profileImage", target = "member.photo")
     CommentDTO commentToCommentDTOWithChildren(Comment comment, List<CommentChildrenDTO> children);
 
     @Mapping(source = "boardId", target = "post.id")
