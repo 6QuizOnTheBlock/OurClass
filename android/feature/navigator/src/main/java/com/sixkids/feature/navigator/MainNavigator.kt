@@ -16,6 +16,9 @@ import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.student.board.navigation.StudentHomeRoute
 import com.sixkids.student.board.navigation.navigateStudentHome
+import com.sixkids.student.main.navigation.navigateJoinOrganization
+import com.sixkids.student.main.navigation.navigateStudentOrganizationList
+import com.sixkids.student.main.navigation.navigateStudentProfile
 import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
@@ -106,6 +109,20 @@ class MainNavigator(
     fun navigatePostWrite() {
         navController.navigatePostWrite()
     }
+
+    /**
+     * Student Main Navigation
+     */
+    fun navigateStudentOrganizationList(){
+        navController.navigateStudentOrganizationList()
+    }
+
+    fun navigateStudentProfile(){
+        navController.navigateStudentProfile()
+    }
+
+    fun navigateJoinOrganization(){
+        navController.navigateJoinOrganization()
 
     fun navigatePostDetail(postId: Long) {
         navController.navigatePostDetail(postId)
