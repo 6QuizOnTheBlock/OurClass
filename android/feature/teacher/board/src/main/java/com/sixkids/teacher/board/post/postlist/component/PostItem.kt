@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ fun PostItem(
     writer: String,
     commentCount: Int,
     dateString: String,
+    dividerColor: Color = Color.Black,
     onClick: () -> Unit = {}
 ) {
     Column(
@@ -56,12 +58,12 @@ fun PostItem(
                 style = UlbanTypography.bodyMedium
             )
         }
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp),
             thickness = 2.dp,
-            color = Color.Black
+            color = dividerColor
         )
     }
 }
