@@ -1,5 +1,6 @@
 package com.sixkids.teacher.board.post.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,10 +27,11 @@ fun PostItem(
     title: String,
     writer: String,
     commentCount: Int,
-    dateString: String
+    dateString: String,
+    onClick: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.clickable { onClick() }
     ) {
         Text(
             text = title,
