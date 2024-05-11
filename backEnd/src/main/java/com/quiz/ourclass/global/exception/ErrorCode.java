@@ -74,6 +74,7 @@ public enum ErrorCode {
 
     //quiz
     NO_QUIZ_GAME(HttpStatus.NOT_FOUND, "해당 단체에서 생성한 퀴즈가 없습니다."),
+    NO_AUTHORITY_FOR_QUIZ(HttpStatus.FORBIDDEN, "해당 퀴즈 게임의 URL을 요청할 권한이 없습니다."),
 
     //relay
     RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),

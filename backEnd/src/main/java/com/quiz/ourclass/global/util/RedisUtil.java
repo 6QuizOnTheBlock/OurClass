@@ -3,6 +3,8 @@ package com.quiz.ourclass.global.util;
 
 import java.time.Duration;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class RedisUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final String PREFIX = "AT:";
 
     public void valueSet(String key, String value, Duration time) {
         redisTemplate.opsForValue().set(key, value, time);
@@ -46,7 +47,7 @@ public class RedisUtil {
 
 
     public String generateBlackListKey(String accessToken) {
-        return PREFIX + accessToken;
+        return ConstantUtil.BLACKLIST_ACCESS_TOKEN + accessToken;
     }
 
     public void addChatRoomUser(Long chatRoomId, String memberId) {
@@ -65,8 +66,17 @@ public class RedisUtil {
         redisTemplate.opsForSet().remove(key, memberId);
     }
 
+    public void setQuizGame(Long quizGameId, UUID uuid) {
+        redisTemplate.opsForValue()
+            .set(buildQuizGameUrlKey(quizGameId), uuid.toString(), 10, TimeUnit.MINUTES);
+    }
+
     private String buildChatRoomKey(Long chatRoomId) {
         return ConstantUtil.REDIS_CHAT_ROOM_KEY + chatRoomId;
+    }
+
+    private String buildQuizGameUrlKey(Long quizGameId) {
+        return ConstantUtil.QUIZ_GAME + quizGameId;
     }
 
 }

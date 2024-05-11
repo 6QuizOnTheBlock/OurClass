@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
 import com.quiz.ourclass.domain.quiz.entity.Quiz;
 import com.quiz.ourclass.domain.quiz.entity.QuizGame;
+import com.quiz.ourclass.global.dto.FcmDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -21,5 +22,7 @@ public interface QuizGameMapper {
     Quiz toQuiz(QuizGame quizGame, QuizDTO quizDTO);
 
     QuizGameDTO toQuizGameDTO(QuizGame QuizGame);
+
+    FcmDTO toFcmDTO(String title, String body);
 
 }

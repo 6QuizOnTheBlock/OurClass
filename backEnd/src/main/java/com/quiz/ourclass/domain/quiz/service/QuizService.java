@@ -9,4 +9,6 @@ public interface QuizService {
     public void makingQuiz(MakingQuizRequest request);
 
     public List<QuizGameDTO> getQuizList(long orgId);
+
+    public String getQuizUrl(long id);
 }

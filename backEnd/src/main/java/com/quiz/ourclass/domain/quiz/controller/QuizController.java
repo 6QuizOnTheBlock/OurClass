@@ -31,4 +31,11 @@ public class QuizController implements QuizControllerDocs {
     public ResponseEntity<ResultResponse<?>> getQuizList(@PathVariable("orgId") long orgId) {
         return ResponseEntity.ok(ResultResponse.success(quizService.getQuizList(orgId)));
     }
+
+    @GetMapping("/code/{quizGameId}")
+    public ResponseEntity<ResultResponse<?>> getQuizUrl(
+        @PathVariable("quizGameId") long quizGameId) {
+        return ResponseEntity.ok(ResultResponse.success(quizService.getQuizUrl(quizGameId)));
+    }
+
 }
