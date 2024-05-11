@@ -24,18 +24,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.MemberSimple
 import com.sixkids.designsystem.R as DesignSystemR
 
 @Composable
 fun MemberIcon(
     modifier: Modifier = Modifier,
-    memberId: Long,
-    name: String,
-    photo: String,
-    onIconClick: (Long) -> Unit = {},
+    member: MemberSimple,
+    onIconClick: (MemberSimple) -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
     showX: Boolean = false,
-    isActive: Boolean = false
+    isActive: Boolean = true
 ) {
     Card(
         modifier = modifier
@@ -49,7 +48,7 @@ fun MemberIcon(
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
 
-        onClick = { onIconClick(memberId) }
+        onClick = { onIconClick(member) }
     ) {
         Box(modifier.wrapContentSize()) {
 
@@ -62,7 +61,7 @@ fun MemberIcon(
                     modifier = modifier.wrapContentSize(),
                 ) {
                     AsyncImage(
-                        model = photo,
+                        model = member.photo,
                         contentDescription = null,
                         modifier = modifier.size(48.dp)
                     )
@@ -75,13 +74,13 @@ fun MemberIcon(
                                 .align(Alignment.TopEnd)
                                 .size(24.dp)
                                 .clickable {
-                                    onRemoveClick(memberId)
+                                    onRemoveClick(member.id)
                                 }
                         )
                     }
                 }
                 Text(
-                    text = name,
+                    text = member.name,
                     style = UlbanTypography.bodyMedium,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -96,9 +95,11 @@ fun MemberIcon(
 @Composable
 fun MemberIconPreview() {
     MemberIcon(
-        memberId = 1,
-        name = "홍길동",
-        photo = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+        member = MemberSimple(
+            id = 1,
+            name = "홍길동",
+            photo = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+        ),
         onIconClick = {},
         onRemoveClick = {}
     )

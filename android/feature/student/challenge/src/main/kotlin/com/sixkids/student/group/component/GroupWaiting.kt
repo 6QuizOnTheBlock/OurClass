@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 
 @Composable
@@ -56,9 +57,11 @@ fun GroupWaiting(
             ) {
                 items(memberList) { item ->
                     MemberIcon(
-                        memberId = item.memberId,
-                        name = item.name,
-                        photo = item.photo,
+                        member = MemberSimple(
+                            id = item.memberId,
+                            name = item.name,
+                            photo = item.photo
+                        ),
                         showX = item.showX,
                         isActive = item.isActive,
                         onRemoveClick = onRemoveClick
@@ -88,7 +91,7 @@ data class MemberIconItem(
 @Composable
 fun GroupWaitingPreview() {
     GroupWaiting(
-        memberList = List(4){
+        memberList = List(4) {
             MemberIconItem(
                 memberId = it.toLong(),
                 name = "name$it",
