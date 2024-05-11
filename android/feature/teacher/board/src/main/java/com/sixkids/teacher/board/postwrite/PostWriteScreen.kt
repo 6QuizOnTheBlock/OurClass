@@ -9,7 +9,10 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +25,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -104,24 +110,21 @@ fun PostWriteRoute(
     }
 
 
-    Box(
-        modifier = Modifier
-            .padding(padding)
-    ) {
-        PostWriteScreen(
-            postWriteState = uiState,
-            cancelOnClick = { viewModel.onBack() },
-            submitOnClick = {
-                viewModel.onPost(
-                    uiState.photo?.let { saveBitmapToFile(context, it, "post_photo.jpg") }
-                )
-            },
-            titleValueChange = { viewModel.onTitleChanged(it) },
-            contentValueChange = { viewModel.onContentChanged(it) },
-            anonymousCheckedChange = { viewModel.onAnonymousChecked(it) },
-            addPhotoOnClick = { photoLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
-        )
-    }
+
+    PostWriteScreen(
+        postWriteState = uiState,
+        cancelOnClick = { viewModel.onBack() },
+        submitOnClick = {
+            viewModel.onPost(
+                uiState.photo?.let { saveBitmapToFile(context, it, "post_photo.jpg") }
+            )
+        },
+        titleValueChange = { viewModel.onTitleChanged(it) },
+        contentValueChange = { viewModel.onContentChanged(it) },
+        anonymousCheckedChange = { viewModel.onAnonymousChecked(it) },
+        addPhotoOnClick = { photoLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+    )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,6 +139,13 @@ fun PostWriteScreen(
     anonymousCheckedChange: (Boolean) -> Unit = {},
     addPhotoOnClick: () -> Unit = {}
 ) {
+
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(postWriteState.content) {
+        scrollState.scrollTo(scrollState.maxValue)
+    }
+
     Box {
         Column(
             modifier = modifier
@@ -167,36 +177,47 @@ fun PostWriteScreen(
                 thickness = 2.dp,
                 color = Color.Black
             )
-            //photo
-            if (postWriteState.photo != null) {
-                Spacer(modifier = Modifier.height(10.dp))
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f),
-                    bitmap = postWriteState.photo.asImageBitmap(),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(scrollState)
+            ) {
+                //photo
+                if (postWriteState.photo != null) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        bitmap = postWriteState.photo.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                //content
+                OutlinedTextField(
+                    value = postWriteState.content,
+                    onValueChange = { string ->
+                        contentValueChange(string)
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent
+                    ),
+                    placeholder = {
+                        Text(
+                            text = stringResource(id = R.string.board_write_content_content),
+                            style = UlbanTypography.bodyLarge
+                        )
+                    },
+                    textStyle = UlbanTypography.bodyLarge
                 )
             }
-            //content
-            OutlinedTextField(
-                value = postWriteState.content,
-                onValueChange = contentValueChange,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent
-                ),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.board_write_content_content),
-                        style = UlbanTypography.bodyLarge
-                    )
-                },
-                textStyle = UlbanTypography.bodyLarge
-            )
-            Spacer(modifier = Modifier.weight(1f))
             Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // 이미지 추가 아이콘
@@ -230,6 +251,7 @@ fun PostWriteScreen(
                 )
             }
         }
+
         if (postWriteState.isLoading) {
             LoadingScreen()
         }
