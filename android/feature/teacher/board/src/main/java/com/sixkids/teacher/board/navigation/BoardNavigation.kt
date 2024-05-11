@@ -7,6 +7,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.sixkids.teacher.board.announce.announcedetail.AnnounceDetailRoute
+import com.sixkids.teacher.board.announce.announcelist.AnnounceListRoute
+import com.sixkids.teacher.board.announce.announcewrite.AnnounceWriteRoute
 import com.sixkids.teacher.board.chatting.ChattingRoute
 import com.sixkids.teacher.board.main.BoardMainRoute
 import com.sixkids.teacher.board.post.postlist.PostRoute
@@ -34,6 +37,18 @@ fun NavController.navigateChatting() {
     navigate(BoardRoute.chattingRoute)
 }
 
+fun NavController.navigateAnnounce() {
+    navigate(BoardRoute.announceRoute)
+}
+
+fun NavController.navigateAnnounceWrite() {
+    navigate(BoardRoute.announceWriteRoute)
+}
+
+fun NavController.navigateAnnounceDetail(announceDetailId: Long) {
+    navigate(BoardRoute.announceDetailRoute(announceDetailId))
+}
+
 fun NavGraphBuilder.boardNavGraph(
     padding: PaddingValues,
     navigateToPost: () -> Unit,
@@ -41,13 +56,17 @@ fun NavGraphBuilder.boardNavGraph(
     navigateToPostWrite: () -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
-    navigateToChatting: () -> Unit
+    navigateToChatting: () -> Unit,
+    navigateToAnnounceDetail: (Long) -> Unit,
+    navigateToAnnounceWrite: () -> Unit,
+    navigateToAnnounceList: () -> Unit,
 ) {
     composable(route = BoardRoute.defaultRoute) {
         BoardMainRoute(
             padding = padding,
             navigateToPost = navigateToPost,
             navigateToChatting = navigateToChatting,
+            navigateToAnnounce = navigateToAnnounceList
         )
     }
 
@@ -80,17 +99,38 @@ fun NavGraphBuilder.boardNavGraph(
         )
     }
 
-    composable(route = BoardRoute.defaultRoute) {
-        BoardMainRoute(
-            padding = padding,
-            navigateToPost = navigateToPost,
-            navigateToChatting = navigateToChatting
-        )
-    }
-
     composable(route = BoardRoute.chattingRoute) {
         ChattingRoute(
             onBackClick = onBackClick,
+            onShowSnackBar = onShowSnackBar
+        )
+    }
+
+    composable(
+        route = BoardRoute.announceRoute,
+    ) {
+        AnnounceListRoute(
+            padding = padding,
+            navigateToAnnounceDetail = navigateToAnnounceDetail,
+            navigateToAnnounceWrite = navigateToAnnounceWrite,
+            onShowSnackBar = onShowSnackBar
+        )
+    }
+
+    composable(BoardRoute.announceWriteRoute) {
+        AnnounceWriteRoute(
+            padding = padding,
+            navigateBack = onBackClick,
+            onShowSnackBar = onShowSnackBar
+        )
+    }
+
+    composable(
+        route = BoardRoute.announceDetailRoute,
+        arguments = listOf(navArgument(BoardRoute.announceDetailARG) { type = NavType.LongType })
+    ) {
+        AnnounceDetailRoute(
+            padding = padding,
             onShowSnackBar = onShowSnackBar
         )
     }
@@ -98,12 +138,17 @@ fun NavGraphBuilder.boardNavGraph(
 
 object BoardRoute {
     const val postDetailARG = "postId"
+    const val announceDetailARG = "announceDetailId"
 
     const val defaultRoute = "board"
     const val postRoute = "post"
     const val postWriteRoute = "post_write"
     const val postDetailRoute = "post_detail/{$postDetailARG}"
     const val chattingRoute = "chatting"
+    const val announceRoute = "announce"
+    const val announceWriteRoute = "announce_write"
+    const val announceDetailRoute = "announce_detail/{$announceDetailARG}"
 
     fun postDetailRoute(postId: Long) = "post_detail/$postId"
+    fun announceDetailRoute(announceDetailId: Long) = "announce_detail/$announceDetailId"
 }

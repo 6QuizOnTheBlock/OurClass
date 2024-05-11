@@ -22,10 +22,18 @@ import com.sixkids.student.main.navigation.navigateStudentProfile
 import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
+import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
+import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
+import com.sixkids.student.relay.navigation.navigateStudentRelayHistory
+import com.sixkids.student.relay.navigation.navigateStudentRelayJoin
 import com.sixkids.teacher.board.navigation.BoardRoute
+import com.sixkids.teacher.board.navigation.navigateAnnounce
+import com.sixkids.teacher.board.navigation.navigateAnnounceDetail
+import com.sixkids.teacher.board.navigation.navigateAnnounceWrite
 import com.sixkids.teacher.board.navigation.navigateBoard
 import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePost
+import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.board.navigation.navigatePostDetail
 import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
@@ -83,7 +91,7 @@ class MainNavigator(
             // 학생 바텀 네비게이션 탭
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
             MainNavigationTab.STUDENT_BOARD -> {}
-            MainNavigationTab.STUDENT_RELAY -> {}
+            MainNavigationTab.STUDENT_RELAY -> navController.navigateStudentRelayHistory(studentNavOptions)
             MainNavigationTab.STUDENT_CHALLENGE -> navController.navigateStudentChallengeHistory(studentNavOptions)
         }
     }
@@ -108,6 +116,22 @@ class MainNavigator(
         navController.navigatePostWrite()
     }
 
+    fun navigatePostDetail(postId: Long) {
+        navController.navigatePostDetail(postId)
+    }
+
+    fun navigateAnnounce() {
+        navController.navigateAnnounce()
+    }
+
+    fun navigateAnnounceWrite() {
+        navController.navigateAnnounceWrite()
+    }
+
+    fun navigateAnnounceDetail(announceId: Long) {
+        navController.navigateAnnounceDetail(announceId)
+    }
+
     /**
      * Student Main Navigation
      */
@@ -123,21 +147,13 @@ class MainNavigator(
         navController.navigateJoinOrganization()
     }
 
-    fun navigatePostDetail(postId: Long) {
-        navController.navigatePostDetail(postId)
-    }
-
 
     /**
      * Home Navigation
      */
     fun navigateHome() {
         bottomTabItems = teacherTab() // 바텀 네비게이션 탭 초기화
-        navController.navigate(HomeRoute.defaultRoute) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
-        }
+        navController.navigate(HomeRoute.defaultRoute)
     }
 
     fun navigateRank() {
@@ -205,6 +221,32 @@ class MainNavigator(
         navController.navigateSignUpPhoto(isTeacher)
     }
 
+    /**
+     * Student Relay Navigation
+     */
+    fun navigateStudentRelayHistory() {
+        navController.navigate(HomeRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
+
+    fun navigateStudentRelayDetail(relayId: Long, groupId: Long?) {
+        navController.navigateStudentRelayDetail(relayId, groupId)
+    }
+
+    fun navigateStudentRelayCreate() {
+        navController.navigateStudentRelayCreate()
+    }
+
+    fun navigateStudentRelayJoin() {
+        navController.navigateStudentRelayJoin()
+    }
+
+    /**
+     * Challenge Navigation
+     */
     fun navigateChallengeHistory() {
         navController.navigateChallengeHistory()
     }

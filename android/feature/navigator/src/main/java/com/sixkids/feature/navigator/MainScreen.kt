@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
@@ -41,6 +42,7 @@ import com.sixkids.student.board.navigation.studentHomeNavGraph
 import com.sixkids.student.main.navigation.studentOrganizationListNavGraph
 import com.sixkids.student.navigation.studentChallengeNavGraph
 import com.sixkids.student.navigation.studentGroupNavGraph
+import com.sixkids.student.relay.navigation.studentRelayNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
@@ -84,8 +86,8 @@ fun MainScreen(
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) },
         )
         {
             homeNavGraph(
@@ -102,6 +104,9 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 navigateToChatting = navigator::navigateChatting,
                 navigateToPostWrite = navigator::navigatePostWrite,
+                navigateToAnnounceDetail = navigator::navigateAnnounceDetail,
+                navigateToAnnounceWrite = navigator::navigateAnnounceWrite,
+                navigateToAnnounceList = navigator::navigateAnnounce,
             )
 
             challengeNavGraph(
@@ -161,6 +166,14 @@ fun MainScreen(
                 navigateToHome = navigator::navigateStudentHome,
                 navigateToSignIn = navigator::navigateSignIn,
                 onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
+            )
+
+            studentRelayNavGraph(
+                navigateRelayDetail = navigator::navigateStudentRelayDetail,
+                navigateCreateRelay = navigator::navigateStudentRelayCreate,
+                navigateJoinRelay = navigator::navigateStudentRelayJoin,
+                handleException = viewModel::handleException,
                 onBackClick = navigator::popBackStack,
             )
 
