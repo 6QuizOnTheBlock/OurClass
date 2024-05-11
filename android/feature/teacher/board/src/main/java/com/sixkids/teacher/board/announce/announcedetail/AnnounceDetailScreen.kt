@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -15,14 +16,22 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.component.screen.LoadingScreen
@@ -33,12 +42,51 @@ import com.sixkids.teacher.board.post.postdetail.commentDummy
 import com.sixkids.teacher.board.post.postdetail.component.CommentItem
 import com.sixkids.teacher.board.post.postdetail.component.CommentTextField
 import com.sixkids.teacher.board.post.postdetail.component.PostWriterInfo
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.util.formatToMonthDayTime
 import java.time.LocalDateTime
 
 @Composable
-fun AnnounceDetailRoute() {
+fun AnnounceDetailRoute(
+    viewModel: AnnounceDetailViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    onShowSnackBar: (SnackbarToken) -> Unit
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    // 키보드 숨기기
+    var keyboardHideState by remember { mutableStateOf(false) }
+    if (keyboardHideState) {
+        LocalSoftwareKeyboardController.current?.hide()
+        keyboardHideState = false
+    }
 
+    LaunchedEffect(Unit) {
+        viewModel.getAnnounceDetail()
+    }
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                AnnounceDetailEffect.RefreshAnnounceDetail -> {
+                    keyboardHideState = true
+                    viewModel.getAnnounceDetail()
+                }
+
+                is AnnounceDetailEffect.OnShowSnackbar -> {
+                    onShowSnackBar(SnackbarToken(message = sideEffect.message))
+                }
+            }
+        }
+    }
+
+    Box(modifier = Modifier.padding(padding)) {
+        AnnounceDetailScreen(
+            announceDetailState = uiState,
+            onCommentTextChanged = viewModel::onCommentTextChanged,
+            onClickComment = viewModel::onSelectedCommentId,
+            onClickSubmitComment = viewModel::onNewComment,
+        )
+    }
 }
 
 @Composable
@@ -55,10 +103,10 @@ fun AnnounceDetailScreen(
 
     BackHandler(
         enabled = announceDetailState.selectedCommentId != null,
-        onBack = {onClickComment(announceDetailState.selectedCommentId?: 0)}
+        onBack = { onClickComment(announceDetailState.selectedCommentId ?: 0) }
     )
 
-    Box{
+    Box {
         Column {
             Column(
                 modifier = modifier

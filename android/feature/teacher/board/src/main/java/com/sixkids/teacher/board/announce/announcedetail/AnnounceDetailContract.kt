@@ -5,7 +5,7 @@ import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 sealed interface AnnounceDetailEffect : SideEffect {
-    data class RefreshAnnounceDetail(val announceId: Long) : AnnounceDetailEffect
+    data object RefreshAnnounceDetail : AnnounceDetailEffect
     data class OnShowSnackbar(val message: String) : AnnounceDetailEffect
 }
 
