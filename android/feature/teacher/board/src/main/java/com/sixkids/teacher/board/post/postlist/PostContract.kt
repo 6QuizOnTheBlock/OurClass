@@ -13,5 +13,4 @@ sealed interface PostEffect : SideEffect {
 data class PostState(
     val isLoding: Boolean = false,
     val classString: String = "",
-    val postList: List<Post> = emptyList(),
 ): UiState

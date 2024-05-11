@@ -24,3 +24,8 @@ fun LocalTime.formatToHourMinute(): String {
     val formatter = DateTimeFormatter.ofPattern("HH:mm")
     return this.format(formatter)
 }
+
+fun LocalDateTime.formatToMonthDayKorean(): String {
+    val formatter = DateTimeFormatter.ofPattern("M월 d일")
+    return this.format(formatter)
+}
