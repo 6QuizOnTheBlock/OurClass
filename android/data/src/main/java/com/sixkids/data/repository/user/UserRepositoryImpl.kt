@@ -79,4 +79,8 @@ class UserRepositoryImpl @Inject constructor(
             throw e
         }
     }
+
+    override suspend fun loadUserInfo(): UserInfo {
+        return userLocalDataSource.getUserInfo()
+    }
 }

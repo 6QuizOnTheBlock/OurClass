@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ChattingService {
-    @GET("/chats")
+    @GET("chats")
     suspend fun getChatList(
         @Query("roomId") roomId: Long,
         @Query("page") page: Int,
