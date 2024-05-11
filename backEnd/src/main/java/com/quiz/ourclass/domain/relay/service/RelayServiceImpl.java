@@ -12,6 +12,7 @@ import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
+import com.quiz.ourclass.domain.relay.dto.response.SendRelayResponse;
 import com.quiz.ourclass.domain.relay.entity.Relay;
 import com.quiz.ourclass.domain.relay.entity.RelayMember;
 import com.quiz.ourclass.domain.relay.repository.RelayMemberRepository;
@@ -142,5 +143,18 @@ public class RelayServiceImpl implements RelayService {
             .lastStatus(endStatus)
             .demerit(ConstantUtil.RELAY_DEMERIT)
             .build();
+    }
+
+    @Override
+    public SendRelayResponse sendRelay(long id) {
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        Relay relay = relayRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_NOT_FOUND));
+        RelayMember prevRelayMember = relayMemberRepository.findByRelayAndNextMember(relay, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
+        return SendRelayResponse.builder()
+            .prevMemberName(prevRelayMember.getCurMember().getName())
+            .prevQuestion(prevRelayMember.getQuestion()).build();
     }
 }

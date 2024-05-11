@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
+import com.quiz.ourclass.domain.relay.dto.response.SendRelayResponse;
 import com.quiz.ourclass.domain.relay.service.RelayService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,11 @@ public class RelayController implements RelayControllerDocs {
         ReceiveRelayResponse receiveRelayResponse = relayService.receiveRelay(
             id, receiveRelayRequest);
         return ResponseEntity.ok(ResultResponse.success(receiveRelayResponse));
+    }
+
+    @PostMapping("/{id}/send")
+    public ResponseEntity<ResultResponse<?>> sendRelay(@PathVariable long id) {
+        SendRelayResponse sendRelayResponse = relayService.sendRelay(id);
+        return ResponseEntity.ok(ResultResponse.success(sendRelayResponse));
     }
 }

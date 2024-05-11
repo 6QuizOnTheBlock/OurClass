@@ -7,6 +7,7 @@ import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
+import com.quiz.ourclass.domain.relay.dto.response.SendRelayResponse;
 
 public interface RelayService {
 
@@ -19,4 +20,6 @@ public interface RelayService {
     RunningRelayResponse getRunningRelay(long organizationId);
 
     ReceiveRelayResponse receiveRelay(long id, ReceiveRelayRequest receiveRelayRequest);
+
+    SendRelayResponse sendRelay(long id);
 }
