@@ -129,11 +129,7 @@ class MainNavigator(
      */
     fun navigateHome() {
         bottomTabItems = teacherTab() // 바텀 네비게이션 탭 초기화
-        navController.navigate(HomeRoute.defaultRoute) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
-        }
+        navController.navigate(HomeRoute.defaultRoute)
     }
 
     fun navigateRank() {
