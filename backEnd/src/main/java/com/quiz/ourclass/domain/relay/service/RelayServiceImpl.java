@@ -66,7 +66,7 @@ public class RelayServiceImpl implements RelayService {
         MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
                 organization, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
-        memberOrganization.updateChallengeCount();
+        memberOrganization.updateRelayCount();
         memberOrganizationRepository.save(memberOrganization);
         return relay.getId();
     }

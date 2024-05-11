@@ -41,4 +41,8 @@ public class MemberOrganization {
     public void updateChallengeCount() {
         this.challengeCount += 1;
     }
+
+    public void updateRelayCount() {
+        this.relayCount += 1;
+    }
 }
