@@ -91,7 +91,11 @@ public interface CommentControllerDocs {
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
                 content = @Content(schema = @Schema(implementation = Boolean.class))),
-            @ApiResponse(responseCode = "403", description = "(message : \"멤버가 해당 단체 소속이 아닙니다.\")", content = @Content),
+            @ApiResponse(responseCode = "403", description = """
+                (message : "멤버가 해당 단체 소속이 아닙니다.")
+                                
+                (message : "단체 관리자는 신고할 수 없습니다.")
+                """, content = @Content),
             @ApiResponse(responseCode = "404", description = """
                 (message : "멤버가 존재하지 않습니다.")
                                 
