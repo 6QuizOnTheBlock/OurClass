@@ -77,7 +77,9 @@ public enum ErrorCode {
     NO_AUTHORITY_FOR_QUIZ(HttpStatus.FORBIDDEN, "해당 퀴즈 게임의 URL을 요청할 권한이 없습니다."),
 
     //relay
+    RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "이어달리기를 찾을 수 없습니다."),
     RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),
+    RELAY_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "이어달리기 주자를 찾을 수 없습니다."),
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),
 
     //chat

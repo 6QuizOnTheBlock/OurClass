@@ -23,6 +23,11 @@ public class Relationship {
     @ManyToOne(fetch = FetchType.LAZY)
     Member member2;
     int relationPoint;
-    int tagCount;
+    int tagGreetingCount;
     int groupCount;
+
+    public int updateTagGreetingCount() {
+        this.tagGreetingCount += 1;
+        return this.tagGreetingCount;
+    }
 }

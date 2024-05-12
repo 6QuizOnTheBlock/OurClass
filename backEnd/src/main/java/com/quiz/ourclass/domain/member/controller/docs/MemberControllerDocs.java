@@ -6,6 +6,7 @@ import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -91,4 +93,17 @@ public interface MemberControllerDocs {
 
     @PatchMapping("/photo")
     public ResponseEntity<ResultResponse<?>> updateProfile(MemberUpdateRequest request);
+
+    @Operation(summary = "멤버 조회", description = "ID 값에 해당하는 멤버 Simple 정보(id, name, iamgeUrl)를 조회합니다.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message: \"Success\")",
+                content = @Content(schema = @Schema(implementation = MemberSimpleDTO.class))),
+            @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content)
+        }
+    )
+    @GetMapping("{id}")
+    ResponseEntity<ResultResponse<?>> select(
+
+        @PathVariable(value = "id") Long id
+    );
 }

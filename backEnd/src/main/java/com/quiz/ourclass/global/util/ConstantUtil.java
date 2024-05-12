@@ -9,6 +9,8 @@ public abstract class ConstantUtil {
     public static final String MONGO_DB_NAME = "chat";
     public static final long HOME_FRIEND_COUNT = 3L;
     public static final String BLACKLIST_ACCESS_TOKEN = "AT:";
-
     public static final String QUIZ_GAME = "quiz:";
+    public static final int RELAY_DEMERIT = -100;
+    public static final Long RELAY_TIMEOUT_DAY = 1L;
+
 }

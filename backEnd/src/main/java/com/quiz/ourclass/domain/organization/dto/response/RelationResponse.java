@@ -13,7 +13,7 @@ public record RelationResponse(
     @Schema(description = "관계 포인트")
     int relationPoint,
     @Schema(description = "태깅 횟수")
-    int tagCount,
+    int tagGreetingCount,
     @Schema(description = "그룹 횟수")
     int groupCount,
     @Schema(description = "이어달리기 질문 받은 횟수")

@@ -1,6 +1,7 @@
 package com.quiz.ourclass.domain.organization.service;
 
 import com.quiz.ourclass.domain.organization.dto.request.RelationRequest;
+import com.quiz.ourclass.domain.organization.dto.request.TagGreetingRequest;
 import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.MemberDetailResponse;
 import com.quiz.ourclass.domain.organization.dto.response.OrganizationHomeResponse;
@@ -20,4 +21,6 @@ public interface MemberOrgService {
     List<RelationSimpleResponse> getMemberRelations(long id, long memberId, Long limit);
 
     OrganizationHomeResponse getOrganizationHome(long id);
+
+    int tagGreeting(TagGreetingRequest tagGreetingRequest);
 }

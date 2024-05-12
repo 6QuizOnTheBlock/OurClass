@@ -32,11 +32,14 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import com.quiz.ourclass.global.util.scheduler.SchedulingService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +62,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ReportMapper reportMapper;
     private final UserAccessUtil accessUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
+    private final SchedulingService schedulingService;
 
     @Override
     public ChallengeSliceResponse getChallenges(ChallengeSliceRequest challengeSliceRequest) {
@@ -78,6 +82,8 @@ public class ChallengeServiceImpl implements ChallengeService {
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
         challenge.setOrganization(organization);
         challengeRepository.save(challenge);
+        schedulingService.scheduleTask(challenge, this::challengeClosing, challenge.getEndTime());
+
         if (!challengeRequest.groups().isEmpty()) {
             challengeRequest.groups().forEach(request -> {
                 ChallengeGroup group = challengeGroupMapper.groupMatchingRequestToChallengeGroup(
@@ -192,14 +198,17 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeMapper.challengeToChallengeSimpleResponse(challenge);
     }
 
-    @Transactional
-    @Override
-    public void ChallengeClosing() {
+    protected void challengeClosing(Challenge challenge) {
+        challenge.setEndStatus(true);
+        challengeRepository.save(challenge);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    protected void challengeClosingReload() {
         List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
         challenges.forEach(challenge -> {
             if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
-                challenge.setEndStatus(true);
-                challengeRepository.save(challenge);
+                challengeClosing(challenge);
             }
         });
     }

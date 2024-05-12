@@ -19,6 +19,7 @@ import org.mapstruct.ReportingPolicy;
 public interface PostMapper {
 
     @Mapping(source = "post.author.id", target = "member.id")
+    @Mapping(source = "post.author.profileImage", target = "member.photo")
     @Mapping(source = "post.image.path", target = "path")
     @Mapping(source = "comments", target = "comments")
     PostDetailResponse postToPostDetailResponse(Post post, List<CommentDTO> comments);
