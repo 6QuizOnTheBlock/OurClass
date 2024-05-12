@@ -44,10 +44,16 @@ public class CommentServiceImpl implements CommentService {
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
         //게시글을 작성한 사용자 단체와 댓글 작성자의 단체가 같은지 확인
-        boolean isSameOrganization = post.getOrganization().getMemberOrganizations().stream()
-            .anyMatch(p -> p.getMember().getId() == commentWriter.getId());
-        if (!isSameOrganization) {
-            throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
+        if (commentWriter.getRole() == Role.STUDENT) {
+            boolean isSameOrganization = post.getOrganization().getMemberOrganizations().stream()
+                .anyMatch(p -> p.getMember().getId() == commentWriter.getId());
+
+            if (!isSameOrganization) {
+                throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
+            }
+        } else if (commentWriter.getRole() == Role.TEACHER) {
+            userAccessUtil.isOrganizationManager(commentWriter, post.getOrganization().getId())
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
 
         //게시글 댓글 저장 (부모 댓글이면 0L로 저장됩니다.)
@@ -101,7 +107,7 @@ public class CommentServiceImpl implements CommentService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = comment.getPost().getOrganization().getId();
-            userAccessUtil.isMemberOfOrganization(member, orgId)
+            userAccessUtil.isOrganizationManager(member, orgId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
 
@@ -118,6 +124,10 @@ public class CommentServiceImpl implements CommentService {
     public Boolean report(Long commentId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.getRole() == Role.TEACHER) {
+            throw new GlobalException(ErrorCode.TEACHER_CAN_NOT_REPORT);
+        }
 
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));

@@ -22,7 +22,8 @@ import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.notice.entity.Notice;
 import com.quiz.ourclass.domain.notice.entity.NoticeType;
 import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
-import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.dto.FcmDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -47,6 +48,7 @@ public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final ImageRepository imageRepository;
     private final NoticeRepository noticeRepository;
+    private final OrganizationRepository organizationRepository;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
     private final UserAccessUtil userAccessUtil;
     private final FcmUtil fcmUtil;
@@ -66,10 +68,21 @@ public class PostServiceImpl implements PostService {
             throw new GlobalException(ErrorCode.POST_WRITE_PERMISSION_DENIED);
         }
 
-        //멤버가 쿼리 파라미터로 들어온 단체에 속해있는지 확인
-        MemberOrganization memberOrganization =
-            userAccessUtil.isMemberOfOrganization(member, organizationId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        //단체가 존재하는지 확인
+        Organization organization = organizationRepository.findById(organizationId)
+            .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
+
+        //멤버가 단체에 속해있는지 확인
+        if (member.getRole() == Role.STUDENT) { //단체 소속 사용자일 때
+            organization =
+                userAccessUtil.isMemberOfOrganization(member, organization.getId())
+                    .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION))
+                    .getOrganization();
+        } else if (member.getRole() == Role.TEACHER) { //단체 관리자일 때
+            organization =
+                userAccessUtil.isOrganizationManager(member, organization.getId())
+                    .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        }
 
         //S3 이미지 파일 업로드
         Image image = null;
@@ -87,7 +100,7 @@ public class PostServiceImpl implements PostService {
         }
         //게시글 저장하기
         Post post = postMapper.postRequestToPost(
-            request, member, memberOrganization.getOrganization(), now, image
+            request, member, organization, now, image
         );
         return postRepository.save(post).getId();
     }
@@ -101,11 +114,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Long modify(Long postId, MultipartFile file, UpdatePostRequest request) {
         LocalDateTime now = LocalDateTime.now();
-        //게시글을 수정할 수 있는 멤버인지 검증
+        //멤버 존재 여부 확인
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
-        //수정 할 게시글 조회
+        //게시글을 수정할 수 있는 멤버인지 검증. 수정 할 게시글 조회.
         Post post = postRepository.findByIdAndAuthor(postId, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_EDIT_PERMISSION_DENIED));
 
@@ -159,9 +172,10 @@ public class PostServiceImpl implements PostService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = post.getOrganization().getId();
-            userAccessUtil.isMemberOfOrganization(member, orgId)
+            userAccessUtil.isOrganizationManager(member, orgId)
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
+        commentRepository.deleteByPostId(post.getId());
         postRepository.delete(post);
         return true;
     }
@@ -186,6 +200,10 @@ public class PostServiceImpl implements PostService {
     public Boolean report(Long postId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.getRole() == Role.TEACHER) {
+            throw new GlobalException(ErrorCode.TEACHER_CAN_NOT_REPORT);
+        }
 
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
