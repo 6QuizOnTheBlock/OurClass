@@ -11,7 +11,7 @@ data class RelayHistoryState(
 ) : UiState
 
 sealed interface RelayHistoryEffect : SideEffect {
-    data class NavigateToRelayDetail(val relayId: Long, val groupId: Long? = null) : RelayHistoryEffect
+    data class NavigateToRelayDetail(val relayId: Long) : RelayHistoryEffect
     data object NavigateToCreateRelay : RelayHistoryEffect
     data object NavigateToJoinRelay : RelayHistoryEffect
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : RelayHistoryEffect

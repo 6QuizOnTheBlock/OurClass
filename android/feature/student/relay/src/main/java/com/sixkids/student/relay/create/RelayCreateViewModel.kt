@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.create
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.relay.CreateRelayUseCase
@@ -9,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "D107"
 @HiltViewModel
 class RelayCreateViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
@@ -32,9 +34,10 @@ class RelayCreateViewModel @Inject constructor(
             if (uiState.value.orgId == -1){
                 init()
             }else{
+                Log.d(TAG, "newRelayClick: ${uiState.value.question} ${uiState.value.orgId}")
                 createRelayUseCase(uiState.value.orgId, uiState.value.question)
                     .onSuccess {
-                        postSideEffect(RelayCreateEffect.NavigateToRelayResult)
+                        postSideEffect(RelayCreateEffect.NavigateToRelayResult(it))
                     }.onFailure {
                         postSideEffect(RelayCreateEffect.OnShowSnackBar(SnackbarToken("이어 달리기 생성에 실패했습니다")))
                     }

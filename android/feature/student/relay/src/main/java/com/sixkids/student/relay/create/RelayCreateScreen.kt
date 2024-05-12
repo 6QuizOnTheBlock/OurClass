@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,7 +30,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun RelayCreateRoute(
     viewModel: RelayCreateViewModel = hiltViewModel(),
-    navigateToRelayResult: () -> Unit,
+    navigateToRelayResult: (Long) -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
@@ -37,9 +38,13 @@ fun RelayCreateRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            RelayCreateEffect.NavigateToRelayResult -> navigateToRelayResult()
+            is RelayCreateEffect.NavigateToRelayResult -> navigateToRelayResult(sideEffect.newRelayId)
             is RelayCreateEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.init()
     }
 
     RelayCreateScreen(

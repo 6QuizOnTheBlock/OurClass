@@ -11,6 +11,6 @@ data class RelayCreateState(
 ) : UiState
 
 sealed interface RelayCreateEffect: SideEffect {
-    data object NavigateToRelayResult : RelayCreateEffect
+    data class NavigateToRelayResult(val newRelayId: Long) : RelayCreateEffect
     data class OnShowSnackBar(val tkn : SnackbarToken) : RelayCreateEffect
 }
