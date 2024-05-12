@@ -41,20 +41,21 @@ class CreateGroupViewModel @Inject constructor(
     fun startScan() {
         bluetoothScanner.startScanning()
         viewModelScope.launch {
-            bluetoothScanner.foundDevices.collect { devices ->
-                if (devices.isEmpty()) return@collect
-//                val id = devices.last().split("-").last()
-                val id = 9L
-                if (uiState.value.selectedMembers.none { it.id == id }) {
-                    getMemberSimpleUseCase(id).onSuccess { member ->
-                        intent {
-                            copy(
-                                foundMembers = foundMembers.toMutableList().apply {
-                                    add(member)
-                                }
-                            )
-                        }
-                    }.onFailure { }
+            bluetoothScanner.foundDevices.collect { memberIds ->
+                if (memberIds.isEmpty()) return@collect
+                val newMembers = mutableListOf<MemberSimple>()
+                for (memberId in memberIds) {
+                    getMemberSimpleUseCase(memberId).onSuccess { member ->
+                        newMembers.add(member)
+                    }.onFailure {
+                        stopScan()
+                        postSideEffect(CreateGroupEffect.HandleException(it) {
+                            startScan()
+                        })
+                    }
+                }
+                intent {
+                    copy(foundMembers = newMembers)
                 }
             }
         }
@@ -80,7 +81,7 @@ class CreateGroupViewModel @Inject constructor(
 
     fun removeMember(memberId: Long) {
         intent {
-            bluetoothScanner.removeDevice("sixkids-${memberId}")
+            bluetoothScanner.removeDevice(memberId)
             copy(
                 selectedMembers = selectedMembers.toMutableList().apply {
                     removeIf { it.id == memberId }
