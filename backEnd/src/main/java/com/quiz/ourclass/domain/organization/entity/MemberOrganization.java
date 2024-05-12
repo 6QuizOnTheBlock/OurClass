@@ -1,7 +1,6 @@
 package com.quiz.ourclass.domain.organization.entity;
 
 import com.quiz.ourclass.domain.member.entity.Member;
-import com.quiz.ourclass.domain.organization.dto.request.UpdateExpRequest;
 import com.quiz.ourclass.domain.organization.dto.response.UpdateExpResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,12 +32,16 @@ public class MemberOrganization {
     int challengeCount;
     int relayCount;
 
-    public UpdateExpResponse updateExp(UpdateExpRequest updateExpRequest) {
-        this.exp += updateExpRequest.exp();
+    public UpdateExpResponse updateExp(int exp) {
+        this.exp += exp;
         return UpdateExpResponse.builder().exp(exp).build();
     }
 
     public void updateChallengeCount() {
         this.challengeCount += 1;
+    }
+
+    public void updateRelayCount() {
+        this.relayCount += 1;
     }
 }
