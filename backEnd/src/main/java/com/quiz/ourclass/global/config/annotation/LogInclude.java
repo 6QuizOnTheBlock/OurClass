@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD}) // 타겟 단위 -> 메소드 단위에만 어노테이션을 붙일 수 있도록
 @Retention(RetentionPolicy.RUNTIME) // 어노테이션이 언제까지 유효할지 설정 -> 실행 기간동안 유지 되어야 함.
-public @interface LogExclusion {
+public @interface LogInclude {
     // Log 찍기 싫은 매소드에게 붙이는 어노테이션
     // 해당 어노테이션을 붙이면 로그가 찍히지 않는다.
 }
