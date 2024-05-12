@@ -24,10 +24,21 @@ public class Relationship {
     Member member2;
     int relationPoint;
     int tagGreetingCount;
-    int groupCount;
+    int designGroupCount;
+    int freeGroupCount;
 
     public int updateTagGreetingCount() {
         this.tagGreetingCount += 1;
         return this.tagGreetingCount;
+    }
+
+    public int updateDesignGroupCount() {
+        this.designGroupCount += 1;
+        return this.designGroupCount;
+    }
+
+    public int updateFreeGroupCount() {
+        this.freeGroupCount += 1;
+        return this.freeGroupCount;
     }
 }

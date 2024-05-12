@@ -15,6 +15,8 @@ import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.notice.dto.SseDTO;
 import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
+import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
@@ -37,6 +39,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupMemberRepository groupMemberRepository;
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
+    private final RelationshipRepository relationshipRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
     private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
@@ -114,9 +117,27 @@ public class GroupServiceImpl implements GroupService {
             sseService.send(sseDTO);
         });
         groupMemberRepository.saveAll(groupMembers);
+        updateGroupCount(members, challenge.getOrganization().getId(), group.getGroupType());
         redisUtil.delete(key);
         return group.getId();
     }
+
+    private void updateGroupCount(Set<String> members, long orgId, GroupType groupType) {
+        List<Long> memberIds = members.stream().map(Long::parseLong).sorted().toList();
+        for (int i = 0; i < memberIds.size() - 1; i++) {
+            for (int j = i + 1; j < memberIds.size(); j++) {
+                Relationship relationship = relationshipRepository.findByOrganizationIdAndMember1IdAndMember2Id(
+                        orgId, memberIds.get(i), memberIds.get(j))
+                    .orElseThrow(() -> new GlobalException(ErrorCode.RELATION_NOT_FOUND));
+                if (groupType.equals(GroupType.FREE)) {
+                    relationship.updateFreeGroupCount();
+                } else {
+                    relationship.updateDesignGroupCount();
+                }
+            }
+        }
+    }
+
 
     @Transactional
     @Override
