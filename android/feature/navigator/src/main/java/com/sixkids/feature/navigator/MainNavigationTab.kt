@@ -8,7 +8,7 @@ import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.navigator.R
-import com.sixkids.student.board.navigation.StudentHomeRoute
+import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.navigation.ChallengeRoute
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.home.navigation.HomeRoute

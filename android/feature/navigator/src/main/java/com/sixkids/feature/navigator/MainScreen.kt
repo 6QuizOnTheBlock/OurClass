@@ -3,8 +3,6 @@ package com.sixkids.feature.navigator
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -38,7 +36,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
-import com.sixkids.student.board.navigation.studentHomeNavGraph
+import com.sixkids.student.home.navigation.studentHomeNavGraph
 import com.sixkids.student.main.navigation.studentOrganizationListNavGraph
 import com.sixkids.student.navigation.studentChallengeNavGraph
 import com.sixkids.student.navigation.studentGroupNavGraph

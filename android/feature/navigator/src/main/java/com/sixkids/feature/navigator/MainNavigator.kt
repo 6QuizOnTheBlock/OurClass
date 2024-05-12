@@ -14,8 +14,8 @@ import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
-import com.sixkids.student.board.navigation.StudentHomeRoute
-import com.sixkids.student.board.navigation.navigateStudentHome
+import com.sixkids.student.home.navigation.StudentHomeRoute
+import com.sixkids.student.home.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
 import com.sixkids.student.main.navigation.navigateStudentOrganizationList
 import com.sixkids.student.main.navigation.navigateStudentProfile
@@ -35,7 +35,6 @@ import com.sixkids.teacher.board.navigation.navigateChatting
 import com.sixkids.teacher.board.navigation.navigatePost
 import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.board.navigation.navigatePostDetail
-import com.sixkids.teacher.board.navigation.navigatePostWrite
 import com.sixkids.teacher.challenge.navigation.navigateChallengeCreatedResult
 import com.sixkids.teacher.challenge.navigation.navigateChallengeDetail
 import com.sixkids.teacher.challenge.navigation.navigateChallengeHistory

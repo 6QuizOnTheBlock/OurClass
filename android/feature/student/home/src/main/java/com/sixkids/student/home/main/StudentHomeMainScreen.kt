@@ -1,4 +1,4 @@
-package com.sixkids.student.board.main
+package com.sixkids.student.home.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
