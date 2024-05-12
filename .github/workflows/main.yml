@@ -6,6 +6,7 @@ on:
       - main
       - AND_develop
       - BE_develop
+      - FE_develop
 
 jobs:
   push-to-gitlab:
