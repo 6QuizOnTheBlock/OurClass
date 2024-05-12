@@ -39,4 +39,20 @@ public interface QuizControllerDocs {
         })
     @GetMapping("/{orgId}")
     public ResponseEntity<ResultResponse<?>> getQuizList(@PathVariable("orgId") long orgId);
+
+    @Operation(summary = "퀴즈 URL 생성 및 전송",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = QuizGameDTO.class))),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "요청을 보낸 회원을 찾을 수 없습니다.")
+                            
+                (message : "퀴즈를 찾을 수 없습니다.")
+                """,
+                content = @Content),
+            @ApiResponse(responseCode = "403", description = "(message : \"해당 퀴즈의 [URL]을 생성할 권한이 없습니다.\")")
+        })
+    @GetMapping("/code/{quizGameId}")
+    public ResponseEntity<ResultResponse<?>> getQuizUrl(
+        @PathVariable("quizGameId") long quizGameId);
 }
