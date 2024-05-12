@@ -8,6 +8,7 @@ import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.navigator.R
+import com.sixkids.student.board.navigation.StudentBoardRoute
 import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.navigation.ChallengeRoute
 import com.sixkids.teacher.board.navigation.BoardRoute
@@ -56,7 +57,7 @@ enum class MainNavigationTab(
         iconId = R.drawable.board,
         iconTint = Blue,
         labelId = R.string.bottom_navigation_tab_label_board,
-        route = "",
+        route = StudentBoardRoute.defaultRoute,
     ),
     STUDENT_RELAY(
         iconId = R.drawable.folded_hands,

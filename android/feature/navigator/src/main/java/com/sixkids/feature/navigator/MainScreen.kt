@@ -36,6 +36,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
+import com.sixkids.student.board.navigation.studentBoardNavGraph
 import com.sixkids.student.home.navigation.studentHomeNavGraph
 import com.sixkids.student.main.navigation.studentOrganizationListNavGraph
 import com.sixkids.student.navigation.studentChallengeNavGraph
@@ -173,6 +174,14 @@ fun MainScreen(
                 navigateJoinRelay = navigator::navigateStudentRelayJoin,
                 handleException = viewModel::handleException,
                 onBackClick = navigator::popBackStack,
+            )
+
+            studentBoardNavGraph(
+                padding = innerPadding,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToStudentBoardDetail = navigator::navigateStudentBoardDetail,
+                navigateToStudentBoardWrite = navigator::navigateStudentBoardWrite,
+                navigateBack = navigator::popBackStack,
             )
 
         }

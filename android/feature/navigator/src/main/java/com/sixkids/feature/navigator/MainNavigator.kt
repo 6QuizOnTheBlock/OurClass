@@ -14,6 +14,10 @@ import com.sixkids.feature.signin.navigation.SignInRoute
 import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
+import com.sixkids.student.board.navigation.StudentBoardRoute
+import com.sixkids.student.board.navigation.navigateStudentBoard
+import com.sixkids.student.board.navigation.navigateStudentBoardDetail
+import com.sixkids.student.board.navigation.navigateStudentBoardWrite
 import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.home.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
@@ -89,7 +93,7 @@ class MainNavigator(
             MainNavigationTab.MANAGE_CLASS -> navController.navigateManageClass(teacherNavOptions)
             // 학생 바텀 네비게이션 탭
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
-            MainNavigationTab.STUDENT_BOARD -> {}
+            MainNavigationTab.STUDENT_BOARD -> navController.navigateStudentBoard(studentNavOptions)
             MainNavigationTab.STUDENT_RELAY -> navController.navigateStudentRelayHistory(studentNavOptions)
             MainNavigationTab.STUDENT_CHALLENGE -> navController.navigateStudentChallengeHistory(studentNavOptions)
         }
@@ -285,6 +289,25 @@ class MainNavigator(
 
     fun navigateChatting() {
         navController.navigateChatting()
+    }
+
+    /**
+     * Student Board Navigation
+     */
+    fun navigateStudentBoard() {
+        navController.navigate(StudentBoardRoute.defaultRoute) {
+            popUpTo(navController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
+
+    fun navigateStudentBoardWrite() {
+        navController.navigateStudentBoardWrite()
+    }
+
+    fun navigateStudentBoardDetail(postId: Long) {
+        navController.navigateStudentBoardDetail(postId)
     }
 
     @Composable
