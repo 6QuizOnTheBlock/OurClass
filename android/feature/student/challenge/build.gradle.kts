@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(libs.bundles.paging)
     implementation(projects.core.bluetooth)
+    implementation(libs.okhttp.eventsource)
 }
