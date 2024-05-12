@@ -16,6 +16,8 @@ public enum ErrorCode {
     PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 입력 값입니다."),
     ANOTHER_AUTH_ERROR(HttpStatus.UNAUTHORIZED, "토큰 외의 Auth 에러입니다."),
+    TEACHER_CAN_NOT_REPORT(HttpStatus.FORBIDDEN, "단체 관리자는 신고할 수 없습니다."),
+
 
     //member
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
