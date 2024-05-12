@@ -32,6 +32,7 @@ fun JoinGroupRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.connectSse()
         viewModel.loadUserInfo()
         viewModel.startAdvertise()
     }

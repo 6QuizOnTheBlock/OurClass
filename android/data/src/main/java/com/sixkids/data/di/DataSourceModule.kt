@@ -18,6 +18,8 @@ import com.sixkids.data.repository.post.remote.PostRemoteDataSource
 import com.sixkids.data.repository.post.remote.PostRemoteDataSourceImpl
 import com.sixkids.data.repository.relay.remote.RelayRemoteDataSource
 import com.sixkids.data.repository.relay.remote.RelayRemoteDataSourceImpl
+import com.sixkids.data.repository.sse.remote.SseDataSource
+import com.sixkids.data.repository.sse.remote.SseDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -40,7 +42,7 @@ abstract class DataSourceModule {
     abstract fun bindChallengeDataSource(
         challengeRemoteDataSource: ChallengeRemoteDataSourceImpl
     ): ChallengeRemoteDataSource
-  
+
     @Binds
     abstract fun bindOrganizationRemoteDataSource(
         organizationRemoteDataSource: OrganizationRemoteDataSourceImpl
@@ -60,7 +62,7 @@ abstract class DataSourceModule {
     abstract fun bindCommentRemoteDataSource(
         commentRemoteDataSource: CommentRemoteDataSourceImpl
     ): CommentRemoteDataSource
-  
+
     @Binds
     abstract fun bindChattingRemoteDataSource(
         chattingRemoteDataSource: ChattingRemoteDataSourceImpl
@@ -70,4 +72,9 @@ abstract class DataSourceModule {
     abstract fun bindRelayRemoteDataSource(
         relayRemoteDataSource: RelayRemoteDataSourceImpl
     ): RelayRemoteDataSource
+
+    @Binds
+    abstract fun bindSseDataSource(
+        sseDataSource: SseDataSourceImpl
+    ): SseDataSource
 }
