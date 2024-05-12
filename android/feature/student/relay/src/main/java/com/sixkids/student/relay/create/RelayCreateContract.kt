@@ -7,6 +7,7 @@ import com.sixkids.ui.base.UiState
 data class RelayCreateState(
     val isLoading: Boolean = false,
     val question: String = "",
+    val orgId: Int = -1
 ) : UiState
 
 sealed interface RelayCreateEffect: SideEffect {

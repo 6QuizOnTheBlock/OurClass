@@ -15,4 +15,6 @@ interface RelayRepository {
     suspend fun getRunningRelay(organizationId: Long): RunningRelay
 
     suspend fun getRelayDetail(relayId: Long): RelayDetail
+
+    suspend fun createRelay(organizationId: Int, question: String): Long
 }

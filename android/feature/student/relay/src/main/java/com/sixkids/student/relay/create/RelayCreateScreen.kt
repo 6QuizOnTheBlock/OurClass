@@ -92,8 +92,7 @@ fun RelayCreateScreen(
             UlbanFilledButton(
                 text = stringResource(R.string.relay_create_create),
                 onClick = { onNewRelayClick() },
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier.fillMaxWidth())
         }
     }
 }

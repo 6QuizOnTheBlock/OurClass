@@ -1,6 +1,7 @@
 package com.sixkids.data.repository.relay.remote
 
 import com.sixkids.data.api.RelayService
+import com.sixkids.data.model.request.RelayCreateRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.model.RelayDetail
 import com.sixkids.model.RunningRelay
@@ -14,6 +15,10 @@ class RelayRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getRelayDetail(relayId: Long): RelayDetail {
         return relayService.getRelayDetail(relayId).getOrThrow().data.toModel()
+    }
+
+    override suspend fun createRelay(organizationId: Int, question: String): Long {
+        return relayService.createRelay(RelayCreateRequest(organizationId, question)).getOrThrow().data
     }
 
 }
