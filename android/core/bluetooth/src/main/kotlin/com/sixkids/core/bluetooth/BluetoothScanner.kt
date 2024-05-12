@@ -6,10 +6,16 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
+import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import com.sixkids.core.bluetooth.BluetoothServer.Companion.ULBAN_UUID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import java.nio.ByteBuffer
+import java.util.UUID
+
+private const val TAG = "D107 ble"
 
 class BluetoothScanner(context: Context) {
     private val bluetooth = context.getSystemService(Context.BLUETOOTH_SERVICE)
@@ -19,7 +25,7 @@ class BluetoothScanner(context: Context) {
         get() = bluetooth.adapter.bluetoothLeScanner
 
     val isScanning = MutableStateFlow(false)
-    val foundDevices = MutableStateFlow<List<String>>(emptyList())
+    val foundDevices = MutableStateFlow<List<Long>>(emptyList())
 
     private val scanCallback = object : ScanCallback() {
         @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -27,10 +33,13 @@ class BluetoothScanner(context: Context) {
             super.onScanResult(callbackType, result)
             result ?: return
 
-            //이름만 가지고 조회
-            if (!foundDevices.value.contains(result.device.name) && ((result.device.name)?:"").startsWith("sixkids-")) {
-                foundDevices.update { it + result.device.name }
-                Log.d("D107", "onScanResult: ${foundDevices.value}")
+            val bytes = result.scanRecord?.getServiceData(ParcelUuid(UUID.fromString(ULBAN_UUID)))
+
+            bytes?.let {
+                val memberId = ByteBuffer.wrap(bytes).long
+                if (!foundDevices.value.contains(memberId)) {
+                    foundDevices.update { it + memberId }
+                }
             }
         }
 
@@ -40,6 +49,7 @@ class BluetoothScanner(context: Context) {
 
         override fun onScanFailed(errorCode: Int) {
             super.onScanFailed(errorCode)
+            Log.d(TAG, "onScanFailed: 실패")
             isScanning.value = false
         }
     }
@@ -56,8 +66,8 @@ class BluetoothScanner(context: Context) {
         isScanning.value = false
     }
 
-    fun removeDevice(deviceName: String) {
-        foundDevices.update { it - deviceName }
+    fun removeDevice(memberId: Long) {
+        foundDevices.update { it - memberId }
     }
 
 }
