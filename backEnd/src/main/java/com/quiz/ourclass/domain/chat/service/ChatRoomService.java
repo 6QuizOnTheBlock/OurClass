@@ -8,5 +8,5 @@ public interface ChatRoomService {
 
     void exitChatRoom(Long roomId);
 
-    void isMemberAuthorizedToJoinRoom(Long userId, Long chatRoomId);
+    void isMemberAuthorizedToJoinRoom(Long memberId, Long chatRoomId);
 }
