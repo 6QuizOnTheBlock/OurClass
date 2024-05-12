@@ -61,7 +61,7 @@ public class SecurityConfig {
         "/health-check",
         "/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/swagger-resources/**",
         "/webjars/**", "/error", "/members/", "/members/sign-in", "/members/developer-At",
-        "/members/default-image"
+        "/members/default-image", "/members/start"
     };
 
     private final String[] teacherList = {};
@@ -141,7 +141,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOriginPatterns(
+            List.of("http://localhost:5173", "https://k10d107.p.ssafy.io"));
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 자격 증명 허용 설정

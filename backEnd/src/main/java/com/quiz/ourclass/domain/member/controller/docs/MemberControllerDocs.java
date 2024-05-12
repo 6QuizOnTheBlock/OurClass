@@ -6,6 +6,7 @@ import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
+import com.quiz.ourclass.domain.quiz.dto.request.QuizStartRequest;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -106,4 +108,10 @@ public interface MemberControllerDocs {
 
         @PathVariable(value = "id") Long id
     );
+
+    @PostMapping("/start")
+    public ResponseEntity<ResultResponse<?>> certificatingUser(QuizStartRequest request);
+
+    @DeleteMapping("/")
+    public ResponseEntity<ResultResponse<?>> deleteMe();
 }

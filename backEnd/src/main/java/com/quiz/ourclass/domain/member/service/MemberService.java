@@ -19,6 +19,8 @@ import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.member.repository.DefaultImageRepository;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.member.repository.RefreshRepository;
+import com.quiz.ourclass.domain.quiz.dto.request.QuizStartRequest;
+import com.quiz.ourclass.domain.quiz.dto.response.QuizStartResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -184,6 +186,29 @@ public class MemberService {
         }
         return memberRepository.save(member);
     }
+
+
+    public QuizStartResponse certificatingUser(QuizStartRequest request) {
+
+        // 1. [UUID]를 이용해 해당 퀴즈 방이 살아있는 방인지 확인 합니다.
+        return Optional.ofNullable(redisUtil.getQuizGame(request.uuid()))
+            .map(quizGameId -> {
+                // 2. UUID가 유효하면 이메일로 회원 정보를 조회합니다.
+                return memberRepository.findByEmail(request.email())
+                    .map(member -> {
+                        // 3. 회원 정보가 있으면 JWT 토큰을 생성합니다.
+                        String accessToken = jwtUtil.createToken(member.getId(),
+                            member.getRole().name(), true);
+                        // 4. 응답 객체 생성 후 반환
+                        return memberMapper.memberToQuizStartResponse(Long.parseLong(quizGameId),
+                            member, accessToken);
+                    })
+                    .orElseThrow(() -> new GlobalException(
+                        ErrorCode.MEMBER_NOT_FOUND)); // 회원 정보가 없는 경우 예외 처리
+            })
+            .orElse(null); // [UUID]가 유효하지 않은 경우 null 반환
+    }
+
 
     public void deleteMe() {
         // 1. 멤버 특정
