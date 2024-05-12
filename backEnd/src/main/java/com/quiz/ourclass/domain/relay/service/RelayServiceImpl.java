@@ -21,8 +21,12 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import com.quiz.ourclass.global.util.scheduler.SchedulingService;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +40,7 @@ public class RelayServiceImpl implements RelayService {
     private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
+    private final SchedulingService schedulingService;
 
 
     @Transactional
@@ -136,7 +141,9 @@ public class RelayServiceImpl implements RelayService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
         memberOrganization.updateRelayCount();
         memberOrganizationRepository.save(memberOrganization);
-        //TODO: 타임아웃 스케줄러 체크
+
+        schedulingService.scheduleTask(relayMember, this::relayClosing,
+            relayMember.getReceiveTime().plusDays(ConstantUtil.RELAY_TIMEOUT_DAY));
         return ReceiveRelayResponse.builder()
             .senderName(currentRunner.getCurMember().getName())
             .question(currentRunner.getQuestion())
@@ -159,5 +166,32 @@ public class RelayServiceImpl implements RelayService {
         return SendRelayResponse.builder()
             .prevMemberName(prevRelayMember.getCurMember().getName())
             .prevQuestion(prevRelayMember.getQuestion()).build();
+    }
+
+    protected void relayClosing(RelayMember relayMember) {
+        Relay relay = relayMember.getRelay();
+        relay.setEndStatus(true);
+        relayRepository.save(relay);
+        relayMember.setEndStatus(true);
+        Member curMember = relayMember.getCurMember();
+        MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
+            relay.getOrganization(), curMember).orElseThrow();
+        memberOrganization.updateExp(ConstantUtil.RELAY_DEMERIT);
+        relayMemberRepository.save(relayMember);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    protected void challengeClosingReload() {
+        List<Relay> relays = relayRepository.findAllByEndStatusIsFalse();
+        relays.forEach(relay -> {
+            RelayMember lastRunner = relay.getLastRunner();
+            if (lastRunner.getReceiveTime().plusDays(ConstantUtil.RELAY_TIMEOUT_DAY)
+                .isBefore(LocalDateTime.now())) {
+                relayClosing(lastRunner);
+            } else {
+                schedulingService.scheduleTask(lastRunner, this::relayClosing,
+                    lastRunner.getReceiveTime().plusDays(ConstantUtil.RELAY_TIMEOUT_DAY));
+            }
+        });
     }
 }
