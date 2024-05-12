@@ -1,20 +1,88 @@
 package com.sixkids.student.relay.history
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.relay.GetRelayHistoryUseCase
+import com.sixkids.domain.usecase.relay.GetRunningRelayUseCase
+import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
+import com.sixkids.model.NotFoundException
+import com.sixkids.model.Relay
 import com.sixkids.model.RunningRelay
+import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class RelayHistoryViewModel @Inject constructor(
+    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val loadUserInfoUseCase: LoadUserInfoUseCase,
+    private val getRunningRelayUseCase: GetRunningRelayUseCase,
+    private val getRelayHistoryUseCase: GetRelayHistoryUseCase
 ) : BaseViewModel<RelayHistoryState, RelayHistoryEffect>(RelayHistoryState())
 {
+    private var orgId = 0L
+    private lateinit var userInfo: UserInfo
+    var relayHistory: Flow<PagingData<Relay>>? = null
+    private var isFirstVisited: Boolean = true
+
     fun initData() = viewModelScope.launch {
-        intent { copy(runningRelay = null) }
+        if (isFirstVisited.not()) return@launch
+        isFirstVisited = false
+
+        intent { copy(isLoading = true) }
+
+        getSelectedOrganizationIdUseCase().onSuccess {
+            orgId = it.toLong()
+        }.onFailure {
+            //todo
+        }
+
+        loadUserInfoUseCase().onSuccess {
+            userInfo = it
+        }.onFailure {
+            //todo
+        }
+
+        getRunningRelay()
+        getRelayHistory()
+
+        intent { copy(isLoading = false) }
     }
+
+    private fun getRunningRelay() {
+        viewModelScope.launch {
+            getRunningRelayUseCase(organizationId = orgId)
+                .onSuccess {
+                    intent { copy(runningRelay = it) }
+                }.onFailure {
+                    if (it is NotFoundException){
+                        intent { copy(runningRelay = null) }
+                    }else{
+                        postSideEffect(
+                            RelayHistoryEffect.HandleException(
+                                it,
+                                ::getRunningRelay
+                            )
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun getRelayHistory() {
+        viewModelScope.launch {
+            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
+                .cachedIn(viewModelScope)
+        }
+    }
+
+
 
     companion object{
         val runningRelayMyTurn = RunningRelay(
@@ -25,7 +93,6 @@ class RelayHistoryViewModel @Inject constructor(
             endTime = LocalDateTime.now(),
             curMemberNickname = "홍유준",
             myTurnStatus = true,
-            lastTurnMemberName = "오하빈"
         )
 
         val runningRelayNotMyTurn = RunningRelay(
@@ -36,7 +103,6 @@ class RelayHistoryViewModel @Inject constructor(
             endTime = LocalDateTime.now(),
             curMemberNickname = "홍유준",
             myTurnStatus = false,
-            lastTurnMemberName = "오하빈"
         )
     }
 }

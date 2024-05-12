@@ -6,6 +6,7 @@ import com.sixkids.data.api.ChattingService
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.api.PostService
+import com.sixkids.data.api.RelayService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.api.TokenService
 import dagger.Module
@@ -81,6 +82,14 @@ object ServiceModule {
         @NetworkModule.AuthRetrofit retrofit: Retrofit
     ): ChattingService {
         return retrofit.create(ChattingService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRelayService(
+        @NetworkModule.AuthRetrofit retrofit: Retrofit
+    ): RelayService {
+        return retrofit.create(RelayService::class.java)
     }
 
 }

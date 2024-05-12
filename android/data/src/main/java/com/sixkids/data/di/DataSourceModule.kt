@@ -16,6 +16,8 @@ import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourc
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourceImpl
 import com.sixkids.data.repository.post.remote.PostRemoteDataSource
 import com.sixkids.data.repository.post.remote.PostRemoteDataSourceImpl
+import com.sixkids.data.repository.relay.remote.RelayRemoteDataSource
+import com.sixkids.data.repository.relay.remote.RelayRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -63,4 +65,9 @@ abstract class DataSourceModule {
     abstract fun bindChattingRemoteDataSource(
         chattingRemoteDataSource: ChattingRemoteDataSourceImpl
     ): ChattingRemoteDataSource
+
+    @Binds
+    abstract fun bindRelayRemoteDataSource(
+        relayRemoteDataSource: RelayRemoteDataSourceImpl
+    ): RelayRemoteDataSource
 }
