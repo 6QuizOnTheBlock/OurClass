@@ -23,7 +23,7 @@ public class ChatFilter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    long id;
     @ManyToOne(fetch = FetchType.LAZY)
     Organization organization;
     String badWord;
