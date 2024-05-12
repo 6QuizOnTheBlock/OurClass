@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.item.UlbanRelayItem
@@ -73,7 +74,7 @@ fun RelayRoute(
 
     RelayHistoryScreen(
         uiState = uiState,
-        relayItems = null,
+        relayItems = viewModel.relayHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { relayId ->
 //            viewModel.navigateRelayDetail(relayId)
         },
@@ -141,7 +142,7 @@ fun RelayHistoryScreen(
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-                if (relayItems == null) {
+                if (relayItems == null || relayItems.itemCount == 0) {
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         modifier = Modifier

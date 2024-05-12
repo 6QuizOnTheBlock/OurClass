@@ -1,13 +1,17 @@
 package com.sixkids.student.relay.history
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.relay.GetRelayHistoryUseCase
 import com.sixkids.domain.usecase.relay.GetRunningRelayUseCase
-import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.model.NotFoundException
+import com.sixkids.model.Relay
 import com.sixkids.model.RunningRelay
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -16,11 +20,17 @@ import javax.inject.Inject
 class RelayHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
     private val getRunningRelayUseCase: GetRunningRelayUseCase,
+    private val getRelayHistoryUseCase: GetRelayHistoryUseCase
 ) : BaseViewModel<RelayHistoryState, RelayHistoryEffect>(RelayHistoryState())
 {
-    var orgId = 0L
+    private var orgId = 0L
+    var relayHistory: Flow<PagingData<Relay>>? = null
+    private var isFirstVisited: Boolean = true
 
     fun initData() = viewModelScope.launch {
+        if (isFirstVisited.not()) return@launch
+        isFirstVisited = false
+
         intent { copy(isLoading = true) }
 
         getSelectedOrganizationIdUseCase().onSuccess {
@@ -57,9 +67,8 @@ class RelayHistoryViewModel @Inject constructor(
 
     private fun getRelayHistory() {
         viewModelScope.launch {
-            intent { copy(isLoading = true) }
-            //todo
-            intent { copy(isLoading = false) }
+            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt())
+                .cachedIn(viewModelScope)
         }
     }
 
