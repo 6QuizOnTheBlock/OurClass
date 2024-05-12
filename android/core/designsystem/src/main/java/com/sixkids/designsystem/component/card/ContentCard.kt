@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -97,7 +96,13 @@ fun ContentCardViewPreview() {
 @Composable
 fun RankCardViewPreview() {
     UlbanTheme {
-        RankCard()
+        ContentVerticalCard(
+            cardModifier = Modifier
+                .padding(20.dp)
+                .aspectRatio(1f),
+            imageDrawable = R.drawable.rank,
+            text = "랭킹"
+        )
     }
 }
 
@@ -244,16 +249,17 @@ fun RunningText(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RankCard(
-    modifier: Modifier = Modifier,
+fun ContentVerticalCard(
+    cardModifier: Modifier = Modifier,
+    cardColor: Color = Yellow,
+    imageDrawable: Int = R.drawable.rank,
+    text: String = "랭킹",
     onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier
-            .height(160.dp)
-            .aspectRatio(1f),
+        modifier = cardModifier,
         colors = CardDefaults.cardColors(
-            containerColor = Yellow
+            containerColor = cardColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
@@ -269,11 +275,11 @@ fun RankCard(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.rank),
+                painter = painterResource(id = imageDrawable),
                 contentDescription = null,
             )
             Text(
-                text = "랭킹",
+                text = text,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = npsFont
