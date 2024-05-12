@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,6 +33,13 @@ fun JoinGroupRoute(
 
     LaunchedEffect(Unit) {
         viewModel.loadUserInfo()
+        viewModel.startAdvertise()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.stopAdvertise()
+        }
     }
 
     viewModel.sideEffect.collectWithLifecycle {

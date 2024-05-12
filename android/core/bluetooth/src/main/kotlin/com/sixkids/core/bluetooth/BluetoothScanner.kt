@@ -26,6 +26,7 @@ class BluetoothScanner(context: Context) {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             result ?: return
+            Log.d("D107 결과", "onScanResult: ${result.device.name}")
 
             //이름만 가지고 조회
             if (!foundDevices.value.contains(result.device.name) && ((result.device.name)?:"").startsWith("sixkids-")) {

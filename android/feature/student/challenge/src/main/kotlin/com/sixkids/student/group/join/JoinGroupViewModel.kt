@@ -1,6 +1,7 @@
 package com.sixkids.student.group.join
 
 import androidx.lifecycle.viewModelScope
+import com.sixkids.core.bluetooth.BluetoothServer
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
 import com.sixkids.ui.base.BaseViewModel
@@ -10,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JoinGroupViewModel @Inject constructor(
+    private val bluetoothServer: BluetoothServer,
     private val loadUserInfoUseCase: LoadUserInfoUseCase
 ) : BaseViewModel<JoinGroupState, JoinGroupEffect>(JoinGroupState()) {
     fun loadUserInfo() {
@@ -29,4 +31,15 @@ class JoinGroupViewModel @Inject constructor(
             }
         }
     }
+
+    fun startAdvertise() {
+        viewModelScope.launch {
+            bluetoothServer.startAdvertising(uiState.value.member.id)
+        }
+    }
+
+    fun stopAdvertise() {
+        bluetoothServer.stopAdvertising()
+    }
+
 }
