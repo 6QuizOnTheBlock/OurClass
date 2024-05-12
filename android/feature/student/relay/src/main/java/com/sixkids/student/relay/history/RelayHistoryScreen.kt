@@ -43,7 +43,7 @@ import com.sixkids.designsystem.R as DesignSystemR
 @Composable
 fun RelayRoute(
     viewModel: RelayHistoryViewModel = hiltViewModel(),
-    navigateToDetail: (Long, Long?) -> Unit,
+    navigateToDetail: (Long) -> Unit,
     navigateToCreate: () -> Unit,
     navigateToJoin: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
@@ -58,8 +58,7 @@ fun RelayRoute(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is RelayHistoryEffect.NavigateToRelayDetail -> navigateToDetail(
-                    sideEffect.relayId,
-                    sideEffect.groupId
+                    sideEffect.relayId
                 )
 
                 is RelayHistoryEffect.NavigateToCreateRelay -> navigateToCreate()
@@ -76,7 +75,7 @@ fun RelayRoute(
         uiState = uiState,
         relayItems = viewModel.relayHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { relayId ->
-//            viewModel.navigateRelayDetail(relayId)
+            viewModel.navigateToRelayDetail(relayId)
         },
         navigateToCreate = navigateToCreate
     )

@@ -82,6 +82,9 @@ class RelayHistoryViewModel @Inject constructor(
         }
     }
 
+    fun navigateToRelayDetail(relayId: Long) = postSideEffect(
+        RelayHistoryEffect.NavigateToRelayDetail(relayId)
+    )
 
 
     companion object{

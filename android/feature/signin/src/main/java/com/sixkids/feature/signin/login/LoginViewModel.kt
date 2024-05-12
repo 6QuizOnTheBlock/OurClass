@@ -58,7 +58,7 @@ class LoginViewModel @Inject constructor(
                 }.onFailure {
                     when(it){
                         is NotFoundException -> {
-                            postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken(it.message)))
+                            postSideEffect(LoginEffect.OnShowSnackBar(SnackbarToken("회원가입을 진행 해주세요")))
                             postSideEffect(LoginEffect.NavigateToSignUp)
                         }
                         else -> {

@@ -4,14 +4,15 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.sixkids.student.relay.detail.RelayDetailRoute
 import com.sixkids.student.relay.history.RelayRoute
 
 fun NavController.navigateStudentRelayHistory(navOptions: NavOptions) {
     navigate(RelayRoute.defaultRoute, navOptions)
 }
 
-fun NavController.navigateStudentRelayDetail(relayId: Long, groupId: Long?) {
-    navigate(RelayRoute.detailRoute(relayId, groupId))
+fun NavController.navigateStudentRelayDetail(relayId: Long) {
+    navigate(RelayRoute.detailRoute(relayId))
 }
 
 fun NavController.navigateStudentRelayCreate() {
@@ -23,20 +24,26 @@ fun NavController.navigateStudentRelayJoin() {
 }
 
 fun NavGraphBuilder.studentRelayNavGraph(
-    navigateRelayDetail: (Long, Long?) -> Unit,
+    navigateRelayDetail: (Long) -> Unit,
     navigateCreateRelay: () -> Unit,
     navigateJoinRelay: () -> Unit,
-    handleException: (Throwable, () -> Unit) -> Unit,
-    onBackClick : () -> Unit
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     composable(route = RelayRoute.defaultRoute)
     {
         RelayRoute(
-            navigateToDetail = { relayId, groupId ->
-                navigateRelayDetail(relayId, groupId)
+            navigateToDetail = { relayId ->
+                navigateRelayDetail(relayId)
             },
             navigateToCreate = navigateCreateRelay,
             navigateToJoin = navigateJoinRelay,
+            handleException = handleException
+        )
+    }
+
+    composable(route = RelayRoute.detailRoute)
+    {
+        RelayDetailRoute(
             handleException = handleException
         )
     }
@@ -44,12 +51,11 @@ fun NavGraphBuilder.studentRelayNavGraph(
 
 object RelayRoute {
     const val RELAY_ID_NAME = "relayId"
-    const val RELAY_TITLE_NAME = "relayTitle"
 
     const val defaultRoute = "relay-history"
     const val createRoute = "relay-create"
-    const val detailRoute = "relay-detail?relayId={$RELAY_ID_NAME}&groupId={${RELAY_TITLE_NAME}}"
+    const val detailRoute = "relay-detail?relayId={$RELAY_ID_NAME}"
     const val joinRoute = "relay-join"
 
-    fun detailRoute(relayId: Long, groupId: Long? = null) = "relay-detail?relayId=$relayId&groupId=$groupId"
+    fun detailRoute(relayId: Long) = "relay-detail?relayId=$relayId"
 }

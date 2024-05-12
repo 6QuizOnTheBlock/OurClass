@@ -8,4 +8,6 @@
     <string name="relay_answer_not_myturn">여기를 터치해서\n이어 달리기를 이어 받아 봐요!</string>
     <string name="relay_relay_count">지금까지  %d번 이어 달리기를 진행했어요</string>
     <string name="relay_no_history">기록이 없어요</string>
+    <string name="relay_detail_last_member">%s 학생이 폭탄을 터트렸어요</string>
+    <string name="relay_detail_total_count">지금까지 %d번 이어 달리기를 진행했어요</string>
 </resources>

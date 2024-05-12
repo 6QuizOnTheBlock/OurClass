@@ -245,8 +245,8 @@ class MainNavigator(
         }
     }
 
-    fun navigateStudentRelayDetail(relayId: Long, groupId: Long?) {
-        navController.navigateStudentRelayDetail(relayId, groupId)
+    fun navigateStudentRelayDetail(relayId: Long) {
+        navController.navigateStudentRelayDetail(relayId)
     }
 
     fun navigateStudentRelayCreate() {
