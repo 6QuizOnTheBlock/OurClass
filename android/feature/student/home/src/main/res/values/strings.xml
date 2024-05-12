@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="student_home_main_announce">알림장</string>
+
+    <string name="student_announce_no_item">알림장이 없어용!</string>
+
+    <string name="student_announce_detail_comment_hint">댓글을 입력하세요</string>
+</resources>
