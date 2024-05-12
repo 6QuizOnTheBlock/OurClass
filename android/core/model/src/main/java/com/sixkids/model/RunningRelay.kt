@@ -9,6 +9,5 @@ data class RunningRelay(
     val startTime: LocalDateTime = LocalDateTime.now(),
     val endTime: LocalDateTime = LocalDateTime.now(),
     val curMemberNickname: String = "",
-    val myTurnStatus : Boolean = false,
-    val lastTurnMemberName: String = ""
+    val myTurnStatus : Boolean = false
 )

@@ -30,6 +30,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.item.UlbanRelayItem
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -172,6 +173,9 @@ fun RelayHistoryScreen(
                     }
                 }
             }
+        }
+        if (uiState.isLoading) {
+            LoadingScreen()
         }
     }
 }
