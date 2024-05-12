@@ -41,7 +41,7 @@ fun StudentMainInfo(
     classString: String = "",
     exp: Int = 0
 ) {
-    val height = 120.dp
+    val height = 80.dp
 
     Card(
         modifier = modifier
