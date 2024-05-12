@@ -130,11 +130,14 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Transactional
     @Override
     public void confirmReport(long id, ReportType reportType) {
-        //TODO: 해당 학급 선생권한 체크 필요
         Report report = reportRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.REPORT_NOW_FOUND));
-        report.setAcceptStatus(reportType);
+        Member loginMember = accessUtil.getMember().orElseThrow();
         Organization organization = report.getChallengeGroup().getChallenge().getOrganization();
+        if (accessUtil.isOrganizationManager(loginMember, organization.getId()).isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_MANAGER);
+        }
+        report.setAcceptStatus(reportType);
         if (reportType.equals(ReportType.APPROVE)) {
             report.getChallengeGroup().getGroupMembers().forEach(groupMember -> {
                 Member member = groupMember.getMember();
@@ -142,6 +145,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                     organization, member).orElseThrow(
                     () -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
                 memberOrganization.updateChallengeCount();
+                memberOrganization.updateExp(report.getChallengeGroup().getChallenge().getReward());
                 memberOrganizationRepository.save(memberOrganization);
             });
         }
@@ -209,6 +213,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         challenges.forEach(challenge -> {
             if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
                 challengeClosing(challenge);
+            } else {
+                schedulingService.scheduleTask(challenge, this::challengeClosing,
+                    challenge.getEndTime());
             }
         });
     }

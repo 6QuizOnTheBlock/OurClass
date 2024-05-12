@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.challenge.controller;
 
+import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +22,7 @@ public interface GroupControllerDocs {
             + "임시 대기방의 ID (Redis KEY) 응답.",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = String.class, description = "대기방 KEY")))
+                content = @Content(schema = @Schema(implementation = MatchingRoomResponse.class)))
         })
     @PostMapping("/groups/matchingroom")
     ResponseEntity<ResultResponse<?>> createMatchingRoom(
@@ -53,7 +54,9 @@ public interface GroupControllerDocs {
             + "전체 멤버에게 SSE(CREATE_GROUP) 전송",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = Long.class, description = "생성된 그룹 id")))
+                content = @Content(schema = @Schema(implementation = Long.class, description = "생성된 그룹 id"))),
+            @ApiResponse(responseCode = "400", description = "(message : \"그룹 최소 인원이 부족합니다.\")", content = @Content)
+
         })
     @PostMapping("/groups")
     ResponseEntity<ResultResponse<?>> createGroup(

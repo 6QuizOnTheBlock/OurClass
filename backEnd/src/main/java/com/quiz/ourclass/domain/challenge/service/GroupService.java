@@ -1,8 +1,10 @@
 package com.quiz.ourclass.domain.challenge.service;
 
+import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
+
 public interface GroupService {
 
-    String createMatchingRoom(long challengeId);
+    MatchingRoomResponse createMatchingRoom(long challengeId);
 
     boolean joinMatchingRoom(String key, boolean joinStatus);
 
