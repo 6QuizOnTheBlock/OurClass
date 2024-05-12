@@ -1,9 +1,10 @@
-package com.sixkids.domain.repository
+package com.sixkids.data.repository.sse.remote
 
 import com.sixkids.domain.sse.SseEventListener
 
-interface SseRepository {
-    suspend fun connectSse()
+interface SseDataSource {
+
+    fun connectSse()
 
     fun setEventListener(listener: SseEventListener)
 }

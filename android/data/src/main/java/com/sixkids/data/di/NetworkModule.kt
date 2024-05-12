@@ -1,7 +1,5 @@
 package com.sixkids.data.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.launchdarkly.eventsource.ConnectStrategy
 import com.launchdarkly.eventsource.EventSource
 import com.launchdarkly.eventsource.background.BackgroundEventSource
@@ -10,8 +8,6 @@ import com.sixkids.data.network.RefreshTokenInterceptor
 import com.sixkids.data.network.SseEventHandler
 import com.sixkids.data.network.TokenAuthenticator
 import com.sixkids.data.network.TokenInterceptor
-import com.sixkids.data.repository.TokenRepositoryImpl
-import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSource
 import com.sixkids.data.util.LocalDateAdapter
 import com.sixkids.data.util.LocalDateTimeAdapter
 import com.sixkids.data.util.UnitJsonAdapter
@@ -22,7 +18,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -176,12 +171,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideSseEventHandler(): SseEventHandler = SseEventHandler()
+
+    @Provides
+    @Singleton
     fun provideEventSource(
         tokenRepositoryImpl: TokenRepository,
+        sseEventHandler: SseEventHandler
     ):BackgroundEventSource {
         val accessToken = runBlocking { tokenRepositoryImpl.getAccessToken() }
         return BackgroundEventSource.Builder(
-            SseEventHandler(),
+            sseEventHandler,
             EventSource.Builder(
                 ConnectStrategy.http(URL(BASE_URL+"sse/subscribe"))
                     .header(

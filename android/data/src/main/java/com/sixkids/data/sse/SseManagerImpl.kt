@@ -1,15 +1,17 @@
-package com.sixkids.data.repository.sse
+package com.sixkids.data.sse
 
 import com.sixkids.data.repository.sse.remote.SseDataSource
-import com.sixkids.domain.repository.SseRepository
 import com.sixkids.domain.sse.SseEventListener
+import com.sixkids.domain.sse.SseManager
 import javax.inject.Inject
 
-class SseRepositoryImpl @Inject constructor(
+class SseManagerImpl @Inject constructor(
     private val sseDataSource: SseDataSource
-): SseRepository {
-    override suspend fun connectSse() = sseDataSource.connectSse()
+): SseManager {
+    override fun connect() = sseDataSource.connectSse()
+
     override fun setEventListener(listener: SseEventListener) {
         sseDataSource.setEventListener(listener)
     }
+
 }
