@@ -1,6 +1,5 @@
 package com.sixkids.student.relay.detail
 
-import com.sixkids.model.Relay
 import com.sixkids.model.RelayDetail
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState

@@ -27,8 +27,7 @@ fun NavGraphBuilder.studentRelayNavGraph(
     navigateRelayDetail: (Long) -> Unit,
     navigateCreateRelay: () -> Unit,
     navigateJoinRelay: () -> Unit,
-    handleException: (Throwable, () -> Unit) -> Unit,
-    onBackClick : () -> Unit
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
     composable(route = RelayRoute.defaultRoute)
     {

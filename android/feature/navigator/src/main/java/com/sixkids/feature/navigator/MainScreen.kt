@@ -173,8 +173,7 @@ fun MainScreen(
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,
                 navigateJoinRelay = navigator::navigateStudentRelayJoin,
-                handleException = viewModel::handleException,
-                onBackClick = navigator::popBackStack,
+                handleException = viewModel::handleException
             )
 
         }
