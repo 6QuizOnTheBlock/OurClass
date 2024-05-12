@@ -42,7 +42,7 @@ public class SseServiceImpl implements SseService {
         sendSse(emitter, emitterId, emitterId, sseDTO);
 
         // 클라이언트가 미수신한 Event 전송
-        if (!lastEventId.isEmpty()) {
+        if (lastEventId != null && !lastEventId.isEmpty()) {
             sendLostData(lastEventId, String.valueOf(loginUserId), emitterId, emitter);
         }
 
