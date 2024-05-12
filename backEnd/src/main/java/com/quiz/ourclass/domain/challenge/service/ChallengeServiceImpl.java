@@ -145,6 +145,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                     organization, member).orElseThrow(
                     () -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
                 memberOrganization.updateChallengeCount();
+                memberOrganization.updateExp(report.getChallengeGroup().getChallenge().getReward());
                 memberOrganizationRepository.save(memberOrganization);
             });
         }
