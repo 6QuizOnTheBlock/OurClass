@@ -1,7 +1,6 @@
 package com.sixkids.domain.repository
 
 import androidx.paging.PagingData
-import com.sixkids.model.Challenge
 import com.sixkids.model.Relay
 import com.sixkids.model.RunningRelay
 import kotlinx.coroutines.flow.Flow

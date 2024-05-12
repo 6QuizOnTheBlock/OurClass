@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sixkids.data.api.RelayService
 import com.sixkids.data.model.response.toModel
-import com.sixkids.data.repository.challenge.remote.ChallengeHistoryPagingSource
 import com.sixkids.model.Relay
 import javax.inject.Inject
 

@@ -1,6 +1,5 @@
 package com.sixkids.data.model.response
 
-import com.sixkids.model.Challenge
 import com.sixkids.model.Relay
 import java.time.LocalDateTime
 
