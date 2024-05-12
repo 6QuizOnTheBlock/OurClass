@@ -209,6 +209,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         challenges.forEach(challenge -> {
             if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
                 challengeClosing(challenge);
+            } else {
+                schedulingService.scheduleTask(challenge, this::challengeClosing,
+                    challenge.getEndTime());
             }
         });
     }
