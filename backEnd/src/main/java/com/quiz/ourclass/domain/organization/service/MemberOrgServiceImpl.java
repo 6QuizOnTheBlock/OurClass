@@ -134,7 +134,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
         Member loginMember = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         long member1 = Math.min(loginMember.getId(), tagGreetingRequest.memberId());
-        long member2 = Math.min(tagGreetingRequest.memberId(), loginMember.getId());
+        long member2 = Math.max(loginMember.getId(), tagGreetingRequest.memberId());
         Relationship relationship = relationshipRepository.findByOrganizationIdAndMember1IdAndMember2Id(
                 tagGreetingRequest.organizationId(), member1, member2)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELATION_NOT_FOUND));
