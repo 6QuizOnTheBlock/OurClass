@@ -8,4 +8,11 @@ import javax.inject.Inject
 class RelayCreateViewModel @Inject constructor(
 
 ): BaseViewModel<RelayCreateState, RelayCreateEffect>(RelayCreateState()){
+    fun newRelayClick() {
+
+    }
+
+    fun updateQuestion(question: String) {
+        intent { copy(question = question) }
+    }
 }
