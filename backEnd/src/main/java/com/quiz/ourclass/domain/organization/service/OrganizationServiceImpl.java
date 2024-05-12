@@ -15,9 +15,11 @@ import com.quiz.ourclass.domain.organization.dto.response.OrganizationSummaryRes
 import com.quiz.ourclass.domain.organization.dto.response.UpdateOrganizationResponse;
 import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
+import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.mapper.OrganizationMapper;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -41,6 +43,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final PostRepository postRepository;
+    private final RelationshipRepository relationshipRepository;
     private final OrganizationMapper organizationMapper;
     private final MemberMapper memberMapper;
     private final RedisUtil redisUtil;
@@ -128,7 +131,28 @@ public class OrganizationServiceImpl implements OrganizationService {
             .organization(organization)
             .build();
         memberOrganizationRepository.save(memberOrganization);
+        makeRelationships(organization, member);
         return organization.getId();
+    }
+
+    private void makeRelationships(Organization organization, Member member) {
+        List<MemberOrganization> orgMembers = memberOrganizationRepository.findByOrganization(
+            organization);
+        for (MemberOrganization orgMember : orgMembers) {
+            if (orgMember.getMember().equals(member)) {
+                continue;
+            }
+            Member member1 =
+                member.getId() < orgMember.getMember().getId() ? member : orgMember.getMember();
+            Member member2 =
+                member.getId() > orgMember.getMember().getId() ? member : orgMember.getMember();
+            Relationship relationship = Relationship.builder()
+                .organization(organization)
+                .member1(member1)
+                .member2(member2)
+                .build();
+            relationshipRepository.save(relationship);
+        }
     }
 
     @Override
