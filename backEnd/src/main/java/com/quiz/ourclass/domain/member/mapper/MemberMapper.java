@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
 import com.quiz.ourclass.domain.member.entity.DefaultImage;
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.quiz.dto.response.QuizStartResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -43,5 +44,9 @@ public interface MemberMapper {
 
     @Mapping(source = "profileImage", target = "photo")
     MemberSimpleDTO memberToMemberSimpleDTO(Member member);
+
+    @Mapping(source = "member.profileImage", target = "photo")
+    @Mapping(source = "member.id", target = "id")
+    QuizStartResponse memberToQuizStartResponse(long quizGameId, Member member, String accessToken);
 
 }

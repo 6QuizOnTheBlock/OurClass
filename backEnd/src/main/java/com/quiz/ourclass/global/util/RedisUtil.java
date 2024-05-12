@@ -1,7 +1,10 @@
 package com.quiz.ourclass.global.util;
 
 
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import java.time.Duration;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -68,15 +71,28 @@ public class RedisUtil {
 
     public void setQuizGame(Long quizGameId, UUID uuid) {
         redisTemplate.opsForValue()
-            .set(buildQuizGameUrlKey(quizGameId), uuid.toString(), 10, TimeUnit.MINUTES);
+            .set(buildQuizGameUrlKey(uuid), String.valueOf(quizGameId), 10, TimeUnit.MINUTES);
+    }
+
+    public String getQuizGame(String uuid) {
+
+        log.info(buildQuizGameUrlKey(uuid));
+
+        return Optional.ofNullable(redisTemplate.opsForValue()
+                .get(buildQuizGameUrlKey(uuid)))
+            .orElseThrow(() -> new GlobalException(ErrorCode.QUIZ_GAME_INACTIVATE));
     }
 
     private String buildChatRoomKey(Long chatRoomId) {
         return ConstantUtil.REDIS_CHAT_ROOM_KEY + chatRoomId;
     }
 
-    private String buildQuizGameUrlKey(Long quizGameId) {
-        return ConstantUtil.QUIZ_GAME + quizGameId;
+    private String buildQuizGameUrlKey(UUID uuid) {
+        return ConstantUtil.QUIZ_GAME + uuid.toString();
+    }
+
+    private String buildQuizGameUrlKey(String uuid) {
+        return ConstantUtil.QUIZ_GAME + uuid;
     }
 
 }

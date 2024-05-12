@@ -9,7 +9,7 @@ import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
-import com.quiz.ourclass.global.config.annotation.LogExclusion;
+import com.quiz.ourclass.domain.quiz.dto.request.QuizStartRequest;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -95,7 +95,7 @@ public class MemberController implements MemberControllerDocs {
     }
 
     /* 8. 기본 이미지 조회 */
-    @LogExclusion
+
     @GetMapping("/default-image")
     public ResponseEntity<ResultResponse<?>> getDefaultImages() {
         return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));
@@ -114,6 +114,12 @@ public class MemberController implements MemberControllerDocs {
     public ResponseEntity<ResultResponse<?>> updateProfile(
         @ModelAttribute MemberUpdateRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity<ResultResponse<?>> certificatingUser(
+        @RequestBody QuizStartRequest request) {
+        return ResponseEntity.ok(ResultResponse.success(memberService.certificatingUser(request)));
     }
 
     @DeleteMapping("/")
