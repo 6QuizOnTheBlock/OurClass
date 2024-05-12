@@ -10,4 +10,5 @@
     <string name="relay">이어 달리기</string>
     <string name="relay_item_last_member">%s 학생이 폭탄을 터트렸어요</string>
     <string name="relay_item_count">%d번</string>
+    <string name="runner_question">받은 질문</string>
 </resources>
