@@ -85,7 +85,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
             .memberId(targetMember.getId())
             .memberName(targetMember.getName())
             .relationPoint(relationship.getRelationPoint())
-            .groupCount(relationship.getGroupCount())
+            .groupCount(relationship.getDesignGroupCount() + relationship.getFreeGroupCount())
             .tagGreetingCount(relationship.getTagGreetingCount())
             .receiveCount(receiveCount)
             .sendCount(sendCount).build();
