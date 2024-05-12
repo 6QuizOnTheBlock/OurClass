@@ -6,9 +6,11 @@ import androidx.paging.cachedIn
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.relay.GetRelayHistoryUseCase
 import com.sixkids.domain.usecase.relay.GetRunningRelayUseCase
+import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.NotFoundException
 import com.sixkids.model.Relay
 import com.sixkids.model.RunningRelay
+import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +21,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RelayHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getRunningRelayUseCase: GetRunningRelayUseCase,
     private val getRelayHistoryUseCase: GetRelayHistoryUseCase
 ) : BaseViewModel<RelayHistoryState, RelayHistoryEffect>(RelayHistoryState())
 {
     private var orgId = 0L
+    private lateinit var userInfo: UserInfo
     var relayHistory: Flow<PagingData<Relay>>? = null
     private var isFirstVisited: Boolean = true
 
@@ -35,6 +39,12 @@ class RelayHistoryViewModel @Inject constructor(
 
         getSelectedOrganizationIdUseCase().onSuccess {
             orgId = it.toLong()
+        }.onFailure {
+            //todo
+        }
+
+        loadUserInfoUseCase().onSuccess {
+            userInfo = it
         }.onFailure {
             //todo
         }
@@ -67,7 +77,7 @@ class RelayHistoryViewModel @Inject constructor(
 
     private fun getRelayHistory() {
         viewModelScope.launch {
-            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt())
+            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
                 .cachedIn(viewModelScope)
         }
     }
