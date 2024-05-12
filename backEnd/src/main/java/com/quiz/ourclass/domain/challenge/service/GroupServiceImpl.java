@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.challenge.service;
 import static com.quiz.ourclass.global.exception.ErrorCode.CHALLENGE_NOT_FOUND;
 import static com.quiz.ourclass.global.exception.ErrorCode.PERMISSION_DENIED;
 
+import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
 import com.quiz.ourclass.domain.challenge.entity.GroupMember;
@@ -42,12 +43,18 @@ public class GroupServiceImpl implements GroupService {
 
     @Transactional
     @Override
-    public String createMatchingRoom(long challengeId) {
+    public MatchingRoomResponse createMatchingRoom(long challengeId) {
         long MemberId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         String dataKey = makeGroupKey(challengeId, MemberId);
         redisUtil.setAdd(dataKey, String.valueOf(MemberId));
-        return dataKey;
+        Challenge challenge = challengeRepository.findById(challengeId)
+            .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
+        int minCount = challenge.getMinCount();
+        return MatchingRoomResponse.builder()
+            .dataKey(dataKey)
+            .minCount(minCount)
+            .build();
     }
 
     @Transactional
