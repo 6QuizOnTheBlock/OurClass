@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="student_home_main_hi">인사</string>
     <string name="student_home_main_announce">알림장</string>
+    <string name="student_home_main_chatting">채팅</string>
+    <string name="student_home_main_rank">일정</string>
 
     <string name="student_announce_no_item">알림장이 없어용!</string>
 
