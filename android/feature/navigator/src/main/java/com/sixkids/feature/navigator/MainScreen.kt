@@ -175,7 +175,10 @@ fun MainScreen(
             studentRelayNavGraph(
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,
+                navigateCreateRelayResult = navigator::navigateStudentRelayCreateResult,
                 navigateJoinRelay = navigator::navigateStudentRelayJoin,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
                 handleException = viewModel::handleException
             )
 

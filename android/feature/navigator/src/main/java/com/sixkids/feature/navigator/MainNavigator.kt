@@ -29,6 +29,7 @@ import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
+import com.sixkids.student.relay.navigation.navigateStudentRelayCreateResult
 import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
 import com.sixkids.student.relay.navigation.navigateStudentRelayHistory
 import com.sixkids.student.relay.navigation.navigateStudentRelayJoin
@@ -255,6 +256,10 @@ class MainNavigator(
 
     fun navigateStudentRelayJoin() {
         navController.navigateStudentRelayJoin()
+    }
+
+    fun navigateStudentRelayCreateResult(newRelayId: Long) {
+        navController.navigateStudentRelayCreateResult(newRelayId)
     }
 
     /**
