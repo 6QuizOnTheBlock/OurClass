@@ -54,7 +54,9 @@ public interface GroupControllerDocs {
             + "전체 멤버에게 SSE(CREATE_GROUP) 전송",
         responses = {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
-                content = @Content(schema = @Schema(implementation = Long.class, description = "생성된 그룹 id")))
+                content = @Content(schema = @Schema(implementation = Long.class, description = "생성된 그룹 id"))),
+            @ApiResponse(responseCode = "400", description = "(message : \"그룹 최소 인원이 부족합니다.\")", content = @Content)
+
         })
     @PostMapping("/groups")
     ResponseEntity<ResultResponse<?>> createGroup(

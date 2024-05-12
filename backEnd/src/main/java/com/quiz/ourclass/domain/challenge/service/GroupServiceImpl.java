@@ -84,6 +84,9 @@ public class GroupServiceImpl implements GroupService {
         Set<String> members = redisUtil.setMembers(key);
         Challenge challenge = challengeRepository.findById(getChallengeIdFromKey(key))
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
+        if (members.size() < challenge.getMinCount()) {
+            throw new GlobalException(ErrorCode.NOT_ENOUGH_GROUP_MEMBER);
+        }
         long leaderId = getLeaderIdFromKey(key);
         LocalDateTime createTime = LocalDateTime.now();
         ChallengeGroup group = ChallengeGroup.builder()
