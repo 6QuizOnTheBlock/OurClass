@@ -147,7 +147,11 @@ fun MainScreen(
 
             studentHomeNavGraph(
                 padding = innerPadding,
+                onShowSnackbar = viewModel::onShowSnackbar,
+                navigateToStudentAnnounceList = navigator::navigateStudentAnnounceList,
+                navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
             )
+
             studentChallengeNavGraph(
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateToCreateGroup = navigator::navigateStudentGroupCreate,

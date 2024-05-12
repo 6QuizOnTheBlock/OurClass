@@ -4,20 +4,63 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailEffect
+import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailRoute
+import com.sixkids.student.home.announce.announcelist.StudentAnnounceListRoute
+import com.sixkids.student.home.main.StudentHomeMainRoute
+import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateStudentHome(navOptions: NavOptions) {
     navigate(StudentHomeRoute.defaultRoute,navOptions)
 }
 
+fun NavController.navigateStudentAnnounceList() {
+    navigate(StudentHomeRoute.announceListRoute)
+}
+
+fun NavController.navigateStudentAnnounceDetail(announceDetailId: Long) {
+    navigate(StudentHomeRoute.announceDetailRoute(announceDetailId))
+}
+
 fun NavGraphBuilder.studentHomeNavGraph(
     padding: PaddingValues,
+    onShowSnackbar: (SnackbarToken) -> Unit,
+    navigateToStudentAnnounceList: () -> Unit,
+    navigateToStudentAnnounceDetail: (Long) -> Unit
 ) {
     composable(route = StudentHomeRoute.defaultRoute) {
-        com.sixkids.student.home.main.StudentHomeMainRoute(padding)
+        StudentHomeMainRoute(padding)
+    }
+
+    composable(route = StudentHomeRoute.announceListRoute) {
+        StudentAnnounceListRoute(
+            padding = padding,
+            navigateToStudentAnnounceDetail = navigateToStudentAnnounceDetail,
+            onShowSnackBar = onShowSnackbar
+        )
+    }
+
+    composable(
+        route = StudentHomeRoute.announceDetailRoute,
+        arguments = listOf(navArgument(StudentHomeRoute.announceDetailARG) { type = NavType.LongType })
+    ) {
+        StudentAnnounceDetailRoute(
+            padding = padding,
+            onShowSnackBar = onShowSnackbar
+        )
     }
 }
 
 object StudentHomeRoute {
+    const val announceDetailARG = "announceDetailId"
+
     const val defaultRoute = "student_home"
+
+    const val announceListRoute = "student_announce_list"
+    const val announceDetailRoute = "student_announce_detail/{$announceDetailARG}"
+
+    fun announceDetailRoute(announceDetailId: Long) = "student_announce_detail/$announceDetailId"
 }
