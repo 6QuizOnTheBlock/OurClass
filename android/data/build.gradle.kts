@@ -12,7 +12,6 @@ dependencies {
     implementation(projects.domain)
 
     implementation(libs.bundles.retrofit)
-    implementation(libs.okhttp.eventsource)
     implementation(libs.datastore)
     implementation(libs.paging)
 

@@ -63,9 +63,6 @@ firebaseMessagingKtx = "24.0.0"
 # Krossbow
 krossbow = "7.0.0"
 
-# EventSource
-eventsource = "4.1.1"
-
 annotationJvm = "1.7.1"
 
 
@@ -112,7 +109,6 @@ moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", 
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi-kotlin" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logginginterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
-okhttp-eventsource = { group = "com.launchdarkly", name = "okhttp-eventsource", version.ref = "eventsource" }
 okhttp-sse = { group = "com.squareup.okhttp3", name = "okhttp-sse", version.ref = "okhttp-sse" }
 
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }

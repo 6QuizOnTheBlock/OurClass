@@ -30,7 +30,6 @@ android {
 dependencies {
     implementation(libs.bundles.paging)
     implementation(projects.core.bluetooth)
-    implementation(libs.okhttp.eventsource)
     implementation(libs.okhttp.sse)
     implementation(libs.okhttp.logginginterceptor)
 }
