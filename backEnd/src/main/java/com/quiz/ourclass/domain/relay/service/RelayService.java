@@ -22,4 +22,6 @@ public interface RelayService {
     ReceiveRelayResponse receiveRelay(long id, ReceiveRelayRequest receiveRelayRequest);
 
     SendRelayResponse sendRelay(long id);
+
+    String getRelayQuestion(long id);
 }

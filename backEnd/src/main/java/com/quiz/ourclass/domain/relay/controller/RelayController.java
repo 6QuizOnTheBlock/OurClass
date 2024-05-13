@@ -66,4 +66,10 @@ public class RelayController implements RelayControllerDocs {
         SendRelayResponse sendRelayResponse = relayService.sendRelay(id);
         return ResponseEntity.ok(ResultResponse.success(sendRelayResponse));
     }
+
+    @GetMapping("/{id}/question")
+    public ResponseEntity<ResultResponse<?>> getRelayQuestion(@PathVariable long id) {
+        String question = relayService.getRelayQuestion(id);
+        return ResponseEntity.ok(ResultResponse.success(question));
+    }
 }

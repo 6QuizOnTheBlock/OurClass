@@ -121,4 +121,22 @@ public interface RelayControllerDocs {
         @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
         long id
     );
+
+    @Operation(summary = "이어달리기 받은 질문 조회",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = """
+                (message : "멤버가 존재하지 않습니다.")
+                                
+                (message : "이어달리기를 찾을 수 없습니다.")
+                                
+                (message : "이어달리기 주자를 찾을 수 없습니다.")
+                """, content = @Content)
+        })
+    @GetMapping("/{id}/question")
+    ResponseEntity<ResultResponse<?>> getRelayQuestion(
+        @PathVariable
+        long id
+    );
 }
