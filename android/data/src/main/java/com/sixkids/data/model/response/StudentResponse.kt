@@ -8,6 +8,11 @@ data class StudentResponse(
     val photo: String,
 )
 
+data class StudentWithRelationScoreResponse(
+    val student: StudentResponse,
+    val relationPoint: Int,
+)
+
 internal fun StudentResponse.toModel() = MemberSimple(
     id = id,
     name = name,
