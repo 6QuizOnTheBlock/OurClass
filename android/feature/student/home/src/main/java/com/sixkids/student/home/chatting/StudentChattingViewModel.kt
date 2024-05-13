@@ -12,18 +12,30 @@ import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.Chat
 import com.sixkids.model.ChatMessage
 import com.sixkids.model.UserInfo
+import com.sixkids.student.home.BuildConfig
 import com.sixkids.ui.base.BaseViewModel
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.stomp.StompSession
 import org.hildan.krossbow.stomp.conversions.convertAndSend
 import org.hildan.krossbow.stomp.conversions.moshi.withMoshi
+import org.hildan.krossbow.stomp.frame.StompFrame
+import org.hildan.krossbow.stomp.headers.StompSendHeaders
+import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import javax.inject.Inject
 
+private const val TAG = "D107"
+
 @HiltViewModel
-class ChattingViewModel @Inject constructor(
+class StudentChattingViewModel @Inject constructor(
     private val getATKUseCase: GetATKUseCase,
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
@@ -36,11 +48,11 @@ class ChattingViewModel @Inject constructor(
     private lateinit var tkn: String
     private lateinit var userInfo: UserInfo
 
-    private lateinit var stompSession: org.hildan.krossbow.stomp.StompSession
-    private val moshi: com.squareup.moshi.Moshi = com.squareup.moshi.Moshi.Builder()
-        .addLast(com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory())
+    private lateinit var stompSession: StompSession
+    private val moshi: Moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
         .build()
-    private lateinit var newChatMessage: Flow<org.hildan.krossbow.stomp.frame.StompFrame.Message>
+    private lateinit var newChatMessage: Flow<StompFrame.Message>
 
     private lateinit var chattingList: List<Chat>
 
@@ -58,7 +70,7 @@ class ChattingViewModel @Inject constructor(
 
 
             } catch (e: Exception) {
-                Log.d(com.sixkids.teacher.board.chatting.TAG, "initStomp: ${e.message}")
+                Log.d(TAG, "initStomp: ${e.message}")
             }
         }
     }
@@ -83,18 +95,18 @@ class ChattingViewModel @Inject constructor(
         viewModelScope.launch {
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(
-                    okhttp3.logging.HttpLoggingInterceptor().apply {
-                        level = okhttp3.logging.HttpLoggingInterceptor.Level.BODY
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
                     }
                 )
                 .build()
 
-            val client = org.hildan.krossbow.stomp.StompClient(
-                org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient(okHttpClient)
+            val client = StompClient(
+                OkHttpWebSocketClient(okHttpClient)
             )
 
             stompSession = client.connect(
-                com.sixkids.teacher.board.BuildConfig.STOMP_ENDPOINT,
+                BuildConfig.STOMP_ENDPOINT,
                 customStompConnectHeaders = mapOf(
                     HEADER_AUTHORIZATION to tkn,
                     HEADER_ROOM_ID to roomId.toString()
@@ -102,7 +114,7 @@ class ChattingViewModel @Inject constructor(
             ).withMoshi(moshi)
 
             newChatMessage = stompSession.subscribe(
-                org.hildan.krossbow.stomp.headers.StompSubscribeHeaders(
+                StompSubscribeHeaders(
                     destination = "$SUBSCRIBE_URL$roomId",
                     customHeaders = mapOf(
                         HEADER_AUTHORIZATION to tkn
@@ -126,9 +138,9 @@ class ChattingViewModel @Inject constructor(
 
     fun sendMessage(message: String) {
         viewModelScope.launch {
-            Log.d(com.sixkids.teacher.board.chatting.TAG, "sendMessage: ${userInfo.photo}")
+            Log.d(TAG, "sendMessage: ${userInfo.photo}")
             stompSession.withMoshi(moshi).convertAndSend(
-                org.hildan.krossbow.stomp.headers.StompSendHeaders(
+                StompSendHeaders(
                     destination = SEND_URL,
                     customHeaders = mapOf(
                         HEADER_AUTHORIZATION to tkn
@@ -146,7 +158,7 @@ class ChattingViewModel @Inject constructor(
                 stompSession.disconnect()
             }
         } catch (e: Exception) {
-            Log.d(com.sixkids.teacher.board.chatting.TAG, "cancelStomp: ${e.message}")
+            Log.d(TAG, "cancelStomp: ${e.message}")
         }
     }
 

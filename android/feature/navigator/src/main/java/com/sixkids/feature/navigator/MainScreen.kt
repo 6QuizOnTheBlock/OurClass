@@ -152,7 +152,8 @@ fun MainScreen(
                 navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
                 navigateToTagHello = { } ,
                 navigateToRank = {  },
-                navigateToChatting = {},
+                navigateToChatting = navigator::navigateChatting,
+                navigateBack = navigator::popBackStack,
             )
 
             studentChallengeNavGraph(

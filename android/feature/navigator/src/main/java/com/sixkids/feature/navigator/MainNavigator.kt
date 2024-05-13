@@ -21,6 +21,7 @@ import com.sixkids.student.board.navigation.navigateStudentBoardWrite
 import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.home.navigation.navigateStudentAnnounceDetail
 import com.sixkids.student.home.navigation.navigateStudentAnnounceList
+import com.sixkids.student.home.navigation.navigateStudentChatting
 import com.sixkids.student.home.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
 import com.sixkids.student.main.navigation.navigateStudentOrganizationList
@@ -323,6 +324,10 @@ class MainNavigator(
 
     fun navigateStudentBoardDetail(postId: Long) {
         navController.navigateStudentBoardDetail(postId)
+    }
+
+    fun navigateStudentChatting() {
+        navController.navigateStudentChatting()
     }
 
     @Composable
