@@ -79,7 +79,7 @@ fun RelayDetailScreen(
                 .fillMaxSize()
         ) {
             UlbanDetailAppBar(
-                leftIcon = DesignSystemR.drawable.hifive,
+                leftIcon = DesignSystemR.drawable.relay,
                 title = stringResource(id = R.string.relay_challenge),
                 content = stringResource(id = R.string.relay_challenge),
                 topDescription = "${uiState.relayDetail.startTime.formatToMonthDayTime()} ~ ${uiState.relayDetail.endTime.formatToMonthDayTime()}",
