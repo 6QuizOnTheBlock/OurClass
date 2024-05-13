@@ -18,7 +18,7 @@ fun RelayTaggingReceiverRoute(
         viewModel.init()
     }
 
-    RelayTaggingScreen()
+    RelayTaggingReceiverScreen()
 
 }
 

@@ -20,7 +20,7 @@ fun RelayTaggingSenderRoute(
         viewModel.init()
     }
 
-    RelayTaggingScreen()
+    RelayTaggingSenderScreen()
 
 }
 

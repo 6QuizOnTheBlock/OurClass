@@ -11,6 +11,7 @@ import com.sixkids.student.relay.detail.RelayDetailRoute
 import com.sixkids.student.relay.history.RelayRoute
 import com.sixkids.student.relay.navigation.RelayRoute.RELAY_ID_NAME
 import com.sixkids.student.relay.pass.answer.RelayAnswerRoute
+import com.sixkids.student.relay.pass.tagging.receiver.RelayTaggingReceiverRoute
 import com.sixkids.student.relay.pass.tagging.sender.RelayTaggingSenderRoute
 import com.sixkids.student.relay.result.RelayCreateResultRoute
 import com.sixkids.ui.SnackbarToken
@@ -123,6 +124,15 @@ fun NavGraphBuilder.studentRelayNavGraph(
         ))
     {
         RelayTaggingSenderRoute(
+        )
+    }
+
+    composable(route = RelayRoute.taggingReceiverRoute,
+        arguments = listOf(
+            navArgument(RELAY_ID_NAME) { type = NavType.LongType }
+        ))
+    {
+        RelayTaggingReceiverRoute(
         )
     }
 }
