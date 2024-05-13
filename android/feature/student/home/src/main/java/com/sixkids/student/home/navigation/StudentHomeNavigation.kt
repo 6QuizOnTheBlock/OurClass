@@ -29,10 +29,20 @@ fun NavGraphBuilder.studentHomeNavGraph(
     padding: PaddingValues,
     onShowSnackbar: (SnackbarToken) -> Unit,
     navigateToStudentAnnounceList: () -> Unit,
-    navigateToStudentAnnounceDetail: (Long) -> Unit
+    navigateToStudentAnnounceDetail: (Long) -> Unit,
+    navigateToTagHello: () -> Unit,
+    navigateToRank: () -> Unit,
+    navigateToChatting: () -> Unit,
 ) {
     composable(route = StudentHomeRoute.defaultRoute) {
-        StudentHomeMainRoute(padding)
+        StudentHomeMainRoute(
+            padding = padding,
+            navigateToAnnounce = navigateToStudentAnnounceList,
+            navigateToTagHello = navigateToTagHello,
+            navigateToRank = navigateToRank,
+            navigateToChatting = navigateToChatting,
+            onShowSnackBar = onShowSnackbar
+        )
     }
 
     composable(route = StudentHomeRoute.announceListRoute) {

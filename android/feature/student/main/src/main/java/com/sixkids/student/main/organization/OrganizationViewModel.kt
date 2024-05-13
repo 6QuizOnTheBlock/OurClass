@@ -56,8 +56,9 @@ class OrganizationViewModel @Inject constructor(
     fun organizationClick(id: Int){
         viewModelScope.launch {
             saveSelectedOrganizationIdUseCase(id)
+            postSideEffect(OrganizationListEffect.NavigateToHome)
         }
-        postSideEffect(OrganizationListEffect.NavigateToHome)
+
     }
 
     fun onTokenRefresh(fcmToken: String) {

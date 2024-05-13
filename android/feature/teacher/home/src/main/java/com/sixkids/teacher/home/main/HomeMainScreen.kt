@@ -3,7 +3,9 @@ package com.sixkids.teacher.home.main
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,11 +16,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
+import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.designsystem.theme.component.card.ContentAligment
 import com.sixkids.designsystem.theme.component.card.ContentCard
-import com.sixkids.designsystem.theme.component.card.RankCard
+import com.sixkids.designsystem.theme.component.card.ContentVerticalCard
 import com.sixkids.teacher.home.component.TeacherInfo
 
 @Composable
@@ -71,10 +75,28 @@ fun HomeMainScreen(
             runningState = homeMainState.runningTogetherState,
             onclick = navigateToChallenge
         )
-        RankCard(
-            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
-            onClick = navigateToRank
-        )
+        Row {
+            ContentVerticalCard(
+                cardModifier = Modifier
+                    .padding(top = 20.dp, end = 10.dp, bottom = 20.dp)
+                    .weight(1f)
+                    .aspectRatio(1f),
+                cardColor = Yellow,
+                imageDrawable = R.drawable.rank,
+                text = "랭킹",
+                onClick = navigateToRank
+            )
+            ContentVerticalCard(
+                cardModifier = Modifier
+                    .padding(top = 20.dp, start = 10.dp, bottom = 20.dp)
+                    .weight(1f)
+                    .aspectRatio(1f),
+                cardColor = Purple,
+                imageDrawable = R.drawable.rank,
+                text = "퀴즈",
+                onClick = { }
+            )
+        }
     }
 }
 
