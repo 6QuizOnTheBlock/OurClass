@@ -50,13 +50,20 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
             .orderBy(relay.id.desc())
             .fetch();
 
+        Long totalCount = jpaQueryFactory.select(
+                relay.id.count()
+            )
+            .from(relay)
+            .where(relayCondition)
+            .fetchOne();
+
         boolean hasNext = false;
         if (relays.size() > pageable.getPageSize()) {
             relays.remove(pageable.getPageSize());
             hasNext = true;
         }
         return RelaySliceResponse.builder().relays(relays).page(request.page()).size(request.size())
-            .last(hasNext).build();
+            .last(hasNext).totalCount(totalCount == null ? 0 : totalCount).build();
     }
 
     private static BooleanBuilder getRelaysBooleanBuilder(RelaySliceRequest request) {
@@ -72,6 +79,7 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
                 .where(relayMember.curMember.id.eq(request.memberId()));
             relayCondition.and(relay.id.in(subQuery));
         }
+        relayCondition.and(relay.endStatus.isFalse());
         return relayCondition;
     }
 

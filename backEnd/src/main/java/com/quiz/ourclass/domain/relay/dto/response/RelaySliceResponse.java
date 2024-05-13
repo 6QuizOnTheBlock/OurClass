@@ -13,6 +13,8 @@ public record RelaySliceResponse(
     int size,
     @Schema(description = "마지막 페이지 여부")
     boolean last,
+    @Schema(description = "이어달리기 총 갯수")
+    long totalCount,
     @Schema(description = "이어달리기 목록")
     List<RelaySimpleResponse> relays
 ) {
