@@ -31,6 +31,7 @@ retrofit = "2.9.0"
 moshi-converter = "2.9.0"
 moshi-kotlin = "1.14.0"
 okhttp = "4.9.1"
+okhttp-sse = "4.9.3"
 logging-interceptor = "4.8.0"
 
 #DataStore
@@ -112,6 +113,7 @@ moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.re
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logginginterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
 okhttp-eventsource = { group = "com.launchdarkly", name = "okhttp-eventsource", version.ref = "eventsource" }
+okhttp-sse = { group = "com.squareup.okhttp3", name = "okhttp-sse", version.ref = "okhttp-sse" }
 
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 

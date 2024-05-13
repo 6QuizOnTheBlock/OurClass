@@ -39,6 +39,7 @@ fun JoinGroupRoute(
 
     DisposableEffect(Unit) {
         onDispose {
+            viewModel.disconnectSse()
             viewModel.stopAdvertise()
         }
     }
