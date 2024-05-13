@@ -79,7 +79,7 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
                 .where(relayMember.curMember.id.eq(request.memberId()));
             relayCondition.and(relay.id.in(subQuery));
         }
-        relayCondition.and(relay.endStatus.isFalse());
+        relayCondition.and(relay.endStatus.isTrue());
         return relayCondition;
     }
 

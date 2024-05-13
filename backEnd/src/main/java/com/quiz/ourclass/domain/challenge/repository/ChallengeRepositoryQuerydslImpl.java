@@ -87,7 +87,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
                 .where(groupMember.member.id.eq(request.memberId()));
             challengeCondition.and(challenge.id.in(subQuery));
         }
-        challengeCondition.and(challenge.endStatus.isFalse());
+        challengeCondition.and(challenge.endStatus.isTrue());
         return challengeCondition;
     }
 
