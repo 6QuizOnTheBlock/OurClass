@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -125,7 +126,7 @@ fun UlbanMissionCard(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                modifier = Modifier.run { size(250.dp).offset(y = -(20.dp)) },
+                modifier = Modifier.run { size(230.dp).offset(x = -(20.dp), y = -(20.dp)) },
                 painter = painterResource(id = imgRes),
                 contentDescription = null
             )
@@ -144,4 +145,14 @@ fun UlbanMissionCardPreview() {
             backGroundColor = Red
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UlbanPreview2(){
+    UlbanMissionCard(
+        imgRes = R.drawable.relay,
+        title = "친구에게 전달해 봐요!",
+        backGroundColor = Orange
+    )
 }

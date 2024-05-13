@@ -14,4 +14,5 @@
     <string name="relay_create_question">다음 친구가 대답할 질문을 작성해 주세요</string>
     <string name="relay_create_question_hint">질문을 작성해 주세요</string>
     <string name="relay_create_create">만들기</string>
+    <string name="create_relay_success">새로운\n이어 달리기가 만들어졌습니다!</string>
 </resources>
