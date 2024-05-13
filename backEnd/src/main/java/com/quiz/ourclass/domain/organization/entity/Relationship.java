@@ -32,6 +32,7 @@ public class Relationship {
     int tagGreetingCount;
     int designGroupCount;
     int freeGroupCount;
+    int socialCount;
 
     public int updateTagGreetingCount() {
         this.tagGreetingCount += 1;
@@ -46,5 +47,9 @@ public class Relationship {
     public int updateFreeGroupCount() {
         this.freeGroupCount += 1;
         return this.freeGroupCount;
+    }
+
+    public void updateSocialCount() {
+        this.socialCount += 1;
     }
 }

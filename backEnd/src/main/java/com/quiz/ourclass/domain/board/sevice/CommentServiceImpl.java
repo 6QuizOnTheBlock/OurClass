@@ -12,6 +12,8 @@ import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.notice.entity.Notice;
 import com.quiz.ourclass.domain.notice.entity.NoticeType;
 import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
+import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.FcmDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -30,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final NoticeRepository noticeRepository;
+    private final RelationshipRepository relationshipRepository;
     private final UserAccessUtil userAccessUtil;
     private final FcmUtil fcmUtil;
     private final CommentMapper commentMapper;
@@ -43,6 +46,8 @@ public class CommentServiceImpl implements CommentService {
         Post post = postRepository.findById(request.boardId())
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
+        long orgId = post.getOrganization().getId();
+
         //게시글을 작성한 사용자 단체와 댓글 작성자의 단체가 같은지 확인
         if (commentWriter.getRole() == Role.STUDENT) {
             boolean isSameOrganization = post.getOrganization().getMemberOrganizations().stream()
@@ -54,6 +59,22 @@ public class CommentServiceImpl implements CommentService {
         } else if (commentWriter.getRole() == Role.TEACHER) {
             userAccessUtil.isOrganizationManager(commentWriter, post.getOrganization().getId())
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        }
+
+        if (post.getAuthor().getId() != commentWriter.getId()) {
+            //해당 게시글에 반응(댓글 작성)을 하였는지 확인
+            boolean isFirstComment = request.parentId() == 0L
+                && !commentRepository.existsByPostAndMember(post, commentWriter);
+            if (isFirstComment) {
+                updateSocialCount(orgId, post.getAuthor(), commentWriter);
+                updateSocialCount(orgId, commentWriter, post.getAuthor());
+            }
+            //해당 댓글에 반응(대댓글 작성)을 하였는지 확인
+            if (request.parentId() > 0L) {
+                Comment parentComment = commentRepository.findById(request.parentId())
+                    .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
+                checkAndUpdateFirstResponse(post, commentWriter, parentComment);
+            }
         }
 
         //게시글 댓글 저장 (부모 댓글이면 0L로 저장됩니다.)
@@ -160,5 +181,35 @@ public class CommentServiceImpl implements CommentService {
         fcmUtil.singleFcmSend(comment.getPost().getOrganization().getManager(), fcmDTO);
 
         return true;
+    }
+
+    /*
+     * 부모 댓글 작성자가 게시글 작성자일 때
+     * 대댓글 작성자가 게시글에 댓글로 반응을 한 적이 없을 때
+     *
+     * 부모 댓글 작성자가 게시글 작성자랑 다를 떄
+     * 대댓글 작성자가 부모 댓글 작성자에게 반응을 하지 않았을 때
+     */
+    private void checkAndUpdateFirstResponse(
+        Post post, Member commentWriter, Comment parentComment) {
+        if ((post.getAuthor().getId() == parentComment.getMember().getId() &&
+            !commentRepository.existsByPostAndMember(post, commentWriter))
+            ||
+            (post.getAuthor().getId() != parentComment.getMember().getId() &&
+                !commentRepository.existsByParentIdAndMember(parentComment.getId(),
+                    commentWriter))) {
+            long orgId = post.getOrganization().getId();
+            updateSocialCount(orgId, parentComment.getMember(), commentWriter);
+            updateSocialCount(orgId, commentWriter, parentComment.getMember());
+        }
+    }
+
+    private void updateSocialCount(Long orgId, Member member1, Member member2) {
+        Relationship relationship =
+            relationshipRepository.findByOrganizationIdAndMember1IdAndMember2Id(
+                orgId, member1.getId(), member2.getId()
+            ).orElseThrow(() -> new GlobalException(ErrorCode.RELATION_NOT_FOUND));
+
+        relationship.updateSocialCount();
     }
 }
