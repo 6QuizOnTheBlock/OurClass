@@ -1,5 +1,6 @@
 package com.sixkids.designsystem.component.screen
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -30,27 +32,22 @@ import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Orange
+import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 
 @Composable
 fun RelayPassResultScreen(
     paddingValues: PaddingValues = PaddingValues(horizontal = 30.dp, vertical = 40.dp),
-    isSender: Boolean = true,
     title: String = stringResource(R.string.relay_pass_result_title),
+    subTitle: String = stringResource(R.string.relay_pass_result_subtitle_sender),
     bodyTop: String = stringResource(R.string.relay_pass_result_body_top_receiver),
     bodyMiddle: String,
+    bodyBottom: String = stringResource(R.string.relay_pass_result_body_bottom_sender),
+    @DrawableRes imgRes: Int = R.drawable.relay_success,
+    backgroundColor: Color = Orange,
     onClick: () -> Unit = {}
 ) {
-    val subTitle =
-        if (isSender) stringResource(R.string.relay_pass_result_subtitle_sender)
-        else stringResource(R.string.relay_pass_result_subtitle_receiver)
-
-
-    val bodyBottom =
-        if (isSender) stringResource(R.string.relay_pass_result_body_bottom_sender)
-        else stringResource(R.string.relay_pass_result_body_bottom_receiver)
-
     val screenWidthDp = with(LocalDensity.current) {
         LocalContext.current.resources.displayMetrics.widthPixels.toDp()
     }
@@ -76,12 +73,12 @@ fun RelayPassResultScreen(
                     modifier = Modifier
                         .size(screenWidthDp / 2)
                         .clip(RoundedCornerShape(28.dp))
-                        .background(Orange)
+                        .background(backgroundColor)
                         .align(Alignment.Center)
                 )
 
                 Image(
-                    painter = painterResource(id = R.drawable.relay_success),
+                    painter = painterResource(id = imgRes),
                     contentDescription = "success",
                     modifier = Modifier
                         .size(screenWidthDp / 2 + screenWidthDp / 7)
@@ -134,6 +131,21 @@ fun RelayPassResultScreenPreview() {
         RelayPassResultScreen(
             bodyTop = "오하빈 학생이",
             bodyMiddle = "\"우리반에서 가장 공부를 잘 하는 친구는 누구야?\"",
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun RelayPassResultBombScreenPreview() {
+    UlbanTheme {
+        RelayPassResultScreen(
+            title = "이런! 폭탄이 터졌어요",
+            subTitle = "-100 exp",
+            bodyTop = "오하빈 학생이",
+            bodyMiddle = "\"우리반에서 가장 공부를 잘 하는 친구는 누구야?\"",
+            imgRes = R.drawable.bomb,
+            backgroundColor = Purple
         )
     }
 }
