@@ -2,6 +2,7 @@ package com.sixkids.data.model.response
 
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
+import com.squareup.moshi.Json
 
 data class StudentResponse(
     val id: Long,
@@ -10,6 +11,7 @@ data class StudentResponse(
 )
 
 data class StudentWithRelationScoreResponse(
+    @Json(name = "member")
     val student: StudentResponse,
     val relationPoint: Int,
 )

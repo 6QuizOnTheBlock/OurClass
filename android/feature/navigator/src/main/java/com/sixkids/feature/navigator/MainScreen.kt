@@ -150,6 +150,9 @@ fun MainScreen(
                 onShowSnackbar = viewModel::onShowSnackbar,
                 navigateToStudentAnnounceList = navigator::navigateStudentAnnounceList,
                 navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
+                navigateToTagHello = { } ,
+                navigateToRank = {  },
+                navigateToChatting = {},
             )
 
             studentChallengeNavGraph(

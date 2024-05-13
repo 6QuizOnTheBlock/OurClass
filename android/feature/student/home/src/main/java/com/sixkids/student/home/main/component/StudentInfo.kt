@@ -52,12 +52,14 @@ fun StudentMainInfo(
         )
     ) {
         Row {
-            AsyncImage(
-                model = imageUrlString,
-                contentDescription = null,
-                modifier = Modifier.size(height),
-                contentScale = ContentScale.FillBounds
-            )
+            Card {
+                AsyncImage(
+                    model = imageUrlString,
+                    contentDescription = null,
+                    modifier = Modifier.size(height),
+                    contentScale = ContentScale.Crop
+                )
+            }
             Spacer(modifier = Modifier.width(8.dp))
             Column(
                 modifier = Modifier.height(height),

@@ -6,6 +6,7 @@ import javax.inject.Inject
 class GetStudentHomeInfoUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    suspend operator fun invoke(organizationId: Long) =
+    suspend operator fun invoke(organizationId: Long) = runCatching {
         userRepository.getStudentHomeInfo(organizationId)
+    }
 }

@@ -1,6 +1,7 @@
 package com.sixkids.student.home.main
 
 import com.sixkids.model.MemberSimpleWithScore
+import com.sixkids.model.StudentHomeInfo
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
@@ -13,9 +14,10 @@ sealed interface StudentHomeMainEffect: SideEffect {
 }
 
 data class StudentHomeMainState(
+    val isLoading: Boolean = false,
     val studentName: String = "",
     val studentImageUrl: String = "",
     val studentClass: String = "",
     val studentExp: Int = 0,
-    val bestFriendList: List<MemberSimpleWithScore> = emptyList()
+    val bestFriendList: List<MemberSimpleWithScore> = emptyList(),
 ): UiState

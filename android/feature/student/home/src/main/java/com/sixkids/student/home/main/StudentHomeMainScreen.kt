@@ -15,10 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Orange
@@ -30,23 +35,58 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.student.home.R
 import com.sixkids.student.home.main.component.StudentMainInfo
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun StudentHomeMainRoute(
-    padding: PaddingValues
+    viewModel: StudentHomeMainViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    navigateToAnnounce: () -> Unit,
+    navigateToTagHello: () -> Unit,
+    navigateToRank: () -> Unit,
+    navigateToChatting: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getStudentHomeInfo()
+    }
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                StudentHomeMainEffect.navigateToAnnounce -> navigateToAnnounce()
+                StudentHomeMainEffect.navigateToChatting -> navigateToChatting()
+                StudentHomeMainEffect.navigateToRank -> navigateToRank()
+                StudentHomeMainEffect.navigateToTagHello -> navigateToTagHello()
+                is StudentHomeMainEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(message = sideEffect.message))
+            }
+        }
+    }
+
     Box(
         modifier = Modifier.padding(padding)
     ) {
-        StudentHomeMainScreen()
+        StudentHomeMainScreen(
+            studentHomeMainState = uiState,
+            announceCardOnClick = navigateToAnnounce,
+            tagHelloCardOnClick = navigateToTagHello,
+            chattingCardOnClick = navigateToChatting,
+            rankCardOnClick = navigateToRank
+        )
     }
 }
 
 @Composable
 fun StudentHomeMainScreen(
     modifier: Modifier = Modifier,
-    studentHomeMainState: StudentHomeMainState = StudentHomeMainState()
+    studentHomeMainState: StudentHomeMainState = StudentHomeMainState(),
+    announceCardOnClick: () -> Unit = {},
+    tagHelloCardOnClick: () -> Unit = {},
+    chattingCardOnClick: () -> Unit = {},
+    rankCardOnClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -68,7 +108,8 @@ fun StudentHomeMainScreen(
                     .padding(end = 10.dp),
                 cardColor = Orange,
                 imageDrawable = UlbanRes.drawable.announce,
-                text = stringResource(id = R.string.student_home_main_announce)
+                text = stringResource(id = R.string.student_home_main_announce),
+                onClick = announceCardOnClick
             )
             ContentVerticalCard(
                 cardModifier = Modifier
@@ -77,7 +118,8 @@ fun StudentHomeMainScreen(
                     .padding(start = 10.dp),
                 cardColor = Blue,
                 imageDrawable = UlbanRes.drawable.tag_hello,
-                text = stringResource(id = R.string.student_home_main_hi)
+                text = stringResource(id = R.string.student_home_main_hi),
+                onClick = tagHelloCardOnClick
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -114,7 +156,8 @@ fun StudentHomeMainScreen(
                     .padding(end = 10.dp),
                 cardColor = Purple,
                 imageDrawable = UlbanRes.drawable.chat,
-                text = stringResource(id = R.string.student_home_main_chatting)
+                text = stringResource(id = R.string.student_home_main_chatting),
+                onClick = chattingCardOnClick
             )
             ContentVerticalCard(
                 cardModifier = Modifier
@@ -123,7 +166,8 @@ fun StudentHomeMainScreen(
                     .padding(start = 10.dp),
                 cardColor = Yellow,
                 imageDrawable = UlbanRes.drawable.rank,
-                text = stringResource(id = R.string.student_home_main_rank)
+                text = stringResource(id = R.string.student_home_main_rank),
+                onClick = rankCardOnClick
             )
         }
     }
