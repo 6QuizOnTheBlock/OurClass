@@ -66,8 +66,12 @@ public class CommentServiceImpl implements CommentService {
             boolean isFirstComment = request.parentId() == 0L
                 && !commentRepository.existsByPostAndMember(post, commentWriter);
             if (isFirstComment) {
-                updateSocialCount(orgId, post.getAuthor(), commentWriter);
-                updateSocialCount(orgId, commentWriter, post.getAuthor());
+                Member member1 = post.getAuthor().getId() < commentWriter.getId() ?
+                    post.getAuthor() : commentWriter;
+                Member member2 = post.getAuthor().getId() < commentWriter.getId() ?
+                    commentWriter : post.getAuthor();
+
+                updateSocialCount(orgId, member1, member2);
             }
             //해당 댓글에 반응(대댓글 작성)을 하였는지 확인
             if (request.parentId() > 0L) {
@@ -199,8 +203,13 @@ public class CommentServiceImpl implements CommentService {
                 !commentRepository.existsByParentIdAndMember(parentComment.getId(),
                     commentWriter))) {
             long orgId = post.getOrganization().getId();
-            updateSocialCount(orgId, parentComment.getMember(), commentWriter);
-            updateSocialCount(orgId, commentWriter, parentComment.getMember());
+
+            Member member1 = post.getAuthor().getId() < commentWriter.getId() ?
+                post.getAuthor() : commentWriter;
+            Member member2 = post.getAuthor().getId() < commentWriter.getId() ?
+                commentWriter : post.getAuthor();
+
+            updateSocialCount(orgId, member1, member2);
         }
     }
 
