@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.quiz.controller;
 
+import com.quiz.ourclass.domain.quiz.controller.docs.QuizControllerDocs;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
 import com.quiz.ourclass.domain.quiz.service.QuizServiceImpl;
 import com.quiz.ourclass.global.dto.ResultResponse;
