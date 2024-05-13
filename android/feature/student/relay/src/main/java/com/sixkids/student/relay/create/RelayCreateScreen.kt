@@ -30,7 +30,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun RelayCreateRoute(
     viewModel: RelayCreateViewModel = hiltViewModel(),
-    navigateToRelayResult: (Long) -> Unit,
+    navigateToRelayResult: () -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
@@ -38,7 +38,7 @@ fun RelayCreateRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is RelayCreateEffect.NavigateToRelayResult -> navigateToRelayResult(sideEffect.newRelayId)
+            is RelayCreateEffect.NavigateToRelayResult -> navigateToRelayResult()
             is RelayCreateEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
     }

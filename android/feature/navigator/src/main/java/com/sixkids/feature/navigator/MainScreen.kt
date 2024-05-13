@@ -173,6 +173,7 @@ fun MainScreen(
             )
 
             studentRelayNavGraph(
+                navigateRelayHistory = navigator::navigateStudentRelayHistory,
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,
                 navigateCreateRelayResult = navigator::navigateStudentRelayCreateResult,

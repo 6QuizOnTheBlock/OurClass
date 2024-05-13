@@ -37,7 +37,10 @@ class RelayCreateViewModel @Inject constructor(
                 Log.d(TAG, "newRelayClick: ${uiState.value.question} ${uiState.value.orgId}")
                 createRelayUseCase(uiState.value.orgId, uiState.value.question)
                     .onSuccess {
-                        postSideEffect(RelayCreateEffect.NavigateToRelayResult(it))
+                        if (it>0){
+                            postSideEffect(RelayCreateEffect.NavigateToRelayResult)
+                        }
+
                     }.onFailure {
                         postSideEffect(RelayCreateEffect.OnShowSnackBar(SnackbarToken("이어 달리기 생성에 실패했습니다")))
                     }

@@ -28,6 +28,7 @@ import com.sixkids.student.main.navigation.navigateStudentProfile
 import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
+import com.sixkids.student.relay.navigation.RelayRoute
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreateResult
 import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
@@ -239,7 +240,7 @@ class MainNavigator(
      * Student Relay Navigation
      */
     fun navigateStudentRelayHistory() {
-        navController.navigate(HomeRoute.defaultRoute) {
+        navController.navigate(RelayRoute.defaultRoute) {
             popUpTo(navController.graph.id) {
                 inclusive = true
             }
@@ -258,8 +259,8 @@ class MainNavigator(
         navController.navigateStudentRelayJoin()
     }
 
-    fun navigateStudentRelayCreateResult(newRelayId: Long) {
-        navController.navigateStudentRelayCreateResult(newRelayId)
+    fun navigateStudentRelayCreateResult() {
+        navController.navigateStudentRelayCreateResult()
     }
 
     /**
