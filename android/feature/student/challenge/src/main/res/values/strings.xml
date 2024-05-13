@@ -14,4 +14,7 @@
 
     <string name="can_create_group">그룹을 만들 수 있어요</string>
     <string name="waint_invite">친구의 초대를 기다리고 있어요</string>
+    <string name="team_member">팀원</string>
+    <string name="end">종료</string>
+    <string name="free_group_matching">자유롭게 팀을 구성해봐요</string>
 </resources>

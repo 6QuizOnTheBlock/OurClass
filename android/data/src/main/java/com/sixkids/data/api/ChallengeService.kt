@@ -4,6 +4,7 @@ import com.sixkids.data.model.request.ChallengeCreateRequest
 import com.sixkids.data.model.response.ChallengeDetailResponse
 import com.sixkids.data.model.response.ChallengeHistoryResponse
 import com.sixkids.data.model.response.ChallengeSimpleResponse
+import com.sixkids.data.model.response.RunningChallengeByStudentResponse
 import com.sixkids.data.model.response.RunningChallengeResponse
 import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
@@ -51,4 +52,9 @@ interface ChallengeService {
         @Path("id") reportId: Long,
         @Query("reportType") acceptStatus: String,
     ): ApiResult<ApiResponse<Unit>>
+
+    @GET("challenges/running/member")
+    suspend fun getRunningChallengeByStudent(
+        @Query("organizationId") organizationId: Int,
+    ): ApiResult<ApiResponse<RunningChallengeByStudentResponse>>
 }

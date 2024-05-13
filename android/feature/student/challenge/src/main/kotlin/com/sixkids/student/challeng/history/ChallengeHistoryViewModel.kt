@@ -1,11 +1,11 @@
 package com.sixkids.student.challeng.history
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.GetChallengeHistoryUseCase
-import com.sixkids.domain.usecase.challenge.GetRunningChallengeUseCase
+import com.sixkids.domain.usecase.challenge.GetRunningChallengeByStudentUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
-import com.sixkids.model.GroupType
 import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
@@ -18,7 +18,7 @@ class ChallengeHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getChallengeHistoryUseCase: GetChallengeHistoryUseCase,
-    private val getRunningChallengeUseCase: GetRunningChallengeUseCase
+    private val getRunningChallengeByStudentUseCase: GetRunningChallengeByStudentUseCase
 ) : BaseViewModel<ChallengeHistoryState, ChallengeHistoryEffect>(
     ChallengeHistoryState()
 ) {
@@ -37,10 +37,11 @@ class ChallengeHistoryViewModel @Inject constructor(
                 this@ChallengeHistoryViewModel.organizationId = organizationId.toLong()
                 val challengeHistory = getChallengeHistoryUseCase(organizationId, userInfo.id)
                 intent { copy(challengeHistory = challengeHistory) }
-                getRunningChallengeUseCase(organizationId)
+                getRunningChallengeByStudentUseCase(organizationId)
             }.onSuccess {
                 intent { copy(isLoading = false, runningChallenge = it) }
             }.onFailure {
+                Log.d("D107", "initData: $it")
                 when (it) {
                     is NoSuchElementException -> {
                         intent { copy(isLoading = false, runningChallenge = null) }
@@ -70,9 +71,8 @@ class ChallengeHistoryViewModel @Inject constructor(
         val runningChallenge = uiState.value.runningChallenge ?: return
         postSideEffect(
             ChallengeHistoryEffect.NavigateToCreateGroup(
-                runningChallenge.id,
-                GroupType.FREE
-//                runningChallenge.groupType
+                runningChallenge.challenge.id,
+                runningChallenge.type
             )
         )
     }
