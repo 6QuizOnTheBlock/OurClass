@@ -25,4 +25,8 @@ class OrganizationRepositoryImpl @Inject constructor(
     override suspend fun newOrganization(name: String): Long {
         return organizationRemoteDataSource.newOrganization(name)
     }
+
+    override suspend fun joinOrganization(orgId: Int, code: String): Long {
+        return organizationRemoteDataSource.joinOrganization(orgId, code)
+    }
 }

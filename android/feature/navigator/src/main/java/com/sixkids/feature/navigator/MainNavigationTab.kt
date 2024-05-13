@@ -11,6 +11,7 @@ import com.sixkids.navigator.R
 import com.sixkids.student.board.navigation.StudentBoardRoute
 import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.navigation.ChallengeRoute
+import com.sixkids.student.relay.navigation.RelayRoute
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.home.navigation.HomeRoute
 import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
@@ -63,7 +64,7 @@ enum class MainNavigationTab(
         iconId = R.drawable.folded_hands,
         iconTint = Purple,
         labelId = R.string.bottom_navigation_tab_label_relay,
-        route = "",
+        route = RelayRoute.defaultRoute,
     ),
     STUDENT_CHALLENGE(
         iconId = R.drawable.home_rocket,

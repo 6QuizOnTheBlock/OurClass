@@ -6,4 +6,6 @@ interface OrganizationRemoteDataSource {
     suspend fun getClassList(): List<Organization>
 
     suspend fun newOrganization(name: String): Long
+
+    suspend fun joinOrganization(orgId: Int, code: String): Long
 }
