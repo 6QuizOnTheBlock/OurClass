@@ -31,7 +31,11 @@ public class FcmUtil {
     }
 
     public void multiFcmSend(List<Member> members, FcmDTO fcmDTO) {
-        members.forEach(member -> singleFcmSend(member, fcmDTO));
+        members.forEach(member ->
+            Thread.startVirtualThread(() ->
+                singleFcmSend(member, fcmDTO)
+            )
+        );
     }
 
     private String getFcmRedisKey(Long memberId) {

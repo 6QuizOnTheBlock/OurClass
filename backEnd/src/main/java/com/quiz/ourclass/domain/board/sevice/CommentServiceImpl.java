@@ -61,7 +61,8 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
         }
 
-        if (post.getAuthor().getId() != commentWriter.getId()) {
+        if (post.getAuthor().getId() != commentWriter.getId() &&
+            post.getAuthor().getRole() == Role.STUDENT) {
             //해당 게시글에 반응(댓글 작성)을 하였는지 확인
             boolean isFirstComment = request.parentId() == 0L
                 && !commentRepository.existsByPostAndMember(post, commentWriter);
