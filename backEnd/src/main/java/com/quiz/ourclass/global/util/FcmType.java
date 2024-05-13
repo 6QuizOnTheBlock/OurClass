@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum FcmType {
     POST("게시글"),
     COMMENT("댓글"),
+    NOTICE("알림장"),
     ;
     private final String Type;
 }

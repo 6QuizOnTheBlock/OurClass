@@ -22,6 +22,7 @@ import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.notice.entity.Notice;
 import com.quiz.ourclass.domain.notice.entity.NoticeType;
 import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.dto.FcmDTO;
@@ -102,6 +103,33 @@ public class PostServiceImpl implements PostService {
         Post post = postMapper.postRequestToPost(
             request, member, organization, now, image
         );
+        //알림장 작성 시 단체 학생들에게 FCM 발송
+        if (post.getPostCategory() == PostCategory.NOTICE) {
+            String title = fcmUtil.makeNoticeTitle(
+                post.getOrganization().getName(), FcmType.NOTICE.getType()
+            );
+            String body = fcmUtil.makeNoticeBody(
+                post.getOrganization().getName(), FcmType.NOTICE.getType()
+            );
+            FcmDTO fcmDTO = fcmUtil.makeFcmDTO(title, body);
+
+            // 알림 저장
+            Notice notice = Notice.builder()
+                .receiver(post.getOrganization().getManager())
+                .url(member.getName())
+                .content(body)
+                .type(NoticeType.NOTICE)
+                .createTime(LocalDateTime.now())
+                .build();
+            noticeRepository.save(notice);
+
+            fcmUtil.multiFcmSend(
+                organization.getMemberOrganizations().stream()
+                    .map(MemberOrganization::getMember)
+                    .toList(),
+                fcmDTO
+            );
+        }
         return postRepository.save(post).getId();
     }
 

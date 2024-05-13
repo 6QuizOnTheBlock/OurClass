@@ -18,9 +18,6 @@ import org.springframework.stereotype.Component;
 public class FcmUtil {
 
     private final RedisUtil redisUtil;
-    private static final String FCM_KEY_PREFIX = "FCM_";
-    private static final int MAX_RETRIES = 5; //최대 재시도 횟수
-    private static final long INITIAL_BACKOFF = 1000L; //초기 백오프 시간 (1초)
 
     @Async("taskExecutor")
     public void singleFcmSend(Member member, FcmDTO fcmDTO) {
@@ -38,7 +35,7 @@ public class FcmUtil {
     }
 
     private String getFcmRedisKey(Long memberId) {
-        return FCM_KEY_PREFIX + memberId;
+        return ConstantUtil.FCM_KEY_PREFIX + memberId;
     }
 
     public Message makeMessage(String title, String body, String token) {
@@ -55,9 +52,9 @@ public class FcmUtil {
 
     private void sendMessage(Message message) {
         int attempt = 0;
-        long backoff = INITIAL_BACKOFF;
+        long backoff = ConstantUtil.INITIAL_BACKOFF;
 
-        while (attempt < MAX_RETRIES) { //지수 백오프 전략
+        while (attempt < ConstantUtil.MAX_RETRIES) { //지수 백오프 전략
             try {
                 FirebaseMessaging.getInstance().send(message);
                 log.info("FCM Send Success");
@@ -65,7 +62,7 @@ public class FcmUtil {
             } catch (FirebaseMessagingException e) {
                 log.error("FCM Send Error: {}", e.getMessage());
                 attempt++;
-                if (attempt >= MAX_RETRIES) {
+                if (attempt >= ConstantUtil.MAX_RETRIES) {
                     // 최대 재시도 횟수 도달 시 루프 종료
                     // 다른 메시지 시스템으로 알림을 전송하는 방법을 고려해볼 수 있음
                     log.error("Reached Maximum Retry Attempts");
@@ -96,5 +93,13 @@ public class FcmUtil {
 
     public String makeReportBody(String authorMember, String reportMember, String type) {
         return authorMember + " 학생이 작성한 " + type + "을" + reportMember + "학생이 신고하였습니다.";
+    }
+
+    public String makeNoticeTitle(String organizationName, String type) {
+        return organizationName + " " + type;
+    }
+
+    public String makeNoticeBody(String organizationName, String type) {
+        return organizationName + " " + type + "이 등록되었어요!!";
     }
 }
