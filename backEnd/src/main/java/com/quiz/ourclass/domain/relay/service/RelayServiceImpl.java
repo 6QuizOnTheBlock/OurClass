@@ -168,6 +168,17 @@ public class RelayServiceImpl implements RelayService {
             .prevQuestion(prevRelayMember.getQuestion()).build();
     }
 
+    @Override
+    public String getRelayQuestion(long id) {
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        Relay relay = relayRepository.findById(id)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_NOT_FOUND));
+        RelayMember prevRelayMember = relayMemberRepository.findByRelayAndNextMember(relay, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
+        return prevRelayMember.getQuestion();
+    }
+
     protected void relayClosing(RelayMember relayMember) {
         Relay relay = relayMember.getRelay();
         relay.setEndStatus(true);
