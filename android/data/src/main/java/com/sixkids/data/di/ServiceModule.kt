@@ -3,6 +3,7 @@ package com.sixkids.data.di
 import com.sixkids.data.api.ChallengeService
 import com.sixkids.data.api.CommentService
 import com.sixkids.data.api.ChattingService
+import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.api.PostService
@@ -90,6 +91,14 @@ object ServiceModule {
         @NetworkModule.AuthRetrofit retrofit: Retrofit
     ): RelayService {
         return retrofit.create(RelayService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMemberOrgService(
+        @NetworkModule.AuthRetrofit retrofit: Retrofit
+    ): MemberOrgService {
+        return retrofit.create(MemberOrgService::class.java)
     }
 
 }

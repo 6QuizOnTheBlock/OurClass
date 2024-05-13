@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.user.remote
 
+import com.sixkids.data.model.response.StudentHomeResponse
 import com.sixkids.model.JwtToken
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.UserInfo
@@ -19,4 +20,6 @@ interface UserRemoteDataSource {
     suspend fun autoSignIn(): JwtToken
 
     suspend fun updateFCMToken(fcmToken: String)
+
+    suspend fun getStudentHomeInfo(organizationId: Long) : StudentHomeResponse
 }

@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.user.remote
 
+import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.FcmRequest
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class UserRemoteDataSourceImpl @Inject constructor(
     private val signInService: SignInService,
     private val memberService: MemberService,
-    private val userLocalDataSource: UserLocalDataSource
+    private val userLocalDataSource: UserLocalDataSource,
+    private val memberOrgService: MemberOrgService
 ) : UserRemoteDataSource{
     override suspend fun signIn(idToken: String): JwtToken {
         val response = signInService.signIn(SignInRequest(idToken))
@@ -111,4 +113,5 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return response.getOrThrow().data.toModel()
     }
 
+    override suspend fun getStudentHomeInfo(organizationId: Long) = memberOrgService.getStudentHomeInfo(organizationId).getOrThrow().data
 }
