@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailEffect
 import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailRoute
 import com.sixkids.student.home.announce.announcelist.StudentAnnounceListRoute
+import com.sixkids.student.home.chatting.StudentChattingRoute
 import com.sixkids.student.home.main.StudentHomeMainRoute
 import com.sixkids.ui.SnackbarToken
 
@@ -25,9 +26,14 @@ fun NavController.navigateStudentAnnounceDetail(announceDetailId: Long) {
     navigate(StudentHomeRoute.announceDetailRoute(announceDetailId))
 }
 
+fun NavController.navigateStudentChatting() {
+    navigate(StudentHomeRoute.chattingRoute)
+}
+
 fun NavGraphBuilder.studentHomeNavGraph(
     padding: PaddingValues,
     onShowSnackbar: (SnackbarToken) -> Unit,
+    navigateBack: () -> Unit,
     navigateToStudentAnnounceList: () -> Unit,
     navigateToStudentAnnounceDetail: (Long) -> Unit,
     navigateToTagHello: () -> Unit,
@@ -62,6 +68,13 @@ fun NavGraphBuilder.studentHomeNavGraph(
             onShowSnackBar = onShowSnackbar
         )
     }
+
+    composable(route = StudentHomeRoute.chattingRoute) {
+        StudentChattingRoute(
+            onBackClick = navigateBack,
+            onShowSnackBar = onShowSnackbar
+        )
+    }
 }
 
 object StudentHomeRoute {
@@ -71,6 +84,8 @@ object StudentHomeRoute {
 
     const val announceListRoute = "student_announce_list"
     const val announceDetailRoute = "student_announce_detail/{$announceDetailARG}"
+
+    const val chattingRoute = "student_chatting"
 
     fun announceDetailRoute(announceDetailId: Long) = "student_announce_detail/$announceDetailId"
 }
