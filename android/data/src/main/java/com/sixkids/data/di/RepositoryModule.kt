@@ -2,15 +2,15 @@ package com.sixkids.data.di
 
 import com.sixkids.data.repository.TokenRepositoryImpl
 import com.sixkids.data.repository.challenge.ChallengeRepositoryImpl
-import com.sixkids.data.repository.comment.CommentRepositoryImpl
 import com.sixkids.data.repository.chatting.ChattingRepositoryImpl
+import com.sixkids.data.repository.comment.CommentRepositoryImpl
 import com.sixkids.data.repository.organization.OrganizationRepositoryImpl
 import com.sixkids.data.repository.post.PostRepositoryImpl
 import com.sixkids.data.repository.relay.RelayRepositoryImpl
-import com.sixkids.domain.repository.ChallengeRepository
 import com.sixkids.data.repository.user.UserRepositoryImpl
-import com.sixkids.domain.repository.CommentRepository
+import com.sixkids.domain.repository.ChallengeRepository
 import com.sixkids.domain.repository.ChattingRepository
+import com.sixkids.domain.repository.CommentRepository
 import com.sixkids.domain.repository.OrganizationRepository
 import com.sixkids.domain.repository.PostRepository
 import com.sixkids.domain.repository.RelayRepository
@@ -61,7 +61,7 @@ abstract class RepositoryModule {
     abstract fun bindCommentRepository(
         commentRepository: CommentRepositoryImpl
     ): CommentRepository
-  
+
     @Singleton
     @Binds
     abstract fun bindChattingRepository(

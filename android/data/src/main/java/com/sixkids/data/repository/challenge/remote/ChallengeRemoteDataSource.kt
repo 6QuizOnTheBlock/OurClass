@@ -29,4 +29,6 @@ interface ChallengeRemoteDataSource {
     suspend fun getChallengeSimple(
         challengeId: Int
     ): Challenge
+
+    suspend fun connectSse()
 }
