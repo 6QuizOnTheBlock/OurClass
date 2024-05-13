@@ -158,7 +158,6 @@ public class RelayServiceImpl implements RelayService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         Relay relay = relayRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_NOT_FOUND));
-        //TODO: 두번 이전으로 수정필요
         RelayMember prevRelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
                 relay, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
