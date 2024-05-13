@@ -34,12 +34,14 @@ fun CreateGroupRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.connectSse()
         viewModel.loadUserInfo()
         viewModel.startScan()
     }
 
     DisposableEffect(Unit) {
         onDispose {
+            viewModel.disconnectSse()
             viewModel.stopScan()
         }
     }

@@ -80,29 +80,9 @@ class JoinGroupViewModel @Inject constructor(
         }
     }
 
-    init {
-//        sseConnectUseCase.setEventListener(this)
-
-
-    }
-
     fun connectSse() = viewModelScope.launch {
         eventSource = EventSources.createFactory(client)
             .newEventSource(request, eventSourceListener)
-
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                client.newCall(request).enqueue(responseCallback = object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        throw e
-                    }
-
-                    override fun onResponse(call: Call, response: Response) {
-                        Log.d(TAG, "APi Call Success ${response.body}")
-                    }
-                })
-            }
-        }
     }
 
     fun disconnectSse() {
