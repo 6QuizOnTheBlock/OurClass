@@ -20,5 +20,11 @@
     <string name="relay_pass_result_body_bottom_receiver">어떤 질문에 나를 지목했는지\n확인할 수 있어요!</string>
     <string name="relay_pass_result_body_top_receiver">다음 친구에게 전달하면</string>
     <string name="relay_pass_result_button_done">완료</string>
+    <string name="relay_tagging_title_sender">이어 달리기 전달하기</string>
+    <string name="relay_tagging_title_receiver">이어 달리기 전달 받기</string>
+    <string name="relay_tagging_sub_title_sender">내가 받은 질문에 맞는 친구에게 전달 해봐요</string>
+    <string name="relay_tagging_sub_title_receiver">친구에게 이어 달리기를 전달 받아요</string>
+    <string name="relay_tagging_body_sender">친구와 핸드폰 뒷면을 맞대서 전달해요</string>
+    <string name="relay_tagging_body_receiver">친구와 핸드폰 뒷면을 맞대서 전달 받아요</string>
 
 </resources>
