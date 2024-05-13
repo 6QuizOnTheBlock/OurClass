@@ -13,5 +13,8 @@ public abstract class ConstantUtil {
     public static final int RELAY_DEMERIT = -100;
     public static final int RELAY_REWARD = 50;
     public static final Long RELAY_TIMEOUT_DAY = 1L;
+    public static final String FCM_KEY_PREFIX = "FCM_";
+    public static final int MAX_RETRIES = 5; //최대 재시도 횟수
+    public static final long INITIAL_BACKOFF = 1000L; //초기 백오프 시간 (1초)
 
 }
