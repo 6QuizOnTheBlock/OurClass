@@ -270,8 +270,8 @@ class MainNavigator(
         navController.navigateStudentRelayAnswer(relayId)
     }
 
-    fun navigateStudentRelayTaggingSender(relayId: Long) {
-        navController.navigateStudentRelayTaggingSender(relayId)
+    fun navigateStudentRelayTaggingSender(relayId: Long, question: String) {
+        navController.navigateStudentRelayTaggingSender(relayId, question)
     }
 
     fun navigateStudentRelayTaggingReceiver(relayId: Long) {

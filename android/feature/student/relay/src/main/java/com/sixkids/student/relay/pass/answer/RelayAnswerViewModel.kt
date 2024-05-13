@@ -39,6 +39,6 @@ class RelayAnswerViewModel @Inject constructor(
     }
 
     fun nextClick() {
-
+        postSideEffect(RelayAnswerEffect.NavigateToTaggingSenderRelay(relayId!!, uiState.value.nextQuestion))
     }
 }

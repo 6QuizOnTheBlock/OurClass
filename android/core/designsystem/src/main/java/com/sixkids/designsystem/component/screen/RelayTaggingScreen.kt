@@ -67,7 +67,7 @@ fun RelayTaggingScreen(
         )
 
         Spacer(modifier = Modifier.weight(1f))
-        if (!isSender) {
+        if (isSender) {
             UlbanFilledButton(
                 text = "다음",
                 onClick = { onClick() },

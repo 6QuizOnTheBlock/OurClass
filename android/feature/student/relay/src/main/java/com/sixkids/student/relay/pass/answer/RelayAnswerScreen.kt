@@ -33,7 +33,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun RelayAnswerRoute(
     viewModel: RelayAnswerViewModel = hiltViewModel(),
-    navigateToTaggingSenderRelay: (Long) -> Unit,
+    navigateToTaggingSenderRelay: (Long, String) -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
@@ -41,7 +41,7 @@ fun RelayAnswerRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is RelayAnswerEffect.NavigateToTaggingSenderRelay -> navigateToTaggingSenderRelay(sideEffect.relayId)
+            is RelayAnswerEffect.NavigateToTaggingSenderRelay -> navigateToTaggingSenderRelay(sideEffect.relayId, sideEffect.question)
             is RelayAnswerEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
     }
