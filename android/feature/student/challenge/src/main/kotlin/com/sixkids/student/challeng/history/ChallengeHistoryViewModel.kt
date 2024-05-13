@@ -5,6 +5,7 @@ import com.sixkids.domain.usecase.challenge.GetChallengeHistoryUseCase
 import com.sixkids.domain.usecase.challenge.GetRunningChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
+import com.sixkids.model.GroupType
 import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
@@ -65,9 +66,16 @@ class ChallengeHistoryViewModel @Inject constructor(
         ChallengeHistoryEffect.ShowGroupDialog
     )
 
-    fun navigateToCreateGroup() = postSideEffect(
-        ChallengeHistoryEffect.NavigateToCreateGroup(organizationId)
-    )
+    fun navigateToCreateGroup() {
+        val runningChallenge = uiState.value.runningChallenge ?: return
+        postSideEffect(
+            ChallengeHistoryEffect.NavigateToCreateGroup(
+                runningChallenge.id,
+                GroupType.FREE
+//                runningChallenge.groupType
+            )
+        )
+    }
 
     fun navigateToJoinGroup() = postSideEffect(
         ChallengeHistoryEffect.NavigateToJoinGroup(organizationId)

@@ -106,7 +106,7 @@ class CreateGroupViewModel @Inject constructor(
                 intent {
                     copy(
                         roomKey = matchingRoom.dataKey,
-                        minCount = matchingRoom.minCount,
+                        groupSize = matchingRoom.minCount,
                     )
                 }
                 loadUserInfoUseCase()

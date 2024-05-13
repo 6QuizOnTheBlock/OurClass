@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.GroupType
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 
@@ -27,7 +28,8 @@ fun GroupWaiting(
     memberList: List<MemberIconItem> = emptyList(),
     onDoneClick: () -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
-    groupSize: Int = 0
+    groupSize: Int = 0,
+    groupType: GroupType = GroupType.FREE
 ) {
     Card(
         modifier = Modifier
@@ -49,15 +51,28 @@ fun GroupWaiting(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = if(remainingMember != 0) {
-                    stringResource(R.string.friend_waiting_message, remainingMember)
-                } else {
-                    stringResource(R.string.can_create_group)
-                },
-                style = UlbanTypography.bodyMedium
-            )
+            if(groupType == GroupType.FREE) {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = if(remainingMember > 0) {
+                        stringResource(R.string.friend_waiting_message, remainingMember)
+                    } else {
+                        stringResource(R.string.can_create_group)
+                    },
+                    style = UlbanTypography.bodyMedium
+                )
+            } else {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = if(remainingMember != 0) {
+                        stringResource(R.string.need_to_waiting_friend_message, remainingMember)
+                    } else {
+                        stringResource(R.string.can_create_group)
+                    },
+                    style = UlbanTypography.bodyMedium
+                )
+            }
+
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {

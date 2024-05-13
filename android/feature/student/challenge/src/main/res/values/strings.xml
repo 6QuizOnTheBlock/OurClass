@@ -10,6 +10,8 @@
     <string name="done">완료</string>
     <string name="invite_friend">근처에 있는 친구를 초대해 보세요</string>
     <string name="friend_waiting_message">%d명의 친구들을 더 모아보세요</string>
+    <string name="need_to_waiting_friend_message">아직 %d명의 친구가 모이지 않았어요</string>
+
     <string name="can_create_group">그룹을 만들 수 있어요</string>
     <string name="waint_invite">친구의 초대를 기다리고 있어요</string>
 </resources>

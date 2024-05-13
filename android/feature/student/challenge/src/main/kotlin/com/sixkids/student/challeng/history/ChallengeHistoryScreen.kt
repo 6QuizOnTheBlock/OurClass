@@ -34,6 +34,7 @@ import com.sixkids.designsystem.component.item.UlbanChallengeItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.GroupType
 import com.sixkids.student.challeng.history.component.GroupParticipationDialog
 import com.sixkids.student.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
@@ -42,7 +43,7 @@ import com.sixkids.ui.util.formatToMonthDayTime
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
     navigateToDetail: (Long, Long?) -> Unit,
-    navigateToCreateGroup: (Long) -> Unit,
+    navigateToCreateGroup: (Long, GroupType) -> Unit,
     navigateToJoinGroup: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -70,7 +71,7 @@ fun ChallengeRoute(
                 ChallengeHistoryEffect.ShowGroupDialog -> {
                     showDialog = true
                 }
-                is ChallengeHistoryEffect.NavigateToCreateGroup -> navigateToCreateGroup(sideEffect.challengeId)
+                is ChallengeHistoryEffect.NavigateToCreateGroup -> navigateToCreateGroup(sideEffect.challengeId, sideEffect.groupType)
                 is ChallengeHistoryEffect.NavigateToJoinGroup -> navigateToJoinGroup(sideEffect.challengeId)
             }
         }
