@@ -65,6 +65,7 @@ fun StudentMainInfo(
                 modifier = Modifier.height(height),
                 verticalArrangement = Arrangement.Center
             ) {
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     textAlign = TextAlign.Start,
                     text = name,
@@ -75,7 +76,7 @@ fun StudentMainInfo(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     textAlign = TextAlign.Start,
-                    text = classString,
+                    text = classString.replace("\n"," "),
                     style = UlbanTypography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -86,6 +87,7 @@ fun StudentMainInfo(
                         fontSize = 18.sp
                     )
                 )
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }
