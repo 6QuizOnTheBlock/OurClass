@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SseServiceImpl implements SseService {
@@ -45,7 +47,7 @@ public class SseServiceImpl implements SseService {
         if (lastEventId != null && !lastEventId.isEmpty()) {
             sendLostData(lastEventId, String.valueOf(loginUserId), emitterId, emitter);
         }
-
+        log.info("SSE연결 요청 : 유저 " + loginUserId + ", 에미터 " + emitterId);
         return emitter;
     }
 
@@ -89,12 +91,17 @@ public class SseServiceImpl implements SseService {
     //종료 상태
     private void checkEmitterStatus(SseEmitter emitter, String emitterId) {
         emitter.onCompletion(() -> {
+            log.info("SSE연결 해제 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
             sseRepository.deleteById(emitterId);
         });
         emitter.onTimeout(() -> {
+            log.info("SSE연결 타임아웃 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
             sseRepository.deleteById(emitterId);
         });
-        emitter.onError((e) -> sseRepository.deleteById(emitterId));
+        emitter.onError((e) -> {
+            log.info("SSE연결 에러 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
+            sseRepository.deleteById(emitterId);
+        });
     }
 
     private void sendLostData(String lastEventId, String userId, String emitterId,
