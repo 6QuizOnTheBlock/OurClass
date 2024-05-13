@@ -131,6 +131,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             .organization(organization)
             .build();
         memberOrganizationRepository.save(memberOrganization);
+        organization.plusMemberCount();
         makeRelationships(organization, member);
         return organization.getId();
     }

@@ -45,4 +45,8 @@ public class Organization {
         this.name = request.name();
         return UpdateOrganizationResponse.builder().name(name).build();
     }
+
+    public void plusMemberCount() {
+        this.memberCount++;
+    }
 }
