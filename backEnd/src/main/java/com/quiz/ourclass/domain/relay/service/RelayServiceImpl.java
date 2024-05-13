@@ -158,14 +158,19 @@ public class RelayServiceImpl implements RelayService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         Relay relay = relayRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_NOT_FOUND));
-        RelayMember prevRelayMember = relayMemberRepository.findByRelayAndNextMember(relay, member)
+        //TODO: 두번 이전으로 수정필요
+        RelayMember prevRelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
+                relay, member)
+            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
+        RelayMember prev2RelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
+                relay, prevRelayMember.getCurMember())
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
         MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
             relay.getOrganization(), member).orElseThrow();
         memberOrganization.updateExp(ConstantUtil.RELAY_REWARD);
         return SendRelayResponse.builder()
-            .prevMemberName(prevRelayMember.getCurMember().getName())
-            .prevQuestion(prevRelayMember.getQuestion()).build();
+            .prevMemberName(prev2RelayMember.getCurMember().getName())
+            .prevQuestion(prev2RelayMember.getQuestion()).build();
     }
 
     @Override
@@ -174,7 +179,8 @@ public class RelayServiceImpl implements RelayService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         Relay relay = relayRepository.findById(id)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_NOT_FOUND));
-        RelayMember prevRelayMember = relayMemberRepository.findByRelayAndNextMember(relay, member)
+        RelayMember prevRelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
+                relay, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
         return prevRelayMember.getQuestion();
     }
