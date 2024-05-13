@@ -86,6 +86,14 @@ class RelayHistoryViewModel @Inject constructor(
         RelayHistoryEffect.NavigateToRelayDetail(relayId)
     )
 
+    fun navigateToAnswerRelay(relayId: Long) = postSideEffect(
+        RelayHistoryEffect.NavigateToAnswerRelay(relayId)
+    )
+
+    fun navigateToTaggingReceiverRelay(relayId: Long) = postSideEffect(
+        RelayHistoryEffect.NavigateToTaggingReceiverRelay(relayId)
+    )
+
 
     companion object{
         val runningRelayMyTurn = RunningRelay(

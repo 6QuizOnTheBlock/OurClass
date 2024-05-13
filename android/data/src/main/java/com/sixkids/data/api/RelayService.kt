@@ -9,6 +9,7 @@ import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RelayService {
@@ -35,5 +36,10 @@ interface RelayService {
     suspend fun createRelay(
         @Body relayCreateRequest: RelayCreateRequest
     ): ApiResult<ApiResponse<Long>>
+
+    @GET("relays/{id}/question")
+    suspend fun getRelayQuestion(
+        @Path("id") relayId: Long
+    ): ApiResult<ApiResponse<String>>
 
 }

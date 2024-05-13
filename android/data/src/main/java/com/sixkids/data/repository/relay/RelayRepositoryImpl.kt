@@ -44,4 +44,8 @@ class RelayRepositoryImpl @Inject constructor(
     override suspend fun createRelay(organizationId: Int, question: String): Long {
         return relayRemoteDataSource.createRelay(organizationId, question)
     }
+
+    override suspend fun getRelayQuestion(relayId: Long): String {
+        return relayRemoteDataSource.getRelayQuestion(relayId)
+    }
 }

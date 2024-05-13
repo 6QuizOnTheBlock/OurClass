@@ -21,4 +21,8 @@ class RelayRemoteDataSourceImpl @Inject constructor(
         return relayService.createRelay(RelayCreateRequest(organizationId, question)).getOrThrow().data
     }
 
+    override suspend fun getRelayQuestion(relayId: Long): String {
+        return relayService.getRelayQuestion(relayId).getOrThrow().data
+    }
+
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,7 +33,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun RelayAnswerRoute(
     viewModel: RelayAnswerViewModel = hiltViewModel(),
-    navigateToPassRelay: () -> Unit,
+    navigateToTaggingSenderRelay: (Long) -> Unit,
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
@@ -40,9 +41,13 @@ fun RelayAnswerRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            RelayAnswerEffect.NavigateToPassRelay -> navigateToPassRelay()
+            is RelayAnswerEffect.NavigateToTaggingSenderRelay -> navigateToTaggingSenderRelay(sideEffect.relayId)
             is RelayAnswerEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
         }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.init()
     }
 
     RelayAnswerScreen(

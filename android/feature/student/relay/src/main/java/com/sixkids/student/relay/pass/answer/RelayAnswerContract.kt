@@ -11,6 +11,6 @@ data class RelayAnswerState(
 ): UiState
 
 sealed interface RelayAnswerEffect: SideEffect{
-    data object NavigateToPassRelay: RelayAnswerEffect
+    data class NavigateToTaggingSenderRelay(val relayId: Long): RelayAnswerEffect
     data class OnShowSnackBar(val tkn: SnackbarToken): RelayAnswerEffect
 }
