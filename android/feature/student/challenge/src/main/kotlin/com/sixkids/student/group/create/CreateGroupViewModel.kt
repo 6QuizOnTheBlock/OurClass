@@ -5,19 +5,17 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
+import com.sixkids.domain.usecase.group.CreateGroupMatchingRoomUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.BuildConfig
 import com.sixkids.ui.base.BaseViewModel
+import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -25,17 +23,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
-import okio.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val TAG = "D107"
+
 @HiltViewModel
 class CreateGroupViewModel @Inject constructor(
     private val bluetoothScanner: BluetoothScanner,
     private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
-    private val getATKUseCase: GetATKUseCase
+    private val getATKUseCase: GetATKUseCase,
+    private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
 
     private var eventSource: EventSource? = null
@@ -97,6 +96,34 @@ class CreateGroupViewModel @Inject constructor(
                 }
             }.onFailure {
                 postSideEffect(CreateGroupEffect.HandleException(it, ::loadUserInfo))
+            }
+        }
+    }
+
+    fun createGroupMatchingRoom(challengeId: Long) {
+        viewModelScope.launch {
+            createGroupMatchingRoomUseCase(challengeId).flatMap { matchingRoom ->
+                intent {
+                    copy(
+                        roomKey = matchingRoom.dataKey,
+                        minCount = matchingRoom.minCount,
+                    )
+                }
+                loadUserInfoUseCase()
+            }.onSuccess { member ->
+                intent {
+                    copy(
+                        leader = MemberSimple(
+                            id = member.id.toLong(),
+                            name = member.name,
+                            photo = member.photo
+                        )
+                    )
+                }
+            }.onFailure {
+                postSideEffect(CreateGroupEffect.HandleException(it) {
+                    createGroupMatchingRoom(challengeId)
+                })
             }
         }
     }
