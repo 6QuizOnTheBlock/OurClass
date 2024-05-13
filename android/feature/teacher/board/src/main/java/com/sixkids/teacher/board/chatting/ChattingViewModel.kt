@@ -82,7 +82,7 @@ class ChattingViewModel @Inject constructor(
             val userInfoJob = async { loadUserInfoUseCase().getOrThrow() }
 
             tkn = tknJob.await()
-//                roomId = roomIdJob.await()
+            roomId = roomIdJob.await().toLong()
             userInfo = userInfoJob.await()
 
              connectStomp()
