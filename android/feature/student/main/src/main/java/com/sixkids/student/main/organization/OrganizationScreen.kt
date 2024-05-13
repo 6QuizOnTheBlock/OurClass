@@ -172,7 +172,8 @@ fun StudentUserInfoSection(name: String, photo: String) {
             modifier = Modifier
                 .padding(20.dp)
                 .size(200.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
+                .align(Alignment.CenterHorizontally),
             contentScale = ContentScale.Crop
         )
 

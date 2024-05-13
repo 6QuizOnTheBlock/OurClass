@@ -9,4 +9,6 @@ interface OrganizationRepository {
     suspend fun getSelectedOrganizationId(): Int
 
     suspend fun newOrganization(name: String): Long
+
+    suspend fun joinOrganization(orgId: Int, code: String): Long
 }

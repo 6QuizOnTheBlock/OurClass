@@ -12,5 +12,9 @@
     <string name="profile_exit">회원 탈퇴</string>
 
     <!-- NewOrganizationScreen -->
-    <string name="join_organization_title">선생님께 받은\n초대코드를 입력하세요</string>
+    <string name="join_organization_title">선생님께 받은 초대코드를 입력하세요</string>
+    <string name="join_organization_id">선생님께 받은 학급 ID를 입력하세요</string>
+    <string name="join_organization_top">학급 가입</string>
+    <string name="join_organization_code_hint">초대 코드</string>
+    <string name="join_organization_id_hint">초대 코드</string>
 </resources>
