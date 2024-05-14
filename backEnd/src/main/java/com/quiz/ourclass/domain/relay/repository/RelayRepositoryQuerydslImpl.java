@@ -41,7 +41,7 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
                 relay.lastRunner.receiveTime,
                 relay.lastRunner.turn,
                 relay.lastRunner.curMember.name
-            ))
+            )).distinct()
             .from(relay)
             .join(relay.relayRunners, relayMember)
             .where(relayCondition)
