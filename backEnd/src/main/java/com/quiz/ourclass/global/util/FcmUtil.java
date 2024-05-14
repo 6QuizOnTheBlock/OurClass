@@ -108,4 +108,8 @@ public class FcmUtil {
         String status = reportType.equals(ReportType.APPROVE) ? "승인" : "거절";
         return "과제 " + status + "!! 함께달리기 [" + challengeName + "]";
     }
+
+    public String makeRelayBody() {
+        return "이어달리기 전달 제한 시간이 지났습니다!!!";
+    }
 }

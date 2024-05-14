@@ -20,6 +20,8 @@ import com.quiz.ourclass.domain.relay.repository.RelayRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.ConstantUtil;
+import com.quiz.ourclass.global.util.FcmType;
+import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.scheduler.SchedulingService;
 import java.time.LocalDateTime;
@@ -41,6 +43,7 @@ public class RelayServiceImpl implements RelayService {
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final SchedulingService schedulingService;
+    private final FcmUtil fcmUtil;
 
 
     @Transactional
@@ -194,6 +197,10 @@ public class RelayServiceImpl implements RelayService {
             relay.getOrganization(), curMember).orElseThrow();
         memberOrganization.updateExp(ConstantUtil.RELAY_DEMERIT);
         relayMemberRepository.save(relayMember);
+        String title = fcmUtil.makeFcmTitle(relay.getOrganization().getName(),
+            FcmType.RELAY.name());
+        String body = fcmUtil.makeRelayBody();
+        fcmUtil.singleFcmSend(curMember, fcmUtil.makeFcmDTO(title, body));
     }
 
     @EventListener(ApplicationReadyEvent.class)
