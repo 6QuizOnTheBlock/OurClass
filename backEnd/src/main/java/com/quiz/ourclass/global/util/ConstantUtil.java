@@ -16,5 +16,7 @@ public abstract class ConstantUtil {
     public static final String FCM_KEY_PREFIX = "FCM_";
     public static final int MAX_RETRIES = 5; //최대 재시도 횟수
     public static final long INITIAL_BACKOFF = 1000L; //초기 백오프 시간 (1초)
+    public static final String QUIZ_GAMER = "gamer";
+    public static final String RANKING = "ranking";
 
 }

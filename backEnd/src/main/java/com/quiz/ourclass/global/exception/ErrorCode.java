@@ -17,6 +17,9 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 입력 값입니다."),
     ANOTHER_AUTH_ERROR(HttpStatus.UNAUTHORIZED, "토큰 외의 Auth 에러입니다."),
     TEACHER_CAN_NOT_REPORT(HttpStatus.FORBIDDEN, "단체 관리자는 신고할 수 없습니다."),
+    CANT_LOAD_KAFKA(HttpStatus.INTERNAL_SERVER_ERROR, "카프카 메타 데이터를 조회할 수 없습니다."),
+    FAILED_TO_SENDING_MESSAGE(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED,
+        "메세지를 카프카로 전송하는데 실패했습니다. 재시도 중..."),
 
 
     //member
