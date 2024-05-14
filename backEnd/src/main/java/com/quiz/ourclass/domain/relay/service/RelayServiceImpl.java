@@ -164,15 +164,12 @@ public class RelayServiceImpl implements RelayService {
         RelayMember prevRelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
                 relay, member)
             .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
-        RelayMember prev2RelayMember = relayMemberRepository.findFirstByRelayAndNextMemberOrderByTurnDesc(
-                relay, prevRelayMember.getCurMember())
-            .orElseThrow(() -> new GlobalException(ErrorCode.RELAY_MEMBER_NOT_FOUND));
         MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
             relay.getOrganization(), member).orElseThrow();
         memberOrganization.updateExp(ConstantUtil.RELAY_REWARD);
         return SendRelayResponse.builder()
-            .prevMemberName(prev2RelayMember.getCurMember().getName())
-            .prevQuestion(prev2RelayMember.getQuestion()).build();
+            .prevMemberName(prevRelayMember.getCurMember().getName())
+            .prevQuestion(prevRelayMember.getQuestion()).build();
     }
 
     @Override
