@@ -14,4 +14,6 @@ interface OrganizationRemoteDataSource {
     suspend fun joinOrganization(orgId: Int, code: String): Long
 
     suspend fun getOrganizationSummary(organizationId: Int): ClassSummaryResponse
+
+    suspend fun updateOrganization(organizationId: Int, name: String): String
 }

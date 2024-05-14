@@ -27,4 +27,9 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
     override suspend fun getOrganizationSummary(organizationId: Int): ClassSummaryResponse {
         return organizationService.getOrganizationSummary(organizationId).getOrThrow().data
     }
+
+    override suspend fun updateOrganization(organizationId: Int, name: String): String {
+        return organizationService.updateOrganization(organizationId, NewOrganizationRequest(name))
+            .getOrThrow().data.name
+    }
 }

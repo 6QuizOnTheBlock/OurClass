@@ -4,10 +4,12 @@ import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
+import com.sixkids.data.model.response.OrganizationNameResponse
 import com.sixkids.data.model.response.OrganizationResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -28,4 +30,10 @@ interface OrganizationService {
     suspend fun getOrganizationSummary(
         @Path(value = "id") organizationId: Int
     ): ApiResult<ApiResponse<ClassSummaryResponse>>
+
+    @PATCH("organizations/{id}")
+    fun updateOrganization(
+        @Path(value = "id") organizationId: Int,
+        @Body newOrganizationRequest: NewOrganizationRequest
+    ): ApiResult<ApiResponse<OrganizationNameResponse>>
 }

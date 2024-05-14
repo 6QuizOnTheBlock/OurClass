@@ -41,4 +41,8 @@ class OrganizationRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun updateOrganization(organizationId: Int, name: String): String {
+        return organizationRemoteDataSource.updateOrganization(organizationId, name)
+    }
 }
