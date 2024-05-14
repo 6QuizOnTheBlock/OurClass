@@ -4,6 +4,7 @@ import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
+import com.sixkids.data.model.response.OrganizationInviteCodeResponse
 import com.sixkids.data.model.response.OrganizationNameResponse
 import com.sixkids.data.model.response.OrganizationResponse
 import com.sixkids.data.network.ApiResult
@@ -32,8 +33,14 @@ interface OrganizationService {
     ): ApiResult<ApiResponse<ClassSummaryResponse>>
 
     @PATCH("organizations/{id}")
-    fun updateOrganization(
+    suspend fun updateOrganization(
         @Path(value = "id") organizationId: Int,
         @Body newOrganizationRequest: NewOrganizationRequest
     ): ApiResult<ApiResponse<OrganizationNameResponse>>
+
+    @GET("organizations/{id}/code")
+    suspend fun getOrganizationInviteCode(
+        @Path(value = "id") organizationId: Int
+    ): ApiResult<ApiResponse<OrganizationInviteCodeResponse>>
+
 }

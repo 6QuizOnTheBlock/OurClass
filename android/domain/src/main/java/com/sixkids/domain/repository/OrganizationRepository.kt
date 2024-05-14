@@ -16,4 +16,6 @@ interface OrganizationRepository {
     suspend fun getOrganizationSummary(organizationId: Int): ClassSummary
 
     suspend fun updateOrganization(organizationId: Int, name: String): String
+
+    suspend fun getOrganizationInviteCode(organizationId: Int): String
 }

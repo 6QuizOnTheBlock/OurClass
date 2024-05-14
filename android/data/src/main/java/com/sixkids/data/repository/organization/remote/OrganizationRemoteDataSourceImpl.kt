@@ -32,4 +32,8 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
         return organizationService.updateOrganization(organizationId, NewOrganizationRequest(name))
             .getOrThrow().data.name
     }
+
+    override suspend fun getOrganizationInviteCode(organizationId: Int): String {
+        return organizationService.getOrganizationInviteCode(organizationId).getOrThrow().data.code
+    }
 }
