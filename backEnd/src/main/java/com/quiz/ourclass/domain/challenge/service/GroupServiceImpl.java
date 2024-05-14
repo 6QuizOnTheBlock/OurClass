@@ -50,6 +50,10 @@ public class GroupServiceImpl implements GroupService {
         long MemberId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         String dataKey = makeGroupKey(challengeId, MemberId);
+        Set<String> redisMembers = redisUtil.setMembers(dataKey);
+        if (redisMembers != null && !redisMembers.isEmpty()) {
+            redisUtil.delete(dataKey);
+        }
         redisUtil.setAdd(dataKey, String.valueOf(MemberId));
         Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
