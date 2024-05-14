@@ -105,7 +105,7 @@ public class PostServiceImpl implements PostService {
         );
         //알림장 작성 시 단체 학생들에게 FCM 발송
         if (post.getPostCategory() == PostCategory.NOTICE) {
-            String title = fcmUtil.makeNoticeTitle(
+            String title = fcmUtil.makeFcmTitle(
                 post.getOrganization().getName(), FcmType.NOTICE.getType()
             );
             String body = fcmUtil.makeNoticeBody(
@@ -241,7 +241,7 @@ public class PostServiceImpl implements PostService {
 
         String reportMember = member.getName();
         String authorMember = post.getAuthor().getName();
-        String title = fcmUtil.makeReportTitle(
+        String title = fcmUtil.makeFcmTitle(
             post.getOrganization().getName(), FcmType.POST.getType()
         );
         String body = fcmUtil.makeReportBody(

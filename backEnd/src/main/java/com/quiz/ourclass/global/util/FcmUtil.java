@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.global.dto.FcmDTO;
 import java.util.List;
@@ -87,19 +88,28 @@ public class FcmUtil {
             .build();
     }
 
-    public String makeReportTitle(String organizationName, String type) {
-        return organizationName + " " + type + " 신고";
+    public String makeFcmTitle(String organizationName, String type) {
+        return organizationName + " " + type;
     }
 
     public String makeReportBody(String authorMember, String reportMember, String type) {
         return authorMember + " 학생이 작성한 " + type + "을" + reportMember + "학생이 신고하였습니다.";
     }
 
-    public String makeNoticeTitle(String organizationName, String type) {
-        return organizationName + " " + type;
-    }
-
     public String makeNoticeBody(String organizationName, String type) {
         return organizationName + " " + type + "이 등록되었어요!!";
+    }
+
+    public String makeChallengeBody(String leaderName, String challengeName) {
+        return leaderName + "팀이 함께달리기 [" + challengeName + "]에 참여했어요!!";
+    }
+
+    public String makeChallengeConfirmBody(String challengeName, ReportType reportType) {
+        String status = reportType.equals(ReportType.APPROVE) ? "승인" : "거절";
+        return "과제 " + status + "!! 함께달리기 [" + challengeName + "]";
+    }
+
+    public String makeRelayBody() {
+        return "이어달리기 전달 제한 시간이 지났습니다!!!";
     }
 }
