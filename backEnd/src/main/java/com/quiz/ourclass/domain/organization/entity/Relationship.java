@@ -28,7 +28,7 @@ public class Relationship {
     Member member1; //memberId가 작은것이 member1
     @ManyToOne(fetch = FetchType.LAZY)
     Member member2;
-    int relationPoint;
+    double relationPoint;
     int tagGreetingCount;
     int designGroupCount;
     int freeGroupCount;
@@ -51,5 +51,9 @@ public class Relationship {
 
     public void updateSocialCount() {
         this.socialCount += 1;
+    }
+
+    public void updateRelationPoint(double relationPoint) {
+        this.relationPoint += relationPoint;
     }
 }
