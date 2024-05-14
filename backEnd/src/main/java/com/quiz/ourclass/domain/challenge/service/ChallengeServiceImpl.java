@@ -31,6 +31,8 @@ import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.AwsS3ObjectStorage;
+import com.quiz.ourclass.global.util.FcmType;
+import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.scheduler.SchedulingService;
 import java.time.LocalDateTime;
@@ -62,6 +64,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     private final ReportMapper reportMapper;
     private final UserAccessUtil accessUtil;
     private final AwsS3ObjectStorage awsS3ObjectStorage;
+    private final FcmUtil fcmUtil;
     private final SchedulingService schedulingService;
 
     @Override
@@ -118,7 +121,10 @@ public class ChallengeServiceImpl implements ChallengeService {
         }
         String fileUrl;
         fileUrl = awsS3ObjectStorage.uploadFile(file);
-
+        Organization organization = group.getChallenge().getOrganization();
+        String title = fcmUtil.makeFcmTitle(organization.getName(), FcmType.CHALLENGE.name());
+        String body = fcmUtil.makeChallengeBody(member.getName(), group.getChallenge().getTitle());
+        fcmUtil.singleFcmSend(organization.getManager(), fcmUtil.makeFcmDTO(title, body));
         Report report = reportMapper.reportRequestToReport(reportRequest);
         report.setFile(fileUrl);
         report.setChallengeGroup(group);

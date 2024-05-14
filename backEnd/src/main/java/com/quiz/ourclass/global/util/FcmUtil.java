@@ -87,19 +87,19 @@ public class FcmUtil {
             .build();
     }
 
-    public String makeReportTitle(String organizationName, String type) {
-        return organizationName + " " + type + " 신고";
+    public String makeFcmTitle(String organizationName, String type) {
+        return organizationName + " " + type;
     }
 
     public String makeReportBody(String authorMember, String reportMember, String type) {
         return authorMember + " 학생이 작성한 " + type + "을" + reportMember + "학생이 신고하였습니다.";
     }
 
-    public String makeNoticeTitle(String organizationName, String type) {
-        return organizationName + " " + type;
-    }
-
     public String makeNoticeBody(String organizationName, String type) {
         return organizationName + " " + type + "이 등록되었어요!!";
+    }
+
+    public String makeChallengeBody(String leaderName, String challengeName) {
+        return leaderName + "팀이 함께달리기 [" + challengeName + "]에 참여했어요!!";
     }
 }

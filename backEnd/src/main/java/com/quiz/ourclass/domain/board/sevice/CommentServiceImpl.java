@@ -163,7 +163,7 @@ public class CommentServiceImpl implements CommentService {
 
         String reportMember = member.getName();
         String authorMember = comment.getPost().getAuthor().getName();
-        String title = fcmUtil.makeReportTitle(
+        String title = fcmUtil.makeFcmTitle(
             comment.getPost().getOrganization().getName(), FcmType.COMMENT.getType()
         );
         String body = fcmUtil.makeReportBody(
