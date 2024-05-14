@@ -84,6 +84,7 @@ public enum ErrorCode {
     RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),
     RELAY_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "이어달리기 주자를 찾을 수 없습니다."),
     EXIST_PROGRESS_RELAY(HttpStatus.BAD_REQUEST, "이미 진행중인 이어달리기가 존재합니다."),
+    NOT_RECEIVE_RELAY(HttpStatus.BAD_REQUEST, "다음 주자가 아직 전달받지 못했습니다."),
 
     //chat
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
