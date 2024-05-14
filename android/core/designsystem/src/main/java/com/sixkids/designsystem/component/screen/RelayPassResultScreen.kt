@@ -95,7 +95,8 @@ fun RelayPassResultScreen(
             Text(
                 text = bodyTop,
                 style = UlbanTypography.bodyLarge,
-                modifier = Modifier.padding(top = 30.dp)
+                modifier = Modifier.padding(top = 30.dp),
+                textAlign = TextAlign.Center
             )
 
             Text(
@@ -108,7 +109,8 @@ fun RelayPassResultScreen(
             Text(
                 text = bodyBottom,
                 style = UlbanTypography.bodyLarge,
-                modifier = Modifier.padding(top = 30.dp)
+                modifier = Modifier.padding(top = 30.dp),
+                textAlign = TextAlign.Center
             )
 
         }

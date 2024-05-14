@@ -9,6 +9,7 @@ import com.sixkids.data.repository.relay.remote.RelayRemoteDataSource
 import com.sixkids.domain.repository.RelayRepository
 import com.sixkids.model.Relay
 import com.sixkids.model.RelayDetail
+import com.sixkids.model.RelayReceive
 import com.sixkids.model.RunningRelay
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -48,4 +49,14 @@ class RelayRepositoryImpl @Inject constructor(
     override suspend fun getRelayQuestion(relayId: Long): String {
         return relayRemoteDataSource.getRelayQuestion(relayId)
     }
+
+    override suspend fun receiveRelay(
+        relayId: Int,
+        senderId: Long,
+        question: String
+    ): RelayReceive {
+        return relayRemoteDataSource.receiveRelay(relayId, senderId, question)
+    }
+
+
 }

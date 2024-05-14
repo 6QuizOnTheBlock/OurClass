@@ -1,6 +1,8 @@
 package com.sixkids.data.api
 
+import com.sixkids.data.model.request.ReceiveRelayRequest
 import com.sixkids.data.model.request.RelayCreateRequest
+import com.sixkids.data.model.response.ReceiveRelayResponse
 import com.sixkids.data.model.response.RelayDetailResponse
 import com.sixkids.data.model.response.RelayHistoryResponse
 import com.sixkids.data.model.response.RunningRelayResponse
@@ -41,5 +43,11 @@ interface RelayService {
     suspend fun getRelayQuestion(
         @Path("id") relayId: Long
     ): ApiResult<ApiResponse<String>>
+
+    @POST("relays/{id}/receive")
+    suspend fun receiveRelay(
+        @Path("id") relayId: Int,
+        @Body receiveRelayRequest: ReceiveRelayRequest
+    ): ApiResult<ApiResponse<ReceiveRelayResponse>>
 
 }

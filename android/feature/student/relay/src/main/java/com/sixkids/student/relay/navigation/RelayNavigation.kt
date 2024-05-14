@@ -133,6 +133,7 @@ fun NavGraphBuilder.studentRelayNavGraph(
         ))
     {
         RelayTaggingReceiverRoute(
+            navigateToRelayHistory = navigateRelayHistory,
         )
     }
 }
@@ -147,6 +148,7 @@ object RelayRoute {
     const val answerRoute = "relay-answer?relayId={$RELAY_ID_NAME}"
     const val taggingSenderRoute = "relay-tagging-sender?relayId={$RELAY_ID_NAME}&question={$RELAY_QUESTION_NAME}"
     const val taggingReceiverRoute = "relay-tagging-receiver?relayId={$RELAY_ID_NAME}"
+    const val taggingResultRoute = "relay-tagging-result"
     const val createResultRoute = "relay-create-result"
     const val joinRoute = "relay-join"
 
