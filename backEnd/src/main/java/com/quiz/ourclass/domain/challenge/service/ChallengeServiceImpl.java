@@ -214,16 +214,25 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     protected void challengeClosing(Challenge challenge) {
+        log.info(challenge.toString());
         challenge.setEndStatus(true);
+        log.info(challenge.toString());
         challengeRepository.save(challenge);
+        log.info(challenge.toString() + "저장함");
     }
 
     @EventListener(ApplicationReadyEvent.class)
+    @Transactional
     protected void challengeClosingReload() {
         List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
         challenges.forEach(challenge -> {
+            log.info(challenge.getEndTime().toString());
+            log.info(LocalDateTime.now().toString());
             if (challenge.getEndTime().isBefore(LocalDateTime.now())) {
+                log.info("닫기");
                 challengeClosing(challenge);
+                log.info("저장후닫기");
+
             } else {
                 schedulingService.scheduleTask(challenge, this::challengeClosing,
                     challenge.getEndTime());
