@@ -4,6 +4,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.quiz.ourclass.domain.challenge.entity.ReportType;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.global.dto.FcmDTO;
 import java.util.List;
@@ -101,5 +102,10 @@ public class FcmUtil {
 
     public String makeChallengeBody(String leaderName, String challengeName) {
         return leaderName + "팀이 함께달리기 [" + challengeName + "]에 참여했어요!!";
+    }
+
+    public String makeChallengeConfirmBody(String challengeName, ReportType reportType) {
+        String status = reportType.equals(ReportType.APPROVE) ? "승인" : "거절";
+        return "과제 " + status + "!! 함께달리기 [" + challengeName + "]";
     }
 }

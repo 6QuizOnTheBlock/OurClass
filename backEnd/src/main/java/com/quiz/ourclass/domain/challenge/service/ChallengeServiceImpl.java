@@ -144,9 +144,10 @@ public class ChallengeServiceImpl implements ChallengeService {
             throw new GlobalException(ErrorCode.MEMBER_NOT_MANAGER);
         }
         report.setAcceptStatus(reportType);
+        List<Member> members = report.getChallengeGroup().getGroupMembers().stream()
+            .map(GroupMember::getMember).toList();
         if (reportType.equals(ReportType.APPROVE)) {
-            report.getChallengeGroup().getGroupMembers().forEach(groupMember -> {
-                Member member = groupMember.getMember();
+            members.forEach(member -> {
                 MemberOrganization memberOrganization = memberOrganizationRepository.findByOrganizationAndMember(
                     organization, member).orElseThrow(
                     () -> new GlobalException(ErrorCode.MEMBER_ORGANIZATION_NOT_FOUND));
@@ -155,6 +156,10 @@ public class ChallengeServiceImpl implements ChallengeService {
                 memberOrganizationRepository.save(memberOrganization);
             });
         }
+        String title = fcmUtil.makeFcmTitle(organization.getName(), FcmType.CHALLENGE.name());
+        String body = fcmUtil.makeChallengeConfirmBody(
+            report.getChallengeGroup().getChallenge().getTitle(), reportType);
+        fcmUtil.multiFcmSend(members, fcmUtil.makeFcmDTO(title, body));
         reportRepository.save(report);
     }
 
