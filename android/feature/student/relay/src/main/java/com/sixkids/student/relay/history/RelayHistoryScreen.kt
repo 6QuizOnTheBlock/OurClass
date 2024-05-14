@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,9 +41,11 @@ import com.sixkids.student.relay.R
 import com.sixkids.ui.util.formatToMonthDayTime
 import com.sixkids.designsystem.R as DesignSystemR
 
+private const val TAG = "D107"
 @Composable
 fun RelayRoute(
     viewModel: RelayHistoryViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToDetail: (Long) -> Unit,
     navigateToCreate: () -> Unit,
     navigateToAnswer: (Long) -> Unit,
@@ -53,6 +56,7 @@ fun RelayRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
+        Log.d(TAG, "RelayRoute: ")
         viewModel.initData()
     }
 
@@ -74,6 +78,7 @@ fun RelayRoute(
 
     RelayHistoryScreen(
         uiState = uiState,
+        padding = padding,
         relayItems = viewModel.relayHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { relayId ->
             viewModel.navigateToRelayDetail(relayId)
@@ -91,6 +96,7 @@ fun RelayRoute(
 @Composable
 fun RelayHistoryScreen(
     uiState: RelayHistoryState = RelayHistoryState(),
+    padding: PaddingValues = PaddingValues(0.dp),
     relayItems: LazyPagingItems<Relay>? = null,
     navigateToDetail: (Long) -> Unit = {},
     navigateToCreate: () -> Unit = {},
@@ -103,7 +109,7 @@ fun RelayHistoryScreen(
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {

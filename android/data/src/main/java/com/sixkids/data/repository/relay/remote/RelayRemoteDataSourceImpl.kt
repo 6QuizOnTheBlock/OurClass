@@ -7,6 +7,7 @@ import com.sixkids.data.model.response.ReceiveRelayResponse
 import com.sixkids.data.model.response.toModel
 import com.sixkids.model.RelayDetail
 import com.sixkids.model.RelayReceive
+import com.sixkids.model.RelaySend
 import com.sixkids.model.RunningRelay
 import javax.inject.Inject
 
@@ -34,6 +35,10 @@ class RelayRemoteDataSourceImpl @Inject constructor(
         question: String
     ): RelayReceive {
         return relayService.receiveRelay(relayId, ReceiveRelayRequest(senderId, question)).getOrThrow().data.toModel()
+    }
+
+    override suspend fun sendRelay(relayId: Int): RelaySend {
+        return relayService.sendRelay(relayId).getOrThrow().data.toModel()
     }
 
 }

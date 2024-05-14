@@ -103,7 +103,7 @@ fun RelayAnswerScreen(
                 Text(text = uiState.preQuestion, style = UlbanTypography.bodyMedium)
 
                 Divider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
                     color = Blue,
                     thickness = 2.dp
                 )

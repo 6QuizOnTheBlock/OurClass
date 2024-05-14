@@ -176,6 +176,7 @@ fun MainScreen(
             )
 
             studentRelayNavGraph(
+                padding = innerPadding,
                 navigateRelayHistory = navigator::navigateStudentRelayHistory,
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,

@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.sixkids.model.Relay
 import com.sixkids.model.RelayDetail
 import com.sixkids.model.RelayReceive
+import com.sixkids.model.RelaySend
 import com.sixkids.model.RunningRelay
 import kotlinx.coroutines.flow.Flow
 
@@ -22,4 +23,6 @@ interface RelayRepository {
     suspend fun getRelayQuestion(relayId: Long): String
 
     suspend fun receiveRelay(relayId: Int, senderId: Long, question: String) : RelayReceive
+
+    suspend fun sendRelay(relayId: Int): RelaySend
 }

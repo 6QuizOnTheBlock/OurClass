@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.history
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+private const val TAG = "D107"
 @HiltViewModel
 class RelayHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
@@ -77,6 +79,7 @@ class RelayHistoryViewModel @Inject constructor(
 
     private fun getRelayHistory() {
         viewModelScope.launch {
+            Log.d(TAG, "getRelayHistory: ")
             relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
                 .cachedIn(viewModelScope)
         }

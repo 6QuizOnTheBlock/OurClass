@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -49,6 +50,7 @@ fun NavController.navigateStudentRelayTaggingReceiver(relayId: Long) {
 }
 
 fun NavGraphBuilder.studentRelayNavGraph(
+    padding: PaddingValues,
     navigateRelayHistory: () -> Unit,
     navigateRelayDetail: (Long) -> Unit,
     navigateCreateRelay: () -> Unit,
@@ -64,6 +66,7 @@ fun NavGraphBuilder.studentRelayNavGraph(
     composable(route = RelayRoute.defaultRoute)
     {
         RelayRoute(
+            padding = padding,
             navigateToDetail = { relayId ->
                 navigateRelayDetail(relayId)
             },
@@ -124,6 +127,8 @@ fun NavGraphBuilder.studentRelayNavGraph(
         ))
     {
         RelayTaggingSenderRoute(
+            navigateToRelayHistory = navigateRelayHistory,
+            onShowSnackBar = onShowSnackBar
         )
     }
 
@@ -148,7 +153,6 @@ object RelayRoute {
     const val answerRoute = "relay-answer?relayId={$RELAY_ID_NAME}"
     const val taggingSenderRoute = "relay-tagging-sender?relayId={$RELAY_ID_NAME}&question={$RELAY_QUESTION_NAME}"
     const val taggingReceiverRoute = "relay-tagging-receiver?relayId={$RELAY_ID_NAME}"
-    const val taggingResultRoute = "relay-tagging-result"
     const val createResultRoute = "relay-create-result"
     const val joinRoute = "relay-join"
 

@@ -124,7 +124,6 @@ fun RelayDetailScreen(
                 } else {
                     LazyColumn(
                         state = listState,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(uiState.relayDetail.runnerList) { runner ->
                             UlbanRunnerItem(
