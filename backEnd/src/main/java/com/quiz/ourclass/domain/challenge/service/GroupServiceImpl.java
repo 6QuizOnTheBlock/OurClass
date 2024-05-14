@@ -73,7 +73,7 @@ public class GroupServiceImpl implements GroupService {
         SseDTO sseDTO = SseDTO.builder()
             .eventType(SseType.INVITE_RESPONSE)
             .receiverId(leaderId)
-            .url(key)
+            .url(String.valueOf(memberId))
             .data(String.valueOf(joinStatus))
             .time(LocalDateTime.now())
             .build();
@@ -115,7 +115,6 @@ public class GroupServiceImpl implements GroupService {
             SseDTO sseDTO = SseDTO.builder()
                 .eventType(SseType.CREATE_GROUP)
                 .receiverId(member.getId())
-                .url(key)
                 .time(createTime)
                 .build();
             sseService.send(sseDTO);
@@ -154,7 +153,6 @@ public class GroupServiceImpl implements GroupService {
         SseDTO sseDTO = SseDTO.builder()
             .eventType(SseType.KICK_MEMBER)
             .receiverId(memberId)
-            .url(key)
             .time(LocalDateTime.now())
             .build();
         sseService.send(sseDTO);
@@ -163,10 +161,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void inviteMatchingRoom(String key, Long memberId) {
+        Long loginMemberId = accessUtil.getMember().orElseThrow().getId();
         SseDTO sseDTO = SseDTO.builder()
             .eventType(SseType.INVITE_REQUEST)
             .receiverId(memberId)
-            .url(key)
+            .url(String.valueOf(loginMemberId))
             .time(LocalDateTime.now())
             .build();
         sseService.send(sseDTO);
