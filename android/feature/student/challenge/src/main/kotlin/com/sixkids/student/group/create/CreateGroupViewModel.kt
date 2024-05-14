@@ -3,6 +3,7 @@ package com.sixkids.student.group.create
 import android.Manifest
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
 import com.sixkids.domain.usecase.group.CreateGroupMatchingRoomUseCase
@@ -34,8 +35,11 @@ class CreateGroupViewModel @Inject constructor(
     private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getATKUseCase: GetATKUseCase,
-    private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase
+    private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
+
+    private val challengeId: Long = savedStateHandle.get<Long>("challengeId") ?: 0L
 
     private var eventSource: EventSource? = null
 
@@ -82,25 +86,7 @@ class CreateGroupViewModel @Inject constructor(
         }
     }
 
-    fun loadUserInfo() {
-        viewModelScope.launch {
-            loadUserInfoUseCase().onSuccess { member ->
-                intent {
-                    copy(
-                        leader = MemberSimple(
-                            id = member.id.toLong(),
-                            name = member.name,
-                            photo = member.photo
-                        )
-                    )
-                }
-            }.onFailure {
-                postSideEffect(CreateGroupEffect.HandleException(it, ::loadUserInfo))
-            }
-        }
-    }
-
-    fun createGroupMatchingRoom(challengeId: Long) {
+    fun createGroupMatchingRoom() {
         viewModelScope.launch {
             createGroupMatchingRoomUseCase(challengeId).flatMap { matchingRoom ->
                 intent {
@@ -121,8 +107,9 @@ class CreateGroupViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
+                Log.d("Tra", "createGroupMatchingRoom: $it")
                 postSideEffect(CreateGroupEffect.HandleException(it) {
-                    createGroupMatchingRoom(challengeId)
+                    createGroupMatchingRoom()
                 })
             }
         }

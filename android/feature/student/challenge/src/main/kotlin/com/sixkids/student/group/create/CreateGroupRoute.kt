@@ -35,7 +35,7 @@ fun CreateGroupRoute(
 
     LaunchedEffect(Unit) {
         viewModel.connectSse()
-        viewModel.loadUserInfo()
+        viewModel.createGroupMatchingRoom()
         viewModel.startScan()
     }
 

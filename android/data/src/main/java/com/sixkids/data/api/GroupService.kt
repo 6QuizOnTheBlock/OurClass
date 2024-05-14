@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface GroupService {
     @POST("challenges/groups/matchingroom")
-    fun createMatchingRoom(
+    suspend fun createMatchingRoom(
         @Query("challengeId") challengeId: Long,
     ): ApiResult<ApiResponse<GroupMatchingRoomResponse>>
 }

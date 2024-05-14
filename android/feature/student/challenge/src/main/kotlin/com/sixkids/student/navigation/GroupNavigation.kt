@@ -2,7 +2,9 @@ package com.sixkids.student.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.sixkids.model.GroupType
 import com.sixkids.student.group.create.CreateGroupRoute
 import com.sixkids.student.group.join.JoinGroupRoute
@@ -21,7 +23,10 @@ fun NavController.navigateStudentGroupJoin() {
 fun NavGraphBuilder.studentGroupNavGraph(
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
-    composable(route = GroupRoute.creatGroupRoute) {
+    composable(
+        route = GroupRoute.creatGroupRoute,
+        arguments = listOf(navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType })
+    ) {
         CreateGroupRoute()
     }
     composable(route = GroupRoute.joinGroupRoute) {
