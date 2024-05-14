@@ -155,6 +155,7 @@ public class RelayServiceImpl implements RelayService {
             .build();
     }
 
+    @Transactional
     @Override
     public SendRelayResponse sendRelay(long id) {
         Member member = accessUtil.getMember()
