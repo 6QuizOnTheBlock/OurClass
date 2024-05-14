@@ -17,4 +17,5 @@
     <string name="team_member">팀원</string>
     <string name="end">종료</string>
     <string name="free_group_matching">자유롭게 팀을 구성해봐요</string>
+    <string name="invited_group">친구가 나를 초대했어요!</string>
 </resources>

@@ -114,9 +114,9 @@ fun GroupWaiting(
 }
 
 data class MemberIconItem(
-    val memberId: Long,
-    val name: String,
-    val photo: String,
+    val memberId: Long = 0L,
+    val name: String = "",
+    val photo: String = "",
     val showX: Boolean = false,
     val isActive: Boolean = false
 )

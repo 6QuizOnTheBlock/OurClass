@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
+import com.sixkids.student.group.component.InviteDialog
 import com.sixkids.student.group.component.MemberIcon
 import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.student.group.component.MultiLayeredCircles
@@ -28,9 +32,14 @@ import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
 fun JoinGroupRoute(
-    viewModel: JoinGroupViewModel = hiltViewModel()
+    viewModel: JoinGroupViewModel = hiltViewModel(),
+    onHandleException: (Throwable, () -> Unit) -> Unit = { _, _ -> }
+
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var isShowInviteDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         viewModel.connectSse()
@@ -45,10 +54,36 @@ fun JoinGroupRoute(
         }
     }
 
-    viewModel.sideEffect.collectWithLifecycle {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is JoinGroupEffect.HandleException -> onHandleException(
+                sideEffect.it,
+                sideEffect.retryAction
+            )
+
+            is JoinGroupEffect.ReceiveInviteRequest -> {
+                isShowInviteDialog = true
+            }
+
+            JoinGroupEffect.CloseInviteDialog -> {
+                isShowInviteDialog = false
+            }
+        }
 
     }
     JoinGroupScreen(uiState)
+
+    if (isShowInviteDialog) {
+        InviteDialog(
+            leader = uiState.leader,
+            onConfirmClick = {
+                viewModel.acceptInvite()
+            },
+            onCancelClick = {
+                viewModel.rejectInvite()
+            }
+        )
+    }
 }
 
 @Composable
