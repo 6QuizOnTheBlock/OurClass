@@ -51,10 +51,10 @@ fun GroupWaiting(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if(groupType == GroupType.FREE) {
+            if (groupType == GroupType.FREE) {
                 Text(
                     modifier = Modifier.padding(top = 16.dp),
-                    text = if(remainingMember > 0) {
+                    text = if (remainingMember > 0) {
                         stringResource(R.string.friend_waiting_message, remainingMember)
                     } else {
                         stringResource(R.string.can_create_group)
@@ -64,7 +64,7 @@ fun GroupWaiting(
             } else {
                 Text(
                     modifier = Modifier.padding(top = 16.dp),
-                    text = if(remainingMember != 0) {
+                    text = if (remainingMember != 0) {
                         stringResource(R.string.need_to_waiting_friend_message, remainingMember)
                     } else {
                         stringResource(R.string.can_create_group)
@@ -76,25 +76,29 @@ fun GroupWaiting(
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                if(leader.id != 0L) {
+                if (leader.id != 0L) {
                     item {
                         MemberIcon(
-                            member = leader,
-                            showX = false,
-                            isActive = true,
+                            member = MemberIconItem(
+                                memberId = leader.id,
+                                name = leader.name,
+                                photo = leader.photo,
+                                showX = false,
+                                isActive = true
+                            ),
                             onRemoveClick = {}
                         )
                     }
                 }
                 items(memberList) { item ->
                     MemberIcon(
-                        member = MemberSimple(
-                            id = item.memberId,
+                        member = MemberIconItem(
+                            memberId = item.memberId,
                             name = item.name,
-                            photo = item.photo
+                            photo = item.photo,
+                            showX = item.showX,
+                            isActive = item.isActive,
                         ),
-                        showX = item.showX,
-                        isActive = item.isActive,
                         onRemoveClick = onRemoveClick
                     )
                 }

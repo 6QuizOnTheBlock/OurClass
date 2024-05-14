@@ -24,27 +24,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.theme.UlbanTypography
-import com.sixkids.model.MemberSimple
 import com.sixkids.designsystem.R as DesignSystemR
 
 @Composable
 fun MemberIcon(
     modifier: Modifier = Modifier,
-    member: MemberSimple,
-    onIconClick: (MemberSimple) -> Unit = {},
+    member: MemberIconItem,
+    onIconClick: (MemberIconItem) -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
-    showX: Boolean = false,
-    isActive: Boolean = true
 ) {
     Card(
         modifier = modifier
             .wrapContentSize()
             .background(
-                if (isActive) Color.Transparent else Color.Gray,
+                if (member.isActive) Color.Transparent else Color.Gray,
                 shape = RoundedCornerShape(8.dp),
             )
             .graphicsLayer {
-                alpha = if (isActive) 1f else 0.5f
+                alpha = if (member.isActive) 1f else 0.5f
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
 
@@ -65,7 +62,7 @@ fun MemberIcon(
                         contentDescription = null,
                         modifier = modifier.size(48.dp)
                     )
-                    if (showX) {
+                    if (member.showX) {
                         Icon(
                             imageVector = ImageVector.vectorResource(DesignSystemR.drawable.ic_close_filled),
                             contentDescription = "Close icon",
@@ -74,7 +71,7 @@ fun MemberIcon(
                                 .align(Alignment.TopEnd)
                                 .size(24.dp)
                                 .clickable {
-                                    onRemoveClick(member.id)
+                                    onRemoveClick(member.memberId)
                                 }
                         )
                     }
@@ -95,10 +92,12 @@ fun MemberIcon(
 @Composable
 fun MemberIconPreview() {
     MemberIcon(
-        member = MemberSimple(
-            id = 1,
-            name = "홍길동",
-            photo = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+        member = MemberIconItem(
+            memberId = 1,
+            name = "John Doe",
+            photo = "https://example.com/photo.jpg",
+            showX = true,
+            isActive = true
         ),
         onIconClick = {},
         onRemoveClick = {}

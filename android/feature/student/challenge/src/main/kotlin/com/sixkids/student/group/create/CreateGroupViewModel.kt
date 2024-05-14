@@ -7,11 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
 import com.sixkids.domain.usecase.group.CreateGroupMatchingRoomUseCase
+import com.sixkids.domain.usecase.group.InviteFriendUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.BuildConfig
+import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +38,7 @@ class CreateGroupViewModel @Inject constructor(
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getATKUseCase: GetATKUseCase,
     private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase,
+    private val inviteFriendUseCase: InviteFriendUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
 
@@ -107,7 +110,6 @@ class CreateGroupViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                Log.d("Tra", "createGroupMatchingRoom: $it")
                 postSideEffect(CreateGroupEffect.HandleException(it) {
                     createGroupMatchingRoom()
                 })
@@ -121,10 +123,18 @@ class CreateGroupViewModel @Inject constructor(
         viewModelScope.launch {
             bluetoothScanner.foundDevices.collect { memberIds ->
                 if (memberIds.isEmpty()) return@collect
-                val newMembers = mutableListOf<MemberSimple>()
+                val newMembers = mutableListOf<MemberIconItem>()
                 for (memberId in memberIds) {
                     getMemberSimpleUseCase(memberId).onSuccess { member ->
-                        newMembers.add(member)
+                        newMembers.add(
+                            MemberIconItem(
+                                memberId = memberId,
+                                name = member.name,
+                                photo = member.photo,
+                                showX = true,
+                                isActive = true
+                            )
+                        )
                     }.onFailure {
                         stopScan()
                         postSideEffect(CreateGroupEffect.HandleException(it) {
@@ -155,16 +165,25 @@ class CreateGroupViewModel @Inject constructor(
         eventSource = null
     }
 
-    fun selectMember(member: MemberSimple) {
-        intent {
-            copy(
-                foundMembers = foundMembers.toMutableList().apply {
-                    remove(member)
-                },
-                selectedMembers = selectedMembers.toMutableList().apply {
-                    add(member)
+    fun selectMember(member: MemberIconItem) {
+
+        viewModelScope.launch {
+            inviteFriendUseCase(uiState.value.roomKey, member.memberId).onSuccess {
+                intent {
+                    copy(
+                        foundMembers = foundMembers.toMutableList().apply {
+                            remove(member)
+                        },
+                        selectedMembers = selectedMembers.toMutableList().apply {
+                            add(member.copy(showX = true, isActive = false))
+                        }
+                    )
                 }
-            )
+            }.onFailure {
+                postSideEffect(CreateGroupEffect.HandleException(it) {
+                    selectMember(member)
+                })
+            }
         }
     }
 
@@ -173,7 +192,7 @@ class CreateGroupViewModel @Inject constructor(
             bluetoothScanner.removeDevice(memberId)
             copy(
                 selectedMembers = selectedMembers.toMutableList().apply {
-                    removeIf { it.id == memberId }
+                    removeIf { it.memberId == memberId }
                 }
             )
         }

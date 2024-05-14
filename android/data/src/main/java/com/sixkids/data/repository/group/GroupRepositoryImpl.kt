@@ -11,4 +11,7 @@ class GroupRepositoryImpl @Inject constructor(
 ) : GroupRepository {
     override suspend fun createMatchingRoom(challengeId: Long): MatchingRoom =
         groupDataSource.createMatchingRoom(challengeId).toModel()
+
+    override suspend fun inviteFriend(key: String, memberId: Long) =
+        groupDataSource.inviteFriend(key, memberId)
 }

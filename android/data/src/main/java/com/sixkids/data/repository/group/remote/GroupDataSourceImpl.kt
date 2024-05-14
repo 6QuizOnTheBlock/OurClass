@@ -9,4 +9,7 @@ class GroupDataSourceImpl @Inject constructor(
 ) : GroupDataSource {
     override suspend fun createMatchingRoom(challengeId: Long): GroupMatchingRoomResponse =
         groupService.createMatchingRoom(challengeId).getOrThrow().data
+
+    override suspend fun inviteFriend(key: String, memberId: Long) =
+        groupService.inviteFriend(key, memberId).getOrThrow().data
 }

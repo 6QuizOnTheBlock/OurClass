@@ -6,15 +6,12 @@ import com.sixkids.core.bluetooth.BluetoothServer
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.SseEventType
 import com.sixkids.student.challenge.BuildConfig
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -22,7 +19,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
-import okio.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -71,7 +67,14 @@ class JoinGroupViewModel @Inject constructor(
             data: String
         ) {
             super.onEvent(eventSource, id, type, data)
-            Log.d(TAG, "On Event Received! Data -: $data")
+            val sseEventType: SseEventType = SseEventType.valueOf(type ?: "")
+            when (sseEventType) {
+                SseEventType.SSE_CONNECT -> Log.d(TAG, "onEvent: 연결됨")
+                SseEventType.INVITE_REQUEST -> Log.d(TAG, "onEvent: 초대 요청")
+                SseEventType.INVITE_RESPONSE -> Log.d(TAG, "onEvent: 초대 응답")
+                SseEventType.KICK_MEMBER -> Log.d(TAG, "onEvent: 추방")
+                SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
+            }
         }
 
         override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {

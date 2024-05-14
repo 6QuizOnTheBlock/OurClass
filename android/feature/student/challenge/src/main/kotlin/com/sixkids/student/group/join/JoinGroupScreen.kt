@@ -21,6 +21,7 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 import com.sixkids.student.group.component.MemberIcon
+import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.student.group.component.MultiLayeredCircles
 import com.sixkids.ui.extension.collectWithLifecycle
 
@@ -67,7 +68,14 @@ fun JoinGroupScreen(
         )
         Box(modifier = Modifier.weight(1f)) {
             MultiLayeredCircles(modifier = Modifier.align(Alignment.Center))
-            MemberIcon(member = uiState.member, modifier = Modifier.align(Alignment.Center))
+            MemberIcon(
+                member = MemberIconItem(
+                    memberId = uiState.member.id,
+                    name = uiState.member.name,
+                    photo = uiState.member.photo,
+                    isActive = true
+                ), modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 
