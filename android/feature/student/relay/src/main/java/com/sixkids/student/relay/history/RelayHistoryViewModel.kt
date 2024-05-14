@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.history
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+private const val TAG = "D107"
 @HiltViewModel
 class RelayHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
@@ -77,6 +79,7 @@ class RelayHistoryViewModel @Inject constructor(
 
     private fun getRelayHistory() {
         viewModelScope.launch {
+            Log.d(TAG, "getRelayHistory: ")
             relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
                 .cachedIn(viewModelScope)
         }
@@ -86,26 +89,12 @@ class RelayHistoryViewModel @Inject constructor(
         RelayHistoryEffect.NavigateToRelayDetail(relayId)
     )
 
+    fun navigateToAnswerRelay(relayId: Long) = postSideEffect(
+        RelayHistoryEffect.NavigateToAnswerRelay(relayId)
+    )
 
-    companion object{
-        val runningRelayMyTurn = RunningRelay(
-            id = 1,
-            totalMemberCount = 20,
-            doneMemberCount = 10,
-            startTime = LocalDateTime.now().minusHours(1),
-            endTime = LocalDateTime.now(),
-            curMemberNickname = "홍유준",
-            myTurnStatus = true,
-        )
+    fun navigateToTaggingReceiverRelay(relayId: Long) = postSideEffect(
+        RelayHistoryEffect.NavigateToTaggingReceiverRelay(relayId)
+    )
 
-        val runningRelayNotMyTurn = RunningRelay(
-            id = 1,
-            totalMemberCount = 20,
-            doneMemberCount = 10,
-            startTime = LocalDateTime.now().minusHours(1),
-            endTime = LocalDateTime.now(),
-            curMemberNickname = "홍유준",
-            myTurnStatus = false,
-        )
-    }
 }

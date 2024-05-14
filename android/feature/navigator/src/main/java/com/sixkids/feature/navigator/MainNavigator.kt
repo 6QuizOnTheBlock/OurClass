@@ -30,11 +30,14 @@ import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.student.relay.navigation.RelayRoute
+import com.sixkids.student.relay.navigation.navigateStudentRelayAnswer
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreateResult
 import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
 import com.sixkids.student.relay.navigation.navigateStudentRelayHistory
 import com.sixkids.student.relay.navigation.navigateStudentRelayJoin
+import com.sixkids.student.relay.navigation.navigateStudentRelayTaggingReceiver
+import com.sixkids.student.relay.navigation.navigateStudentRelayTaggingSender
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateAnnounce
 import com.sixkids.teacher.board.navigation.navigateAnnounceDetail
@@ -262,6 +265,18 @@ class MainNavigator(
 
     fun navigateStudentRelayCreateResult() {
         navController.navigateStudentRelayCreateResult()
+    }
+
+    fun navigateStudentRelayAnswer(relayId: Long) {
+        navController.navigateStudentRelayAnswer(relayId)
+    }
+
+    fun navigateStudentRelayTaggingSender(relayId: Long, question: String) {
+        navController.navigateStudentRelayTaggingSender(relayId, question)
+    }
+
+    fun navigateStudentRelayTaggingReceiver(relayId: Long) {
+        navController.navigateStudentRelayTaggingReceiver(relayId)
     }
 
     /**

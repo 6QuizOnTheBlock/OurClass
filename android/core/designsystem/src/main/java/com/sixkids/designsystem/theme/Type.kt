@@ -77,7 +77,7 @@ val UlbanTypography = Typography(
         fontFamily = npsFont,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        lineHeight = 20.sp,
+        lineHeight = 26.sp,
         letterSpacing = 0.8.sp
     ),
 

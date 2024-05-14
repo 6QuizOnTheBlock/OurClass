@@ -35,7 +35,7 @@ class RelayCreateViewModel @Inject constructor(
                 init()
             }else{
                 Log.d(TAG, "newRelayClick: ${uiState.value.question} ${uiState.value.orgId}")
-                createRelayUseCase(uiState.value.orgId, uiState.value.question)
+                createRelayUseCase(uiState.value.orgId, "첫번째 주자입니다!")
                     .onSuccess {
                         if (it>0){
                             postSideEffect(RelayCreateEffect.NavigateToRelayResult)
@@ -46,9 +46,5 @@ class RelayCreateViewModel @Inject constructor(
                     }
             }
         }
-    }
-
-    fun updateQuestion(question: String) {
-        intent { copy(question = question) }
     }
 }

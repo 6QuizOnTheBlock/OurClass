@@ -1,5 +1,6 @@
 package com.sixkids.student.board.main
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,6 +37,7 @@ import com.sixkids.student.board.component.PostItem
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.util.formatToMonthDayTimeKorean
 
+private const val TAG = "D107"
 
 @Composable
 fun StudentBoardMainRoute(
@@ -49,6 +51,7 @@ fun StudentBoardMainRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        Log.d(TAG, "StudentBoardMainRoute: ")
         viewModel.getPostList()
     }
 

@@ -177,11 +177,15 @@ fun MainScreen(
             )
 
             studentRelayNavGraph(
+                padding = innerPadding,
                 navigateRelayHistory = navigator::navigateStudentRelayHistory,
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,
                 navigateCreateRelayResult = navigator::navigateStudentRelayCreateResult,
                 navigateJoinRelay = navigator::navigateStudentRelayJoin,
+                navigateAnswerRelay = navigator::navigateStudentRelayAnswer,
+                navigateTaggingSender = navigator::navigateStudentRelayTaggingSender,
+                navigateTaggingReceiver = navigator::navigateStudentRelayTaggingReceiver,
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 handleException = viewModel::handleException
