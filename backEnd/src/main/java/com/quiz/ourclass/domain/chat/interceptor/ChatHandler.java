@@ -42,6 +42,10 @@ public class ChatHandler implements ChannelInterceptor {
         switch (stompCommand) {
             case CONNECT:
                 String memberId = verifyAccessToken(getAccessToken(accessor));
+                String type = accessor.getFirstNativeHeader("type");
+                if (type != null && type.equals("quiz")) {
+                    break;
+                }
                 connectToChatRoom(accessor, memberId);
                 break;
             case SUBSCRIBE:

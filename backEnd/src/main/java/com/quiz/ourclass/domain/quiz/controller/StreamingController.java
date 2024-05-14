@@ -18,6 +18,7 @@ public class StreamingController {
     private final StreamingServiceImpl streamingService;
 
     // 1. gamer : [gamer List]를 point 가 높은 순으로 주는 TOPIC
+
     @MessageMapping("/gamer")
     public void getGamer(GamerDTO message, @Header("Authorization") final String accessToken) {
         streamingService.sendGamer(message);
