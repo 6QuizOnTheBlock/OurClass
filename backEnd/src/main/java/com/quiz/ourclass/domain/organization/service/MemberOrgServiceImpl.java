@@ -84,7 +84,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
         return RelationResponse.builder()
             .memberId(targetMember.getId())
             .memberName(targetMember.getName())
-            .relationPoint(relationship.getRelationPoint())
+            .relationPoint((int) relationship.getRelationPoint())
             .groupCount(relationship.getDesignGroupCount() + relationship.getFreeGroupCount())
             .tagGreetingCount(relationship.getTagGreetingCount())
             .receiveCount(receiveCount)
@@ -156,7 +156,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
                 MemberSimpleDTO memberSimpleDTO = memberMapper.memberToMemberSimpleDTO(target);
                 return RelationSimpleResponse.builder()
                     .member(memberSimpleDTO)
-                    .relationPoint(relationship.getRelationPoint())
+                    .relationPoint((int) relationship.getRelationPoint())
                     .build();
             }).toList();
     }
