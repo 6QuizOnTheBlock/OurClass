@@ -97,26 +97,4 @@ class RelayHistoryViewModel @Inject constructor(
         RelayHistoryEffect.NavigateToTaggingReceiverRelay(relayId)
     )
 
-
-    companion object{
-        val runningRelayMyTurn = RunningRelay(
-            id = 1,
-            totalMemberCount = 20,
-            doneMemberCount = 10,
-            startTime = LocalDateTime.now().minusHours(1),
-            endTime = LocalDateTime.now(),
-            curMemberNickname = "홍유준",
-            myTurnStatus = true,
-        )
-
-        val runningRelayNotMyTurn = RunningRelay(
-            id = 1,
-            totalMemberCount = 20,
-            doneMemberCount = 10,
-            startTime = LocalDateTime.now().minusHours(1),
-            endTime = LocalDateTime.now(),
-            curMemberNickname = "홍유준",
-            myTurnStatus = false,
-        )
-    }
 }

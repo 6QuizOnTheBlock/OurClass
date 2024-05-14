@@ -66,15 +66,13 @@ fun RelayTaggingReceiverRoute(
     if (uiState.relayReceive.senderName != ""){
         RelayTaggingResultScreen(uiState.relayReceive, navigateToRelayHistory)
     }else{
-        RelayTaggingReceiverScreen(uiState)
+        RelayTaggingReceiverScreen()
     }
 
 }
 
 @Composable
-fun RelayTaggingReceiverScreen(
-    uiState: RelayTaggingReceiverState = RelayTaggingReceiverState()
-){
+fun RelayTaggingReceiverScreen(){
     Box(modifier = Modifier.fillMaxSize()){
         RelayTaggingScreen(
             isSender = false

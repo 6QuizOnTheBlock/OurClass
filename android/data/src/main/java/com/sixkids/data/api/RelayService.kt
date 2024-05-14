@@ -1,6 +1,5 @@
 package com.sixkids.data.api
 
-import androidx.datastore.preferences.protobuf.Api
 import com.sixkids.data.model.request.ReceiveRelayRequest
 import com.sixkids.data.model.request.RelayCreateRequest
 import com.sixkids.data.model.response.ReceiveRelayResponse

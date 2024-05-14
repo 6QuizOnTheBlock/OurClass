@@ -27,7 +27,6 @@ import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.student.relay.R
 import com.sixkids.ui.SnackbarToken
-import com.sixkids.ui.base.UiState
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable

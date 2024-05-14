@@ -14,10 +14,7 @@ import com.sixkids.core.nfc.HCEService
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.component.screen.RelayPassResultScreen
 import com.sixkids.designsystem.component.screen.RelayTaggingScreen
-import com.sixkids.designsystem.theme.Purple
-import com.sixkids.model.RelayReceive
 import com.sixkids.model.RelaySend
-import com.sixkids.student.relay.create.RelayCreateEffect
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import kotlinx.serialization.encodeToString

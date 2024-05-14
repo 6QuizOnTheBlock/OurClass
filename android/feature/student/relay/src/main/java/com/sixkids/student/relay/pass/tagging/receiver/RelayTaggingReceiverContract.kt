@@ -14,6 +14,5 @@ data class RelayTaggingReceiverState(
 ): UiState
 
 sealed interface RelayTaggingReceiverEffect: SideEffect {
-    data class NavigateToTaggingResult(val prevMemberName: String, val prevQuestion: String): RelayTaggingReceiverEffect
     data class OnShowSnackBar(val tkn: SnackbarToken): RelayTaggingReceiverEffect
 }

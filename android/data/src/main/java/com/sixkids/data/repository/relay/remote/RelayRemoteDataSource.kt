@@ -1,6 +1,5 @@
 package com.sixkids.data.repository.relay.remote
 
-import com.sixkids.data.model.response.ReceiveRelayResponse
 import com.sixkids.model.RelayDetail
 import com.sixkids.model.RelayReceive
 import com.sixkids.model.RelaySend
