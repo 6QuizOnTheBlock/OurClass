@@ -1,6 +1,7 @@
 package com.sixkids.data.repository.chattingfilter.remote
 
 import com.sixkids.data.api.ChatFilterService
+import com.sixkids.data.model.request.ChatFilterRequest
 import com.sixkids.data.model.response.ChattingFilterListResponse
 import javax.inject.Inject
 
@@ -9,11 +10,12 @@ class ChattingFilterRemoteDataSourceImpl @Inject constructor(
 ) : ChattingFilterRemoteDataSource {
 
     override suspend fun deleteChatFilter(id: Long): Boolean {
-        TODO("Not yet implemented")
+        return chattingFilterService.deleteChatFilter(id).getOrThrow().data
     }
 
     override suspend fun createChatFilter(organizationId: Long, badWord: String): Long {
-        TODO("Not yet implemented")
+        return chattingFilterService.createChatFilter(organizationId, ChatFilterRequest(badWord))
+            .getOrThrow().data
     }
 
     override suspend fun updateChatFilter(
@@ -21,7 +23,11 @@ class ChattingFilterRemoteDataSourceImpl @Inject constructor(
         id: Long,
         badWord: String
     ): Boolean {
-        TODO("Not yet implemented")
+        return chattingFilterService.updateChatFilter(
+            id,
+            organizationId,
+            ChatFilterRequest(badWord)
+        ).getOrThrow().data
     }
 
 }

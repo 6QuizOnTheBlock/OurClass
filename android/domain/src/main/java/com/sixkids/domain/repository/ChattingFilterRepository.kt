@@ -7,9 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface ChattingFilterRepository {
 
     suspend fun getChattingFilters(
-        organizationId: Int,
-        page: Int,
-        size: Int,
+        organizationId: Int
     ): Flow<PagingData<ChatFilterWord>>
 
     suspend fun deleteChatFilter(

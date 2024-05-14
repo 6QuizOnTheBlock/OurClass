@@ -19,9 +19,7 @@ class ChattingFilterRepositoryImpl @Inject constructor(
     private val chatFilterService: ChatFilterService
 ) : ChattingFilterRepository {
     override suspend fun getChattingFilters(
-        organizationId: Int,
-        page: Int,
-        size: Int
+        organizationId: Int
     ): Flow<PagingData<ChatFilterWord>> {
         return Pager(
             config = PagingConfig(ChattingFilterPagingSource.DEFAULT_SIZE),

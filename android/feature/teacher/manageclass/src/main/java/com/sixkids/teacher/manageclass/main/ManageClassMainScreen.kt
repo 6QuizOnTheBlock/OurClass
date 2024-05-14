@@ -34,20 +34,33 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun ManageClassMainRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    navigateToClassSummary: () -> Unit,
+    navigateToClassSetting: () -> Unit,
+    navigateToChattingFilter: () -> Unit,
+    navigateToInvite: () -> Unit,
 ) {
 
     Box(
         modifier = Modifier.padding(padding)
     ) {
-        ManageClassMainScreen()
+        ManageClassMainScreen(
+            summaryCardOnClick = navigateToClassSummary,
+            settingCardOnClick = navigateToClassSetting,
+            chattingFilterCardOnClick = navigateToChattingFilter,
+            inviteCardOnClick = navigateToInvite
+        )
     }
 }
 
 @Composable
 fun ManageClassMainScreen(
     modifier: Modifier = Modifier,
-    manageClassMainState: ManageClassMainState = ManageClassMainState()
+    manageClassMainState: ManageClassMainState = ManageClassMainState(),
+    summaryCardOnClick: () -> Unit = {},
+    settingCardOnClick: () -> Unit = {},
+    chattingFilterCardOnClick: () -> Unit = {},
+    inviteCardOnClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -72,7 +85,8 @@ fun ManageClassMainScreen(
             contentName = stringResource(id = R.string.manage_class_statistics),
             contentImageId = UlbanRes.drawable.statistics,
             cardColor = Blue,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = summaryCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
@@ -80,7 +94,8 @@ fun ManageClassMainScreen(
             contentName = stringResource(id = R.string.manage_class_setting),
             contentImageId = UlbanRes.drawable.setting,
             cardColor = Red,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = settingCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
@@ -88,7 +103,8 @@ fun ManageClassMainScreen(
             contentName = stringResource(id = R.string.manage_class_filter_chat),
             contentImageId = UlbanRes.drawable.chat_filter,
             cardColor = Yellow,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = chattingFilterCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
@@ -96,7 +112,8 @@ fun ManageClassMainScreen(
             contentName = stringResource(id = R.string.manage_class_invite),
             contentImageId = UlbanRes.drawable.invite,
             cardColor = Green   ,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = inviteCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
     }

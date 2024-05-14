@@ -120,6 +120,11 @@ fun MainScreen(
 
             manageClassNavGraph(
                 padding = innerPadding,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToClassSummary = { },
+                navigateToClassSetting = { },
+                navigateToChattingFilter = navigator::navigateChattingFilter,
+                navigateToInvite = { },
             )
 
             manageStudentNavGraph(

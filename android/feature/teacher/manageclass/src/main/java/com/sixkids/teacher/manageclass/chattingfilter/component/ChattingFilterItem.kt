@@ -1,5 +1,6 @@
 package com.sixkids.teacher.manageclass.chattingfilter.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +44,7 @@ fun ChattingFilterItem(
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
+                modifier = Modifier.clickable { deleteOnclick() },
                 imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_delete),
                 contentDescription = null
             )
