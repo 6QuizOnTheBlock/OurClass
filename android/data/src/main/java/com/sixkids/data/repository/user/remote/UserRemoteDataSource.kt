@@ -7,6 +7,8 @@ import com.sixkids.model.UserInfo
 import java.io.File
 
 interface UserRemoteDataSource {
+
+    suspend fun testSignIn(email: String): JwtToken
     suspend fun signIn(idToken: String): JwtToken
 
     suspend fun signUp(file: File?, idToken: String, defaultImage: Int, role: String): JwtToken

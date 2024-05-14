@@ -5,6 +5,7 @@ import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.FcmRequest
 import com.sixkids.data.model.request.SignInRequest
+import com.sixkids.data.model.request.TestSignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.model.JwtToken
@@ -23,6 +24,14 @@ class UserRemoteDataSourceImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource,
     private val memberOrgService: MemberOrgService
 ) : UserRemoteDataSource{
+
+    override suspend fun testSignIn(email: String): JwtToken {
+        val response = signInService.testSignIn(TestSignInRequest(email))
+        if (response.getOrNull() != null) {
+            userLocalDataSource.saveRole(response.getOrNull()?.data?.role ?: "error")
+        }
+        return response.getOrThrow().data.toModel()
+    }
     override suspend fun signIn(idToken: String): JwtToken {
         val response = signInService.signIn(SignInRequest(idToken))
         if (response.getOrNull() != null) {

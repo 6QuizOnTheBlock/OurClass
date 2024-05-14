@@ -17,6 +17,20 @@ class UserRepositoryImpl @Inject constructor(
     private val userLocalDataSource: UserLocalDataSource,
     private val tokenRepository: TokenRepository
 ) : UserRepository {
+    override suspend fun testSignIn(email: String): JwtToken {
+        try {
+            val response = userRemoteDataSource.testSignIn(email)
+
+            tokenRepository.saveAccessToken(response.accessToken)
+            tokenRepository.saveRefreshToken(response.refreshToken)
+
+            return response
+        } catch (e: Exception) {
+//            tokenRepository.saveIdToken(idToken)
+            throw e
+        }
+    }
+
     override suspend fun signIn(idToken: String): JwtToken {
         try {
             val response = userRemoteDataSource.signIn(idToken)

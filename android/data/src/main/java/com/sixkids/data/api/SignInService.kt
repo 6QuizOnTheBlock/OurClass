@@ -1,6 +1,7 @@
 package com.sixkids.data.api
 
 import com.sixkids.data.model.request.SignInRequest
+import com.sixkids.data.model.request.TestSignInRequest
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.SignInResponse
 import com.sixkids.data.network.ApiResult
@@ -13,6 +14,11 @@ import retrofit2.http.Part
 import retrofit2.http.PartMap
 
 interface SignInService {
+
+    @POST("members/developer-At")
+    suspend fun testSignIn(
+        @Body signInRequest: TestSignInRequest
+    ): ApiResult<ApiResponse<SignInResponse>>
 
     @POST("members/sign-in")
     suspend fun signIn(

@@ -7,6 +7,8 @@ import com.sixkids.model.UserInfo
 import java.io.File
 
 interface UserRepository {
+
+    suspend fun testSignIn(email: String): JwtToken
     suspend fun signIn(idToken: String): JwtToken
 
     suspend fun signUp(file: File?, defaultImage: Int, role: String): JwtToken

@@ -69,4 +69,23 @@ class LoginViewModel @Inject constructor(
             intent { copy(isLoading = false)}
         }
     }
+
+    fun loginWithStudent1() {
+        viewModelScope.launch {
+            signInUseCase.testSignIn("testStudent1")
+        }
+    }
+
+    fun loginWithStudent2() {
+        viewModelScope.launch {
+            signInUseCase.testSignIn("testStudent2")
+        }
+    }
+
+    fun loginWithStudent3() {
+        viewModelScope.launch {
+            signInUseCase.testSignIn("testStudent3")
+        }
+    }
+
 }

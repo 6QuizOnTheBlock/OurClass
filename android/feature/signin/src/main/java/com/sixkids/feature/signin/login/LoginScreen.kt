@@ -90,7 +90,18 @@ fun LoginRoute(
                     Log.d(TAG, "카카오 에러!")
                 }
             )
+        },
+        loginWithStudent1 = {
+            viewModel.loginWithStudent1()
+        },
+
+        loginWithStudent2 = {
+            viewModel.loginWithStudent2()
+        },
+        loginWithStudent3 = {
+            viewModel.loginWithStudent3()
         }
+
 
     )
 }
@@ -99,6 +110,9 @@ fun LoginRoute(
 fun LoginScreen(
     uiState: LoginState = LoginState(),
     onLoginClick: () -> Unit = {},
+    loginWithStudent1: () -> Unit = {},
+    loginWithStudent2: () -> Unit = {},
+    loginWithStudent3: () -> Unit = {},
 ) {
     var animationStart by remember {
         mutableStateOf(false)
@@ -212,6 +226,18 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
+            Row {
+                Button(onClick = { loginWithStudent1()}) {
+                    Text("학생1")
+                }
+                Button(onClick = { loginWithStudent2() }) {
+                    Text("학생2")
+                }
+                Button(onClick = { loginWithStudent3() }) {
+                    Text("학생3")
+                }
+
+            }
             LogInButton(onLoginClick)
         }
 

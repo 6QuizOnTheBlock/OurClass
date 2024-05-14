@@ -9,4 +9,6 @@ class SignInUseCase @Inject constructor(
     suspend operator fun invoke(idToken: String) = runCatching {
         userRepository.signIn(idToken)
     }
+
+    suspend fun testSignIn(email: String) = userRepository.testSignIn(email)
 }
