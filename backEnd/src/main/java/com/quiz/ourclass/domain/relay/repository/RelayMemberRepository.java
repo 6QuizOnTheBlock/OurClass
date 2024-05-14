@@ -11,4 +11,6 @@ public interface RelayMemberRepository extends JpaRepository<RelayMember, Long> 
     int countByCurMemberIdAndNextMemberId(long curMemberId, long nextMemberId);
 
     Optional<RelayMember> findFirstByRelayAndNextMemberOrderByTurnDesc(Relay relay, Member member);
+
+    Optional<RelayMember> findFirstByRelayAndCurMemberOrderByTurnDesc(Relay relay, Member member);
 }
