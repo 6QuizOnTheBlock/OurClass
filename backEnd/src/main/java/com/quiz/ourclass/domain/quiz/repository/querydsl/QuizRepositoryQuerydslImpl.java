@@ -8,7 +8,7 @@ import static com.quiz.ourclass.domain.quiz.entity.QQuizGame.quizGame;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
-import com.quiz.ourclass.domain.quiz.service.GamerStatus;
+import com.quiz.ourclass.domain.quiz.entity.GamerStatus;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import java.util.List;

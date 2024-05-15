@@ -1,6 +1,6 @@
 package com.quiz.ourclass.domain.quiz.dto;
 
-import com.quiz.ourclass.domain.quiz.service.GamerStatus;
+import com.quiz.ourclass.domain.quiz.entity.GamerStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 

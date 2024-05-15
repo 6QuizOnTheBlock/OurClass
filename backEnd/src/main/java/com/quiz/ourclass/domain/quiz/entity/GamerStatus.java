@@ -1,4 +1,4 @@
-package com.quiz.ourclass.domain.quiz.service;
+package com.quiz.ourclass.domain.quiz.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

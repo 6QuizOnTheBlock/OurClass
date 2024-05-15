@@ -29,9 +29,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // /subscribe/{roomId}로 주제 구독 가능
-        registry.enableSimpleBroker("/subscribe");
+        registry.enableSimpleBroker("/subscribe", "/user");
         // /publish/message 로 메시지 전송 컨트롤러 라우팅 가능
         registry.setApplicationDestinationPrefixes("/publish");
+        // 요청을 보낸 사용자에게 바로 전송할 때 사용자 식별을 위한 접두사 세팅
+        registry.setUserDestinationPrefix("/user");
     }
 
     // 클라이언트 인바운드 채널을 구성하는 메서드

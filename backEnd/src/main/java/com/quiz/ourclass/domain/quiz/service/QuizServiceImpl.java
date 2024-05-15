@@ -32,6 +32,7 @@ public class QuizServiceImpl implements QuizService {
     private final QuizGameRepository quizGameRepository;
     private final QuizRepository quizRepository;
     private final QuizGameMapper quizGameMapper;
+    private final CountdownService countdownService;
 
     public void makingQuiz(MakingQuizRequest request) {
         // 0. orgId로 들어온 단체 찾기
@@ -77,6 +78,8 @@ public class QuizServiceImpl implements QuizService {
         // 4. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.
         List<Member> members = quizRepository.sendUrl4Member(quizGameId);
 //        fcmUtil.multiFcmSend(members, quizGameMapper.toFcmDTO("퀴즈를 풀어보아요!", url));
+        // 5. 대기방 60초 카운트 다운 시작 -> 60초 지나면 게임 자동 시작
+        countdownService.startCountDown();
         return url;
     }
 }
