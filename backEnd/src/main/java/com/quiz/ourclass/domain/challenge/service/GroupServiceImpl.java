@@ -166,6 +166,7 @@ public class GroupServiceImpl implements GroupService {
             .eventType(SseType.INVITE_REQUEST)
             .receiverId(memberId)
             .url(String.valueOf(loginMemberId))
+            .data(key)
             .time(LocalDateTime.now())
             .build();
         sseService.send(sseDTO);
