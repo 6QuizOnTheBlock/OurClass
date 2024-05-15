@@ -1,4 +1,4 @@
-package com.sixkids.student.relay.history
+package com.sixkids.teacher.relay.history
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -25,13 +25,11 @@ private const val TAG = "D107"
 @HiltViewModel
 class RelayHistoryViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
-    private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getRunningRelayUseCase: GetRunningRelayUseCase,
     private val getRelayHistoryUseCase: GetRelayHistoryUseCase
 ) : BaseViewModel<RelayHistoryState, RelayHistoryEffect>(RelayHistoryState())
 {
     private var orgId = 0L
-    private lateinit var userInfo: UserInfo
     var relayHistory: Flow<PagingData<Relay>>? = null
     private var isFirstVisited: Boolean = true
 
@@ -43,12 +41,6 @@ class RelayHistoryViewModel @Inject constructor(
 
         getSelectedOrganizationIdUseCase().onSuccess {
             orgId = it.toLong()
-        }.onFailure {
-            postSideEffect(RelayHistoryEffect.HandleException(it, ::initData))
-        }
-
-        loadUserInfoUseCase().onSuccess {
-            userInfo = it
         }.onFailure {
             postSideEffect(RelayHistoryEffect.HandleException(it, ::initData))
         }
@@ -79,25 +71,16 @@ class RelayHistoryViewModel @Inject constructor(
         }
     }
 
+    fun updateTotalCount(totalCount: Int) = intent { copy(totalRelayCount = totalCount) }
+
     private fun getRelayHistory() {
         viewModelScope.launch {
-            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
+            relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = 0)
                 .cachedIn(viewModelScope)
         }
     }
 
-    fun updateTotalCount(totalCount: Int) = intent { copy(totalRelayCount = totalCount) }
-
     fun navigateToRelayDetail(relayId: Long) = postSideEffect(
         RelayHistoryEffect.NavigateToRelayDetail(relayId)
     )
-
-    fun navigateToAnswerRelay(relayId: Long) = postSideEffect(
-        RelayHistoryEffect.NavigateToAnswerRelay(relayId)
-    )
-
-    fun navigateToTaggingReceiverRelay(relayId: Long) = postSideEffect(
-        RelayHistoryEffect.NavigateToTaggingReceiverRelay(relayId)
-    )
-
 }

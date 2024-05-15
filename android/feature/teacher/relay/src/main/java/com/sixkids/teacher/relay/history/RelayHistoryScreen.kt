@@ -1,4 +1,4 @@
-package com.sixkids.student.relay.history
+package com.sixkids.teacher.relay.history
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -31,32 +31,29 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
+import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
 import com.sixkids.designsystem.component.item.UlbanRelayItem
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Orange
+import com.sixkids.designsystem.theme.OrangeDark
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Relay
-import com.sixkids.student.relay.R
+import com.sixkids.teacher.relay.R
 import com.sixkids.ui.util.formatToMonthDayTime
 import com.sixkids.designsystem.R as DesignSystemR
 
 private const val TAG = "D107"
 @Composable
-fun RelayRoute(
+fun RelayHistoryRoute(
     viewModel: RelayHistoryViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateToDetail: (Long) -> Unit,
-    navigateToCreate: () -> Unit,
-    navigateToAnswer: (Long) -> Unit,
-    navigateToTaggingReceiver: (Long) -> Unit,
-    navigateToJoin: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        Log.d(TAG, "RelayRoute: ")
         viewModel.initData()
     }
 
@@ -64,10 +61,6 @@ fun RelayRoute(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is RelayHistoryEffect.NavigateToRelayDetail -> navigateToDetail(sideEffect.relayId)
-                is RelayHistoryEffect.NavigateToCreateRelay -> navigateToCreate()
-                is RelayHistoryEffect.NavigateToJoinRelay -> navigateToJoin()
-                is RelayHistoryEffect.NavigateToAnswerRelay -> navigateToAnswer(sideEffect.relayId)
-                is RelayHistoryEffect.NavigateToTaggingReceiverRelay -> navigateToTaggingReceiver(sideEffect.relayId)
                 is RelayHistoryEffect.HandleException -> handleException(
                     sideEffect.throwable,
                     sideEffect.retry
@@ -83,13 +76,6 @@ fun RelayRoute(
         navigateToDetail = { relayId ->
             viewModel.navigateToRelayDetail(relayId)
         },
-        navigateToCreate = navigateToCreate,
-        navigateToAnswer = { relayId ->
-            viewModel.navigateToAnswerRelay(relayId)
-        },
-        navigateToTaggingReceiver = { relayId ->
-            viewModel.navigateToTaggingReceiverRelay(relayId)
-        },
         updateTotalCount = {
             viewModel.updateTotalCount(it)
         }
@@ -102,9 +88,6 @@ fun RelayHistoryScreen(
     padding: PaddingValues = PaddingValues(0.dp),
     relayItems: LazyPagingItems<Relay>? = null,
     navigateToDetail: (Long) -> Unit = {},
-    navigateToCreate: () -> Unit = {},
-    navigateToAnswer: (Long) -> Unit = {},
-    navigateToTaggingReceiver: (Long) -> Unit = {},
     updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
@@ -113,7 +96,6 @@ fun RelayHistoryScreen(
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
         }
     }
-
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(padding)) {
@@ -124,30 +106,33 @@ fun RelayHistoryScreen(
             if (currentRelay == null) {
                 UlbanDefaultAppBar(
                     leftIcon = DesignSystemR.drawable.relay,
-                    title = stringResource(R.string.relay_challenge),
-                    content = stringResource(R.string.relay_create),
+                    title = stringResource(R.string.relay),
+                    content = stringResource(R.string.relay_no),
                     color = Orange,
-                    onclick = navigateToCreate,
+                    onclick = {},
                     expanded = !isScrolled
                 )
             } else {
-                UlbanDetailAppBar(
+                UlbanDetailWithProgressAppBar(
                     leftIcon = DesignSystemR.drawable.relay,
-                    title = stringResource(R.string.relay_challenge),
-                    content = if (currentRelay.myTurnStatus) stringResource(R.string.relay_running_myturn) else stringResource(
-                        R.string.relay_running_not_myturn
+                    title = stringResource(R.string.relay),
+                    content = stringResource(R.string.relay_current),
+                    topDescription = "${uiState.runningRelay.startTime.formatToMonthDayTime()} ~",
+                    bottomDescription = stringResource(
+                        R.string.relay_current_runner,
+                        uiState.runningRelay.curMemberNickname
                     ),
-                    topDescription = "${currentRelay.startTime.formatToMonthDayTime()} ~",
-                    bottomDescription = if (currentRelay.myTurnStatus) stringResource(R.string.relay_answer_myturn) else stringResource(
-                        R.string.relay_answer_not_myturn
-                    ),
+                    totalCnt = uiState.runningRelay.totalMemberCount,
+                    successCnt = uiState.runningRelay.doneMemberCount,
                     color = Orange,
-                    onclick = { if (currentRelay.myTurnStatus) navigateToAnswer(currentRelay.id) else navigateToTaggingReceiver(currentRelay.id) },
+                    progressBarColor = OrangeDark,
                     expanded = !isScrolled,
+                    onclick = {}
                 )
             }
 
             Spacer(modifier = Modifier.padding(12.dp))
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -183,8 +168,9 @@ fun RelayHistoryScreen(
                     ) {
                         items(relayItems.itemCount) { index ->
                             relayItems[index]?.let { relay ->
-                                if (index == 0)
+                                if (index == 0){
                                     updateTotalCount(relay.totalCount)
+                                }
                                 UlbanRelayItem(
                                     startDate = relay.startTime,
                                     endDate = relay.endTime,

@@ -8,4 +8,5 @@ data class Relay(
     val endTime: LocalDateTime = LocalDateTime.now(),
     val lastTurn: Int = 0,
     val lastMemberName: String = "",
+    val totalCount: Int = 0
 )

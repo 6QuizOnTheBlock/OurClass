@@ -62,6 +62,8 @@ import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
 import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
+import com.sixkids.teacher.relay.navigation.navigateTeacherRelayDetail
+import com.sixkids.teacher.relay.navigation.navigateTeacherRelayHistory
 
 class MainNavigator(
     val navController: NavHostController,
@@ -300,6 +302,17 @@ class MainNavigator(
 
     fun navigateChallengeCreatedResult(challengeId: Long, title: String) {
         navController.navigateChallengeCreatedResult(challengeId, title)
+    }
+
+    /**
+     *  Teacher Relay
+     */
+    fun navigateTeacherRelayHistory(){
+        navController.navigateTeacherRelayHistory()
+    }
+
+    fun navigateTeacherRelayDetail(relayId: Long){
+        navController.navigateTeacherRelayDetail(relayId)
     }
 
     fun navigateTeacherOrganizationList() {
