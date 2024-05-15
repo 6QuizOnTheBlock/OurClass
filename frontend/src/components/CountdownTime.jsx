@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-function CountdownTimer({onTimerEnd}) {
-  const [timeLeft, setTimeLeft] = useState(10); // 10초로 초기화
+function CountdownTimer({onTimerEnd, time}) {
+  const [timeLeft, setTimeLeft] = useState(time); // 10초로 초기화
 
   useEffect(() => {
     if (timeLeft > 0) {

@@ -12,23 +12,26 @@ import Answer from './quiz/Answer';
 import QuizEnd from './quiz/QuizEnd';
 import RankingScreen from './quiz/Ranking';
 import LoginForm from './page/LoginFrom';
+import { WebSocketProvider } from './utils/WebSocketProvider';
 
 
 function App() {
 
   return (
     <BrowserRouter>
-       <Routes>
-        <Route path='/:quizGameId/:uuid' element={<LoginForm/>}></Route>
-        <Route path='/home' element={<TeacherHome/>}></Route>
-         <Route path='/teacherRemote' element={<TeacherOngoing/>} ></Route>
-         <Route path="/waitingRoom" element={<WaitingRoomPage/>}></Route>
-         <Route path='/subject/:Qid' element={<SubjectiveQuiz/>}></Route>
-         <Route path='/multiple/:Qid' element={<QuizComponent/>}></Route>
-         <Route path='/answer/:Qid' element={<Answer/>}></Route>
-         <Route path='/quizEnd' element={<QuizEnd/>}></Route>
-         <Route path='/ranking' element={<RankingScreen/>}></Route>
-       </Routes>
+      <WebSocketProvider>
+        <Routes>
+          <Route path='/:quizGameId/:uuid' element={<LoginForm/>}></Route>
+          <Route path='/home' element={<TeacherHome/>}></Route>
+          <Route path='/teacherRemote' element={<TeacherOngoing/>} ></Route>
+          <Route path="/waitingRoom/:Qid" element={<WaitingRoomPage/>}></Route>
+          <Route path='/subject/:Qid' element={<SubjectiveQuiz/>}></Route>
+          <Route path='/multiple/:Qid' element={<QuizComponent/>}></Route>
+          <Route path='/answer/:Qid' element={<Answer/>}></Route>
+          <Route path='/quizEnd' element={<QuizEnd/>}></Route>
+          <Route path='/ranking' element={<RankingScreen/>}></Route>
+        </Routes>
+      </WebSocketProvider>
     </BrowserRouter>
   )
 }
