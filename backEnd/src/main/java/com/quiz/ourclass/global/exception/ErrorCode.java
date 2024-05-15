@@ -17,6 +17,9 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 입력 값입니다."),
     ANOTHER_AUTH_ERROR(HttpStatus.UNAUTHORIZED, "토큰 외의 Auth 에러입니다."),
     TEACHER_CAN_NOT_REPORT(HttpStatus.FORBIDDEN, "단체 관리자는 신고할 수 없습니다."),
+    CANT_LOAD_KAFKA(HttpStatus.INTERNAL_SERVER_ERROR, "카프카 메타 데이터를 조회할 수 없습니다."),
+    FAILED_TO_SENDING_MESSAGE(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED,
+        "메세지를 카프카로 전송하는데 실패했습니다. 재시도 중..."),
 
 
     //member
@@ -79,6 +82,8 @@ public enum ErrorCode {
     NO_QUIZ_GAME(HttpStatus.NOT_FOUND, "해당 단체에서 생성한 퀴즈가 없습니다."),
     NO_AUTHORITY_FOR_QUIZ(HttpStatus.FORBIDDEN, "해당 퀴즈 게임의 URL을 요청할 권한이 없습니다."),
     QUIZ_GAME_INACTIVATE(HttpStatus.BAD_REQUEST, "해당 게임은 이미 종료되었거나, 시작하지 않았습니다."),
+    UNKNOWN_GAMER_STATUS(HttpStatus.BAD_REQUEST, "알 수 없는 게이머 상태를 입력 받았습니다."),
+
     //relay
     RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "이어달리기를 찾을 수 없습니다."),
     RUNNING_RELAY_NOT_FOUND(HttpStatus.NOT_FOUND, "진행중인 이어달리기가 없습니다."),

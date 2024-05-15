@@ -1,18 +1,14 @@
 package com.quiz.ourclass.global.config;
 
-import com.quiz.ourclass.domain.member.repository.RefreshRepository;
-import com.quiz.ourclass.global.dto.FilterResponse;
 import com.quiz.ourclass.global.exception.CustomAccessDeniedHandler;
 import com.quiz.ourclass.global.exception.CustomAuthenticationEntryPoint;
-import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.jwt.JwtAuthFilter;
 import com.quiz.ourclass.global.util.jwt.JwtAutoLoginFilter;
 import com.quiz.ourclass.global.util.jwt.JwtLogOutHandler;
 import com.quiz.ourclass.global.util.jwt.JwtLogOutSuccessHandler;
-import com.quiz.ourclass.global.util.jwt.JwtUtil;
 import com.quiz.ourclass.global.util.jwt.TokenRefreshFilter;
 import jakarta.servlet.DispatcherType;
-import java.util.List;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,11 +40,6 @@ public class SecurityConfig {
      *  (6) studentList              : 학생 토큰으로만 입장 가능
      */
 
-
-    private final JwtUtil jwtUtil;
-    private final RedisUtil redisUtil;
-    private final RefreshRepository refreshRepository;
-    private final FilterResponse filterResponse;
     private final JwtLogOutHandler jwtLogOutHandler;
     private final JwtLogOutSuccessHandler jwtLogOutSuccessHandler;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -140,16 +131,14 @@ public class SecurityConfig {
 // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOriginPattern("*");
         configuration.setAllowedOriginPatterns(
-            List.of("http://localhost:5173", "https://k10d107.p.ssafy.io"));
-        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
-        configuration.addAllowedHeader("*"); // 모든 헤더 허용
+            Arrays.asList("http://localhost:5173", "https://k10d107.p.ssafy.io"));
+        configuration.addAllowedMethod(CorsConfiguration.ALL); // 모든 HTTP 메서드 허용
+        configuration.addAllowedHeader(CorsConfiguration.ALL); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 자격 증명 허용 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 구성 적용
         return source;
     }
-
 }

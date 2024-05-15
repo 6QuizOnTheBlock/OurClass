@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -94,5 +95,35 @@ public class RedisUtil {
     private String buildQuizGameUrlKey(String uuid) {
         return ConstantUtil.QUIZ_GAME + uuid;
     }
+
+    private String buildRankingKey(long quizGameId) {
+        return ConstantUtil.RANKING + quizGameId;
+    }
+
+
+    // 신규 게이머를 퀴즈 게임 랭크에 넣기
+    public void setMemberScore(long memberId, long quizGameId, int score) {
+        redisTemplate.opsForZSet()
+            .add(buildRankingKey(quizGameId), String.valueOf(memberId), score);
+    }
+
+    // 전체 랭킹을 점수가 높은 순으로 가져오기
+    public Set<ZSetOperations.TypedTuple<String>> getAllMemberScores(long quizGameId) {
+        return redisTemplate.opsForZSet()
+            .reverseRangeWithScores(buildRankingKey(quizGameId), 0, -1);
+    }
+
+    // 멤버 한 명 점수 조회
+    public Double getMemberScore(long memberId, long quizGameId) {
+        return redisTemplate.opsForZSet()
+            .score(buildRankingKey(quizGameId), String.valueOf(memberId));
+    }
+
+    public boolean removeMemberScore(long memberId, long quizGameId) {
+        Long result = redisTemplate.opsForZSet()
+            .remove(buildRankingKey(quizGameId), Long.toString(memberId));
+        return result != null && result > 0;
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.quiz.ourclass.global.config.kafka;
 
 import com.google.common.collect.ImmutableMap;
 import com.quiz.ourclass.domain.chat.dto.Message;
+import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
 import java.util.Map;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +21,6 @@ public class ProducerConfig {
     @Value("${kafka.url}")
     String kafkaUrl;
 
-    // Kafka ProducerFactory 생성하는 Bean 메서드
-    @Bean
-    public ProducerFactory<String, Message> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigurations());
-    }
-
     // Kafka Producer 구성을 위한 설정값들을 포함한 맵을 반환하는 메서드
     @Bean
     public Map<String, Object> producerConfigurations() {
@@ -39,9 +34,30 @@ public class ProducerConfig {
             .build();
     }
 
-    // KafkaTemplate 생성하는 Bean 메서드
+
+    // Message ProducerFactory 생성하는 Bean 메서드
+    @Bean
+    public ProducerFactory<String, Message> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigurations());
+    }
+
+    // [Message template]를 생성하는 Bean 메서드
     @Bean
     public KafkaTemplate<String, Message> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+
+
+    // Gamer Template -> 총 게이머에 대한 명세(이름, id, 프로필 사진), 게이머의 랭킹
+    @Bean
+    public ProducerFactory<String, GamerDTO> GamerProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigurations());
+    }
+
+    @Bean
+    public KafkaTemplate<String, GamerDTO> gamerTemplate() {
+        return new KafkaTemplate<>(GamerProducerFactory());
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.quiz.ourclass.domain.quiz.controller;
+package com.quiz.ourclass.domain.quiz.controller.docs;
 
 import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;

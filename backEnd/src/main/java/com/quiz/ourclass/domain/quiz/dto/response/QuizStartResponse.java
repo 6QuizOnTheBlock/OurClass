@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record QuizStartResponse(
     @Schema(description = "회원 고유번호")
     long id,
+    @Schema(description = "멤버 이름")
+    String name,
     @Schema(description = "퀴즈 게임 고유 번호")
     long quizGameId,
     @Schema(description = "프로필 이미지")
