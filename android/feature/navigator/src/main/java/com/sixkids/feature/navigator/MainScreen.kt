@@ -124,7 +124,7 @@ fun MainScreen(
                 navigateToClassSummary = { },
                 navigateToClassSetting = { },
                 navigateToChattingFilter = navigator::navigateChattingFilter,
-                navigateToInvite = { },
+                navigateToInvite = navigator::navigateClassInvite,
             )
 
             manageStudentNavGraph(

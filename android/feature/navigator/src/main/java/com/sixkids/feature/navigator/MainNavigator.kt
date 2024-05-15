@@ -186,6 +186,10 @@ class MainNavigator(
         navController.navigateChattingFilter()
     }
 
+    fun navigateClassInvite() {
+        navController.navigate(ManageClassRoute.inviteRoute)
+    }
+
     /**
      * Manage Student Navigation
      */

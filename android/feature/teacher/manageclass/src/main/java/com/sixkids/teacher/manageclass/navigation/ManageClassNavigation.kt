@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterEffect
 import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterRoute
+import com.sixkids.teacher.manageclass.invite.ClassInviteRoute
 import com.sixkids.teacher.manageclass.main.ManageClassMainRoute
 import com.sixkids.ui.SnackbarToken
 
@@ -16,6 +17,10 @@ fun NavController.navigateManageClass(navOptions: NavOptions) {
 
 fun NavController.navigateChattingFilter() {
     navigate(ManageClassRoute.chattingFilterRoute)
+}
+
+fun NavController.navigateInvite() {
+    navigate(ManageClassRoute.inviteRoute)
 }
 
 fun NavGraphBuilder.manageClassNavGraph(
@@ -38,6 +43,13 @@ fun NavGraphBuilder.manageClassNavGraph(
 
     composable(route = ManageClassRoute.chattingFilterRoute){
         ChattingFilterRoute(
+            onShowSnackBar = onShowSnackBar
+        )
+    }
+
+    composable(ManageClassRoute.inviteRoute){
+        ClassInviteRoute(
+            padding = padding,
             onShowSnackBar = onShowSnackBar
         )
     }

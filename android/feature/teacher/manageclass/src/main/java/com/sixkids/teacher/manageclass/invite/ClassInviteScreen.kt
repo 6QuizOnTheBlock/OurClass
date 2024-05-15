@@ -15,27 +15,62 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.manageclass.R
+import com.sixkids.ui.SnackbarToken
+import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun ClassInviteRoute(
-    padding: PaddingValues
+    viewModel: ClassInviteViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    onShowSnackBar: (SnackbarToken) -> Unit
 ) {
+    var copyTrigger by remember { mutableStateOf(false) }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is ClassInviteEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(it.message))
+        }
+    }
+
+    if (copyTrigger){
+        if (uiState.classId == null || uiState.classInviteCode == null){
+            onShowSnackBar(SnackbarToken("초대 코드를 복사 할 수 없습니다."))
+        } else {
+            copyToClipboardClassInviteCode(uiState.classId!!, uiState.classInviteCode!!)
+        }
+        copyTrigger = false
+    }
+
     Box(modifier = Modifier.padding(padding)) {
-        ClassInviteScreen()
+        ClassInviteScreen(
+            classInviteState = uiState,
+            createInviteCodeButtonOnClick = { viewModel.getInviteCode() },
+            copyInviteCodeOnClick = { copyTrigger = true }
+        )
     }
 }
 
@@ -100,6 +135,15 @@ fun ClassInviteScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun copyToClipboardClassInviteCode(classId: Int, classInviteCode: String) {
+    LocalClipboardManager.current.let { manager ->
+        manager.setText(AnnotatedString(
+            "학급 아이디 : ${classId}\n초대 코드 : ${classInviteCode}"
+        ))
     }
 }
 
