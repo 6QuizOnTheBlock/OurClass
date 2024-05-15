@@ -3,6 +3,8 @@ package com.quiz.ourclass.domain.challenge.service;
 import static com.quiz.ourclass.global.exception.ErrorCode.CHALLENGE_NOT_FOUND;
 import static com.quiz.ourclass.global.exception.ErrorCode.PERMISSION_DENIED;
 
+import com.quiz.ourclass.domain.challenge.dto.request.AutoGroupMatchingRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
 import com.quiz.ourclass.domain.challenge.entity.Challenge;
 import com.quiz.ourclass.domain.challenge.entity.ChallengeGroup;
@@ -11,20 +13,26 @@ import com.quiz.ourclass.domain.challenge.entity.GroupType;
 import com.quiz.ourclass.domain.challenge.repository.ChallengeGroupRepository;
 import com.quiz.ourclass.domain.challenge.repository.ChallengeRepository;
 import com.quiz.ourclass.domain.challenge.repository.GroupMemberRepository;
+import com.quiz.ourclass.domain.member.mapper.MemberMapper;
 import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.notice.dto.SseDTO;
 import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +48,10 @@ public class GroupServiceImpl implements GroupService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
     private final RelationshipRepository relationshipRepository;
+    private final OrganizationRepository organizationRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
+    private final MemberMapper memberMapper;
     private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
 
     @Transactional
@@ -170,6 +180,71 @@ public class GroupServiceImpl implements GroupService {
             .time(LocalDateTime.now())
             .build();
         sseService.send(sseDTO);
+    }
+
+    @Override
+    public List<AutoGroupMatchingResponse> getGroupMatching(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
+        if (autoGroupMatchingRequest.minCount() > autoGroupMatchingRequest.members().size()) {
+            throw new GlobalException(ErrorCode.GROUP_MIN_COUNT_OVER);
+        }
+        switch (autoGroupMatchingRequest.matchingType()) {
+            case RAND -> {
+                return getRandomGroup(autoGroupMatchingRequest);
+            }
+            case FRIENDLY -> {
+                return getFriendlyGroup(autoGroupMatchingRequest);
+            }
+            case UNFRIENDLY -> {
+                return getUnfriendlyGroup(autoGroupMatchingRequest);
+            }
+        }
+        return null;
+    }
+
+    private List<AutoGroupMatchingResponse> getRandomGroup(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
+        List<MemberSimpleDTO> members = autoGroupMatchingRequest.members().stream()
+            .map(memberRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(memberMapper::memberToMemberSimpleDTO)
+            .collect(Collectors.toList());
+        Collections.shuffle(members);
+        List<List<MemberSimpleDTO>> groups = new ArrayList<>();
+        int groupSize = autoGroupMatchingRequest.minCount();
+        int groupCount = members.size() / groupSize;
+        int left = members.size() % groupSize;
+        int addCount = left / groupCount;
+        int start = 0;
+        for (int i = 0; i < groupCount; i++) {
+            int size = groupSize;
+            if (i < left) {
+                if (left >= addCount) {
+                    size += left;
+                } else {
+                    size += addCount;
+                    left -= addCount;
+                }
+            }
+            groups.add(members.subList(start, start + size));
+            start += size;
+        }
+        return groups.stream().map(group -> AutoGroupMatchingResponse.builder()
+                .members(group)
+                .headCount(group.size())
+                .build())
+            .toList();
+    }
+
+    private List<AutoGroupMatchingResponse> getFriendlyGroup(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
+        return null;
+    }
+
+    private List<AutoGroupMatchingResponse> getUnfriendlyGroup(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
+        return null;
     }
 
     private static String makeGroupKey(long challengeId, long MemberId) {

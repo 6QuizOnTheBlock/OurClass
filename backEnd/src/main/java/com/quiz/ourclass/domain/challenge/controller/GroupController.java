@@ -1,7 +1,10 @@
 package com.quiz.ourclass.domain.challenge.controller;
 
+import com.quiz.ourclass.domain.challenge.dto.request.AutoGroupMatchingRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
 import com.quiz.ourclass.domain.challenge.service.GroupService;
 import com.quiz.ourclass.global.dto.ResultResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,5 +48,13 @@ public class GroupController implements GroupControllerDocs {
     public ResponseEntity<ResultResponse<?>> inviteMatchingRoom(String key, Long memberId) {
         groupService.inviteMatchingRoom(key, memberId);
         return ResponseEntity.ok(ResultResponse.success(null));
+    }
+
+    @GetMapping("/groups/matching")
+    public ResponseEntity<ResultResponse<?>> getGroupMatching(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
+        List<AutoGroupMatchingResponse> autoGroupMatchingResponse = groupService.getGroupMatching(
+            autoGroupMatchingRequest);
+        return ResponseEntity.ok(ResultResponse.success(autoGroupMatchingResponse));
     }
 }
