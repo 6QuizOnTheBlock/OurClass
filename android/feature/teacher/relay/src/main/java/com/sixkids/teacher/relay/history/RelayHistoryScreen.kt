@@ -75,6 +75,9 @@ fun RelayHistoryRoute(
         relayItems = viewModel.relayHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { relayId ->
             viewModel.navigateToRelayDetail(relayId)
+        },
+        updateTotalCount = {
+            viewModel.updateTotalCount(it)
         }
     )
 }
@@ -85,6 +88,7 @@ fun RelayHistoryScreen(
     padding: PaddingValues = PaddingValues(0.dp),
     relayItems: LazyPagingItems<Relay>? = null,
     navigateToDetail: (Long) -> Unit = {},
+    updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -113,14 +117,10 @@ fun RelayHistoryScreen(
                     leftIcon = DesignSystemR.drawable.relay,
                     title = stringResource(R.string.relay),
                     content = stringResource(R.string.relay_current),
-                    topDescription = stringResource(
+                    topDescription = "${uiState.runningRelay.startTime.formatToMonthDayTime()} ~",
+                    bottomDescription = stringResource(
                         R.string.relay_current_runner,
                         uiState.runningRelay.curMemberNickname
-                    ),
-                    bottomDescription = stringResource(
-                        R.string.relay_progress,
-                        uiState.runningRelay.totalMemberCount,
-                        uiState.runningRelay.doneMemberCount
                     ),
                     totalCnt = uiState.runningRelay.totalMemberCount,
                     successCnt = uiState.runningRelay.doneMemberCount,
@@ -168,6 +168,9 @@ fun RelayHistoryScreen(
                     ) {
                         items(relayItems.itemCount) { index ->
                             relayItems[index]?.let { relay ->
+                                if (index == 0){
+                                    updateTotalCount(relay.totalCount)
+                                }
                                 UlbanRelayItem(
                                     startDate = relay.startTime,
                                     endDate = relay.endTime,

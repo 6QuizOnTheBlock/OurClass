@@ -7,6 +7,7 @@ data class RelayHistoryResponse(
     val page: Int,
     val size: Int,
     val last: Boolean,
+    val totalCount: Int,
     val relays: List<RelayResponse>
 )
 
@@ -18,10 +19,11 @@ data class RelayResponse(
     val lastMemberName : String
 )
 
-internal fun RelayResponse.toModel() = Relay(
+internal fun RelayResponse.toModel(totalCount: Int) = Relay(
     id = id,
     startTime = startTime,
     endTime = endTime,
     lastTurn = lastTurn,
-    lastMemberName = lastMemberName
+    lastMemberName = lastMemberName,
+    totalCount = totalCount
 )

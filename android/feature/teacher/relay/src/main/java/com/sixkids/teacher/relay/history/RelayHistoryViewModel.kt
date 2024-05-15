@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.relay.GetRelayHistoryUseCase
 import com.sixkids.domain.usecase.relay.GetRunningRelayUseCase
@@ -15,6 +16,7 @@ import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -68,6 +70,8 @@ class RelayHistoryViewModel @Inject constructor(
                 }
         }
     }
+
+    fun updateTotalCount(totalCount: Int) = intent { copy(totalRelayCount = totalCount) }
 
     private fun getRelayHistory() {
         viewModelScope.launch {

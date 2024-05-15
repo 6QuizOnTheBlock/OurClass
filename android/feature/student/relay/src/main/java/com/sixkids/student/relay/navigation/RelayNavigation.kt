@@ -147,7 +147,7 @@ object RelayRoute {
     const val RELAY_ID_NAME = "relayId"
     const val RELAY_QUESTION_NAME = "question"
 
-    const val defaultRoute = "relay-history"
+    const val defaultRoute = "student/relay-history"
     const val createRoute = "relay-create"
     const val detailRoute = "relay-detail?relayId={$RELAY_ID_NAME}"
     const val answerRoute = "relay-answer?relayId={$RELAY_ID_NAME}"

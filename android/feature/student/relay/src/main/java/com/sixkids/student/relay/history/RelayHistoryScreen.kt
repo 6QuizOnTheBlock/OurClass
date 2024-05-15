@@ -89,6 +89,9 @@ fun RelayRoute(
         },
         navigateToTaggingReceiver = { relayId ->
             viewModel.navigateToTaggingReceiverRelay(relayId)
+        },
+        updateTotalCount = {
+            viewModel.updateTotalCount(it)
         }
     )
 }
@@ -102,6 +105,7 @@ fun RelayHistoryScreen(
     navigateToCreate: () -> Unit = {},
     navigateToAnswer: (Long) -> Unit = {},
     navigateToTaggingReceiver: (Long) -> Unit = {},
+    updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -109,7 +113,10 @@ fun RelayHistoryScreen(
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
         }
     }
-    Box(modifier = Modifier.fillMaxSize().padding(padding)) {
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -176,6 +183,8 @@ fun RelayHistoryScreen(
                     ) {
                         items(relayItems.itemCount) { index ->
                             relayItems[index]?.let { relay ->
+                                if (index == 0)
+                                    updateTotalCount(relay.totalCount)
                                 UlbanRelayItem(
                                     startDate = relay.startTime,
                                     endDate = relay.endTime,

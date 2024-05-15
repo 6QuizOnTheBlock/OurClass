@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.relay.GetRelayHistoryUseCase
 import com.sixkids.domain.usecase.relay.GetRunningRelayUseCase
@@ -15,6 +16,7 @@ import com.sixkids.model.UserInfo
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -42,13 +44,13 @@ class RelayHistoryViewModel @Inject constructor(
         getSelectedOrganizationIdUseCase().onSuccess {
             orgId = it.toLong()
         }.onFailure {
-            //todo
+            postSideEffect(RelayHistoryEffect.HandleException(it, ::initData))
         }
 
         loadUserInfoUseCase().onSuccess {
             userInfo = it
         }.onFailure {
-            //todo
+            postSideEffect(RelayHistoryEffect.HandleException(it, ::initData))
         }
 
         getRunningRelay()
@@ -79,11 +81,12 @@ class RelayHistoryViewModel @Inject constructor(
 
     private fun getRelayHistory() {
         viewModelScope.launch {
-            Log.d(TAG, "getRelayHistory: ")
             relayHistory = getRelayHistoryUseCase(organizationId = orgId.toInt(), memberId = userInfo.id)
                 .cachedIn(viewModelScope)
         }
     }
+
+    fun updateTotalCount(totalCount: Int) = intent { copy(totalRelayCount = totalCount) }
 
     fun navigateToRelayDetail(relayId: Long) = postSideEffect(
         RelayHistoryEffect.NavigateToRelayDetail(relayId)

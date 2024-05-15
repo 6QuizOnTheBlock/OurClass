@@ -29,7 +29,10 @@ class RelayHistoryPagingSource @Inject constructor(
                 page,
                 DEFAULT_SIZE
             )
-            val challengeHistory = response.getOrThrow().data.relays.map { it.toModel() }
+            val challengeHistory = response.getOrThrow().data.let {relayResponse ->
+                relayResponse.relays.map{it.toModel(relayResponse.totalCount)}
+            }
+
 
             LoadResult.Page(
                 data = challengeHistory,
