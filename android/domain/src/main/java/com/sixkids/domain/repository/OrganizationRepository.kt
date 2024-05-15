@@ -18,4 +18,8 @@ interface OrganizationRepository {
     suspend fun updateOrganization(organizationId: Int, name: String): String
 
     suspend fun getOrganizationInviteCode(organizationId: Int): String
+
+    suspend fun saveSelectedOrganizationName(organizationName: String)
+
+    suspend fun loadSelectedOrganizationName(): String
 }

@@ -49,4 +49,12 @@ class OrganizationRepositoryImpl @Inject constructor(
     override suspend fun getOrganizationInviteCode(organizationId: Int): String {
         return organizationRemoteDataSource.getOrganizationInviteCode(organizationId)
     }
+
+    override suspend fun saveSelectedOrganizationName(organizationName: String) {
+        organizationLocalDataSource.saveSelectedOrganizationName(organizationName)
+    }
+
+    override suspend fun loadSelectedOrganizationName(): String {
+        return organizationLocalDataSource.getSelectedOrganizationName()
+    }
 }
