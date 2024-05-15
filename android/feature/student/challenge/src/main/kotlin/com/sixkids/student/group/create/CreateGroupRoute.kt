@@ -99,6 +99,7 @@ fun CreateGroupScreen(
             groupSize = uiState.groupSize,
             leader = uiState.leader,
             memberList = uiState.selectedMembers,
+            waitingMemberList = uiState.waitingMembers,
             onRemoveClick = {
                 onMemberRemove(it)
             }

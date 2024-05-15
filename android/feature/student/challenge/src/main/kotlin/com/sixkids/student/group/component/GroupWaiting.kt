@@ -26,6 +26,7 @@ import com.sixkids.student.challenge.R
 fun GroupWaiting(
     leader: MemberSimple = MemberSimple(),
     memberList: List<MemberSimple> = emptyList(),
+    waitingMemberList: List<MemberSimple> = emptyList(),
     onDoneClick: () -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
     groupSize: Int = 0,
@@ -96,6 +97,15 @@ fun GroupWaiting(
                             isActive = true,
                         ),
                         onRemoveClick = onRemoveClick
+                    )
+                }
+                items(waitingMemberList){
+                    MemberIcon(
+                        memberIconItem = MemberIconItem(
+                            member = it,
+                            showX = false,
+                            isActive = false
+                        )
                     )
                 }
             }

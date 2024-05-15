@@ -16,7 +16,6 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.model.SseData
 import com.sixkids.model.SseEventType
 import com.sixkids.student.challenge.BuildConfig
-import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -95,7 +94,8 @@ class CreateGroupViewModel @Inject constructor(
                 SseEventType.INVITE_RESPONSE -> {
                     if (url == null) return
                     if (realData == null) return
-                    handelInviteResult(realData.toBoolean())
+                    Log.d(TAG, "onEvent: $realData")
+                    handelInviteResult(realData.toBoolean(), url)
                 }
 
                 SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
@@ -176,14 +176,25 @@ class CreateGroupViewModel @Inject constructor(
         eventSource = null
     }
 
-    private fun handelInviteResult(isAccepted: Boolean) {
+    private fun handelInviteResult(isAccepted: Boolean, memberId: Long) {
+        Log.d(TAG, "handelInviteResult: $isAccepted $memberId")
         if (isAccepted) {
-            //대기 그룹 인원 선택 멤버로 추가
             intent {
-                copy()
+                val member = waitingMembers.first { it.id == memberId }
+                Log.d(TAG, "handelInviteResult: $member")
+                copy(
+                    selectedMembers = selectedMembers.toMutableList().apply {
+                        add(member)
+                    }
+                )
             }
-        } else {
-            //대기 그룹 인원에서 삭제
+        }
+        intent {
+            copy(
+                waitingMembers = waitingMembers.toMutableList().apply {
+                    removeIf { it.id == memberId }
+                }
+            )
         }
     }
 
@@ -195,7 +206,7 @@ class CreateGroupViewModel @Inject constructor(
                         foundMembers = foundMembers.toMutableList().apply {
                             remove(member)
                         },
-                        selectedMembers = selectedMembers.toMutableList().apply {
+                        waitingMembers = waitingMembers.toMutableList().apply {
                             add(member)
                         }
                     )
