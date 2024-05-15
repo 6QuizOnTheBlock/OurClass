@@ -29,7 +29,8 @@ fun StudentProgressBarPreview() {
 fun StudentProgressBar(
     modifier: Modifier = Modifier,
     totalStudentCount: Int,
-    successStudentCount: Int
+    successStudentCount: Int,
+    progressBarColor: Color = RedDark
 ){
     Column(
         modifier = modifier,
@@ -40,7 +41,7 @@ fun StudentProgressBar(
                 .height(4.dp),
             progress = (successStudentCount.toFloat()/totalStudentCount.toFloat()),
             trackColor = Color.White,
-            color = RedDark
+            color = progressBarColor
         )
         Text(
             modifier = Modifier

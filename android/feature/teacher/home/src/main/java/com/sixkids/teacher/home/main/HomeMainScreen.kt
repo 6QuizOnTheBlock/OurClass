@@ -29,7 +29,8 @@ import com.sixkids.teacher.home.component.TeacherInfo
 fun HomeMainRoute(
     padding: PaddingValues,
     navigateToRank: () -> Unit,
-    navigateToChallenge: () -> Unit
+    navigateToChallenge: () -> Unit,
+    navigateToRelay: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -38,7 +39,8 @@ fun HomeMainRoute(
     ) {
         HomeMainScreen(
             navigateToRank = navigateToRank,
-            navigateToChallenge = navigateToChallenge
+            navigateToChallenge = navigateToChallenge,
+            navigateToRelay = navigateToRelay
         )
     }
 }
@@ -48,7 +50,8 @@ fun HomeMainScreen(
     modifier: Modifier = Modifier,
     homeMainState: HomeMainState = HomeMainState(),
     navigateToRank: () -> Unit = {},
-    navigateToChallenge: () -> Unit = {}
+    navigateToChallenge: () -> Unit = {},
+    navigateToRelay: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -64,6 +67,7 @@ fun HomeMainScreen(
             contentName = "이어 달리기",
             contentImageId = R.drawable.relay,
             runningState = homeMainState.runningRelayState,
+            onclick = navigateToRelay
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
