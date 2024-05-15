@@ -27,7 +27,9 @@ fun NavGraphBuilder.studentGroupNavGraph(
         route = GroupRoute.creatGroupRoute,
         arguments = listOf(navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType })
     ) {
-        CreateGroupRoute()
+        CreateGroupRoute(
+            handleException = handleException
+        )
     }
     composable(route = GroupRoute.joinGroupRoute) {
         JoinGroupRoute()

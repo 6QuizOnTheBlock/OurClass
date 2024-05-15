@@ -14,4 +14,7 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun inviteFriend(key: String, memberId: Long) =
         groupDataSource.inviteFriend(key, memberId)
+
+    override suspend fun deportFriend(key: String, memberId: Long) =
+        groupDataSource.deportFriend(key, memberId)
 }

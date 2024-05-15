@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
 import com.sixkids.domain.usecase.group.CreateGroupMatchingRoomUseCase
+import com.sixkids.domain.usecase.group.DeportFriendUseCase
 import com.sixkids.domain.usecase.group.InviteFriendUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
@@ -39,6 +40,7 @@ class CreateGroupViewModel @Inject constructor(
     private val getATKUseCase: GetATKUseCase,
     private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase,
     private val inviteFriendUseCase: InviteFriendUseCase,
+    private val deportFriendUseCase: DeportFriendUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
 
@@ -157,7 +159,6 @@ class CreateGroupViewModel @Inject constructor(
     fun connectSse() = viewModelScope.launch {
         eventSource = EventSources.createFactory(client)
             .newEventSource(request, eventSourceListener)
-
     }
 
     fun disconnectSse() {
@@ -188,13 +189,22 @@ class CreateGroupViewModel @Inject constructor(
     }
 
     fun removeMember(memberId: Long) {
-        intent {
-            bluetoothScanner.removeDevice(memberId)
-            copy(
-                selectedMembers = selectedMembers.toMutableList().apply {
-                    removeIf { it.memberId == memberId }
+        viewModelScope.launch {
+            deportFriendUseCase(uiState.value.roomKey, memberId).onSuccess {
+                bluetoothScanner.removeDevice(memberId)
+                intent {
+                    copy(
+                        selectedMembers = selectedMembers.toMutableList().apply {
+                            removeIf { it.memberId == memberId }
+                        }
+                    )
                 }
-            )
+            }.onFailure {
+                postSideEffect(CreateGroupEffect.HandleException(it) {
+                    removeMember(memberId)
+                })
+            }
+
         }
     }
 }

@@ -29,6 +29,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun CreateGroupRoute(
     viewModel: CreateGroupViewModel = hiltViewModel(),
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -47,7 +48,11 @@ fun CreateGroupRoute(
 
 
     viewModel.sideEffect.collectWithLifecycle {
-
+        when (it) {
+            is CreateGroupEffect.FriendScanStart -> {}
+            CreateGroupEffect.FriendScanStop -> {}
+            is CreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
+        }
     }
     CreateGroupScreen(
         uiState = uiState,

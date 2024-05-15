@@ -6,4 +6,6 @@ interface GroupDataSource {
     suspend fun createMatchingRoom(challengeId: Long): GroupMatchingRoomResponse
 
     suspend fun inviteFriend(key: String, memberId: Long)
+
+    suspend fun deportFriend(key: String, memberId: Long)
 }
