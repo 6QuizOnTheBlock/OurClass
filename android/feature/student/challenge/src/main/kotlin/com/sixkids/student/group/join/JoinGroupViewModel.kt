@@ -88,9 +88,7 @@ class JoinGroupViewModel @Inject constructor(
                             intent {
                                 copy(
                                     leader = MemberIconItem(
-                                        memberId = it.id,
-                                        name = it.name,
-                                        photo = it.photo,
+                                        member = it,
                                         showX = false,
                                         isActive = true
                                     ),
@@ -102,7 +100,6 @@ class JoinGroupViewModel @Inject constructor(
                             postSideEffect(JoinGroupEffect.HandleException(it, ::loadUserInfo))
                         }
                     }
-
                 }
 
                 SseEventType.INVITE_RESPONSE -> Log.d(TAG, "onEvent: 초대 응답")

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.dialog.UlbanBasicDialog
 import com.sixkids.designsystem.theme.Red
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 import com.sixkids.designsystem.R as DesignSystemR
 
@@ -34,7 +35,7 @@ fun InviteDialog(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MemberIcon(modifier = Modifier.padding(top = 4.dp), member = leader)
+            MemberIcon(modifier = Modifier.padding(top = 4.dp), memberIconItem = leader)
             Text(
                 modifier = Modifier.padding(vertical = 16.dp),
                 text = stringResource(R.string.invited_group)
@@ -67,9 +68,11 @@ fun InviteDialog(
 private fun InviteDialogPreview() {
     InviteDialog(
         leader = MemberIconItem(
-            memberId = 1,
-            name = "Leader",
-            photo = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            member = MemberSimple(
+                id = 1,
+                name = "Leader",
+                photo = "https://www.example.com/image.jpg"
+            ),
             isActive = true
         )
     )

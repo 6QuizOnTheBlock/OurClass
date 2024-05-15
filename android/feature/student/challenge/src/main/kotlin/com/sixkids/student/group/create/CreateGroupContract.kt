@@ -8,11 +8,12 @@ import com.sixkids.ui.base.UiState
 data class CreateGroupState(
     val isLoading: Boolean = false,
     val isScanning: Boolean = false,
-    val foundMembers: List<MemberIconItem> = emptyList(),
+    val foundMembers: List<MemberSimple> = emptyList(),
+    val selectedMembers: List<MemberSimple> = emptyList(),
+    val waitingMembers: List<MemberSimple> = emptyList(),
     val groupSize: Int = 0,
     val leader: MemberSimple = MemberSimple(),
     val roomKey: String = "",
-    val selectedMembers: List<MemberIconItem> = emptyList(),
 ) : UiState
 
 

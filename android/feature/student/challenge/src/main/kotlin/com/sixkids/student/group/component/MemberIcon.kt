@@ -24,12 +24,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.MemberSimple
 import com.sixkids.designsystem.R as DesignSystemR
 
 @Composable
 fun MemberIcon(
     modifier: Modifier = Modifier,
-    member: MemberIconItem,
+    memberIconItem: MemberIconItem,
     onIconClick: (MemberIconItem) -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
 ) {
@@ -37,15 +38,15 @@ fun MemberIcon(
         modifier = modifier
             .wrapContentSize()
             .background(
-                if (member.isActive) Color.Transparent else Color.Gray,
+                if (memberIconItem.isActive) Color.Transparent else Color.Gray,
                 shape = RoundedCornerShape(8.dp),
             )
             .graphicsLayer {
-                alpha = if (member.isActive) 1f else 0.5f
+                alpha = if (memberIconItem.isActive) 1f else 0.5f
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
 
-        onClick = { onIconClick(member) }
+        onClick = { onIconClick(memberIconItem) }
     ) {
         Box(modifier.wrapContentSize()) {
 
@@ -58,11 +59,11 @@ fun MemberIcon(
                     modifier = modifier.wrapContentSize(),
                 ) {
                     AsyncImage(
-                        model = member.photo,
+                        model = memberIconItem.member.photo,
                         contentDescription = null,
                         modifier = modifier.size(48.dp)
                     )
-                    if (member.showX) {
+                    if (memberIconItem.showX) {
                         Icon(
                             imageVector = ImageVector.vectorResource(DesignSystemR.drawable.ic_close_filled),
                             contentDescription = "Close icon",
@@ -71,13 +72,13 @@ fun MemberIcon(
                                 .align(Alignment.TopEnd)
                                 .size(24.dp)
                                 .clickable {
-                                    onRemoveClick(member.memberId)
+                                    onRemoveClick(memberIconItem.member.id)
                                 }
                         )
                     }
                 }
                 Text(
-                    text = member.name,
+                    text = memberIconItem.member.name,
                     style = UlbanTypography.bodyMedium,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -92,10 +93,13 @@ fun MemberIcon(
 @Composable
 fun MemberIconPreview() {
     MemberIcon(
-        member = MemberIconItem(
-            memberId = 1,
-            name = "John Doe",
-            photo = "https://example.com/photo.jpg",
+        memberIconItem = MemberIconItem(
+            member = MemberSimple(
+                id = 1,
+                name = "Leader",
+                photo = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+
+            ),
             showX = true,
             isActive = true
         ),

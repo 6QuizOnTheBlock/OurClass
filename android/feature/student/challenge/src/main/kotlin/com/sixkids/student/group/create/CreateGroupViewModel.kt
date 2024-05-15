@@ -143,18 +143,10 @@ class CreateGroupViewModel @Inject constructor(
         viewModelScope.launch {
             bluetoothScanner.foundDevices.collect { memberIds ->
                 if (memberIds.isEmpty()) return@collect
-                val newMembers = mutableListOf<MemberIconItem>()
+                val newMembers = mutableListOf<MemberSimple>()
                 for (memberId in memberIds) {
                     getMemberSimpleUseCase(memberId).onSuccess { member ->
-                        newMembers.add(
-                            MemberIconItem(
-                                memberId = memberId,
-                                name = member.name,
-                                photo = member.photo,
-                                showX = true,
-                                isActive = true
-                            )
-                        )
+                        newMembers.add(member)
                     }.onFailure {
                         stopScan()
                         postSideEffect(CreateGroupEffect.HandleException(it) {
@@ -195,16 +187,16 @@ class CreateGroupViewModel @Inject constructor(
         }
     }
 
-    fun selectMember(member: MemberIconItem) {
+    fun selectMember(member: MemberSimple) {
         viewModelScope.launch {
-            inviteFriendUseCase(uiState.value.roomKey, member.memberId).onSuccess {
+            inviteFriendUseCase(uiState.value.roomKey, member.id).onSuccess {
                 intent {
                     copy(
                         foundMembers = foundMembers.toMutableList().apply {
                             remove(member)
                         },
                         selectedMembers = selectedMembers.toMutableList().apply {
-                            add(member.copy(showX = true, isActive = false))
+                            add(member)
                         }
                     )
                 }
@@ -223,7 +215,7 @@ class CreateGroupViewModel @Inject constructor(
                 intent {
                     copy(
                         selectedMembers = selectedMembers.toMutableList().apply {
-                            removeIf { it.memberId == memberId }
+                            removeIf { it.id == memberId }
                         }
                     )
                 }

@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 import com.sixkids.student.group.component.GroupWaiting
 import com.sixkids.student.group.component.MemberIcon
@@ -64,7 +65,7 @@ fun CreateGroupRoute(
 @Composable
 fun CreateGroupScreen(
     uiState: CreateGroupState = CreateGroupState(),
-    onMemberSelect: (MemberIconItem) -> Unit = { },
+    onMemberSelect: (MemberSimple) -> Unit = { },
     onMemberRemove: (Long) -> Unit = { }
 ) {
 
@@ -83,7 +84,11 @@ fun CreateGroupScreen(
             LazyColumn {
                 items(uiState.foundMembers) { member ->
                     MemberIcon(
-                        member = member,
+                        memberIconItem = MemberIconItem(
+                            member = member,
+                            isActive = true,
+                            showX = false
+                        ),
                         onIconClick = { onMemberSelect(member) },
                     )
                 }

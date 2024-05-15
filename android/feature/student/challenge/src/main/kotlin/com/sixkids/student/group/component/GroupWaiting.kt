@@ -25,7 +25,7 @@ import com.sixkids.student.challenge.R
 @Composable
 fun GroupWaiting(
     leader: MemberSimple = MemberSimple(),
-    memberList: List<MemberIconItem> = emptyList(),
+    memberList: List<MemberSimple> = emptyList(),
     onDoneClick: () -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
     groupSize: Int = 0,
@@ -79,10 +79,8 @@ fun GroupWaiting(
                 if (leader.id != 0L) {
                     item {
                         MemberIcon(
-                            member = MemberIconItem(
-                                memberId = leader.id,
-                                name = leader.name,
-                                photo = leader.photo,
+                            memberIconItem = MemberIconItem(
+                                member = leader,
                                 showX = false,
                                 isActive = true
                             ),
@@ -92,12 +90,10 @@ fun GroupWaiting(
                 }
                 items(memberList) { item ->
                     MemberIcon(
-                        member = MemberIconItem(
-                            memberId = item.memberId,
-                            name = item.name,
-                            photo = item.photo,
-                            showX = item.showX,
-                            isActive = item.isActive,
+                        memberIconItem = MemberIconItem(
+                            member = item,
+                            showX = true,
+                            isActive = true,
                         ),
                         onRemoveClick = onRemoveClick
                     )
@@ -114,9 +110,7 @@ fun GroupWaiting(
 }
 
 data class MemberIconItem(
-    val memberId: Long = 0L,
-    val name: String = "",
-    val photo: String = "",
+    val member: MemberSimple = MemberSimple(),
     val showX: Boolean = false,
     val isActive: Boolean = false
 )
@@ -132,12 +126,10 @@ fun GroupWaitingPreview() {
             photo = ""
         ),
         memberList = List(4) {
-            MemberIconItem(
-                memberId = it.toLong(),
-                name = "name$it",
+            MemberSimple(
+                id = it.toLong(),
+                name = "member $it",
                 photo = "",
-                showX = false,
-                isActive = it % 2 == 0
             )
         },
         groupSize = 5

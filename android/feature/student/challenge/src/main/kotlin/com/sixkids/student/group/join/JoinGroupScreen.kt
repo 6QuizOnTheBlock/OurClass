@@ -103,10 +103,8 @@ fun JoinGroupScreen(
         Box(modifier = Modifier.weight(1f)) {
             MultiLayeredCircles(modifier = Modifier.align(Alignment.Center))
             MemberIcon(
-                member = MemberIconItem(
-                    memberId = uiState.member.id,
-                    name = uiState.member.name,
-                    photo = uiState.member.photo,
+                memberIconItem = MemberIconItem(
+                    member = uiState.member,
                     isActive = true
                 ), modifier = Modifier.align(Alignment.Center)
             )
