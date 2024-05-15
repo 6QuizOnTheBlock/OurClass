@@ -66,9 +66,9 @@ public class QuizServiceImpl implements QuizService {
         Member me = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         // 1. 퀴즈 게임을 찾고, 퀴즈 게임의 단체의 담당자가 현재 요청을 보낸 사람과 일치하는지 확인합니다.
-        if (!quizRepository.canItGetUrl(quizGameId, me.getId())) {
-            throw new GlobalException(ErrorCode.NO_AUTHORITY_FOR_QUIZ);
-        }
+//        if (!quizRepository.canItGetUrl(quizGameId, me.getId())) {
+//            throw new GlobalException(ErrorCode.NO_AUTHORITY_FOR_QUIZ);
+//        }
         // 2. [UUID]를 이용해 퀴즈 게임 [URL]을 생성합니다.
         UUID uuid = UUID.randomUUID();
         String url = "http://localhost:5173/" + quizGameId + "/" + uuid;
@@ -76,7 +76,7 @@ public class QuizServiceImpl implements QuizService {
         redisUtil.setQuizGame(quizGameId, uuid);
         // 4. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.
         List<Member> members = quizRepository.sendUrl4Member(quizGameId);
-        fcmUtil.multiFcmSend(members, quizGameMapper.toFcmDTO("퀴즈를 풀어보아요!", url));
+//        fcmUtil.multiFcmSend(members, quizGameMapper.toFcmDTO("퀴즈를 풀어보아요!", url));
         return url;
     }
 }

@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.quiz.dto;
 
+import com.quiz.ourclass.domain.quiz.service.GamerStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 
@@ -14,7 +15,9 @@ public record GamerDTO(
     @Schema(description = "이름")
     String name,
     @Schema(description = "점수")
-    int point
+    int point,
+    @Schema(description = "게이머의 상태: ENTER, QUIT")
+    GamerStatus gamerStatus
 ) implements Serializable {
 
 

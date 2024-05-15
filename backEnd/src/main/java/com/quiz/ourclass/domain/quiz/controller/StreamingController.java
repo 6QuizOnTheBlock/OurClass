@@ -21,12 +21,14 @@ public class StreamingController {
 
     @MessageMapping("/gamer")
     public void getGamer(GamerDTO message, @Header("Authorization") final String accessToken) {
+        log.info(message.toString());
         streamingService.sendGamer(message);
     }
 
     // 2. answer -> 게이머들의 답변이 들어 오는 TOPIC -> point 재집계,
     @MessageMapping("/answer")
-    public void sendAnwer(final String message, @Header("Authorization") final String accessToken) {
+    public void sendAnswer(final String message,
+        @Header("Authorization") final String accessToken) {
 
     }
 }

@@ -102,7 +102,7 @@ public class RedisUtil {
 
 
     // 신규 게이머를 퀴즈 게임 랭크에 넣기
-    public void setMemberScore(long quizGameId, long memberId, int score) {
+    public void setMemberScore(long memberId, long quizGameId, int score) {
         redisTemplate.opsForZSet()
             .add(buildRankingKey(quizGameId), String.valueOf(memberId), score);
     }
@@ -115,7 +115,14 @@ public class RedisUtil {
 
     // 멤버 한 명 점수 조회
     public Double getMemberScore(long memberId, long quizGameId) {
-        return redisTemplate.opsForZSet().score(buildRankingKey(quizGameId), memberId);
+        return redisTemplate.opsForZSet()
+            .score(buildRankingKey(quizGameId), String.valueOf(memberId));
+    }
+
+    public boolean removeMemberScore(long memberId, long quizGameId) {
+        Long result = redisTemplate.opsForZSet()
+            .remove(buildRankingKey(quizGameId), Long.toString(memberId));
+        return result != null && result > 0;
     }
 
 
