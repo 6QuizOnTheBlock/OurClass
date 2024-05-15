@@ -8,4 +8,6 @@ interface GroupDataSource {
     suspend fun inviteFriend(key: String, memberId: Long)
 
     suspend fun deportFriend(key: String, memberId: Long)
+
+    suspend fun joinGroup(key: String, joinStatus: Boolean)
 }

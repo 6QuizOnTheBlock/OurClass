@@ -13,9 +13,10 @@
     <string name="need_to_waiting_friend_message">아직 %d명의 친구가 모이지 않았어요</string>
 
     <string name="can_create_group">그룹을 만들 수 있어요</string>
-    <string name="waint_invite">친구의 초대를 기다리고 있어요</string>
+    <string name="wait_group_invite">친구의 초대를 기다리고 있어요</string>
     <string name="team_member">팀원</string>
     <string name="end">종료</string>
     <string name="free_group_matching">자유롭게 팀을 구성해봐요</string>
     <string name="invited_group">친구가 나를 초대했어요!</string>
+    <string name="waiting_group_start">그룹이 시작되기를 기다리고 있어요.</string>
 </resources>

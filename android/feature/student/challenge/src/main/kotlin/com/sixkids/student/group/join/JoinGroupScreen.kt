@@ -77,10 +77,10 @@ fun JoinGroupRoute(
         InviteDialog(
             leader = uiState.leader,
             onConfirmClick = {
-                viewModel.acceptInvite()
+                viewModel.answerInvite(true)
             },
             onCancelClick = {
-                viewModel.rejectInvite()
+                viewModel.answerInvite(false)
             }
         )
     }
@@ -90,14 +90,13 @@ fun JoinGroupRoute(
 fun JoinGroupScreen(
     uiState: JoinGroupState = JoinGroupState()
 ) {
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.waint_invite),
+            text = if(uiState.isJoinedGroup) stringResource(R.string.waiting_group_start) else stringResource(R.string.wait_group_invite),
             style = UlbanTypography.titleSmall,
             modifier = Modifier.padding(top = 32.dp)
         )

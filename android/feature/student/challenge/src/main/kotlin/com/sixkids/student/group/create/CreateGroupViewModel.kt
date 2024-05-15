@@ -13,6 +13,8 @@ import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.SseData
+import com.sixkids.model.SseEventType
 import com.sixkids.student.challenge.BuildConfig
 import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.ui.base.BaseViewModel
@@ -20,6 +22,7 @@ import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -82,7 +85,22 @@ class CreateGroupViewModel @Inject constructor(
             data: String
         ) {
             super.onEvent(eventSource, id, type, data)
-            Log.d(TAG, "On Event Received! Data -: $data")
+            val sseEventType: SseEventType = SseEventType.valueOf(type ?: "")
+            val sseData = Json.decodeFromString<SseData>(data)
+            val url = sseData.url
+            val realData = sseData.data
+            when (sseEventType) {
+                SseEventType.SSE_CONNECT -> {}
+                SseEventType.INVITE_REQUEST -> {}
+                SseEventType.INVITE_RESPONSE -> {
+                    if (url == null) return
+                    if (realData == null) return
+                    handelInviteResult(realData.toBoolean())
+                }
+
+                SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
+                SseEventType.KICK_MEMBER -> Log.d(TAG, "onEvent: 추방")
+            }
         }
 
         override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
@@ -166,8 +184,18 @@ class CreateGroupViewModel @Inject constructor(
         eventSource = null
     }
 
-    fun selectMember(member: MemberIconItem) {
+    private fun handelInviteResult(isAccepted: Boolean) {
+        if (isAccepted) {
+            //대기 그룹 인원 선택 멤버로 추가
+            intent {
+                copy()
+            }
+        } else {
+            //대기 그룹 인원에서 삭제
+        }
+    }
 
+    fun selectMember(member: MemberIconItem) {
         viewModelScope.launch {
             inviteFriendUseCase(uiState.value.roomKey, member.memberId).onSuccess {
                 intent {

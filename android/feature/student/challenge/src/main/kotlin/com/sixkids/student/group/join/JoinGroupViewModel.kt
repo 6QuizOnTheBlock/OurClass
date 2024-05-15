@@ -3,6 +3,7 @@ package com.sixkids.student.group.join
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothServer
+import com.sixkids.domain.usecase.group.JoinGroupUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
@@ -34,6 +35,7 @@ class JoinGroupViewModel @Inject constructor(
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getATKUseCase: GetATKUseCase,
     private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
+    private val joinGroupUseCase: JoinGroupUseCase
 ) : BaseViewModel<JoinGroupState, JoinGroupEffect>(JoinGroupState()) {
 
     private var eventSource: EventSource? = null
@@ -75,12 +77,14 @@ class JoinGroupViewModel @Inject constructor(
             val sseEventType: SseEventType = SseEventType.valueOf(type ?: "")
             val sseData = Json.decodeFromString<SseData>(data)
             val url = sseData.url
+            val roomKey = sseData.data
             when (sseEventType) {
                 SseEventType.SSE_CONNECT -> {}
                 SseEventType.INVITE_REQUEST -> {
                     if (url == null) return
+                    if (roomKey == null) return
                     viewModelScope.launch {
-                        getMemberSimpleUseCase(url).onSuccess { it ->
+                        getMemberSimpleUseCase(url).onSuccess {
                             intent {
                                 copy(
                                     leader = MemberIconItem(
@@ -89,10 +93,11 @@ class JoinGroupViewModel @Inject constructor(
                                         photo = it.photo,
                                         showX = false,
                                         isActive = true
-                                    )
+                                    ),
+                                    roomKey = roomKey
                                 )
                             }
-                            postSideEffect(JoinGroupEffect.ReceiveInviteRequest(url))
+                            postSideEffect(JoinGroupEffect.ReceiveInviteRequest)
                         }.onFailure {
                             postSideEffect(JoinGroupEffect.HandleException(it, ::loadUserInfo))
                         }
@@ -150,14 +155,22 @@ class JoinGroupViewModel @Inject constructor(
         bluetoothServer.stopAdvertising()
     }
 
-    fun acceptInvite() {
-        //초대 승인
-        closeDialog()
-    }
-
-    fun rejectInvite() {
-        //초대 거절
-        closeDialog()
+    fun answerInvite(joinStatus: Boolean) {
+        viewModelScope.launch {
+            joinGroupUseCase(uiState.value.roomKey, joinStatus).onSuccess {
+                intent {
+                    copy(isJoinedGroup = joinStatus)
+                }
+                if(joinStatus){
+                    stopAdvertise()
+                }
+                closeDialog()
+            }.onFailure {
+                postSideEffect(JoinGroupEffect.HandleException(it){
+                    answerInvite(joinStatus)
+                })
+            }
+        }
     }
 
     private fun closeDialog() = postSideEffect(JoinGroupEffect.CloseInviteDialog)
