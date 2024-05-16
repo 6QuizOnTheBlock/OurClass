@@ -77,6 +77,7 @@ public enum ErrorCode {
     CHALLENGE_IS_END(HttpStatus.BAD_REQUEST, "종료된 함께달리기입니다."),
     NOT_CHALLENGE_GROUP_LEADER(HttpStatus.BAD_REQUEST, "레포트 제출은 그룹 리더만 가능합니다."),
     NOT_ENOUGH_GROUP_MEMBER(HttpStatus.BAD_REQUEST, "그룹 최소 인원이 부족합니다."),
+    GROUP_MIN_COUNT_OVER(HttpStatus.BAD_REQUEST, "그룹 당 최소 인원이 전체 인원을 초과합니다"),
 
     //quiz
     NO_QUIZ_GAME(HttpStatus.NOT_FOUND, "해당 단체에서 생성한 퀴즈가 없습니다."),

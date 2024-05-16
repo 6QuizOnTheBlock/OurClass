@@ -1,5 +1,7 @@
 package com.quiz.ourclass.domain.challenge.controller;
 
+import com.quiz.ourclass.domain.challenge.dto.request.AutoGroupMatchingRequest;
+import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,5 +92,16 @@ public interface GroupControllerDocs {
         String key,
         @Parameter(description = "초대 멤버 ID", required = true, in = ParameterIn.QUERY)
         Long memberId
+    );
+
+    @Operation(summary = "함께달리기 그룹 자동 매칭",
+        description = "RAND, FRIENDLY, UNFRIENDLY // 랜덤,친한순, 안친한순\n",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content(schema = @Schema(implementation = AutoGroupMatchingResponse.class)))
+        })
+    @GetMapping("/groups/matching")
+    ResponseEntity<ResultResponse<?>> getGroupMatching(
+        AutoGroupMatchingRequest autoGroupMatchingRequest
     );
 }
