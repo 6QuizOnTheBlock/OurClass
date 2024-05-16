@@ -38,4 +38,10 @@ public class QuizController implements QuizControllerDocs {
         @PathVariable("quizGameId") long quizGameId) {
         return ResponseEntity.ok(ResultResponse.success(quizService.getQuizUrl(quizGameId)));
     }
+
+    @GetMapping("/ranking/{quizGameId}")
+    public ResponseEntity<ResultResponse<?>> getRanking(
+        @PathVariable("quizGameId") long quizGameId) {
+        return ResponseEntity.ok(ResultResponse.success(quizService.getRanking(quizGameId)));
+    }
 }

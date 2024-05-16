@@ -1,10 +1,13 @@
 package com.quiz.ourclass.domain.quiz.service;
 
 import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
+import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
 import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
+import com.quiz.ourclass.domain.quiz.entity.Quiz;
 import com.quiz.ourclass.domain.quiz.entity.QuizGame;
 import com.quiz.ourclass.domain.quiz.mapper.QuizGameMapper;
 import com.quiz.ourclass.domain.quiz.repository.jpa.QuizGameRepository;
@@ -14,10 +17,12 @@ import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,20 +39,35 @@ public class QuizServiceImpl implements QuizService {
     private final QuizGameMapper quizGameMapper;
     private final CountdownService countdownService;
 
+    @Value("${ulvan.url}")
+    private String UlvanUrl;
+
+
+    @Transactional
     public void makingQuiz(MakingQuizRequest request) {
         // 0. orgId로 들어온 단체 찾기
         Organization org = organizationRepository.findById(request.orgId())
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
-        // 1. 단체 ID 담당자랑, 퀴즈 만들겠다는 단체랑 매칭 되는지 확인
-        if (!org.getManager().equals(accessUtil.getMember().orElse(null))) {
+        // 1. 퀴즈를 만들 수 있는 권한이 있는지 체크 (선생님인가)
+        Member member = accessUtil.getMember()
+            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
+        if (!member.getRole().equals(Role.TEACHER)) {
             throw new GlobalException(ErrorCode.ORGANIZATION_NOT_MATCH);
         }
         // 2. 매칭이 된다면, 해당 단체에 귀속 되는 퀴즈 게임 만들기
-        QuizGame quizGame = quizGameRepository.save(quizGameMapper.toQuizGame(request,
-            org));
+        QuizGame quizGame = quizGameRepository.save(quizGameMapper.toQuizGame(request, org));
         // 3. 해당 퀴즈 게임에 귀속 되는 퀴즈들 생성
         request.quizList().stream()
-            .map(quizDTO -> quizGameMapper.toQuiz(quizGame, quizDTO))
+            .map(quizDTO -> Quiz.builder()
+                .quizGame(quizGame)
+                .question(quizDTO.question())
+                .answer(quizDTO.answer())
+                .point(quizDTO.point())
+                .candidate1(quizDTO.candidate1())
+                .candidate2(quizDTO.candidate2())
+                .candidate3(quizDTO.candidate3())
+                .candidate4(quizDTO.candidate4())
+                .build())
             .forEach(quizRepository::save);
     }
 
@@ -72,7 +92,7 @@ public class QuizServiceImpl implements QuizService {
 //        }
         // 2. [UUID]를 이용해 퀴즈 게임 [URL]을 생성합니다.
         UUID uuid = UUID.randomUUID();
-        String url = "http://localhost:5173/" + quizGameId + "/" + uuid;
+        String url = UlvanUrl + quizGameId + "/" + uuid;
         // 3. [URL]을 [REDIS]에 수명을 10분으로 두고 저장합니다. (퀴즈 방 입장할 때 체크용)
         redisUtil.setQuizGame(quizGameId, uuid);
         // 4. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.
@@ -81,5 +101,10 @@ public class QuizServiceImpl implements QuizService {
         // 5. 대기방 60초 카운트 다운 시작 -> 60초 지나면 게임 자동 시작
         countdownService.startCountDown();
         return url;
+    }
+
+    @Override
+    public List<GamerDTO> getRanking(long quizGameId) {
+        return quizRepository.getRankingList(quizGameId, redisUtil.getAllMemberScores(quizGameId));
     }
 }

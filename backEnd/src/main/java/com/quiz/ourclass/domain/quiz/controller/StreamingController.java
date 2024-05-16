@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.quiz.controller;
 
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
+import com.quiz.ourclass.domain.quiz.dto.request.AnswerRequest;
+import com.quiz.ourclass.domain.quiz.dto.request.QuestionRequest;
 import com.quiz.ourclass.domain.quiz.service.CountdownService;
 import com.quiz.ourclass.domain.quiz.service.StreamingServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +25,22 @@ public class StreamingController {
     // 1. gamer : [gamer List]를 point 가 높은 순으로 주는 TOPIC
 
     @MessageMapping("/gamer")
-    public void getGamer(GamerDTO message, @Header("Authorization") final String accessToken) {
+    public void getGamer(GamerDTO message) {
         log.info(message.toString());
         streamingService.sendGamer(message);
     }
 
-    // 2. answer -> 게이머들의 답변이 들어 오는 TOPIC -> point 재집계,
+    // 2. 질문 요청에 대한 응답
+    @MessageMapping("/question")
+    public void sendQuestion(QuestionRequest request) {
+        streamingService.sendQuestion(request);
+    }
+
+    // 3. answer -> 게이머들의 답변이 들어 오는 TOPIC -> point 재집계,
     @MessageMapping("/answer")
-    public void sendAnswer(final String message,
+    public void sendAnswer(final AnswerRequest request,
         @Header("Authorization") final String accessToken) {
+        streamingService.sendAnswer(request, accessToken);
     }
 
     // 3. 서버 <-> 클라이언트 시간 동기화 (React 화면 마운트 시에 서버에 요청, 서버는 남은 카운트 다운 수 전송)
@@ -42,4 +51,6 @@ public class StreamingController {
         log.info("Destination={}", sha.getDestination());
         return String.valueOf(countdownService.getCurrentCountDown());
     }
+
+
 }

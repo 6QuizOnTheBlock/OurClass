@@ -1,6 +1,8 @@
 package com.quiz.ourclass.domain.quiz.service;
 
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
+import com.quiz.ourclass.domain.quiz.dto.request.QuestionRequest;
+import com.quiz.ourclass.domain.quiz.dto.response.AnswerResponse;
 import com.quiz.ourclass.domain.quiz.repository.jpa.QuizRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -8,6 +10,7 @@ import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
@@ -20,8 +23,10 @@ public class QuizReceive {
     private final SimpMessageSendingOperations template;
     private final QuizRepository quizRepository;
     private final RedisUtil redisUtil;
+    @Value("${kafka.group}")
+    String kafkaGroup;
 
-    @KafkaListener(topics = ConstantUtil.QUIZ_GAMER, containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = ConstantUtil.QUIZ_GAMER, containerFactory = "kafkaListenerContainerFactory", concurrency = "4")
     public void receivedGamer(GamerDTO gamer) {
         log.info("/gamer/" + gamer.quizGameId());
         log.info("게이머 상세={}", gamer.toString());
@@ -44,6 +49,33 @@ public class QuizReceive {
         template.convertAndSend("/subscribe/gamer/" + gamer.quizGameId(),
             quizRepository.getRankingList
                 (gamer.quizGameId(), redisUtil.getAllMemberScores(gamer.quizGameId())));
+    }
+
+    @KafkaListener(topics = ConstantUtil.QUIZ_QUESTION, containerFactory = "kafkaListenerContainerFactory")
+    public void receivedQuestion(QuestionRequest request) {
+        log.info("보내줘야 할 질문 상세={}", request.toString());
+
+        template.convertAndSend("/subscribe/question/" + request.quizGameId(),
+            quizRepository.getQuiz(
+                request.quizGameId(), request.id()));
+    }
+
+    @KafkaListener(topics = ConstantUtil.QUIZ_ANSWER, containerFactory = "kafkaListenerContainerFactory")
+    public void receivedAnswer(AnswerResponse response) {
+        log.info("보내줘야할 답 상세={}", response.toString());
+
+        if (response.submit().replaceAll(" ", "").equals(response.ans().replaceAll(" ", ""))) {
+
+            log.info(String.valueOf(
+                response.submit().replaceAll(" ", "").equals(response.ans().replaceAll(" ", ""))));
+
+            int score =
+                redisUtil
+                    .getMemberScore(response.studentId(), response.quizGameId()).intValue() + 100;
+            redisUtil.setMemberScore(response.studentId(), response.quizGameId(), score);
+        }
+
+        template.convertAndSend("/subscribe/answer/" + response.quizGameId(), response);
     }
 
 }

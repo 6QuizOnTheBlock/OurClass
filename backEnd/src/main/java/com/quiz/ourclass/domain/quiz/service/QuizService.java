@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.quiz.service;
 
+import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
 import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
 import java.util.List;
@@ -11,4 +12,6 @@ public interface QuizService {
     public List<QuizGameDTO> getQuizList(long orgId);
 
     public String getQuizUrl(long id);
+
+    public List<GamerDTO> getRanking(long quizGameId);
 }
