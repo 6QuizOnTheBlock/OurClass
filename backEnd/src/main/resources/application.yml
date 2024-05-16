@@ -79,3 +79,6 @@ firebase:
 kafka:
   url: ENC(S/qv76amkPMXZ2qL1ncBy/Td9LnfF2VtIxp3WlrB2cQ=)
   group: ENC(zfETOXpFX/sWRqXNhrk/j+LcLwYFTMfk)
+
+ulvan:
+  url: ENC(XH7Q0qDLHdytJyNWLX19ii1whNZcuR3p/oJUJ2nxG14cwrgzcpt10Q==)
