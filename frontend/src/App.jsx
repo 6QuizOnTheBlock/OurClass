@@ -1,20 +1,33 @@
-
+import React, { useState } from 'react';
 import { Button } from "./components/ui/button";
 import { Calendar } from "./components/ui/calendar";
 import "./index.css";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import WaitingRoomPage from './page/WaitingRoomPage';
+import TeacherHome from './teacherPage/TeacherHome';
+import TeacherOngoing from './teacherPage/TeacherOngoing';
+import SubjectiveQuiz from './quiz/SubjectiveQuiz';
+import QuizComponent from './quiz/MulitpleQuiz';
+import Answer from './quiz/Answer';
+import QuizEnd from './quiz/QuizEnd';
+import RankingScreen from './quiz/Ranking';
+
 
 function App() {
 
   return (
-    <>
-      <div className="flex justify-center items-center min-h-screen">
-        <Button variant="zosh" size="xl">Code With Zosh</Button>
-        <Calendar/>
-      </div>
-      <p className="read-the-docs">
-       
-      </p>
-    </>
+    <BrowserRouter>
+       <Routes>
+        <Route path='/home' element={<TeacherHome/>}></Route>
+         <Route path='/' element={<TeacherOngoing/>} ></Route>
+         <Route path="/waitingRoom" element={<WaitingRoomPage/>}></Route>
+         <Route path='/subject/:Qid' element={<SubjectiveQuiz/>}></Route>
+         <Route path='/multiple/:Qid' element={<QuizComponent/>}></Route>
+         <Route path='/answer/:Qid' element={<Answer/>}></Route>
+         <Route path='/quizEnd' element={<QuizEnd/>}></Route>
+         <Route path='/ranking' element={<RankingScreen/>}></Route>
+       </Routes>
+    </BrowserRouter>
   )
 }
 

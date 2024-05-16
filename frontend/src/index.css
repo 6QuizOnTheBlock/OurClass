@@ -1,4 +1,12 @@
-@tailwind base;
+@font-face {
+  font-family: 'MonoplexKRNerd-Bold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_Monoplex-nerd@1.0/MonoplexKRNerd-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+  @tailwind base;
   @tailwind components;
   @tailwind utilities;
 
@@ -71,6 +79,8 @@
       @apply border-border;
     }
     body {
-      @apply dark bg-background text-foreground;
+      @apply bg-background text-foreground;
     }
   }
+
+  
