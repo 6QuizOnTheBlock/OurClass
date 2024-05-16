@@ -86,19 +86,15 @@ public class QuizServiceImpl implements QuizService {
     public String getQuizUrl(long quizGameId) {
         Member me = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
-        // 1. 퀴즈 게임을 찾고, 퀴즈 게임의 단체의 담당자가 현재 요청을 보낸 사람과 일치하는지 확인합니다.
-//        if (!quizRepository.canItGetUrl(quizGameId, me.getId())) {
-//            throw new GlobalException(ErrorCode.NO_AUTHORITY_FOR_QUIZ);
-//        }
-        // 2. [UUID]를 이용해 퀴즈 게임 [URL]을 생성합니다.
+        // 1. [UUID]를 이용해 퀴즈 게임 [URL]을 생성합니다.
         UUID uuid = UUID.randomUUID();
         String url = UlvanUrl + quizGameId + "/" + uuid;
-        // 3. [URL]을 [REDIS]에 수명을 10분으로 두고 저장합니다. (퀴즈 방 입장할 때 체크용)
+        // 2. [URL]을 [REDIS]에 수명을 10분으로 두고 저장합니다. (퀴즈 방 입장할 때 체크용)
         redisUtil.setQuizGame(quizGameId, uuid);
-        // 4. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.
+        // 3. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.
         List<Member> members = quizRepository.sendUrl4Member(quizGameId);
-//        fcmUtil.multiFcmSend(members, quizGameMapper.toFcmDTO("퀴즈를 풀어보아요!", url));
-        // 5. 대기방 60초 카운트 다운 시작 -> 60초 지나면 게임 자동 시작
+        fcmUtil.multiFcmSend(members, quizGameMapper.toFcmDTO("퀴즈를 풀어보아요!", url));
+        // 4. 대기방 60초 카운트 다운 시작 -> 60초 지나면 게임 자동 시작
         countdownService.startCountDown();
         return url;
     }
