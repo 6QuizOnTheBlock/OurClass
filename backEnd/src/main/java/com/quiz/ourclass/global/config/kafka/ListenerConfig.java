@@ -29,7 +29,7 @@ public class ListenerConfig {
 
     // KafkaListener 컨테이너 팩토리를 생성하는 Bean 메서드
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, Message> chatContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
@@ -72,7 +72,7 @@ public class ListenerConfig {
         Map<String, Object> consumerConfigurations =
             ImmutableMap.<String, Object>builder()
                 .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
-                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, "group-2")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
                 .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
@@ -99,7 +99,7 @@ public class ListenerConfig {
         Map<String, Object> consumerConfigurations =
             ImmutableMap.<String, Object>builder()
                 .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
-                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, "group-3")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
                 .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
@@ -125,7 +125,7 @@ public class ListenerConfig {
         Map<String, Object> consumerConfigurations =
             ImmutableMap.<String, Object>builder()
                 .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
-                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, "group-4")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
                 .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
