@@ -29,7 +29,7 @@ public class ListenerConfig {
 
     // KafkaListener 컨테이너 팩토리를 생성하는 Bean 메서드
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Message> chatContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

@@ -26,7 +26,7 @@ public class QuizReceive {
     @Value("${kafka.group}")
     String kafkaGroup;
 
-    @KafkaListener(topics = ConstantUtil.QUIZ_GAMER, groupId = "group-2", containerFactory = "gamerListenerContainerFactory", concurrency = "4")
+    @KafkaListener(topics = ConstantUtil.QUIZ_GAMER, containerFactory = "gamerListenerContainerFactory", concurrency = "4")
     public void receivedGamer(GamerDTO gamer) {
         log.info("/gamer/" + gamer.quizGameId());
         log.info("게이머 상세={}", gamer.toString());
@@ -51,7 +51,7 @@ public class QuizReceive {
                 (gamer.quizGameId(), redisUtil.getAllMemberScores(gamer.quizGameId())));
     }
 
-    @KafkaListener(topics = ConstantUtil.QUIZ_QUESTION, groupId = "group-3", containerFactory = "questionRequestContainerFactory")
+    @KafkaListener(topics = ConstantUtil.QUIZ_QUESTION, containerFactory = "questionRequestContainerFactory")
     public void receivedQuestion(QuestionRequest request) {
         log.info("보내줘야 할 질문 상세={}", request.toString());
 
@@ -60,7 +60,7 @@ public class QuizReceive {
                 request.quizGameId(), request.id()));
     }
 
-    @KafkaListener(topics = ConstantUtil.QUIZ_ANSWER, groupId = "group-4", containerFactory = "answerResponseContainerFactory")
+    @KafkaListener(topics = ConstantUtil.QUIZ_ANSWER, containerFactory = "answerResponseContainerFactory")
     public void receivedAnswer(AnswerResponse response) {
         log.info("보내줘야할 답 상세={}", response.toString());
 
