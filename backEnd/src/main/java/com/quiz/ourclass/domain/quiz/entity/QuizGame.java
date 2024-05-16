@@ -10,13 +10,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class QuizGame {

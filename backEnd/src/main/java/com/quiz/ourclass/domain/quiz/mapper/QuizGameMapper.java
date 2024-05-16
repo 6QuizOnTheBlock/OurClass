@@ -11,14 +11,16 @@ import com.quiz.ourclass.global.dto.FcmDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Mapper(componentModel = "spring", uses = OrganizationRepository.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuizGameMapper {
-
 
     @Mapping(source = "organization", target = "organization")
     QuizGame toQuizGame(MakingQuizRequest makingQuizRequest, Organization organization);
 
+    @Transactional
     Quiz toQuiz(QuizGame quizGame, QuizDTO quizDTO);
 
     QuizGameDTO toQuizGameDTO(QuizGame QuizGame);

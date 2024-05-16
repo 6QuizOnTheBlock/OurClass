@@ -3,11 +3,14 @@ package com.quiz.ourclass.domain.quiz.repository.querydsl;
 import static com.quiz.ourclass.domain.member.entity.QMember.member;
 import static com.quiz.ourclass.domain.organization.entity.QMemberOrganization.memberOrganization;
 import static com.quiz.ourclass.domain.organization.entity.QOrganization.organization;
+import static com.quiz.ourclass.domain.quiz.entity.QQuiz.quiz;
 import static com.quiz.ourclass.domain.quiz.entity.QQuizGame.quizGame;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.member.entity.Member;
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
+import com.quiz.ourclass.domain.quiz.dto.response.QuestionResponse;
 import com.quiz.ourclass.domain.quiz.entity.GamerStatus;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
@@ -81,5 +84,22 @@ public class QuizRepositoryQuerydslImpl implements QuizRepositoryQuerydsl {
             .toList();
     }
 
+    @Override
+    public List<QuestionResponse> getQuiz(long quizGameId, long id) {
 
+        return queryFactory.select(Projections.constructor(
+                QuestionResponse.class,
+                quiz.id,
+                quiz.question,
+                quiz.answer,
+                quiz.point,
+                quiz.candidate1,
+                quiz.candidate2,
+                quiz.candidate3,
+                quiz.candidate4
+            ))
+            .from(quiz)
+            .where(quiz.quizGame.id.eq(quizGameId))
+            .fetch();
+    }
 }

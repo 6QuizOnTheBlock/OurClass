@@ -11,13 +11,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Quiz {
@@ -39,5 +39,19 @@ public class Quiz {
     @Enumerated(EnumType.STRING)
     Quiztype quiztype;
 
-
+    @Override
+    public String toString() {
+        return "Quiz{" +
+            "id=" + id +
+            ", quizGame=" + quizGame +
+            ", question='" + question + '\'' +
+            ", answer='" + answer + '\'' +
+            ", point=" + point +
+            ", candidate1='" + candidate1 + '\'' +
+            ", candidate2='" + candidate2 + '\'' +
+            ", candidate3='" + candidate3 + '\'' +
+            ", candidate4='" + candidate4 + '\'' +
+            ", quiztype=" + quiztype +
+            '}';
+    }
 }

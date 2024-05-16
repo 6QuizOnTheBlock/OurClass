@@ -3,6 +3,8 @@ package com.quiz.ourclass.global.config.kafka;
 import com.google.common.collect.ImmutableMap;
 import com.quiz.ourclass.domain.chat.dto.Message;
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
+import com.quiz.ourclass.domain.quiz.dto.request.QuestionRequest;
+import com.quiz.ourclass.domain.quiz.dto.response.AnswerResponse;
 import java.util.Map;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,5 +61,23 @@ public class ProducerConfig {
         return new KafkaTemplate<>(GamerProducerFactory());
     }
 
+    @Bean
+    public ProducerFactory<String, QuestionRequest> QuestionProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigurations());
+    }
 
+    @Bean
+    public KafkaTemplate<String, QuestionRequest> questionTemplate() {
+        return new KafkaTemplate<>(QuestionProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, AnswerResponse> AnswerProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigurations());
+    }
+
+    @Bean
+    public KafkaTemplate<String, AnswerResponse> answerTemplate() {
+        return new KafkaTemplate<>(AnswerProducerFactory());
+    }
 }
