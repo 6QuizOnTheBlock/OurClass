@@ -1,41 +1,47 @@
 import Layout from "../components/Layout"
-import React, { useState } from 'react';
-import { Card, CardContent, CardTitle } from "../components/ui/card";
+import React, { useEffect, useState } from 'react';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { useWebSocket } from '../utils/WebSocketProvider';
+import useUserStore from '../stores/member';
 import CountdownTimer from "../components/CountdownTime";
-import { useNavigate } from "react-router-dom";
 import QuestionPart from "./QuestionPart";
-import { useParams } from 'react-router-dom';
 
-const SubjectiveQuiz = () => {
-    const navigate = useNavigate();
-    const {Qid} = useParams();
-
+const SubjectiveQuiz = ({setCurrentScreen, Qid, question}) => {
+    const {stompClient} = useWebSocket();
+    const accessToken = useUserStore(state => state.accessToken);
+    const userInfo = useUserStore(state => state.userInfo);
+    const [inputValue, setInputValue] = useState(''); // 문제에 대한 답변 제출
     // 타이머 종료 시 호출될 함수
     const handleTimerEnd = () => {
-       navigate('/answer/'+ parseInt(Qid));
+        setCurrentScreen('Answer');
     };
 
 
-    // 문제에 대한 답변 제출
-    const [inputValue, setInputValue] = useState(''); // 입력값 상태 관리
     const handleInputChange = (e) => {
         setInputValue(e.target.value); // 입력값 변경 처리
+
       };
     
       const handleSubmit = () => {
-        alert(`입력한 내용: ${inputValue}`); // 입력값 제출 처리, 실제 구현에서는 다른 로직을 추가할 수 있습니다.
+        console.log(`입력한 내용: ${inputValue}`);
+        const payload = {
+            quizGameId: Qid,
+            quizId: question.id,
+            answer: inputValue
+        }
+
+        stompClient.send(`/publish/answer`,{Authorization: accessToken, type: "quiz"}, JSON.stringify(payload));
       };
 
     return(
     <Layout>
         {/* 문제 번호 */}
-        <div className=" text-white text-center my-2">Question {Qid}/5</div>
+        <div className=" text-white text-center my-2">Question</div>
         {/* 시간 제한 */}
-        <CountdownTimer onTimerEnd={handleTimerEnd}/>
+        <CountdownTimer onTimerEnd={handleTimerEnd} time={10}/>
         {/* 문제 내용 적는 곳 */}
-        <QuestionPart img={"https://www.agoda.com/wp-content/uploads/2020/04/Jeju-Island-hotels-things-to-do-in-Jeju-Island-South-Korea.jpg"} question={"제주도는 삼다도라 불리는데, 여기서 삼다는 무엇일까?"} />
+        <QuestionPart question={question.question} />
         {/* 답 입력 */}
             <div className="mt-4 w-full p-6 flex items-center">
                 <Input

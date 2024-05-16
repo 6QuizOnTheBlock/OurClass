@@ -17,7 +17,7 @@ export const WebSocketProvider = ({ children }) => {
       return;
     }
 
-    const sockJS = new SockJS("http://localhost:8080/api/ws-stomp");
+    const sockJS = new SockJS("https://k10d107.p.ssafy.io/api/ws-stomp");
     const client = Stomp.over(sockJS);
     client.connect(
       {

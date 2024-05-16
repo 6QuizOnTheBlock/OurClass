@@ -3,29 +3,21 @@ import LayoutforAns from "../components/LayoutforAns";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
-const Answer = () => {
-    const navigate = useNavigate();
-    const {Qid} = useParams();
-    const handleTimerEnd = () => {
+const Answer = ({setCurrentScreen, Qid, answer, point}) => {
 
-        var next = parseInt(Qid) + 1;
-        
-        if(parseInt(Qid) > 5){
-            navigate("/quizEnd");
-        }else{
-            parseInt(Qid)%2 === 0? navigate("/subject/"+ next) :  navigate("/multiple/"+ next)
-        }
+    const handleTimerEnd = () => {
+        setCurrentScreen('Ranking');
       };
     return(
         <LayoutforAns>
-            <CountdownTimer onTimerEnd={handleTimerEnd}/>
+            <CountdownTimer onTimerEnd={handleTimerEnd} time={10}/>
             <div className="text-center p-4">
                 <div className="bg-white rounded-full p-4 shadow-lg">
                 <div className="text-sm text-gray-500">YOUR SCORE</div>
-                <div className="text-3xl font-bold">100 pt</div>
+                <div className="text-3xl font-bold">{point}</div>
                 </div>
                 <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
-                <div className="text-lg">정답: 여자,바람,돌</div>
+                <div className="text-lg">{answer}</div>
                 </div>
             </div>
             <div className="w-full p-4">

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/api',
-    // baseURL: 'http://k10d107.p.ssafy.io/api'
+    // baseURL: 'http://localhost:8080/api',
+    baseURL: 'https://k10d107.p.ssafy.io/api'
 })
 
 const tokens = JSON.parse(localStorage.getItem('tokens')) || {};
