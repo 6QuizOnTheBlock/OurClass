@@ -57,73 +57,81 @@ public class ListenerConfig {
         );
     }
 
-    // Kafka Consumer 설정
     @Bean
-    public Map<String, Object> consumerConfigurations() {
-        return ImmutableMap.<String, Object>builder()
-            .put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                kafkaUrl)
-            .put(org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class)
-            .put(org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                JsonDeserializer.class)
-            .put(org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
-            .put(org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,
-                "earliest")
-            .build();
-    }
-
-    // ConsumerFactory 설정
-    @Bean
-    public ConsumerFactory<String, GamerDTO> gamerConsumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(
-            consumerConfigurations(),
-            new StringDeserializer(),
-            new JsonDeserializer<>(GamerDTO.class));
-    }
-
-    // Listener Container 설정
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, GamerDTO> gamerKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, GamerDTO> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(gamerConsumerFactory());
+    ConcurrentKafkaListenerContainerFactory<String, GamerDTO> gamerListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, GamerDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(gamerDTOConsumerFactory());
         return factory;
     }
 
-    // Question Consumer 설정
     @Bean
-    public ConsumerFactory<String, QuestionRequest> questionConsumerFactory() {
+    public ConsumerFactory<String, GamerDTO> gamerDTOConsumerFactory() {
+        JsonDeserializer<GamerDTO> deserializer = new JsonDeserializer<>();
+        deserializer.addTrustedPackages("*");
+
+        Map<String, Object> consumerConfigurations =
+            ImmutableMap.<String, Object>builder()
+                .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
+                .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .build();
+
         return new DefaultKafkaConsumerFactory<>(
-            consumerConfigurations(),
-            new StringDeserializer(),
-            new JsonDeserializer<>(QuestionRequest.class));
+            consumerConfigurations, new StringDeserializer(), deserializer
+        );
     }
 
+
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, QuestionRequest> questionKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, QuestionRequest> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(questionConsumerFactory());
+    ConcurrentKafkaListenerContainerFactory<String, QuestionRequest> questionRequestContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, QuestionRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(questionRequestConsumerFactory());
         return factory;
     }
 
-    // Answer Consumer 설정
     @Bean
-    public ConsumerFactory<String, AnswerResponse> answerConsumerFactory() {
+    public ConsumerFactory<String, QuestionRequest> questionRequestConsumerFactory() {
+        JsonDeserializer<QuestionRequest> deserializer = new JsonDeserializer<>();
+        deserializer.addTrustedPackages("*");
+
+        Map<String, Object> consumerConfigurations =
+            ImmutableMap.<String, Object>builder()
+                .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
+                .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .build();
+
         return new DefaultKafkaConsumerFactory<>(
-            consumerConfigurations(),
-            new StringDeserializer(),
-            new JsonDeserializer<>(AnswerResponse.class));
+            consumerConfigurations, new StringDeserializer(), deserializer
+        );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, AnswerResponse> answerKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, AnswerResponse> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(answerConsumerFactory());
+    ConcurrentKafkaListenerContainerFactory<String, AnswerResponse> answerResponseContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, AnswerResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(answerResponseConsumerFactory());
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, AnswerResponse> answerResponseConsumerFactory() {
+        JsonDeserializer<AnswerResponse> deserializer = new JsonDeserializer<>();
+        deserializer.addTrustedPackages("*");
 
+        Map<String, Object> consumerConfigurations =
+            ImmutableMap.<String, Object>builder()
+                .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUrl)
+                .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
+                .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
+                .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .build();
+        return new DefaultKafkaConsumerFactory<>(
+            consumerConfigurations, new StringDeserializer(), deserializer
+        );
+    }
 }
