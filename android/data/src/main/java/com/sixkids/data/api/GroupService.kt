@@ -29,6 +29,6 @@ interface GroupService {
     @POST("challenges/groups/join")
     suspend fun joinGroup(
         @Query("key") key: String,
-        @Query("joinStatus ") joinStatus : Boolean,
+        @Query("joinStatus") joinStatus : Boolean,
     ): ApiResult<ApiResponse<Unit>>
 }
