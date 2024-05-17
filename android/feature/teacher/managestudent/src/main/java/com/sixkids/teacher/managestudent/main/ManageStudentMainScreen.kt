@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -22,6 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
@@ -31,24 +34,23 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun ManageStudentMainRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    viewModel: ManageStudentMainViewModel = hiltViewModel(),
+    navigateToStudentDetail: (Long) -> Unit,
+
 ) {
+
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.initData()
+    }
+
     Box(
         modifier = Modifier.padding(padding)
     ) {
         ManageStudentMainScreen(
-            //TODO : ManageStudentMainState를 받아오는 로직 추가 후 더미데이터 제거
-            manageStudentMainState = ManageStudentMainState(
-                classString = "인동초등학교 1학년 1반",
-                studentList = List(20
-                ) {
-                    MemberSimple(
-                        0,
-                        "정철주",
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
-                    )
-                }
-            )
+            uiState = uiState
         )
     }
 }
@@ -56,7 +58,7 @@ fun ManageStudentMainRoute(
 @Composable
 fun ManageStudentMainScreen(
     modifier: Modifier = Modifier,
-    manageStudentMainState: ManageStudentMainState = ManageStudentMainState()
+    uiState: ManageStudentMainState = ManageStudentMainState()
 ) {
     Column(
         modifier = modifier
@@ -69,42 +71,21 @@ fun ManageStudentMainScreen(
             style = UlbanTypography.titleLarge
         )
         Text(
-            text = manageStudentMainState.classString,
+            text = uiState.classString,
             style = UlbanTypography.bodySmall
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        // 필터 버튼
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-            Row(
-                modifier = Modifier
-                    .clickable {
+        Spacer(modifier = Modifier.height(20.dp))
 
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.manage_student_sort_by_name),
-                    style = UlbanTypography.bodyLarge,
-                )
-                Image(
-                    imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_filter_alt),
-                    contentDescription = null,
-                )
-            }
-        }
         // 학생 리스트
         Spacer(modifier = Modifier.height(10.dp))
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
         ) {
-            items(manageStudentMainState.studentList.size) {
+            items(uiState.studentList.size) {
                 StudentSimpleCardItem(
                     modifier = Modifier.padding(4.dp),
-                    name = manageStudentMainState.studentList[it].name,
-                    photo = manageStudentMainState.studentList[it].photo,
+                    name = uiState.studentList[it].name,
+                    photo = uiState.studentList[it].photo,
                 )
             }
         }
@@ -115,17 +96,5 @@ fun ManageStudentMainScreen(
 @Preview(showBackground = true)
 @Composable
 fun ManageStudentMainScreenPreview() {
-    ManageStudentMainScreen(
-        manageStudentMainState = ManageStudentMainState(
-            classString = "인동초등학교 1학년 1반",
-            studentList = List(20
-            ) {
-                MemberSimple(
-                    0,
-                    "정철주",
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKe3bkhl96AgtmHyTiKW-KXRst2-5MoY6xB9-mZP74BQ&s"
-                )
-            }
-        )
-    )
+    ManageStudentMainScreen()
 }

@@ -64,6 +64,7 @@ import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
 import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
+import com.sixkids.teacher.managestudent.navigation.navigateStudentDetail
 import com.sixkids.teacher.relay.navigation.navigateTeacherRelayDetail
 import com.sixkids.teacher.relay.navigation.navigateTeacherRelayHistory
 
@@ -162,6 +163,13 @@ class MainNavigator(
         navController.navigateJoinOrganization()
     }
 
+
+    /**
+     * Teacher Manage Student Navigation
+     */
+    fun navigateManageStudentDetail(studentId: Long) {
+        navController.navigateStudentDetail(studentId)
+    }
 
     /**
      * Home Navigation

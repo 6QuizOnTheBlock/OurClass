@@ -3,6 +3,7 @@ package com.sixkids.data.repository.organization
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 import javax.inject.Inject
 
@@ -28,5 +29,9 @@ class OrganizationRepositoryImpl @Inject constructor(
 
     override suspend fun joinOrganization(orgId: Int, code: String): Long {
         return organizationRemoteDataSource.joinOrganization(orgId, code)
+    }
+
+    override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
+        return organizationRemoteDataSource.getOrganizationMembers(orgId)
     }
 }
