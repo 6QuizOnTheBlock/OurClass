@@ -18,7 +18,7 @@ fun UlbanDefaultAppBar(
     content: String,
     color: Color,
     expanded: Boolean = true,
-    onclick: () -> Unit,
+    onclick: () -> Unit = {},
 ) {
     BasicAppBar(
         modifier = modifier,

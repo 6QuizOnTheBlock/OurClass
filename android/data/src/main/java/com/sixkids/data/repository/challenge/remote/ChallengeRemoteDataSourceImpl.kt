@@ -3,6 +3,7 @@ package com.sixkids.data.repository.challenge.remote
 import com.sixkids.data.api.ChallengeService
 import com.sixkids.data.model.request.ChallengeCreateRequest
 import com.sixkids.data.model.request.GroupRequest
+import com.sixkids.data.model.response.RunningChallengeByStudentResponse
 import com.sixkids.data.model.response.toModel
 import com.sixkids.model.AcceptStatus
 import com.sixkids.model.Challenge
@@ -16,6 +17,12 @@ class ChallengeRemoteDataSourceImpl @Inject constructor(
 ) : ChallengeRemoteDataSource {
     override suspend fun getRunningChallenges(organizationId: Int) =
         challengeService.getRunningChallenge(organizationId).getOrThrow().data.toModel()
+
+    override suspend fun getRunningChallengesByStudent(
+        organizationId: Int
+    ): RunningChallengeByStudentResponse =
+        challengeService.getRunningChallengeByStudent(organizationId).getOrThrow().data
+
 
     override suspend fun createChallenge(
         organizationId: Int,

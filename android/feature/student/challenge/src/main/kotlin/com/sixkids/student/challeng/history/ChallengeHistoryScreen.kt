@@ -29,20 +29,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
-import com.sixkids.designsystem.component.appbar.UlbanDetailWithProgressAppBar
 import com.sixkids.designsystem.component.item.UlbanChallengeItem
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.GroupType
 import com.sixkids.student.challeng.history.component.GroupParticipationDialog
+import com.sixkids.student.challeng.history.component.UlbanStudentRunningChallengeAppBar
 import com.sixkids.student.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+import com.sixkids.designsystem.R as DesignSystemR
 
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
     navigateToDetail: (Long, Long?) -> Unit,
-    navigateToCreateGroup: (Long) -> Unit,
+    navigateToCreateGroup: (Long, GroupType) -> Unit,
     navigateToJoinGroup: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -63,14 +65,21 @@ fun ChallengeRoute(
                     sideEffect.challengeId,
                     sideEffect.groupId
                 )
+
                 is ChallengeHistoryEffect.HandleException -> handleException(
                     sideEffect.throwable,
                     sideEffect.retry
                 )
+
                 ChallengeHistoryEffect.ShowGroupDialog -> {
                     showDialog = true
                 }
-                is ChallengeHistoryEffect.NavigateToCreateGroup -> navigateToCreateGroup(sideEffect.challengeId)
+
+                is ChallengeHistoryEffect.NavigateToCreateGroup -> navigateToCreateGroup(
+                    sideEffect.challengeId,
+                    sideEffect.groupType
+                )
+
                 is ChallengeHistoryEffect.NavigateToJoinGroup -> navigateToJoinGroup(sideEffect.challengeId)
             }
         }
@@ -110,28 +119,34 @@ fun ChallengeHistoryScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val currentChallenge = uiState.runningChallenge
-        if (currentChallenge == null) {
+        val runningChallenge = uiState.runningChallenge?.challenge
+        if (runningChallenge == null) {
             UlbanDefaultAppBar(
                 leftIcon = com.sixkids.designsystem.R.drawable.hifive,
                 title = stringResource(id = R.string.hifive_challenge),
                 content = stringResource(R.string.no_running_challenge),
                 color = Red,
-                onclick = showDialog,
                 expanded = !isScrolled
             )
         } else {
-            UlbanDetailWithProgressAppBar(
-                leftIcon = com.sixkids.designsystem.R.drawable.hifive,
+            UlbanStudentRunningChallengeAppBar(
+                leftIcon = DesignSystemR.drawable.hifive,
                 title = stringResource(id = R.string.hifive_challenge),
-                content = currentChallenge.title,
-                topDescription = "${currentChallenge.startTime.formatToMonthDayTime()} ~ ${currentChallenge.endTime.formatToMonthDayTime()}",
-                bottomDescription = currentChallenge.content,
+                content = runningChallenge.title,
+                topDescription = "${runningChallenge.startTime.formatToMonthDayTime()} ~ ${runningChallenge.endTime.formatToMonthDayTime()}",
+                bottomDescription = runningChallenge.content,
                 color = Red,
-                onclick =  showDialog ,
-                totalCnt = currentChallenge.totalMemberCount,
-                successCnt = currentChallenge.doneMemberCount,
-                badgeCount = currentChallenge.waitingCount,
+                onClick = showDialog,
+                onReportEnable = uiState.runningChallenge.endStatus?.not() ?: false,
+                onReportClick = {
+                    //TODO 과제 제출로 이동
+                },
+                teamDescription = if(uiState.runningChallenge.type == GroupType.DESIGN) {
+                    uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
+                } else {
+                    stringResource(R.string.free_group_matching)
+                },
+                runningTimeDescription = "과제 참여 후 진행시간 표시하기",
                 expanded = !isScrolled
             )
         }

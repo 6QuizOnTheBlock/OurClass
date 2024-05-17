@@ -3,18 +3,20 @@ package com.sixkids.student.group.join
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothServer
+import com.sixkids.domain.usecase.group.JoinGroupUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
+import com.sixkids.domain.usecase.user.GetMemberSimpleUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.SseData
+import com.sixkids.model.SseEventType
 import com.sixkids.student.challenge.BuildConfig
+import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -22,7 +24,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.sse.EventSource
 import okhttp3.sse.EventSourceListener
 import okhttp3.sse.EventSources
-import okio.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -32,7 +33,9 @@ private const val TAG = "D107"
 class JoinGroupViewModel @Inject constructor(
     private val bluetoothServer: BluetoothServer,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
-    private val getATKUseCase: GetATKUseCase
+    private val getATKUseCase: GetATKUseCase,
+    private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
+    private val joinGroupUseCase: JoinGroupUseCase
 ) : BaseViewModel<JoinGroupState, JoinGroupEffect>(JoinGroupState()) {
 
     private var eventSource: EventSource? = null
@@ -71,38 +74,59 @@ class JoinGroupViewModel @Inject constructor(
             data: String
         ) {
             super.onEvent(eventSource, id, type, data)
-            Log.d(TAG, "On Event Received! Data -: $data")
+            val sseEventType: SseEventType = SseEventType.valueOf(type ?: "")
+            val sseData = Json.decodeFromString<SseData>(data)
+            val url = sseData.url
+            val roomKey = sseData.data
+            when (sseEventType) {
+                SseEventType.SSE_CONNECT -> {}
+                SseEventType.INVITE_REQUEST -> {
+                    if (url == null) return
+                    if (roomKey == null) return
+                    viewModelScope.launch {
+                        getMemberSimpleUseCase(url).onSuccess {
+                            intent {
+                                copy(
+                                    leader = MemberIconItem(
+                                        member = it,
+                                        showX = false,
+                                        isActive = true
+                                    ),
+                                    roomKey = roomKey,
+                                    isJoinedGroup = true
+                                )
+                            }
+                            postSideEffect(JoinGroupEffect.ReceiveInviteRequest)
+                        }.onFailure {
+                            postSideEffect(JoinGroupEffect.HandleException(it, ::loadUserInfo))
+                        }
+                    }
+                }
+
+                SseEventType.INVITE_RESPONSE -> Log.d(TAG, "onEvent: 초대 응답")
+                SseEventType.KICK_MEMBER -> {
+                    intent {
+                        copy(
+                            isJoinedGroup = false
+                        )
+                    }
+                    startAdvertise()
+                }
+                SseEventType.CREATE_GROUP -> {
+                    postSideEffect(JoinGroupEffect.NavigateToChallengeHistory)
+                }
+            }
         }
 
         override fun onFailure(eventSource: EventSource, t: Throwable?, response: Response?) {
             super.onFailure(eventSource, t, response)
-            Log.d(TAG, "On Failure -: ${response?.body}")
+            Log.d(TAG, "On Failure -: ${response?.body} ${t?.message}")
         }
-    }
-
-    init {
-//        sseConnectUseCase.setEventListener(this)
-
-
     }
 
     fun connectSse() = viewModelScope.launch {
         eventSource = EventSources.createFactory(client)
             .newEventSource(request, eventSourceListener)
-
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                client.newCall(request).enqueue(responseCallback = object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        throw e
-                    }
-
-                    override fun onResponse(call: Call, response: Response) {
-                        Log.d(TAG, "APi Call Success ${response.body}")
-                    }
-                })
-            }
-        }
     }
 
     fun disconnectSse() {
@@ -130,12 +154,32 @@ class JoinGroupViewModel @Inject constructor(
 
     fun startAdvertise() {
         viewModelScope.launch {
-            bluetoothServer.startAdvertising(uiState.value.member.id)
+           bluetoothServer.startAdvertising(uiState.value.member.id)
         }
     }
 
     fun stopAdvertise() {
         bluetoothServer.stopAdvertising()
     }
+
+    fun answerInvite(joinStatus: Boolean) {
+        viewModelScope.launch {
+            joinGroupUseCase(uiState.value.roomKey, joinStatus).onSuccess {
+                intent {
+                    copy(isJoinedGroup = joinStatus)
+                }
+                if(joinStatus){
+                    stopAdvertise()
+                }
+                closeDialog()
+            }.onFailure {
+                postSideEffect(JoinGroupEffect.HandleException(it){
+                    answerInvite(joinStatus)
+                })
+            }
+        }
+    }
+
+    private fun closeDialog() = postSideEffect(JoinGroupEffect.CloseInviteDialog)
 
 }

@@ -30,25 +30,23 @@ import com.sixkids.designsystem.R as DesignSystemR
 @Composable
 fun MemberIcon(
     modifier: Modifier = Modifier,
-    member: MemberSimple,
-    onIconClick: (MemberSimple) -> Unit = {},
+    memberIconItem: MemberIconItem,
+    onIconClick: (MemberIconItem) -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
-    showX: Boolean = false,
-    isActive: Boolean = true
 ) {
     Card(
         modifier = modifier
             .wrapContentSize()
             .background(
-                if (isActive) Color.Transparent else Color.Gray,
+                if (memberIconItem.isActive) Color.Transparent else Color.Gray,
                 shape = RoundedCornerShape(8.dp),
             )
             .graphicsLayer {
-                alpha = if (isActive) 1f else 0.5f
+                alpha = if (memberIconItem.isActive) 1f else 0.5f
             },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
 
-        onClick = { onIconClick(member) }
+        onClick = { onIconClick(memberIconItem) }
     ) {
         Box(modifier.wrapContentSize()) {
 
@@ -61,11 +59,11 @@ fun MemberIcon(
                     modifier = modifier.wrapContentSize(),
                 ) {
                     AsyncImage(
-                        model = member.photo,
+                        model = memberIconItem.member.photo,
                         contentDescription = null,
                         modifier = modifier.size(48.dp)
                     )
-                    if (showX) {
+                    if (memberIconItem.showX) {
                         Icon(
                             imageVector = ImageVector.vectorResource(DesignSystemR.drawable.ic_close_filled),
                             contentDescription = "Close icon",
@@ -74,13 +72,13 @@ fun MemberIcon(
                                 .align(Alignment.TopEnd)
                                 .size(24.dp)
                                 .clickable {
-                                    onRemoveClick(member.id)
+                                    onRemoveClick(memberIconItem.member.id)
                                 }
                         )
                     }
                 }
                 Text(
-                    text = member.name,
+                    text = memberIconItem.member.name,
                     style = UlbanTypography.bodyMedium,
                     modifier = Modifier.padding(4.dp)
                 )
@@ -95,10 +93,15 @@ fun MemberIcon(
 @Composable
 fun MemberIconPreview() {
     MemberIcon(
-        member = MemberSimple(
-            id = 1,
-            name = "홍길동",
-            photo = "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+        memberIconItem = MemberIconItem(
+            member = MemberSimple(
+                id = 1,
+                name = "Leader",
+                photo = "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+
+            ),
+            showX = true,
+            isActive = true
         ),
         onIconClick = {},
         onRemoveClick = {}

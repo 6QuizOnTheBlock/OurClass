@@ -3,6 +3,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.sixkids.android.feature.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 fun getProperty(propertyKey: String): String =
@@ -32,4 +33,5 @@ dependencies {
     implementation(projects.core.bluetooth)
     implementation(libs.okhttp.sse)
     implementation(libs.okhttp.logginginterceptor)
+    implementation(libs.kotlinx.serialization.json)
 }

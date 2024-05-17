@@ -8,15 +8,16 @@ data class CreateGroupState(
     val isLoading: Boolean = false,
     val isScanning: Boolean = false,
     val foundMembers: List<MemberSimple> = emptyList(),
+    val selectedMembers: List<MemberSimple> = emptyList(),
+    val waitingMembers: List<MemberSimple> = emptyList(),
     val groupSize: Int = 0,
     val leader: MemberSimple = MemberSimple(),
-    val selectedMembers: List<MemberSimple> = emptyList(),
+    val roomKey: String = "",
 ) : UiState
 
 
 sealed interface CreateGroupEffect : SideEffect {
-    data object FriendScanStart : CreateGroupEffect
-    data object FriendScanStop : CreateGroupEffect
+    data object NavigateToChallengeHistory : CreateGroupEffect
     data class HandleException(
         val throwable: Throwable,
         val retryAction: () -> Unit

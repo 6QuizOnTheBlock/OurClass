@@ -30,28 +30,36 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun CreateGroupRoute(
     viewModel: CreateGroupViewModel = hiltViewModel(),
+    navigateToChallengeHistory: () -> Unit,
+    handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.loadUserInfo()
+        viewModel.connectSse()
+        viewModel.createGroupMatchingRoom()
         viewModel.startScan()
     }
 
     DisposableEffect(Unit) {
         onDispose {
+            viewModel.disconnectSse()
             viewModel.stopScan()
         }
     }
 
 
     viewModel.sideEffect.collectWithLifecycle {
-
+        when (it) {
+            is CreateGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
+            is CreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
+        }
     }
     CreateGroupScreen(
         uiState = uiState,
         onMemberSelect = viewModel::selectMember,
-        onMemberRemove = viewModel::removeMember
+        onMemberRemove = viewModel::removeMember,
+        onGroupCreate = viewModel::createGroup
     )
 }
 
@@ -59,7 +67,8 @@ fun CreateGroupRoute(
 fun CreateGroupScreen(
     uiState: CreateGroupState = CreateGroupState(),
     onMemberSelect: (MemberSimple) -> Unit = { },
-    onMemberRemove: (Long) -> Unit = { }
+    onMemberRemove: (Long) -> Unit = { },
+    onGroupCreate: () -> Unit = { }
 ) {
 
     Column(
@@ -77,7 +86,11 @@ fun CreateGroupScreen(
             LazyColumn {
                 items(uiState.foundMembers) { member ->
                     MemberIcon(
-                        member = member,
+                        memberIconItem = MemberIconItem(
+                            member = member,
+                            isActive = true,
+                            showX = false
+                        ),
                         onIconClick = { onMemberSelect(member) },
                     )
                 }
@@ -87,18 +100,12 @@ fun CreateGroupScreen(
         GroupWaiting(
             groupSize = uiState.groupSize,
             leader = uiState.leader,
-            memberList = uiState.selectedMembers.map {
-                MemberIconItem(
-                    memberId = it.id,
-                    name = it.name,
-                    photo = it.photo,
-                    showX = true,
-                    isActive = true
-                )
-            },
+            memberList = uiState.selectedMembers,
+            waitingMemberList = uiState.waitingMembers,
             onRemoveClick = {
                 onMemberRemove(it)
-            }
+            },
+            onDoneClick = onGroupCreate
         )
     }
 }
