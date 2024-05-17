@@ -44,4 +44,8 @@ public class MemberOrganization {
     public void updateRelayCount() {
         this.relayCount += 1;
     }
+
+    public void updateIsolationPoint(double isolationPoint) {
+        this.isolationPoint = isolationPoint;
+    }
 }
