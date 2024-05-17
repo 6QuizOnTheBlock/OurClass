@@ -3,6 +3,7 @@ package com.sixkids.data.api
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ApiResponse
+import com.sixkids.data.model.response.OrganizationMemberResponse
 import com.sixkids.data.model.response.OrganizationResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
@@ -22,4 +23,9 @@ interface OrganizationService {
         @Path(value = "id") orgId: Int,
         @Body joinOrganizationRequest: JoinOrganizationRequest
     ): ApiResult<ApiResponse<Long>>
+
+    @GET("organizations/{id}/members")
+    suspend fun getOrganizationMembers(
+        @Path(value = "id") orgId: Int
+    ): ApiResult<ApiResponse<List<OrganizationMemberResponse>>>
 }
