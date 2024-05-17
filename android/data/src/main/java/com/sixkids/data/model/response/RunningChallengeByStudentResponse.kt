@@ -16,11 +16,12 @@ data class RunningChallengeByStudentResponse(
     val endStatus: Boolean?
 )
 
-internal fun RunningChallengeByStudentResponse.toModel() = RunningChallengeByStudent(
-    challenge = challenge.toModel(),
-    leaderStatus = leaderStatus,
-    memberNames = memberNames?.map { it.toModel() }?: emptyList(),
-    type = GroupType.valueOf(type),
-    createTime = createTime,
-    endStatus = endStatus
-)
+internal fun RunningChallengeByStudentResponse.toModel() =
+    RunningChallengeByStudent(
+        challenge = challenge.toModel(),
+        leaderStatus = leaderStatus,
+        memberNames = memberNames?.map { it.toModel() } ?: emptyList(),
+        type = GroupType.valueOf(type),
+        createTime = createTime,
+        endStatus = endStatus
+    )

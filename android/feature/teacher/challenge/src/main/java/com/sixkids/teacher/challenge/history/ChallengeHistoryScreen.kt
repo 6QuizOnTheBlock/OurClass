@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,7 +74,8 @@ fun ChallengeRoute(
         navigateToDetail = { challengeId ->
             viewModel.navigateChallengeDetail(challengeId)
         },
-        navigateToCreate = navigateToCreate
+        navigateToCreate = navigateToCreate,
+        updateTotalCount = viewModel::updateTotalCount
     )
 }
 
@@ -83,6 +85,7 @@ fun ChallengeHistoryScreen(
     challengeItems: LazyPagingItems<Challenge>? = null,
     navigateToDetail: (Long) -> Unit = {},
     navigateToCreate: () -> Unit = {},
+    updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -154,8 +157,13 @@ fun ChallengeHistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+                    Log.d("DTEST", "ChallengeHistoryScreen:  challengeItems.itemCount ${challengeItems.itemCount}")
                     items(challengeItems.itemCount) { index ->
                         challengeItems[index]?.let { challenge ->
+                            if(index == 0) {
+                                Log.d("DTEST", "ChallengeHistoryScreen: updateTotalCount ${challenge.totalCount}")
+                                updateTotalCount(challenge.totalCount)
+                            }
                             UlbanChallengeItem(
                                 title = challenge.title,
                                 description = challenge.content,
