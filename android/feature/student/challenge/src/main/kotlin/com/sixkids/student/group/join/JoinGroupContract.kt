@@ -18,4 +18,6 @@ sealed interface JoinGroupEffect : SideEffect {
     data class HandleException(val it: Throwable, val retryAction: () -> Unit) : JoinGroupEffect
     data object ReceiveInviteRequest : JoinGroupEffect
     data object CloseInviteDialog : JoinGroupEffect
+    data object NavigateToChallengeHistory : JoinGroupEffect
+
 }

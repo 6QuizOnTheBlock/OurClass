@@ -21,6 +21,7 @@ fun NavController.navigateStudentGroupJoin() {
 }
 
 fun NavGraphBuilder.studentGroupNavGraph(
+    navigateToChallengeHistory: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     composable(
@@ -28,11 +29,15 @@ fun NavGraphBuilder.studentGroupNavGraph(
         arguments = listOf(navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType })
     ) {
         CreateGroupRoute(
+            navigateToChallengeHistory = navigateToChallengeHistory,
             handleException = handleException
         )
     }
     composable(route = GroupRoute.joinGroupRoute) {
-        JoinGroupRoute()
+        JoinGroupRoute(
+            navigateToChallengeHistory = navigateToChallengeHistory,
+            handleException = handleException
+        )
     }
 }
 

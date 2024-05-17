@@ -10,4 +10,6 @@ interface GroupRepository {
     suspend fun deportFriend(key: String, memberId: Long)
 
     suspend fun joinGroup(key: String, joinStatus: Boolean)
+
+    suspend fun createGroup(key: String): Long
 }

@@ -27,6 +27,7 @@ import com.sixkids.student.home.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
 import com.sixkids.student.main.navigation.navigateStudentOrganizationList
 import com.sixkids.student.main.navigation.navigateStudentProfile
+import com.sixkids.student.navigation.navigatePopupToStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
@@ -220,6 +221,11 @@ class MainNavigator(
      * Student Group Navigation
      */
     //TODO : memberId 추가
+
+    fun navigatePopupToStudentGroupHistory() {
+        navController.navigatePopupToStudentChallengeHistory()
+    }
+
     fun navigateStudentGroupCreate(challengeId: Long, groupType: GroupType) {
         navController.navigateStudentGroupCreate(
             challengeId = challengeId,

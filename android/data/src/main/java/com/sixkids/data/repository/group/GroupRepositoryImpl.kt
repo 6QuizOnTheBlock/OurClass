@@ -20,4 +20,6 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun joinGroup(key: String, joinStatus: Boolean) =
         groupDataSource.joinGroup(key, joinStatus)
+
+    override suspend fun createGroup(key: String): Long = groupDataSource.createGroup(key)
 }

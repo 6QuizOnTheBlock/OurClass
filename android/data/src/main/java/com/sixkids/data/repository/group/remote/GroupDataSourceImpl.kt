@@ -18,4 +18,7 @@ class GroupDataSourceImpl @Inject constructor(
 
     override suspend fun joinGroup(key: String, joinStatus: Boolean) =
         groupService.joinGroup(key, joinStatus).getOrThrow().data
+
+    override suspend fun createGroup(key: String): Long =
+        groupService.createGroup(key).getOrThrow().data
 }

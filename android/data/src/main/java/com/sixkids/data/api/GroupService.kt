@@ -31,4 +31,9 @@ interface GroupService {
         @Query("key") key: String,
         @Query("joinStatus") joinStatus : Boolean,
     ): ApiResult<ApiResponse<Unit>>
+
+    @POST("challenges/groups")
+    suspend fun createGroup(
+        @Query("key") key: String,
+    ): ApiResult<ApiResponse<Long>>
 }

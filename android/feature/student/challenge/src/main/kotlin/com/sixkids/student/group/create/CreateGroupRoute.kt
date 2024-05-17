@@ -30,6 +30,7 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun CreateGroupRoute(
     viewModel: CreateGroupViewModel = hiltViewModel(),
+    navigateToChallengeHistory: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -50,15 +51,15 @@ fun CreateGroupRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is CreateGroupEffect.FriendScanStart -> {}
-            CreateGroupEffect.FriendScanStop -> {}
+            is CreateGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
             is CreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
         }
     }
     CreateGroupScreen(
         uiState = uiState,
         onMemberSelect = viewModel::selectMember,
-        onMemberRemove = viewModel::removeMember
+        onMemberRemove = viewModel::removeMember,
+        onGroupCreate = viewModel::createGroup
     )
 }
 
@@ -66,7 +67,8 @@ fun CreateGroupRoute(
 fun CreateGroupScreen(
     uiState: CreateGroupState = CreateGroupState(),
     onMemberSelect: (MemberSimple) -> Unit = { },
-    onMemberRemove: (Long) -> Unit = { }
+    onMemberRemove: (Long) -> Unit = { },
+    onGroupCreate: () -> Unit = { }
 ) {
 
     Column(
@@ -102,7 +104,8 @@ fun CreateGroupScreen(
             waitingMemberList = uiState.waitingMembers,
             onRemoveClick = {
                 onMemberRemove(it)
-            }
+            },
+            onDoneClick = onGroupCreate
         )
     }
 }

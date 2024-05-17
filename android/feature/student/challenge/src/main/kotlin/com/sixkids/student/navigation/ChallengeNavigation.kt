@@ -11,6 +11,13 @@ fun NavController.navigateStudentChallengeHistory(navOptions: NavOptions) {
     navigate(ChallengeRoute.defaultRoute, navOptions)
 }
 
+fun NavController.navigatePopupToStudentChallengeHistory() {
+    navigate(ChallengeRoute.defaultRoute) {
+        popUpTo(ChallengeRoute.defaultRoute) {
+            inclusive = true
+        }
+    }
+}
 
 
 fun NavGraphBuilder.studentChallengeNavGraph(

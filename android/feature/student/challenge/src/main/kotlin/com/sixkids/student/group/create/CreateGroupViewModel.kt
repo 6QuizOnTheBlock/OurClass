@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sixkids.core.bluetooth.BluetoothScanner
 import com.sixkids.domain.usecase.group.CreateGroupMatchingRoomUseCase
+import com.sixkids.domain.usecase.group.CreateGroupUseCase
 import com.sixkids.domain.usecase.group.DeportFriendUseCase
 import com.sixkids.domain.usecase.group.InviteFriendUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
@@ -43,6 +44,7 @@ class CreateGroupViewModel @Inject constructor(
     private val createGroupMatchingRoomUseCase: CreateGroupMatchingRoomUseCase,
     private val inviteFriendUseCase: InviteFriendUseCase,
     private val deportFriendUseCase: DeportFriendUseCase,
+    private val createGroupUseCase: CreateGroupUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
 
@@ -239,6 +241,18 @@ class CreateGroupViewModel @Inject constructor(
                 })
             }
 
+        }
+    }
+
+    fun createGroup() {
+        viewModelScope.launch {
+            createGroupUseCase(uiState.value.roomKey).onSuccess {
+                postSideEffect(CreateGroupEffect.NavigateToChallengeHistory)
+            }.onFailure {
+                postSideEffect(CreateGroupEffect.HandleException(it) {
+                    createGroup()
+                })
+            }
         }
     }
 }

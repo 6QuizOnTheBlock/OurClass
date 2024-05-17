@@ -166,6 +166,7 @@ fun MainScreen(
             )
 
             studentGroupNavGraph(
+                navigateToChallengeHistory = navigator::navigatePopupToStudentGroupHistory,
                 handleException = viewModel::handleException,
             )
 

@@ -112,7 +112,9 @@ class JoinGroupViewModel @Inject constructor(
                     }
                     startAdvertise()
                 }
-                SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
+                SseEventType.CREATE_GROUP -> {
+                    postSideEffect(JoinGroupEffect.NavigateToChallengeHistory)
+                }
             }
         }
 

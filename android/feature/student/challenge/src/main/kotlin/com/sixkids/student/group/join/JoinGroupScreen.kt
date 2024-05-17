@@ -33,8 +33,8 @@ import com.sixkids.ui.extension.collectWithLifecycle
 @Composable
 fun JoinGroupRoute(
     viewModel: JoinGroupViewModel = hiltViewModel(),
-    onHandleException: (Throwable, () -> Unit) -> Unit = { _, _ -> }
-
+    handleException: (Throwable, () -> Unit) -> Unit = { _, _ -> },
+    navigateToChallengeHistory: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -56,7 +56,7 @@ fun JoinGroupRoute(
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
-            is JoinGroupEffect.HandleException -> onHandleException(
+            is JoinGroupEffect.HandleException -> handleException(
                 sideEffect.it,
                 sideEffect.retryAction
             )
@@ -68,6 +68,9 @@ fun JoinGroupRoute(
             JoinGroupEffect.CloseInviteDialog -> {
                 isShowInviteDialog = false
             }
+
+            JoinGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
+
         }
 
     }
