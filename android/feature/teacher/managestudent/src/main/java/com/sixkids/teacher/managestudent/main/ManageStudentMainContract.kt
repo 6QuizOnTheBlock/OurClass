@@ -12,7 +12,7 @@ data class ManageStudentMainState(
 ): UiState
 
 sealed interface ManageStudentMainEffect : SideEffect{
-    data class NavigateToStudentDetail(val relayId: Long) : ManageStudentMainEffect
+    data class NavigateToStudentDetail(val studentId: Long) : ManageStudentMainEffect
 
     data class HandleException(val throwable: Throwable, val retry: () -> Unit) : ManageStudentMainEffect
 }

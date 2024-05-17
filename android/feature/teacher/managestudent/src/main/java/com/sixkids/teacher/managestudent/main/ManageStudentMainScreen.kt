@@ -36,6 +36,7 @@ import com.sixkids.designsystem.R as UlbanRes
 fun ManageStudentMainRoute(
     padding: PaddingValues,
     viewModel: ManageStudentMainViewModel = hiltViewModel(),
+    navigateToStudentDetail: (Long) -> Unit,
 
 ) {
 
@@ -73,29 +74,8 @@ fun ManageStudentMainScreen(
             text = uiState.classString,
             style = UlbanTypography.bodySmall
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        // 필터 버튼
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-            Row(
-                modifier = Modifier
-                    .clickable {
+        Spacer(modifier = Modifier.height(20.dp))
 
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.manage_student_sort_by_name),
-                    style = UlbanTypography.bodyLarge,
-                )
-                Image(
-                    imageVector = ImageVector.vectorResource(id = UlbanRes.drawable.ic_filter_alt),
-                    contentDescription = null,
-                )
-            }
-        }
         // 학생 리스트
         Spacer(modifier = Modifier.height(10.dp))
         LazyVerticalGrid(

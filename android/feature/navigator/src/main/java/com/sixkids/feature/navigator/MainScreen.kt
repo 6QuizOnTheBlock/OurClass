@@ -126,6 +126,7 @@ fun MainScreen(
 
             manageStudentNavGraph(
                 padding = innerPadding,
+                navigateToStudentDetail = navigator::navigateManageStudentDetail,
             )
 
             signInNavGraph(
