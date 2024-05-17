@@ -10,7 +10,7 @@ data class CreateGroupState(
     val foundMembers: List<MemberSimple> = emptyList(),
     val selectedMembers: List<MemberSimple> = emptyList(),
     val waitingMembers: List<MemberSimple> = emptyList(),
-    val groupSize: IntZ = 0,
+    val groupSize: Int = 0,
     val leader: MemberSimple = MemberSimple(),
     val roomKey: String = "",
 ) : UiState
