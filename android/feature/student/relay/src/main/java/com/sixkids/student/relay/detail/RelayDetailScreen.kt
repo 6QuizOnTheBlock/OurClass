@@ -1,6 +1,5 @@
 package com.sixkids.student.relay.detail
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -124,7 +123,6 @@ fun RelayDetailScreen(
                 } else {
                     LazyColumn(
                         state = listState,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(uiState.relayDetail.runnerList) { runner ->
                             UlbanRunnerItem(

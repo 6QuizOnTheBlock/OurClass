@@ -31,11 +31,14 @@ import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
 import com.sixkids.student.relay.navigation.RelayRoute
+import com.sixkids.student.relay.navigation.navigateStudentRelayAnswer
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreateResult
 import com.sixkids.student.relay.navigation.navigateStudentRelayDetail
 import com.sixkids.student.relay.navigation.navigateStudentRelayHistory
 import com.sixkids.student.relay.navigation.navigateStudentRelayJoin
+import com.sixkids.student.relay.navigation.navigateStudentRelayTaggingReceiver
+import com.sixkids.student.relay.navigation.navigateStudentRelayTaggingSender
 import com.sixkids.teacher.board.navigation.BoardRoute
 import com.sixkids.teacher.board.navigation.navigateAnnounce
 import com.sixkids.teacher.board.navigation.navigateAnnounceDetail
@@ -60,6 +63,8 @@ import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
 import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
+import com.sixkids.teacher.relay.navigation.navigateTeacherRelayDetail
+import com.sixkids.teacher.relay.navigation.navigateTeacherRelayHistory
 
 class MainNavigator(
     val navController: NavHostController,
@@ -268,6 +273,18 @@ class MainNavigator(
         navController.navigateStudentRelayCreateResult()
     }
 
+    fun navigateStudentRelayAnswer(relayId: Long) {
+        navController.navigateStudentRelayAnswer(relayId)
+    }
+
+    fun navigateStudentRelayTaggingSender(relayId: Long, question: String) {
+        navController.navigateStudentRelayTaggingSender(relayId, question)
+    }
+
+    fun navigateStudentRelayTaggingReceiver(relayId: Long) {
+        navController.navigateStudentRelayTaggingReceiver(relayId)
+    }
+
     /**
      * Challenge Navigation
      */
@@ -289,6 +306,17 @@ class MainNavigator(
 
     fun navigateChallengeCreatedResult(challengeId: Long, title: String) {
         navController.navigateChallengeCreatedResult(challengeId, title)
+    }
+
+    /**
+     *  Teacher Relay
+     */
+    fun navigateTeacherRelayHistory(){
+        navController.navigateTeacherRelayHistory()
+    }
+
+    fun navigateTeacherRelayDetail(relayId: Long){
+        navController.navigateTeacherRelayDetail(relayId)
     }
 
     fun navigateTeacherOrganizationList() {
