@@ -177,23 +177,23 @@ class CreateGroupViewModel @Inject constructor(
     }
 
     private fun handelInviteResult(isAccepted: Boolean, memberId: Long) {
-        Log.d(TAG, "handelInviteResult: $isAccepted $memberId")
         if (isAccepted) {
             intent {
                 val member = waitingMembers.first { it.id == memberId }
-                Log.d(TAG, "handelInviteResult: $member")
                 copy(
                     selectedMembers = selectedMembers.toMutableList().apply {
                         add(member)
                     }
                 )
             }
+        } else {
+            bluetoothScanner.removeDevice(memberId)
         }
         intent {
             copy(
                 waitingMembers = waitingMembers.toMutableList().apply {
                     removeIf { it.id == memberId }
-                }
+                },
             )
         }
     }
@@ -226,6 +226,9 @@ class CreateGroupViewModel @Inject constructor(
                 intent {
                     copy(
                         selectedMembers = selectedMembers.toMutableList().apply {
+                            removeIf { it.id == memberId }
+                        },
+                        foundMembers = foundMembers.toMutableList().apply {
                             removeIf { it.id == memberId }
                         }
                     )

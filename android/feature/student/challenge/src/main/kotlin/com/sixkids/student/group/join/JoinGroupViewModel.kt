@@ -110,6 +110,7 @@ class JoinGroupViewModel @Inject constructor(
                             isJoinedGroup = false
                         )
                     }
+                    startAdvertise()
                 }
                 SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
             }
