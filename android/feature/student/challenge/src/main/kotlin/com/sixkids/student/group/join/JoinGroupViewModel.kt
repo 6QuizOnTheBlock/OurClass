@@ -92,7 +92,8 @@ class JoinGroupViewModel @Inject constructor(
                                         showX = false,
                                         isActive = true
                                     ),
-                                    roomKey = roomKey
+                                    roomKey = roomKey,
+                                    isJoinedGroup = true
                                 )
                             }
                             postSideEffect(JoinGroupEffect.ReceiveInviteRequest)
@@ -103,7 +104,13 @@ class JoinGroupViewModel @Inject constructor(
                 }
 
                 SseEventType.INVITE_RESPONSE -> Log.d(TAG, "onEvent: 초대 응답")
-                SseEventType.KICK_MEMBER -> Log.d(TAG, "onEvent: 추방")
+                SseEventType.KICK_MEMBER -> {
+                    intent {
+                        copy(
+                            isJoinedGroup = false
+                        )
+                    }
+                }
                 SseEventType.CREATE_GROUP -> Log.d(TAG, "onEvent: 그룹 생성")
             }
         }
