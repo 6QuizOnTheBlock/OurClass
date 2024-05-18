@@ -103,9 +103,7 @@ class MainNavigator(
             MainNavigationTab.STUDENT_HOME -> navController.navigateStudentHome(studentNavOptions)
             MainNavigationTab.STUDENT_BOARD -> navController.navigateStudentBoard(studentNavOptions)
             MainNavigationTab.STUDENT_RELAY -> navController.navigateStudentRelayHistory(studentNavOptions)
-            MainNavigationTab.STUDENT_CHALLENGE ->
-//                navController.navigateStudentChallengeHistory(studentNavOptions)
-                navController.navigateManageClass(teacherNavOptions)
+            MainNavigationTab.STUDENT_CHALLENGE -> navController.navigateStudentChallengeHistory(studentNavOptions)
         }
     }
 
