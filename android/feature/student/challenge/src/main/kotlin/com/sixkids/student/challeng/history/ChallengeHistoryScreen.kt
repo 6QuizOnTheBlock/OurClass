@@ -88,6 +88,7 @@ fun ChallengeRoute(
 
     ChallengeHistoryScreen(
         uiState = uiState,
+        updateTotalCount = viewModel::updateTotalCount,
         navigateToDetail = viewModel::navigateChallengeDetail,
         showDialog = viewModel::showGroupDialog,
     )
@@ -104,6 +105,7 @@ fun ChallengeRoute(
 @Composable
 fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
+    updateTotalCount: (Int) -> Unit = {},
     navigateToDetail: (Long) -> Unit = {},
     showDialog: () -> Unit = {},
 ) {
@@ -143,11 +145,10 @@ fun ChallengeHistoryScreen(
                     //TODO 과제 제출로 이동
                 },
                 teamDescription = if (uiState.runningChallenge.type == GroupType.DESIGN) {
-                    uiState.runningChallenge.memberList.joinToString(", ") { it.name }
+                    uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
                 } else {
-                    Log.d("멤버", "ChallengeHistoryScreen: ${uiState.runningChallenge.memberList}")
-                    if (uiState.runningChallenge.memberList.isNotEmpty()) {
-                        uiState.runningChallenge.memberList.joinToString(", ") { it.name }
+                    if (uiState.runningChallenge.memberNames.isNotEmpty()) {
+                        uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
                     } else {
                         stringResource(R.string.free_group_matching)
                     }
@@ -173,7 +174,7 @@ fun ChallengeHistoryScreen(
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
 
-            if (challengeItems == null) {
+            if (challengeItems == null || challengeItems.itemCount == 0) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
@@ -194,6 +195,9 @@ fun ChallengeHistoryScreen(
                 ) {
                     items(challengeItems.itemCount) { index ->
                         challengeItems[index]?.let { challenge ->
+                            if (index == 0) {
+                                updateTotalCount(challenge.totalCount)
+                            }
                             UlbanChallengeItem(
                                 title = challenge.title,
                                 description = challenge.content,

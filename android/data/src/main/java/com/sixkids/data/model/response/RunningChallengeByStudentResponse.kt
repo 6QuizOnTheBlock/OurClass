@@ -20,7 +20,7 @@ internal fun RunningChallengeByStudentResponse.toModel() =
     RunningChallengeByStudent(
         challenge = challenge.toModel(),
         leaderStatus = leaderStatus,
-        memberList = memberList?.map { it.toModel() } ?: emptyList(),
+        memberNames = memberList?.map { it.toModel() } ?: emptyList(),
         type = GroupType.valueOf(type),
         createTime = createTime,
         endStatus = endStatus
