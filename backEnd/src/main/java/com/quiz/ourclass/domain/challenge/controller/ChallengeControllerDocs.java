@@ -68,7 +68,6 @@ public interface ChallengeControllerDocs {
     ResponseEntity<ResultResponse<?>> createReport(
         @RequestPart
         ReportRequest reportRequest,
-        @Schema(description = "사진")
         @RequestPart
         MultipartFile file
     );
