@@ -8,6 +8,7 @@ data class CreateGroupState(
     val isLoading: Boolean = false,
     val isScanning: Boolean = false,
     val foundMembers: List<MemberSimple> = emptyList(),
+    val showMembers: Array<MemberSimple?> = Array(5) { null },
     val selectedMembers: List<MemberSimple> = emptyList(),
     val waitingMembers: List<MemberSimple> = emptyList(),
     val groupSize: Int = 0,

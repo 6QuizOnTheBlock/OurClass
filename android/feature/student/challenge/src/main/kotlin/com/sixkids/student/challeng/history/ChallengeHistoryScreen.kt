@@ -1,6 +1,5 @@
 package com.sixkids.student.challeng.history
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -139,7 +138,11 @@ fun ChallengeHistoryScreen(
                 topDescription = "${runningChallenge.startTime.formatToMonthDayTime()} ~ ${runningChallenge.endTime.formatToMonthDayTime()}",
                 bottomDescription = runningChallenge.content,
                 color = Red,
-                onClick = showDialog,
+                onClick = if (uiState.runningChallenge.createTime == null) {
+                    showDialog
+                } else {
+                    {}
+                },
                 onReportEnable = (uiState.runningChallenge.leaderStatus == true && uiState.runningChallenge.endStatus?.not() ?: false),
                 onReportClick = {
                     //TODO 과제 제출로 이동
