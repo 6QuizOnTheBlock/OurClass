@@ -9,6 +9,7 @@ import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
+import com.sixkids.model.StudentRelation
 import javax.inject.Inject
 
 class OrganizationRepositoryImpl @Inject constructor(
@@ -75,5 +76,13 @@ class OrganizationRepositoryImpl @Inject constructor(
         limit: Int?
     ): List<MemberSimpleWithScore> {
         return organizationRemoteDataSource.getStudentRelation(orgId, studentId, limit)
+    }
+
+    override suspend fun getStudentRelationDetail(
+        orgId: Long,
+        sourceStudentId: Long,
+        targetStudentId: Long
+    ): StudentRelation {
+        return organizationRemoteDataSource.getStudentRelationDetail(orgId, sourceStudentId, targetStudentId)
     }
 }

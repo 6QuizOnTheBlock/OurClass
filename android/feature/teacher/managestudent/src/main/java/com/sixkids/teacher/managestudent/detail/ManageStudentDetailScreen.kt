@@ -45,6 +45,7 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimpleWithScore
+import com.sixkids.teacher.managestudent.detail.component.MemberRelationDialog
 import com.sixkids.designsystem.R as DesignR
 
 @Composable
@@ -58,7 +59,9 @@ fun ManageStudentDetailRoute(
     }
 
     ManageStudentDetailScreen(
-        uiState = uiState
+        uiState = uiState,
+        showDialog =  viewModel::onFriendClick,
+        cancelDialog = viewModel::cancelDialog
     )
 }
 
@@ -66,6 +69,8 @@ fun ManageStudentDetailRoute(
 @Composable
 fun ManageStudentDetailScreen(
     uiState: ManageStudentDetailState = ManageStudentDetailState(),
+    showDialog: (Long) -> Unit = {},
+    cancelDialog : () -> Unit = {}
 ) {
     val pagerState =
         rememberPagerState(pageCount = {
@@ -103,7 +108,7 @@ fun ManageStudentDetailScreen(
             BestFriendsSection(
                 pagerState = pagerState,
                 uiState.studentList,
-                onFriendClick = { /*TODO*/ }
+                onFriendClick =  showDialog
             )
 
             Spacer(modifier = Modifier.size(20.dp))
@@ -119,6 +124,13 @@ fun ManageStudentDetailScreen(
                 challenge = uiState.memberDetail.challengeCount,
                 relay = uiState.memberDetail.relayCount,
                 post = uiState.memberDetail.postCount
+            )
+        }
+
+        if (uiState.isDialogShowing) {
+            MemberRelationDialog(
+                confirmButtonOnClick = cancelDialog,
+                relationInfo = uiState.relation
             )
         }
     }
@@ -172,6 +184,7 @@ fun BestFriendsSection(
             for (i in startIndex until endIndex) {
                 val item = bestFriends[i]
                 StudentSimpleCardItem(
+                    id = item.memberSimple.id,
                     name = item.memberSimple.name,
                     photo = item.memberSimple.photo,
                     score = item.relationPoint,

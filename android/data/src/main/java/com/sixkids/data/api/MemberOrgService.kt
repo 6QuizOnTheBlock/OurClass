@@ -2,6 +2,7 @@ package com.sixkids.data.api
 
 import com.sixkids.data.model.response.StudentDetailResponse
 import com.sixkids.data.model.response.StudentHomeResponse
+import com.sixkids.data.model.response.StudentRelationDetailResponse
 import com.sixkids.data.model.response.StudentWithRelationScoreResponse
 import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
@@ -27,5 +28,13 @@ interface MemberOrgService {
         @Query("memberId") memberId: Int,
         @Query("limit") relationType: Int? = null
     ): ApiResult<ApiResponse<List<StudentWithRelationScoreResponse>>>
+
+    @GET("organizations/{id}/relation")
+    suspend fun getRelationDetail(
+        @Path("id") organizationId: Long,
+        @Query("sourceMemberId") sourceMemberId: Int,
+        @Query("targetMemberId") targetMemberId: Int
+    ): ApiResult<ApiResponse<StudentRelationDetailResponse>>
+
 
 }
