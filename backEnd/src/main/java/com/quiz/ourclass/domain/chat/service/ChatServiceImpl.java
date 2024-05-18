@@ -1,5 +1,6 @@
 package com.quiz.ourclass.domain.chat.service;
 
+import com.quiz.ourclass.domain.chat.algorithm.WordFilter;
 import com.quiz.ourclass.domain.chat.dto.ChatDTO;
 import com.quiz.ourclass.domain.chat.dto.Message;
 import com.quiz.ourclass.domain.chat.dto.request.MessageSliceRequest;
@@ -39,6 +40,7 @@ public class ChatServiceImpl implements ChatService {
     private final RedisUtil redisUtil;
     private final JwtUtil jwtUtil;
     private final MessageSend messageSend;
+    private final WordFilter wordFilter;
 
     @Transactional
     public void sendMessage(Message message, String accessToken) {
@@ -52,6 +54,10 @@ public class ChatServiceImpl implements ChatService {
             LocalDateTime.now(),
             member,
             readCount
+        );
+
+        message.convertContent(
+            wordFilter.ahoCorasickFilter(message.getContent())
         );
 
         messageSend.send(ConstantUtil.KAFKA_TOPIC, message);
