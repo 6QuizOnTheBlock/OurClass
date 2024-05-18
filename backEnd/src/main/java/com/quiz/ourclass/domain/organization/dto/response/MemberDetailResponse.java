@@ -10,8 +10,10 @@ public record MemberDetailResponse(
     String name,
     @Schema(description = "멤버 프로필 사진")
     String photo,
-    @Schema(description = "멤버 인싸력")
+    @Schema(description = "멤버 인싸력 점수")
     double isolationPoint,
+    @Schema(description = "멤버 인싸력 등수")
+    int isolationRank,
     @Schema(description = "멤버 포인트")
     int exp,
     @Schema(description = "함께달리기 참여 횟수")

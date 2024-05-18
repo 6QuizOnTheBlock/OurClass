@@ -105,6 +105,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
             .name(member.getName())
             .photo(member.getProfileImage())
             .isolationPoint(memberOrganization.getIsolationPoint())
+            .isolationRank(memberOrganization.getIsolationRank())
             .exp(memberOrganization.getExp())
             .challengeCount(challengeCount)
             .relayCount(relayCount)
