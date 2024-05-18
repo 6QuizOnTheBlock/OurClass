@@ -9,8 +9,8 @@ data class RunningChallengeByStudentResponse(
     @Json(name = "challengeSimpleDTO")
     val challenge: ChallengeResponse,
     val leaderStatus: Boolean?,
-    @Json(name = "memberList")
-    val memberNames: List<MemberSimpleResponse>?,
+    @Json(name = "memberNames")
+    val memberList: List<MemberSimpleResponse>?,
     val type: String,
     val createTime: LocalDateTime?,
     val endStatus: Boolean?
@@ -20,7 +20,7 @@ internal fun RunningChallengeByStudentResponse.toModel() =
     RunningChallengeByStudent(
         challenge = challenge.toModel(),
         leaderStatus = leaderStatus,
-        memberNames = memberNames?.map { it.toModel() } ?: emptyList(),
+        memberList = memberList?.map { it.toModel() } ?: emptyList(),
         type = GroupType.valueOf(type),
         createTime = createTime,
         endStatus = endStatus

@@ -1,5 +1,6 @@
 package com.sixkids.student.challeng.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -137,14 +138,19 @@ fun ChallengeHistoryScreen(
                 bottomDescription = runningChallenge.content,
                 color = Red,
                 onClick = showDialog,
-                onReportEnable = uiState.runningChallenge.endStatus?.not() ?: false,
+                onReportEnable = (uiState.runningChallenge.leaderStatus == true && uiState.runningChallenge.endStatus?.not() ?: false),
                 onReportClick = {
                     //TODO 과제 제출로 이동
                 },
-                teamDescription = if(uiState.runningChallenge.type == GroupType.DESIGN) {
-                    uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
+                teamDescription = if (uiState.runningChallenge.type == GroupType.DESIGN) {
+                    uiState.runningChallenge.memberList.joinToString(", ") { it.name }
                 } else {
-                    stringResource(R.string.free_group_matching)
+                    Log.d("멤버", "ChallengeHistoryScreen: ${uiState.runningChallenge.memberList}")
+                    if (uiState.runningChallenge.memberList.isNotEmpty()) {
+                        uiState.runningChallenge.memberList.joinToString(", ") { it.name }
+                    } else {
+                        stringResource(R.string.free_group_matching)
+                    }
                 },
                 runningTimeDescription = "과제 참여 후 진행시간 표시하기",
                 expanded = !isScrolled

@@ -1,6 +1,5 @@
 package com.sixkids.teacher.challenge.create.info
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
