@@ -94,7 +94,8 @@ fun MainScreen(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
                 navigateToChallenge = navigator::navigateChallengeHistory,
-                navigateToRelay = navigator::navigateTeacherRelayHistory
+                navigateToRelay = navigator::navigateTeacherRelayHistory,
+                navigateToQuiz = { } ,
             )
 
             boardNavGraph(
