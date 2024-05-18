@@ -16,7 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.core.nfc.HCEService
 import com.sixkids.designsystem.component.screen.GreetingScreen
-import com.sixkids.designsystem.component.screen.RelayTaggingScreen
 import com.sixkids.model.GreetingNFC
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle

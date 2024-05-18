@@ -7,7 +7,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailEffect
 import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailRoute
 import com.sixkids.student.home.announce.announcelist.StudentAnnounceListRoute
 import com.sixkids.student.home.chatting.StudentChattingRoute

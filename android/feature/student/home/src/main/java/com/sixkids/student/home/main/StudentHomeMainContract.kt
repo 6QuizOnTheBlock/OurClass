@@ -1,7 +1,6 @@
 package com.sixkids.student.home.main
 
 import com.sixkids.model.MemberSimpleWithScore
-import com.sixkids.model.StudentHomeInfo
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
