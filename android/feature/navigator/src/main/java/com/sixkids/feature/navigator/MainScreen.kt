@@ -94,7 +94,8 @@ fun MainScreen(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
                 navigateToChallenge = navigator::navigateChallengeHistory,
-                navigateToRelay = navigator::navigateTeacherRelayHistory
+                navigateToRelay = navigator::navigateTeacherRelayHistory,
+                navigateToQuiz = { } ,
             )
 
             boardNavGraph(
@@ -122,6 +123,12 @@ fun MainScreen(
 
             manageClassNavGraph(
                 padding = innerPadding,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToClassSummary = { },
+                navigateToClassSetting = navigator::navigateClassSetting,
+                navigateToChattingFilter = navigator::navigateChattingFilter,
+                navigateToInvite = navigator::navigateClassInvite,
+                navigateBack = navigator::popBackStack,
             )
 
             manageStudentNavGraph(

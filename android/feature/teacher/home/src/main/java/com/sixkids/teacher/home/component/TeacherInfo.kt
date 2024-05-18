@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.sixkids.designsystem.R
 
 //preview
@@ -34,7 +37,8 @@ fun TeacherInfoCardPreview() {
 @Composable
 fun TeacherInfo(
     modifier: Modifier = Modifier,
-    teacherName: String
+    teacherName: String,
+    teacherImageUrl: String = "",
 ) {
     val height = 120.dp
 
@@ -47,12 +51,16 @@ fun TeacherInfo(
         )
     ) {
         Row {
-            Image(
-                painter = painterResource(id = R.drawable.teacher_woman),
-                contentDescription = null,
-                modifier = Modifier.size(height),
-                contentScale = ContentScale.FillBounds
-            )
+            Card {
+                AsyncImage(
+                    model = teacherImageUrl,
+                    contentDescription = null,
+                    error = painterResource(id = R.drawable.teacher_woman),
+                    modifier = Modifier.size(height),
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(height),
                 verticalArrangement = Arrangement.Center

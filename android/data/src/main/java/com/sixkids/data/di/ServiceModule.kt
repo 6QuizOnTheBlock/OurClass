@@ -1,6 +1,7 @@
 package com.sixkids.data.di
 
 import com.sixkids.data.api.ChallengeService
+import com.sixkids.data.api.ChatFilterService
 import com.sixkids.data.api.CommentService
 import com.sixkids.data.api.ChattingService
 import com.sixkids.data.api.GroupService
@@ -102,6 +103,14 @@ object ServiceModule {
         return retrofit.create(MemberOrgService::class.java)
     }
 
+    @Singleton
+    @Provides
+    fun provideChatFilterService(
+        @NetworkModule.AuthRetrofit retrofit: Retrofit
+    ): ChatFilterService {
+        return retrofit.create(ChatFilterService::class.java)
+    }
+    
     @Singleton
     @Provides
     fun provideGroupService(

@@ -4,6 +4,7 @@ import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
+import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.model.response.toModel
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
@@ -27,6 +28,19 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
             .getOrThrow().data
     }
 
+    override suspend fun getOrganizationSummary(organizationId: Int): ClassSummaryResponse {
+        return organizationService.getOrganizationSummary(organizationId).getOrThrow().data
+    }
+
+    override suspend fun updateOrganization(organizationId: Int, name: String): String {
+        return organizationService.updateOrganization(organizationId, NewOrganizationRequest(name))
+            .getOrThrow().data.name
+    }
+
+    override suspend fun getOrganizationInviteCode(organizationId: Int): String {
+        return organizationService.getOrganizationInviteCode(organizationId).getOrThrow().data.code
+    }
+    
     override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
         return organizationService.getOrganizationMembers(orgId).getOrThrow().data.map { it.toModel() }
     }

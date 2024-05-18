@@ -20,14 +20,16 @@ fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
     navigateToRank: () -> Unit,
     navigateToChallenge: () -> Unit,
-    navigateToRelay: () -> Unit
+    navigateToRelay: () -> Unit,
+    navigateToQuiz: () -> Unit
 ) {
     composable(route = HomeRoute.defaultRoute) {
         HomeMainRoute(
-            padding,
-            navigateToRank,
-            navigateToChallenge,
-            navigateToRelay
+            padding = padding,
+            navigateToRank = navigateToRank,
+            navigateToChallenge = navigateToChallenge,
+            navigateToRelay = navigateToRelay,
+            navigateToQuiz = navigateToQuiz
         )
     }
     composable(route = HomeRoute.rankRoute) {

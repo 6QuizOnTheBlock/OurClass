@@ -154,7 +154,7 @@ fun ContentCard(
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp)
+                                .padding(end = 20.dp)
                                 .wrapContentHeight(),
                             textAlign = TextAlign.Start,
                             fontSize = 34.sp,
