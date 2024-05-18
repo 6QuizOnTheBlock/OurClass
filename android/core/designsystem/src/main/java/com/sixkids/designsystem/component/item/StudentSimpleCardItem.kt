@@ -86,7 +86,7 @@ fun StudentSimpleCardItemPreview() {
             StudentSimpleCardItem(
                 modifier = Modifier.padding(4.dp),
                 name = "김철수",
-                photo = "https://i.pinimg.com/564x/f9/e5/c1/f9e5c19d2a51bda108e5ea536d7745c1.jpg",
+//                photo = "https://i.pinimg.com/564x/f9/e5/c1/f9e5c19d2a51bda108e5ea536d7745c1.jpg",
                 score = 97
             )
         }
