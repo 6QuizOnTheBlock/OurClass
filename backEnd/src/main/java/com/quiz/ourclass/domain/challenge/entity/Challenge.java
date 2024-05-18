@@ -31,4 +31,8 @@ public class Challenge {
     LocalDateTime endTime;
     int minCount;
     int headCount;
+
+    public void updateHeadCount(int count) {
+        this.headCount += count;
+    }
 }

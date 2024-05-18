@@ -130,6 +130,7 @@ public class GroupServiceImpl implements GroupService {
             sseService.send(sseDTO);
         });
         groupMemberRepository.saveAll(groupMembers);
+        challenge.updateHeadCount(groupMembers.size());
         updateGroupCount(members, challenge.getOrganization().getId(), group.getGroupType());
         redisUtil.delete(key);
         return group.getId();
