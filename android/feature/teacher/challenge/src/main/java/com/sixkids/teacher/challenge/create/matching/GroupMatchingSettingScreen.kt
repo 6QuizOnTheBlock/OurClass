@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,10 +50,15 @@ fun GroupMatchingSettingRoute(
 
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.initData()
+    }
+
     GroupMatchingSettingScreen(
         modifier = modifier,
         state = uiState,
-        onNextButtonClick = { }
+        onNextButtonClick = { },
+        removeMember = viewModel::removeStudent
     )
 }
 
@@ -60,6 +66,7 @@ fun GroupMatchingSettingRoute(
 fun GroupMatchingSettingScreen(
     modifier: Modifier = Modifier,
     state: GroupMatchingSettingState = GroupMatchingSettingState(),
+    removeMember: (Long) -> Unit = {},
     onNextButtonClick: () -> Unit = {}
 ) {
     val radioOptions = MatchingType.entries
@@ -130,7 +137,10 @@ fun GroupMatchingSettingScreen(
                             member = state.studentList[index],
                             isActive = true,
                             showX = true,
-                        )
+                        ),
+                        onRemoveClick = {
+                            removeMember(it)
+                        },
                     )
                 }
             }

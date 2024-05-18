@@ -11,6 +11,7 @@ data class GroupMatchingSettingState(
 ) : UiState
 
 sealed interface GroupMatchingSettingEffect: SideEffect {
+    data class HandleException(val it: Throwable, val retryAction: () -> Unit) : GroupMatchingSettingEffect
 }
 
 enum class MatchingType(
