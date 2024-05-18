@@ -27,4 +27,6 @@ interface OrganizationRemoteDataSource {
     suspend fun getStudentRelation(orgId: Long, studentId: Long, limit: Int?): List<MemberSimpleWithScore>
 
     suspend fun getStudentRelationDetail(orgId: Long, sourceStudentId: Long, targetStudentId: Long): StudentRelation
+
+    suspend fun tagGreeting(orgId: Long, memberId: Long): Int
 }

@@ -85,4 +85,8 @@ class OrganizationRepositoryImpl @Inject constructor(
     ): StudentRelation {
         return organizationRemoteDataSource.getStudentRelationDetail(orgId, sourceStudentId, targetStudentId)
     }
+
+    override suspend fun tagGreeting(orgId: Long, memberId: Long): Int {
+        return organizationRemoteDataSource.tagGreeting(orgId, memberId)
+    }
 }
