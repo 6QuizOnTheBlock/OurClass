@@ -4,6 +4,8 @@ import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSource
 import com.sixkids.data.repository.challenge.remote.ChallengeRemoteDataSourceImpl
 import com.sixkids.data.repository.chatting.remote.ChattingRemoteDataSource
 import com.sixkids.data.repository.chatting.remote.ChattingRemoteDataSourceImpl
+import com.sixkids.data.repository.chattingfilter.remote.ChattingFilterRemoteDataSource
+import com.sixkids.data.repository.chattingfilter.remote.ChattingFilterRemoteDataSourceImpl
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSource
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSourceImpl
 import com.sixkids.data.repository.group.remote.GroupDataSource
@@ -73,6 +75,11 @@ abstract class DataSourceModule {
         relayRemoteDataSource: RelayRemoteDataSourceImpl
     ): RelayRemoteDataSource
 
+    @Binds
+    abstract fun bindChattingFilterRemoteDataSource(
+        chattingFilterRemoteDataSource: ChattingFilterRemoteDataSourceImpl
+    ): ChattingFilterRemoteDataSource
+  
     @Binds
     abstract fun bindGroupDataSource(
         groupDataSource: GroupDataSourceImpl

@@ -1,8 +1,10 @@
 package com.sixkids.data.repository.organization
 
+import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
+import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 import javax.inject.Inject
@@ -31,6 +33,32 @@ class OrganizationRepositoryImpl @Inject constructor(
         return organizationRemoteDataSource.joinOrganization(orgId, code)
     }
 
+    override suspend fun getOrganizationSummary(organizationId: Int): ClassSummary {
+        organizationRemoteDataSource.getOrganizationSummary(organizationId).let {
+            return ClassSummary(
+                it.challengeCounts.map { challengeCount -> challengeCount.toModel() },
+                it.relayCounts.map { challengeCount -> challengeCount.toModel() },
+                it.postsCounts.map { challengeCount -> challengeCount.toModel() },
+            )
+        }
+    }
+
+    override suspend fun updateOrganization(organizationId: Int, name: String): String {
+        return organizationRemoteDataSource.updateOrganization(organizationId, name)
+    }
+
+    override suspend fun getOrganizationInviteCode(organizationId: Int): String {
+        return organizationRemoteDataSource.getOrganizationInviteCode(organizationId)
+    }
+
+    override suspend fun saveSelectedOrganizationName(organizationName: String) {
+        organizationLocalDataSource.saveSelectedOrganizationName(organizationName)
+    }
+
+    override suspend fun loadSelectedOrganizationName(): String {
+        return organizationLocalDataSource.getSelectedOrganizationName()
+    }
+    
     override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
         return organizationRemoteDataSource.getOrganizationMembers(orgId)
     }

@@ -61,6 +61,9 @@ import com.sixkids.teacher.main.navigation.navigateNewOrganization
 import com.sixkids.teacher.main.navigation.navigateProfile
 import com.sixkids.teacher.main.navigation.navigateTeacherOrganizationList
 import com.sixkids.teacher.manageclass.navigation.ManageClassRoute
+import com.sixkids.teacher.manageclass.navigation.navigateChattingFilter
+import com.sixkids.teacher.manageclass.navigation.navigateClassSetting
+import com.sixkids.teacher.manageclass.navigation.navigateInvite
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
 import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
@@ -192,6 +195,18 @@ class MainNavigator(
                 inclusive = true
             }
         }
+    }
+
+    fun navigateChattingFilter() {
+        navController.navigateChattingFilter()
+    }
+
+    fun navigateClassInvite() {
+        navController.navigateInvite()
+    }
+
+    fun navigateClassSetting() {
+        navController.navigateClassSetting()
     }
 
     /**
