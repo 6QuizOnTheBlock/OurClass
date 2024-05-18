@@ -35,7 +35,7 @@ fun MemberIcon(
     onRemoveClick: (Long) -> Unit = {},
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .wrapContentSize()
             .background(
                 if (memberIconItem.isActive) Color.Transparent else Color.Gray,

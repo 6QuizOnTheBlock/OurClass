@@ -1,8 +1,13 @@
 package com.sixkids.student.group.create
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +30,7 @@ import com.sixkids.student.challenge.R
 import com.sixkids.student.group.component.GroupWaiting
 import com.sixkids.student.group.component.MemberIcon
 import com.sixkids.student.group.component.MemberIconItem
+import com.sixkids.student.group.component.MultiLayeredCircles
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
@@ -71,42 +77,116 @@ fun CreateGroupScreen(
     onGroupCreate: () -> Unit = { }
 ) {
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.invite_friend),
-            style = UlbanTypography.titleSmall,
-            modifier = Modifier.padding(top = 32.dp)
-        )
-        Spacer(modifier = Modifier.weight(1f))
-
-        if (uiState.foundMembers.isNotEmpty()) {
-            LazyColumn {
-                items(uiState.foundMembers) { member ->
-                    MemberIcon(
-                        memberIconItem = MemberIconItem(
-                            member = member,
-                            isActive = true,
-                            showX = false
-                        ),
-                        onIconClick = { onMemberSelect(member) },
-                    )
+    Box {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(R.string.invite_friend),
+                style = UlbanTypography.titleSmall,
+                modifier = Modifier.padding(top = 32.dp)
+            )
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                MultiLayeredCircles(modifier = Modifier.align(Alignment.Center))
+                MemberIcon(
+                    memberIconItem = MemberIconItem(
+                        member = uiState.leader,
+                        isActive = true
+                    ), modifier = Modifier.align(Alignment.Center)
+                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val member0 = uiState.showMembers[0]
+                    val member1 = uiState.showMembers[1]
+                    val member2 = uiState.showMembers[2]
+                    val member3 = uiState.showMembers[3]
+                    val member4 = uiState.showMembers[4]
+                    if(uiState.leader != null){
+                        Box(modifier = Modifier.offset((-100).dp, (-100).dp)) {
+                            MemberIcon(
+                                memberIconItem = MemberIconItem(
+                                    member = uiState.leader,
+                                    isActive = true
+                                ), modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+//                    if(uiState.leader != null){
+//                        MemberIcon(
+//                            memberIconItem = MemberIconItem(
+//                                member = uiState.leader,
+//                                isActive = true
+//                            ), modifier = Modifier.align(Alignment.Center).offset(
+//                                x = 32.dp,
+//                                y = (-32).dp
+//                            )
+//                        )
+//                    }
+//                    if(uiState.leader != null){
+//                        MemberIcon(
+//                            memberIconItem = MemberIconItem(
+//                                member = uiState.leader,
+//                                isActive = true
+//                            ), modifier = Modifier.align(Alignment.Center).offset(
+//                                x = (-32).dp,
+//                                y = 32.dp
+//                            )
+//                        )
+//                    }
+//                    if(uiState.leader != null){
+//                        MemberIcon(
+//                            memberIconItem = MemberIconItem(
+//                                member = uiState.leader,
+//                                isActive = true
+//                            ), modifier = Modifier.align(Alignment.BottomCenter).offset(
+//                                x = 32.dp,
+//                                y = 32.dp
+//                            )
+//                        )
+//                    }
+//                    if(uiState.leader != null){
+//                        MemberIcon(
+//                            memberIconItem = MemberIconItem(
+//                                member = uiState.leader,
+//                                isActive = true
+//                            ), modifier = Modifier.align(Alignment.BottomStart).offset(
+//                                x = 64.dp,
+//                                y = 32.dp
+//                            )
+//                        )
+//                    }
                 }
             }
-        }
+            if (uiState.foundMembers.isNotEmpty()) {
+//            LazyColumn {
+//                items(uiState.foundMembers) { member ->
+//                    MemberIcon(
+//                        memberIconItem = MemberIconItem(
+//                            member = member,
+//                            isActive = true,
+//                            showX = false
+//                        ),
+//                        onIconClick = { onMemberSelect(member) },
+//                    )
+//                }
+//            }
 
-        GroupWaiting(
-            groupSize = uiState.groupSize,
-            leader = uiState.leader,
-            memberList = uiState.selectedMembers,
-            waitingMemberList = uiState.waitingMembers,
-            onRemoveClick = {
-                onMemberRemove(it)
-            },
-            onDoneClick = onGroupCreate
-        )
+            }
+
+            GroupWaiting(
+                groupSize = uiState.groupSize,
+                leader = uiState.leader,
+                memberList = uiState.selectedMembers,
+                waitingMemberList = uiState.waitingMembers,
+                onRemoveClick = {
+                    onMemberRemove(it)
+                },
+                onDoneClick = onGroupCreate
+            )
+        }
     }
 }
 
