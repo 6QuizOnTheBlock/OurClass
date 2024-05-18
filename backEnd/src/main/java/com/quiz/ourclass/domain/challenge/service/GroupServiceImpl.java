@@ -124,7 +124,7 @@ public class GroupServiceImpl implements GroupService {
         groupMembers.forEach(member -> {
             SseDTO sseDTO = SseDTO.builder()
                 .eventType(SseType.CREATE_GROUP)
-                .receiverId(member.getId())
+                .receiverId(member.getMember().getId())
                 .time(createTime)
                 .build();
             sseService.send(sseDTO);
