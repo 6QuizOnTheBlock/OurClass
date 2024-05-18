@@ -36,18 +36,33 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.challenge.R
 import com.sixkids.teacher.challenge.create.matching.component.MemberIcon
 import com.sixkids.teacher.challenge.create.matching.component.MemberIconItem
+import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
 fun GroupMatchingSettingRoute(
     modifier: Modifier = Modifier,
-    viewModel: GroupMatchingSettingViewModel = hiltViewModel()
+    viewModel: GroupMatchingSettingViewModel = hiltViewModel(),
+    moveNextStep: () -> Unit,
+    onUpdateMatchingMemberList: (List<Long>) -> Unit,
+    onUpdateMatchingType: (MatchingType) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is GroupMatchingSettingEffect.ShowSnackbar -> {
+                onShowSnackbar(SnackbarToken(it.message))
+            }
 
+            is GroupMatchingSettingEffect.MoveToMatchingSuccessStep -> {
+                onUpdateMatchingType(it.matchingType)
+                onUpdateMatchingMemberList(it.matchingMemberList)
+                moveNextStep()
+            }
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -57,7 +72,7 @@ fun GroupMatchingSettingRoute(
     GroupMatchingSettingScreen(
         modifier = modifier,
         state = uiState,
-        onNextButtonClick = { },
+        onNextButtonClick = viewModel::moveNextStep,
         removeMember = viewModel::removeStudent
     )
 }
@@ -85,7 +100,9 @@ fun GroupMatchingSettingScreen(
         radioOptions.forEach { option ->
             TextRadioButton(
                 selected = selectedOption == option,
-                onClick = { onOptionSelected(option) },
+                onClick = {
+                    onOptionSelected(option)
+                },
                 text = stringResource(id = option.textRes),
             )
             Spacer(modifier = Modifier.height(4.dp))

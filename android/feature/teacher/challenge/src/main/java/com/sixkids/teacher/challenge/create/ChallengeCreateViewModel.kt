@@ -5,6 +5,7 @@ import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
+import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +43,8 @@ class ChallengeCreateViewModel @Inject constructor(
     private var endTime: LocalDateTime = LocalDateTime.now()
     private var point: String = ""
     private var headCount: String = ""
+    private var matchingMemberList: List<Long> = emptyList()
+    private var groupMatchingType: MatchingType = MatchingType.FRIENDLY
     private var groupType: GroupType = GroupType.FREE
     private val groupList: List<GroupSimple> = emptyList()
 
@@ -123,6 +126,14 @@ class ChallengeCreateViewModel @Inject constructor(
 
     fun updateGroupType(groupType: GroupType) {
         this.groupType = groupType
+    }
+
+    fun updateMatchingMemberList(matchingMemberList: List<Long> ) {
+        this.matchingMemberList = matchingMemberList
+    }
+
+    fun updateMatchingType(matchingType: MatchingType) {
+        this.groupMatchingType = matchingType
     }
 
 

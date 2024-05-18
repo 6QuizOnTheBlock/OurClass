@@ -7,11 +7,13 @@ import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
 data class GroupMatchingSettingState(
-    val studentList: List<MemberSimple> = emptyList()
+    val studentList: List<MemberSimple> = emptyList(),
+    val matchingType: MatchingType = MatchingType.FRIENDLY
 ) : UiState
 
 sealed interface GroupMatchingSettingEffect: SideEffect {
-    data class HandleException(val it: Throwable, val retryAction: () -> Unit) : GroupMatchingSettingEffect
+    data class MoveToMatchingSuccessStep(val matchingMemberList: List<Long>, val matchingType: MatchingType): GroupMatchingSettingEffect
+    data class ShowSnackbar(val message: String): GroupMatchingSettingEffect
 }
 
 enum class MatchingType(

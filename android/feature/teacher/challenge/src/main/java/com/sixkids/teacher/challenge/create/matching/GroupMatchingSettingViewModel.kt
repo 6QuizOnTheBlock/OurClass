@@ -29,8 +29,6 @@ class GroupMatchingSettingViewModel @Inject constructor(
                     intent {
                         copy(studentList = memberList)
                     }
-                }.onFailure {
-                    postSideEffect(GroupMatchingSettingEffect.HandleException(it, ::initData) )
                 }
         }
     }
@@ -39,6 +37,15 @@ class GroupMatchingSettingViewModel @Inject constructor(
         intent {
             copy(studentList = studentList.filter { it.id != memberId })
         }
+    }
+
+    fun moveNextStep() {
+        postSideEffect(
+            GroupMatchingSettingEffect.MoveToMatchingSuccessStep(
+                matchingMemberList = uiState.value.studentList.map { it.id },
+                matchingType = uiState.value.matchingType
+            )
+        )
     }
 
 }
