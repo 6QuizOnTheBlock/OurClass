@@ -5,6 +5,7 @@ import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.network.ApiResult
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
 import retrofit2.http.Path
 
@@ -24,4 +25,6 @@ interface OrganizationRemoteDataSource {
     suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple>
 
     suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail
+
+    suspend fun getStudentRelation(orgId: Long, studentId: Long, limit: Int?): List<MemberSimpleWithScore>
 }
