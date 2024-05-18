@@ -6,6 +6,7 @@ import com.quiz.ourclass.domain.organization.entity.Organization;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,52 @@ public class WordFilter {
 
     private final ChatFilterRepository chatFilterRepository;
 
+    /**
+     * Version - 2 정규식
+     **/
+    public String regexFilter(String message, Organization organization) {
+        List<ChatFilter> chatFilters =
+            chatFilterRepository.findByOrganization(organization);
+
+        // 모든 공백과 특수 문자 제거하고 소문자로 변환하여 검사용 문자열 생성
+        String sanitizedMessage =
+            message.replaceAll("[^\\p{L}]", "").toLowerCase();
+
+        for (ChatFilter chatFilter : chatFilters) {
+            String bannedWord = chatFilter.getBadWord();
+
+            // 단어 사이 비문자 허용 정규식 생성
+            String regex = createRegexForWord(bannedWord);
+            // regex 정규 표현식 기준으로 Pattern 객체를 생성
+            Pattern pattern = Pattern.compile(regex);
+            // 검사용 문자열 내에서 패턴에 매칭되는 부분을 찾기 위한 Matcher 객체를 생성
+            Matcher matcher = pattern.matcher(sanitizedMessage);
+
+            if (matcher.find()) {
+                // 가장 최근의 매칭 연산에서 성공적으로 매칭된 부분 문자열 길이만큼 "*" 문자열 생성
+                String starts = "*".repeat(matcher.group().length());
+                message = message.replaceAll(regex, starts);
+            }
+        }
+
+        return message;
+    }
+
+    private String createRegexForWord(String word) {
+        int wordLength = word.length();
+        StringBuilder regex = new StringBuilder();
+        // 한 문자씩 추출해서 검사 후 다음 문자 뒤에 추가
+        for (int i = 0; i < wordLength; i++) {
+            regex.append(
+                Pattern.quote(String.valueOf(word.charAt(i)))
+            );
+            if (i < wordLength - 1) {
+                // 문자 사이에 어떠한 비문자 요소가 들어간 경우도 필터링함
+                regex.append("[^\\p{L}]*");
+            }
+        }
+        return regex.toString();
+    }
 
     /**
      * Version - 1 슬라이딩 윈도우
