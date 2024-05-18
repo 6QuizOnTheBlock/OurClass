@@ -30,8 +30,8 @@ fun GreetingScreen(
 
 
     val body =
-        if (isSender) stringResource(R.string.relay_tagging_body_sender)
-        else stringResource(R.string.relay_tagging_body_receiver)
+        if (isSender) "친구와 핸드폰 뒷면을 맞대서 인사를 건네요"
+        else "친구와 핸드폰 뒷면을 맞대서 인사를 받아요"
 
     Column(
         modifier = Modifier.fillMaxSize()
