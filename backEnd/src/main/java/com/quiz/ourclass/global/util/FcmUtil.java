@@ -31,6 +31,7 @@ public class FcmUtil {
         }
     }
 
+    @Async("taskExecutor")
     public void multiFcmSend(List<Member> members, FcmDTO fcmDTO) {
         members.forEach(member -> singleFcmSend(member, fcmDTO));
     }
@@ -51,7 +52,7 @@ public class FcmUtil {
             .build();
     }
 
-    private void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         int attempt = 0;
         long backoff = ConstantUtil.INITIAL_BACKOFF;
 
