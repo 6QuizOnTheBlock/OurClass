@@ -135,6 +135,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         report.setChallengeGroup(group);
         report.setAcceptStatus(ReportType.BEFORE);
         report.setCreateTime(LocalDateTime.now());
+        group.setCompleteStatus(true);
         return reportRepository.save(report).getId();
     }
 
