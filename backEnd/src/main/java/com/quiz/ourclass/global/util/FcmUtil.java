@@ -100,6 +100,10 @@ public class FcmUtil {
         return organizationName + " " + type + "이 등록되었어요!!";
     }
 
+    public String makeChallengeCreateBody(String challengeName) {
+        return "함께달리기가 시작됐어요! [" + challengeName + "]";
+    }
+
     public String makeChallengeBody(String leaderName, String challengeName) {
         return leaderName + "팀이 함께달리기 [" + challengeName + "]에 참여했어요!!";
     }

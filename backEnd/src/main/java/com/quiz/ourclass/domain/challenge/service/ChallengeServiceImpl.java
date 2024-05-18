@@ -103,6 +103,11 @@ public class ChallengeServiceImpl implements ChallengeService {
                 groupMemberRepository.saveAll(groupMembers);
             });
         }
+        List<Member> members = memberOrganizationRepository.findByOrganization(
+            organization).stream().map(MemberOrganization::getMember).toList();
+        String title = fcmUtil.makeFcmTitle(organization.getName(), FcmType.CHALLENGE.name());
+        String body = fcmUtil.makeChallengeCreateBody(challenge.getTitle());
+        fcmUtil.multiFcmSend(members, fcmUtil.makeFcmDTO(title, body));
         return challenge.getId();
     }
 
