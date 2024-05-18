@@ -30,10 +30,11 @@ import com.sixkids.designsystem.theme.UlbanTypography
 @Composable
 fun StudentSimpleCardItem(
     modifier: Modifier = Modifier,
+    id: Long = 0,
     name: String = "",
     photo: String = "",
     score: Int? = null,
-    onClick: () -> Unit = {}
+    onClick: (Long) -> Unit = {}
 ) {
     Card(
         modifier = modifier,
@@ -44,7 +45,7 @@ fun StudentSimpleCardItem(
             defaultElevation = 4.dp,
             pressedElevation = 8.dp
         ),
-        onClick = onClick
+        onClick = {onClick(id)}
     ) {
         Column(
             modifier = Modifier

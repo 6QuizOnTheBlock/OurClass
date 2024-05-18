@@ -1,15 +1,18 @@
 package com.sixkids.data.repository.organization.remote
 
+import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.toModel
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 import javax.inject.Inject
 
 class OrganizationRemoteDataSourceImpl @Inject constructor(
-    private val organizationService: OrganizationService
+    private val organizationService: OrganizationService,
+    private val memberOrgService: MemberOrgService
 ) : OrganizationRemoteDataSource {
     override suspend fun getClassList(): List<Organization> {
         return organizationService.getOrganizationList().getOrThrow().data.map { it.toModel() }
@@ -26,5 +29,9 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
         return organizationService.getOrganizationMembers(orgId).getOrThrow().data.map { it.toModel() }
+    }
+
+    override suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail {
+        return memberOrgService.getMemberDetail(orgId, studentId).getOrThrow().data.toModel()
     }
 }

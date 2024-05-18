@@ -29,6 +29,7 @@ import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.managestudent.R
+import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.designsystem.R as UlbanRes
 
 
@@ -37,7 +38,7 @@ fun ManageStudentMainRoute(
     padding: PaddingValues,
     viewModel: ManageStudentMainViewModel = hiltViewModel(),
     navigateToStudentDetail: (Long) -> Unit,
-
+    handleException: (Throwable, () -> Unit) -> Unit
 ) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -46,11 +47,21 @@ fun ManageStudentMainRoute(
         viewModel.initData()
     }
 
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is ManageStudentMainEffect.NavigateToStudentDetail -> {
+                navigateToStudentDetail(it.studentId)
+            }
+            is ManageStudentMainEffect.HandleException -> handleException(it.throwable, it.retry)
+        }
+    }
+
     Box(
         modifier = Modifier.padding(padding)
     ) {
         ManageStudentMainScreen(
-            uiState = uiState
+            uiState = uiState,
+            navigateToStudentDetail = navigateToStudentDetail
         )
     }
 }
@@ -58,7 +69,8 @@ fun ManageStudentMainRoute(
 @Composable
 fun ManageStudentMainScreen(
     modifier: Modifier = Modifier,
-    uiState: ManageStudentMainState = ManageStudentMainState()
+    uiState: ManageStudentMainState = ManageStudentMainState(),
+    navigateToStudentDetail: (Long) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -83,9 +95,11 @@ fun ManageStudentMainScreen(
         ) {
             items(uiState.studentList.size) {
                 StudentSimpleCardItem(
+                    id = uiState.studentList[it].id,
                     modifier = Modifier.padding(4.dp),
                     name = uiState.studentList[it].name,
                     photo = uiState.studentList[it].photo,
+                    onClick = navigateToStudentDetail
                 )
             }
         }
