@@ -18,6 +18,14 @@ import org.springframework.stereotype.Component;
 public class WordFilter {
 
     private final ChatFilterRepository chatFilterRepository;
+    private final Filter filter;
+
+    /**
+     * Version - 3 아-호 코라식
+     **/
+    public String ahoCorasickFilter(String message) {
+        return filter.filterMessage(message);
+    }
 
     /**
      * Version - 2 정규식
