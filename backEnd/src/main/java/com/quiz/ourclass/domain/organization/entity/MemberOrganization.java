@@ -28,6 +28,7 @@ public class MemberOrganization {
     @ManyToOne(fetch = FetchType.LAZY)
     Member member;
     double isolationPoint;
+    int isolationRank;
     int exp;
     int challengeCount;
     int relayCount;
@@ -47,5 +48,9 @@ public class MemberOrganization {
 
     public void updateIsolationPoint(double isolationPoint) {
         this.isolationPoint = isolationPoint;
+    }
+
+    public void updateIsolationRank(int isolationRank) {
+        this.isolationRank = isolationRank;
     }
 }

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,7 @@ public class SchedulingService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 30 3 * * *")
+    @Scheduled(cron = "0 15 3 * * *")
     protected void isolationScore() {
         List<Organization> organizations = organizationRepository.findAll();
 
@@ -105,6 +106,40 @@ public class SchedulingService {
                     .orElse(0.0);
 
                 updateIsolationScore(member, isolationScore);
+            }
+        }
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 30 3 * * *")
+    public void isolationRank() {
+        List<Organization> organizations = organizationRepository.findAll();
+
+        for (Organization organization : organizations) {
+            // isolationPoint 기준으로 내림차순 정렬
+            List<MemberOrganization> memberOrganizations = memberOrganizationRepository
+                .findAllByOrganizationOrderByMemberId(organization)
+                .stream()
+                .sorted(
+                    Comparator.comparingDouble(MemberOrganization::getIsolationPoint).reversed()
+                )
+                .toList();
+
+            // 순위 계산 및 업데이트
+            int rank = 1; // 현재 순위
+            int actualRank = 1; // 다음에 적용될 실제 순위
+            double lastPoint = Double.MAX_VALUE; // 이전 isolationPoint
+            for (MemberOrganization memberOrg : memberOrganizations) {
+                // 점수가 변경되면 순위 업데이트
+                if (memberOrg.getIsolationPoint() != lastPoint) {
+                    lastPoint = memberOrg.getIsolationPoint();
+                    rank = actualRank;
+                }
+                memberOrg.updateIsolationRank(rank);
+                memberOrganizationRepository.save(memberOrg);
+
+                // 실제 사용될 다음 순위 업데이트 (동 순위 고려)
+                actualRank++;
             }
         }
     }
