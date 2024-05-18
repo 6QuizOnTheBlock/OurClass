@@ -1,5 +1,6 @@
 package com.sixkids.domain.repository
 
+import com.sixkids.model.ChallengeGroup
 import com.sixkids.model.MatchingRoom
 
 interface GroupRepository {
@@ -12,4 +13,11 @@ interface GroupRepository {
     suspend fun joinGroup(key: String, joinStatus: Boolean)
 
     suspend fun createGroup(key: String): Long
+
+    suspend fun getMatchingGroup(
+        organizationId: Long,
+        minCount: Int,
+        matchingType: String,
+        members: List<Long>
+    ): List<ChallengeGroup>
 }
