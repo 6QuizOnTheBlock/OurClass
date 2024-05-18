@@ -165,6 +165,9 @@ fun MainScreen(
                 navigateToRank = {  },
                 navigateToChatting = navigator::navigateChatting,
                 navigateBack = navigator::popBackStack,
+                navigateToGreetingSender = navigator::navigateGreetingSender,
+                navigateToGreetingReceiver = navigator::navigateGreetingReceiver,
+                onBackClick = navigator::popBackStack,
             )
 
             studentChallengeNavGraph(

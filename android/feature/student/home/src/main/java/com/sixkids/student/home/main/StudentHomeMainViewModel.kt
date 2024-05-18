@@ -1,17 +1,15 @@
 package com.sixkids.student.home.main
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.domain.usecase.user.GetStudentHomeInfoUseCase
-import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
-import com.sixkids.model.PostCategory
-import com.sixkids.student.home.announce.announcelist.StudentAnnounceListEffect
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "D107"
 @HiltViewModel
 class StudentHomeMainViewModel @Inject constructor(
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
@@ -54,5 +52,14 @@ class StudentHomeMainViewModel @Inject constructor(
 
 
         }
+    }
+
+    fun showGreetingDialog(){
+        intent { copy(isShowGreetingDialog = true) }
+    }
+
+    fun offDialog(){
+        Log.d(TAG, "offDialog: ")
+        intent { copy(isShowGreetingDialog = false) }
     }
 }

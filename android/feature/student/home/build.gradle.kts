@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.sixkids.android.feature.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -35,4 +36,8 @@ dependencies {
     implementation(libs.krossbow.stomp.moshi)
 
     implementation(libs.bundles.paging)
+    
+    implementation(libs.kotlinx.serialization.json)
+    implementation(projects.core.nfc)
+
 }

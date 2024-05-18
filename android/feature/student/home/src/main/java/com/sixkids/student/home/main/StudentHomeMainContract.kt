@@ -1,7 +1,6 @@
 package com.sixkids.student.home.main
 
 import com.sixkids.model.MemberSimpleWithScore
-import com.sixkids.model.StudentHomeInfo
 import com.sixkids.ui.base.SideEffect
 import com.sixkids.ui.base.UiState
 
@@ -20,4 +19,5 @@ data class StudentHomeMainState(
     val studentClass: String = "",
     val studentExp: Int = 0,
     val bestFriendList: List<MemberSimpleWithScore> = emptyList(),
+    val isShowGreetingDialog: Boolean = false
 ): UiState
