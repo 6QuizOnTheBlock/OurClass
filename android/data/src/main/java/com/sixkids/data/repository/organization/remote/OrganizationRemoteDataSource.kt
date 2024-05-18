@@ -1,11 +1,11 @@
 package com.sixkids.data.repository.organization.remote
 
-import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
-import com.sixkids.data.network.ApiResult
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
-import retrofit2.http.Path
+import com.sixkids.model.StudentRelation
 
 interface OrganizationRemoteDataSource {
     suspend fun getClassList(): List<Organization>
@@ -19,6 +19,12 @@ interface OrganizationRemoteDataSource {
     suspend fun updateOrganization(organizationId: Int, name: String): String
 
     suspend fun getOrganizationInviteCode(organizationId: Int): String
-  
+
     suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple>
+
+    suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail
+
+    suspend fun getStudentRelation(orgId: Long, studentId: Long, limit: Int?): List<MemberSimpleWithScore>
+
+    suspend fun getStudentRelationDetail(orgId: Long, sourceStudentId: Long, targetStudentId: Long): StudentRelation
 }

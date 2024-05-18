@@ -31,7 +31,7 @@ enum class MainNavigationTab(
         route = HomeRoute.defaultRoute,
     ),
     BOARD(
-        iconId = R.drawable.board,
+        iconId = R.drawable.ic_board,
         iconTint = Blue,
         labelId = R.string.bottom_navigation_tab_label_board,
         route = BoardRoute.defaultRoute,
@@ -55,7 +55,7 @@ enum class MainNavigationTab(
         route = StudentHomeRoute.defaultRoute,
     ),
     STUDENT_BOARD(
-        iconId = R.drawable.board,
+        iconId = R.drawable.ic_board,
         iconTint = Blue,
         labelId = R.string.bottom_navigation_tab_label_board,
         route = StudentBoardRoute.defaultRoute,

@@ -1,16 +1,21 @@
 package com.sixkids.data.repository.organization.remote
 
+import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.model.response.toModel
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
+import com.sixkids.model.StudentRelation
 import javax.inject.Inject
 
 class OrganizationRemoteDataSourceImpl @Inject constructor(
-    private val organizationService: OrganizationService
+    private val organizationService: OrganizationService,
+    private val memberOrgService: MemberOrgService
 ) : OrganizationRemoteDataSource {
     override suspend fun getClassList(): List<Organization> {
         return organizationService.getOrganizationList().getOrThrow().data.map { it.toModel() }
@@ -40,5 +45,25 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
     
     override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
         return organizationService.getOrganizationMembers(orgId).getOrThrow().data.map { it.toModel() }
+    }
+
+    override suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail {
+        return memberOrgService.getMemberDetail(orgId, studentId).getOrThrow().data.toModel()
+    }
+
+    override suspend fun getStudentRelation(
+        orgId: Long,
+        studentId: Long,
+        limit: Int?
+    ): List<MemberSimpleWithScore> {
+        return memberOrgService.getRelationSimple(orgId, studentId.toInt(), limit).getOrThrow().data.map { it.toModel() }
+    }
+
+    override suspend fun getStudentRelationDetail(
+        orgId: Long,
+        sourceStudentId: Long,
+        targetStudentId: Long
+    ): StudentRelation {
+        return memberOrgService.getRelationDetail(orgId, sourceStudentId.toInt(), targetStudentId.toInt()).getOrThrow().data.toModel()
     }
 }

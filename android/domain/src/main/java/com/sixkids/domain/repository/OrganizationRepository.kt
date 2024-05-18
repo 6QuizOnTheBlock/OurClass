@@ -1,8 +1,11 @@
 package com.sixkids.domain.repository
 
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
+import com.sixkids.model.StudentRelation
 
 interface OrganizationRepository {
     suspend fun getClassList(): List<Organization>
@@ -23,6 +26,12 @@ interface OrganizationRepository {
     suspend fun saveSelectedOrganizationName(organizationName: String)
 
     suspend fun loadSelectedOrganizationName(): String
-  
+
     suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple>
+
+    suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail
+
+    suspend fun getStudentRelation(orgId: Long, studentId: Long, limit: Int?): List<MemberSimpleWithScore>
+
+    suspend fun getStudentRelationDetail(orgId: Long, sourceStudentId: Long, targetStudentId: Long): StudentRelation
 }

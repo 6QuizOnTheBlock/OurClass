@@ -134,6 +134,7 @@ fun MainScreen(
             manageStudentNavGraph(
                 padding = innerPadding,
                 navigateToStudentDetail = navigator::navigateManageStudentDetail,
+                handleException = viewModel::handleException,
             )
 
             signInNavGraph(

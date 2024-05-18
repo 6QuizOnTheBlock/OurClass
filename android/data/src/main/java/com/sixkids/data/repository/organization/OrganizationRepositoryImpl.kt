@@ -4,9 +4,12 @@ import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberSimple
+import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
+import com.sixkids.model.StudentRelation
 import javax.inject.Inject
 
 class OrganizationRepositoryImpl @Inject constructor(
@@ -58,8 +61,28 @@ class OrganizationRepositoryImpl @Inject constructor(
     override suspend fun loadSelectedOrganizationName(): String {
         return organizationLocalDataSource.getSelectedOrganizationName()
     }
-    
+
     override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
         return organizationRemoteDataSource.getOrganizationMembers(orgId)
+    }
+
+    override suspend fun getStudentDetail(orgId: Long, studentId: Long): MemberDetail {
+        return organizationRemoteDataSource.getStudentDetail(orgId, studentId)
+    }
+
+    override suspend fun getStudentRelation(
+        orgId: Long,
+        studentId: Long,
+        limit: Int?
+    ): List<MemberSimpleWithScore> {
+        return organizationRemoteDataSource.getStudentRelation(orgId, studentId, limit)
+    }
+
+    override suspend fun getStudentRelationDetail(
+        orgId: Long,
+        sourceStudentId: Long,
+        targetStudentId: Long
+    ): StudentRelation {
+        return organizationRemoteDataSource.getStudentRelationDetail(orgId, sourceStudentId, targetStudentId)
     }
 }
