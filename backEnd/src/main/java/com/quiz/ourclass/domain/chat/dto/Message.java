@@ -36,6 +36,10 @@ public class Message implements Serializable {
         this.readCount = readCount;
     }
 
+    public void convertContent(String content) {
+        this.content = content;
+    }
+
     public Chat convertEntity() {
         return Chat.builder()
             .roomId(roomId)
