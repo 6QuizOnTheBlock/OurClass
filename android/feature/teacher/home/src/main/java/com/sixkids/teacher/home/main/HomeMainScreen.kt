@@ -1,5 +1,6 @@
 package com.sixkids.teacher.home.main
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,34 +11,61 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Purple
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.designsystem.theme.component.card.ContentAligment
 import com.sixkids.designsystem.theme.component.card.ContentCard
 import com.sixkids.designsystem.theme.component.card.ContentVerticalCard
 import com.sixkids.teacher.home.component.TeacherInfo
+import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
 fun HomeMainRoute(
+    viewModel: HomeMainViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateToRank: () -> Unit,
     navigateToChallenge: () -> Unit,
-    navigateToRelay: () -> Unit
+    navigateToRelay: () -> Unit,
+    navigateToQuiz: () -> Unit
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is HomeMainEffect.NavigateToRanking -> navigateToRank()
+        }
+    }
+
+
+    LaunchedEffect(Unit) {
+        viewModel.loadUserInfo()
+        viewModel.loadSelectedOrganizationName()
+    }
+
     Box(
         modifier = Modifier
             .padding(padding)
             .fillMaxSize()
     ) {
         HomeMainScreen(
+            homeMainState = uiState,
             navigateToRank = navigateToRank,
             navigateToChallenge = navigateToChallenge,
             navigateToRelay = navigateToRelay
@@ -56,9 +84,20 @@ fun HomeMainScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp),
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+            .verticalScroll(ScrollState(0)),
     ) {
-        TeacherInfo(teacherName = "홍유준")
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = homeMainState.classString,
+            style = UlbanTypography.titleMedium,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TeacherInfo(
+            teacherName = homeMainState.teacherName,
+            teacherImageUrl = homeMainState.teacherImageUrl
+        )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
             modifier = Modifier.fillMaxWidth(),
@@ -66,7 +105,6 @@ fun HomeMainScreen(
             cardColor = Cream,
             contentName = "이어 달리기",
             contentImageId = R.drawable.relay,
-            runningState = homeMainState.runningRelayState,
             onclick = navigateToRelay
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -76,7 +114,6 @@ fun HomeMainScreen(
             cardColor = Red,
             contentName = "함께 달리기",
             contentImageId = R.drawable.hifive,
-            runningState = homeMainState.runningTogetherState,
             onclick = navigateToChallenge
         )
         Row {
@@ -96,7 +133,7 @@ fun HomeMainScreen(
                     .weight(1f)
                     .aspectRatio(1f),
                 cardColor = Purple,
-                imageDrawable = R.drawable.rank,
+                imageDrawable = R.drawable.quiz,
                 text = "퀴즈",
                 onClick = { }
             )
@@ -109,6 +146,11 @@ fun HomeMainScreen(
 @Preview(showBackground = true)
 fun HomeMainScreenPreview() {
     UlbanTheme {
-        HomeMainScreen()
+        HomeMainScreen(
+            homeMainState = HomeMainState(
+                classString = "구미 초등학교 1학년 1반",
+                teacherName = "홍유준"
+            )
+        )
     }
 }

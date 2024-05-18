@@ -37,7 +37,12 @@ class ClassSettingViewModel @Inject constructor(
             loadSelectedOrganizationNameUseCase()
                 .onSuccess {
                     intent { copy(classString = it.replace("\n"," ")) }
-                    separateClassString(it)
+                    if (it.isNotBlank()){
+                        separateClassString(it)
+                    } else {
+                        postSideEffect(ClassSettingEffect.onShowSnackBar("학급 정보를 불러오는데 실패했습니다. ;("))
+                        postSideEffect(ClassSettingEffect.navigateBack)
+                    }
                 }
                 .onFailure {
                     postSideEffect(ClassSettingEffect.onShowSnackBar("학급 정보를 불러오는데 실패했습니다. ;("))
@@ -79,6 +84,7 @@ class ClassSettingViewModel @Inject constructor(
     }
 
     private fun separateClassString(classString: String){
+        Log.d(TAG, "separateClassString: $classString")
         var school_name = ""
         var grade = 0
         var classNumber = 0

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.organization.GetOrganizationListUseCase
 import com.sixkids.domain.usecase.organization.SaveSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.organization.SaveSelectedOrganizationNameUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
 import com.sixkids.domain.usecase.user.UpdateFCMTokenUseCase
 import com.sixkids.ui.SnackbarToken
@@ -19,6 +20,7 @@ class OrganizationViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getOrganizationListUseCase: GetOrganizationListUseCase,
     private val saveSelectedOrganizationIdUseCase: SaveSelectedOrganizationIdUseCase,
+    private val saveSelectedOrganizationNameUseCase: SaveSelectedOrganizationNameUseCase,
     private val updateFCMTokenUseCase: UpdateFCMTokenUseCase
 ) : BaseViewModel<OrganizationListState, OrganizationListEffect>(OrganizationListState()) {
 
@@ -57,6 +59,9 @@ class OrganizationViewModel @Inject constructor(
     fun organizationClick(id: Int){
         viewModelScope.launch {
             saveSelectedOrganizationIdUseCase(id)
+            currentState.organizationList.find { it.id == id }?.let {
+                saveSelectedOrganizationNameUseCase(it.name)
+            }
             postSideEffect(OrganizationListEffect.NavigateToHome)
         }
     }
