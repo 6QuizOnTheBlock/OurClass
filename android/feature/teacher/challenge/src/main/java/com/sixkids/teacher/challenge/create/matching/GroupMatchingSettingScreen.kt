@@ -15,13 +15,15 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.button.UlbanFilledButton
-import com.sixkids.designsystem.component.checkbox.TextCheckBox
+import com.sixkids.designsystem.component.checkbox.TextRadioButton
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Gray
@@ -42,6 +44,9 @@ fun GroupMatchingSettingScreen(
     state: GroupMatchingSettingState = GroupMatchingSettingState(),
     onNextButtonClick: () -> Unit = {}
 ) {
+    val radioOptions = MatchingType.entries
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,21 +57,15 @@ fun GroupMatchingSettingScreen(
             style = UlbanTypography.titleSmall
         )
         Spacer(modifier = Modifier.height(20.dp))
-        TextCheckBox(
-            checked = state.isFriendly,
-            text = stringResource(id = R.string.matching_friendly_type)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        TextCheckBox(
-            checked = state.isUnfriendly,
-            text = stringResource(id = R.string.matching_unfriendly_type)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        TextCheckBox(
-            checked = state.isRandom,
-            text = stringResource(id = R.string.matching_random_type)
-        )
-        Spacer(modifier = Modifier.height(20.dp))
+        radioOptions.forEach { option ->
+            TextRadioButton(
+                selected = selectedOption == option,
+                onClick = { onOptionSelected(option) },
+                text = stringResource(id = option.textRes),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -90,14 +89,14 @@ fun GroupMatchingSettingScreen(
         // 학생 목록
         LazyVerticalGrid(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .weight(1f),
             columns = GridCells.Fixed(4),
-
-        ) {
+            ) {
             items(state.studentList.size) { index ->
                 Card(
-                    modifier = Modifier.wrapContentSize().padding(bottom = 8.dp),
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(bottom = 8.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Cream
                     ),
@@ -132,7 +131,6 @@ fun GroupMatchingSettingScreen(
 fun GroupMatchingSettingScreenPreview() {
     GroupMatchingSettingScreen(
         state = GroupMatchingSettingState(
-            isFriendly = true,
             studentList = List(30) {
                 MemberSimple(
                     id = it.toLong(),

@@ -31,6 +31,6 @@
     <string name="matching_random_type">랜덤으로 매칭할게요</string>
     <string name="matching_friendly_type">친한 친구들끼리 매칭할게요</string>
     <string name="matching_unfriendly_type">친하지 않은 친구들끼리 매칭할게요</string>
-    <string name="matching_choice_student">포함하지 않을 학생들을 선택해주세요</string>
+    <string name="matching_choice_student">포함할 학생들을 선택해 주세요</string>
     <string name="matching_success">그룹이 매칭됐습니다</string>
 </resources>
