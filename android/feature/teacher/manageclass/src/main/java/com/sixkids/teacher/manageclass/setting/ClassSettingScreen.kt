@@ -11,24 +11,55 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.RedDark
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.teacher.manageclass.R
+import com.sixkids.teacher.manageclass.setting.component.SimpleNumberOutlinedTextField
 import com.sixkids.teacher.manageclass.setting.component.SimpleOutlinedTextField
+import com.sixkids.ui.SnackbarToken
+import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun ClassSettingRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    viewModel: ClassSettingViewModel = hiltViewModel(),
+    navigateBack: () -> Unit,
+    onShowSnackBar: (SnackbarToken) -> Unit
 ) {
-    ClassSettingScreen()
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it){
+            ClassSettingEffect.navigateBack -> navigateBack()
+            is ClassSettingEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(it.message))
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.loadSelectedOrganizationName()
+    }
+
+    ClassSettingScreen(
+        classSettingState = uiState,
+        cancelButtonOnClick = navigateBack,
+        confirmButtonOnClick = viewModel::updateClassName,
+        onSchoolTextChange = viewModel::onSchoolNameChanged,
+        onGradeTextChange = viewModel::onGradeChanged,
+        onClassNumberTextChange = viewModel::onClassNumberChanged
+    )
 }
 
 @Composable
@@ -36,8 +67,14 @@ fun ClassSettingScreen(
     modifier: Modifier = Modifier,
     classSettingState: ClassSettingState = ClassSettingState(),
     cancelButtonOnClick: () -> Unit = {},
-    confirmButtonOnClick: () -> Unit = {}
+    confirmButtonOnClick: () -> Unit = {},
+    onSchoolTextChange: (String) -> Unit = {},
+    onGradeTextChange: (String) -> Unit = {},
+    onClassNumberTextChange: (String) -> Unit = {}
 ) {
+    val gradeString = classSettingState.grade?.toString() ?: ""
+    val classNumberString = classSettingState.classNumber?.toString() ?: ""
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -64,6 +101,8 @@ fun ClassSettingScreen(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(4.dp),
+                text = classSettingState.schoolName,
+                onTextChange = onSchoolTextChange
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -71,10 +110,13 @@ fun ClassSettingScreen(
                 style = UlbanTypography.bodyLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
-            SimpleOutlinedTextField(
+            SimpleNumberOutlinedTextField(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(4.dp),
+                text = gradeString,
+                postfix = stringResource(id = R.string.setting_class_grade),
+                onTextChange = {onGradeTextChange(it)}
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -82,10 +124,13 @@ fun ClassSettingScreen(
                 style = UlbanTypography.bodyLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
-            SimpleOutlinedTextField(
+            SimpleNumberOutlinedTextField(
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(4.dp),
+                text = classNumberString,
+                postfix = stringResource(id = R.string.setting_class_class_number),
+                onTextChange = {onClassNumberTextChange(it)}
             )
             Spacer(modifier = Modifier.height(30.dp))
             Row {
@@ -100,7 +145,7 @@ fun ClassSettingScreen(
                 UlbanFilledButton(
                     modifier = Modifier.weight(1f),
                     text = stringResource(id = R.string.ok),
-                    onClick = cancelButtonOnClick,
+                    onClick = confirmButtonOnClick,
                 )
             }
         }

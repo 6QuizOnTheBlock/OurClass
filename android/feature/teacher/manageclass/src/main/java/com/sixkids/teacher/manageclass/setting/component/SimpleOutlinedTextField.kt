@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.textfield.UlbanBasicTextField
+import com.sixkids.designsystem.component.textfield.UlbanNumberTextField
 
 @Composable
 fun SimpleOutlinedTextField(
@@ -30,6 +31,30 @@ fun SimpleOutlinedTextField(
             text = text,
             hint = hint,
             onTextChange = onTextChange,
+        )
+    }
+}
+
+@Composable
+fun SimpleNumberOutlinedTextField(
+    modifier: Modifier = Modifier,
+    text : String = "",
+    hint: String = "",
+    postfix: String = "",
+    onTextChange: (String) -> Unit = {}
+) {
+    Card(
+        modifier = Modifier.border(1.dp, Color.Gray, RoundedCornerShape(6.dp)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        )
+    ) {
+        UlbanNumberTextField(
+            modifier = modifier,
+            text = text,
+            hint = hint,
+            onTextChange = onTextChange,
+            postfix = postfix
         )
     }
 }

@@ -16,16 +16,19 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun `학급_문자열_정규식_활용_파싱_테스트`(){
-        val text = "3 학년, 4학년, 그리고 12 학년이 있습니다."
-        val regex = "[\\d+]\\s*학년".toRegex() // 정규 표현식으로 변환
+    fun `학급_문자열__파싱_테스트`(){
+        //when
+        val text = "구미 초등학교\n2학년 3반"
 
 
-        // 정규식을 사용하여 매치되는 모든 결과를 찾기
-        val matches = regex.findAll(text)
+        val school_name = text.split("\n")[0]
+        val grade = text.split("\n")[1].split("학년")[0].toInt()
+        val classNumber = text.split("\n")[1].split(" ")[1].split("반")[0].toInt()
 
-        matches.forEach {
-            it.groupValues
-        }
+        //then
+        assertEquals("구미 초등학교", school_name)
+        assertEquals(2, grade)
+        assertEquals(3, classNumber)
+
     }
 }

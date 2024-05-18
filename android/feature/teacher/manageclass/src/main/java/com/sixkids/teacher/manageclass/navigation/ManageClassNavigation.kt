@@ -9,6 +9,7 @@ import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterEffect
 import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterRoute
 import com.sixkids.teacher.manageclass.invite.ClassInviteRoute
 import com.sixkids.teacher.manageclass.main.ManageClassMainRoute
+import com.sixkids.teacher.manageclass.setting.ClassSettingRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateManageClass(navOptions: NavOptions) {
@@ -23,6 +24,10 @@ fun NavController.navigateInvite() {
     navigate(ManageClassRoute.inviteRoute)
 }
 
+fun NavController.navigateClassSetting() {
+    navigate(ManageClassRoute.settingRoute)
+}
+
 fun NavGraphBuilder.manageClassNavGraph(
     padding: PaddingValues,
     onShowSnackBar: (SnackbarToken) -> Unit,
@@ -30,6 +35,7 @@ fun NavGraphBuilder.manageClassNavGraph(
     navigateToClassSetting: () -> Unit,
     navigateToChattingFilter: () -> Unit,
     navigateToInvite: () -> Unit,
+    navigateBack: () -> Unit
 ) {
     composable(route = ManageClassRoute.defaultRoute){
         ManageClassMainRoute(
@@ -51,6 +57,14 @@ fun NavGraphBuilder.manageClassNavGraph(
         ClassInviteRoute(
             padding = padding,
             onShowSnackBar = onShowSnackBar
+        )
+    }
+
+    composable(ManageClassRoute.settingRoute){
+        ClassSettingRoute(
+            padding = padding,
+            onShowSnackBar = onShowSnackBar,
+            navigateBack = navigateBack
         )
     }
 }
