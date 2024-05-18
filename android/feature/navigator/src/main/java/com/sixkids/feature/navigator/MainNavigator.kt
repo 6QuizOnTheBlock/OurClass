@@ -23,6 +23,8 @@ import com.sixkids.student.home.navigation.StudentHomeRoute
 import com.sixkids.student.home.navigation.navigateStudentAnnounceDetail
 import com.sixkids.student.home.navigation.navigateStudentAnnounceList
 import com.sixkids.student.home.navigation.navigateStudentChatting
+import com.sixkids.student.home.navigation.navigateStudentGreetingReceiver
+import com.sixkids.student.home.navigation.navigateStudentGreetingSender
 import com.sixkids.student.home.navigation.navigateStudentHome
 import com.sixkids.student.main.navigation.navigateJoinOrganization
 import com.sixkids.student.main.navigation.navigateStudentOrganizationList
@@ -238,6 +240,14 @@ class MainNavigator(
 
     fun navigateStudentAnnounceDetail(announceId: Long) {
         navController.navigateStudentAnnounceDetail(announceId)
+    }
+
+    fun navigateGreetingSender(){
+        navController.navigateStudentGreetingSender()
+    }
+
+    fun navigateGreetingReceiver(){
+        navController.navigateStudentGreetingReceiver()
     }
 
     /**

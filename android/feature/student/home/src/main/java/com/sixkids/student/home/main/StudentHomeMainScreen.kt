@@ -1,5 +1,7 @@
 package com.sixkids.student.home.main
 
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,10 +36,12 @@ import com.sixkids.designsystem.theme.component.card.ContentVerticalCard
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.student.home.R
+import com.sixkids.student.home.main.component.GreetingDialog
 import com.sixkids.student.home.main.component.StudentMainInfo
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.designsystem.R as UlbanRes
 
+private const val TAG = "D107"
 @Composable
 fun StudentHomeMainRoute(
     viewModel: StudentHomeMainViewModel = hiltViewModel(),
@@ -46,6 +50,8 @@ fun StudentHomeMainRoute(
     navigateToTagHello: () -> Unit,
     navigateToRank: () -> Unit,
     navigateToChatting: () -> Unit,
+    navigateToGreetingSender: () -> Unit,
+    navigateToGreetingReceiver: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,15 +73,29 @@ fun StudentHomeMainRoute(
     }
 
     Box(
-        modifier = Modifier.padding(padding)
+        modifier = Modifier
+            .padding(padding)
+            .fillMaxSize()
     ) {
         StudentHomeMainScreen(
             studentHomeMainState = uiState,
             announceCardOnClick = navigateToAnnounce,
-            tagHelloCardOnClick = navigateToTagHello,
             chattingCardOnClick = navigateToChatting,
-            rankCardOnClick = navigateToRank
+            rankCardOnClick = navigateToRank,
+            showGreetingDialog =  viewModel::showGreetingDialog,
         )
+        if (uiState.isShowGreetingDialog) {
+            BackHandler(enabled = true) {
+                Log.d(TAG, "BackHandler triggered")
+                viewModel.offDialog()
+            }
+
+            GreetingDialog(
+                senderClick = navigateToGreetingSender,
+                receiverClick = navigateToGreetingReceiver,
+                cancelClick = viewModel::offDialog
+            )
+        }
     }
 }
 
@@ -84,9 +104,9 @@ fun StudentHomeMainScreen(
     modifier: Modifier = Modifier,
     studentHomeMainState: StudentHomeMainState = StudentHomeMainState(),
     announceCardOnClick: () -> Unit = {},
-    tagHelloCardOnClick: () -> Unit = {},
     chattingCardOnClick: () -> Unit = {},
-    rankCardOnClick: () -> Unit = {}
+    rankCardOnClick: () -> Unit = {},
+    showGreetingDialog: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -119,7 +139,7 @@ fun StudentHomeMainScreen(
                 cardColor = Blue,
                 imageDrawable = UlbanRes.drawable.tag_hello,
                 text = stringResource(id = R.string.student_home_main_hi),
-                onClick = tagHelloCardOnClick
+                onClick = showGreetingDialog
             )
         }
         Spacer(modifier = Modifier.height(20.dp))

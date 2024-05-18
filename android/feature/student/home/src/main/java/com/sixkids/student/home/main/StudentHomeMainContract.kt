@@ -20,4 +20,5 @@ data class StudentHomeMainState(
     val studentClass: String = "",
     val studentExp: Int = 0,
     val bestFriendList: List<MemberSimpleWithScore> = emptyList(),
+    val isShowGreetingDialog: Boolean = false
 ): UiState
