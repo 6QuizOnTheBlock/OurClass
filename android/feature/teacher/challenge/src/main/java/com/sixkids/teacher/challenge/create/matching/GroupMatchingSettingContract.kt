@@ -3,10 +3,15 @@ package com.sixkids.teacher.challenge.create.matching
 import androidx.annotation.StringRes
 import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.challenge.R
+import com.sixkids.ui.base.SideEffect
+import com.sixkids.ui.base.UiState
 
 data class GroupMatchingSettingState(
     val studentList: List<MemberSimple> = emptyList()
-)
+) : UiState
+
+sealed interface GroupMatchingSettingEffect: SideEffect {
+}
 
 enum class MatchingType(
     @StringRes val textRes: Int
