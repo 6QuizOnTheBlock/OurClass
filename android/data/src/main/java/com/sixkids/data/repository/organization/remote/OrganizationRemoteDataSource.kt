@@ -1,14 +1,11 @@
 package com.sixkids.data.repository.organization.remote
 
-import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
-import com.sixkids.data.network.ApiResult
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
 import com.sixkids.model.StudentRelation
-import retrofit2.http.Path
 
 interface OrganizationRemoteDataSource {
     suspend fun getClassList(): List<Organization>

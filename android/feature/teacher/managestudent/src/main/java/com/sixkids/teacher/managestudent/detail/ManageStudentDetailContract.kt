@@ -1,7 +1,6 @@
 package com.sixkids.teacher.managestudent.detail
 
 import com.sixkids.model.MemberDetail
-import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.StudentRelation
 import com.sixkids.ui.base.SideEffect
