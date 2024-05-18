@@ -8,6 +8,8 @@ import com.sixkids.data.repository.chattingfilter.remote.ChattingFilterRemoteDat
 import com.sixkids.data.repository.chattingfilter.remote.ChattingFilterRemoteDataSourceImpl
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSource
 import com.sixkids.data.repository.comment.remote.CommentRemoteDataSourceImpl
+import com.sixkids.data.repository.group.remote.GroupDataSource
+import com.sixkids.data.repository.group.remote.GroupDataSourceImpl
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourceImpl
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
@@ -77,4 +79,9 @@ abstract class DataSourceModule {
     abstract fun bindChattingFilterRemoteDataSource(
         chattingFilterRemoteDataSource: ChattingFilterRemoteDataSourceImpl
     ): ChattingFilterRemoteDataSource
+  
+    @Binds
+    abstract fun bindGroupDataSource(
+        groupDataSource: GroupDataSourceImpl
+    ): GroupDataSource
 }

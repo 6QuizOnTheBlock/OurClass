@@ -1,5 +1,6 @@
 package com.sixkids.student.relay.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,29 +41,33 @@ import com.sixkids.student.relay.R
 import com.sixkids.ui.util.formatToMonthDayTime
 import com.sixkids.designsystem.R as DesignSystemR
 
+private const val TAG = "D107"
 @Composable
 fun RelayRoute(
     viewModel: RelayHistoryViewModel = hiltViewModel(),
+    padding: PaddingValues,
     navigateToDetail: (Long) -> Unit,
     navigateToCreate: () -> Unit,
+    navigateToAnswer: (Long) -> Unit,
+    navigateToTaggingReceiver: (Long) -> Unit,
     navigateToJoin: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
+        Log.d(TAG, "RelayRoute: ")
         viewModel.initData()
     }
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is RelayHistoryEffect.NavigateToRelayDetail -> navigateToDetail(
-                    sideEffect.relayId
-                )
-
+                is RelayHistoryEffect.NavigateToRelayDetail -> navigateToDetail(sideEffect.relayId)
                 is RelayHistoryEffect.NavigateToCreateRelay -> navigateToCreate()
                 is RelayHistoryEffect.NavigateToJoinRelay -> navigateToJoin()
+                is RelayHistoryEffect.NavigateToAnswerRelay -> navigateToAnswer(sideEffect.relayId)
+                is RelayHistoryEffect.NavigateToTaggingReceiverRelay -> navigateToTaggingReceiver(sideEffect.relayId)
                 is RelayHistoryEffect.HandleException -> handleException(
                     sideEffect.throwable,
                     sideEffect.retry
@@ -73,20 +78,34 @@ fun RelayRoute(
 
     RelayHistoryScreen(
         uiState = uiState,
+        padding = padding,
         relayItems = viewModel.relayHistory?.collectAsLazyPagingItems(),
         navigateToDetail = { relayId ->
             viewModel.navigateToRelayDetail(relayId)
         },
-        navigateToCreate = navigateToCreate
+        navigateToCreate = navigateToCreate,
+        navigateToAnswer = { relayId ->
+            viewModel.navigateToAnswerRelay(relayId)
+        },
+        navigateToTaggingReceiver = { relayId ->
+            viewModel.navigateToTaggingReceiverRelay(relayId)
+        },
+        updateTotalCount = {
+            viewModel.updateTotalCount(it)
+        }
     )
 }
 
 @Composable
 fun RelayHistoryScreen(
     uiState: RelayHistoryState = RelayHistoryState(),
+    padding: PaddingValues = PaddingValues(0.dp),
     relayItems: LazyPagingItems<Relay>? = null,
     navigateToDetail: (Long) -> Unit = {},
     navigateToCreate: () -> Unit = {},
+    navigateToAnswer: (Long) -> Unit = {},
+    navigateToTaggingReceiver: (Long) -> Unit = {},
+    updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -94,7 +113,10 @@ fun RelayHistoryScreen(
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 100
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(padding)) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -120,7 +142,7 @@ fun RelayHistoryScreen(
                         R.string.relay_answer_not_myturn
                     ),
                     color = Orange,
-                    onclick = {},
+                    onclick = { if (currentRelay.myTurnStatus) navigateToAnswer(currentRelay.id) else navigateToTaggingReceiver(currentRelay.id) },
                     expanded = !isScrolled,
                 )
             }
@@ -161,6 +183,8 @@ fun RelayHistoryScreen(
                     ) {
                         items(relayItems.itemCount) { index ->
                             relayItems[index]?.let { relay ->
+                                if (index == 0)
+                                    updateTotalCount(relay.totalCount)
                                 UlbanRelayItem(
                                     startDate = relay.startTime,
                                     endDate = relay.endTime,

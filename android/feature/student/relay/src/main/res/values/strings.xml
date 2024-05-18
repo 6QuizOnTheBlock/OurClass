@@ -9,10 +9,13 @@
     <string name="relay_relay_count">지금까지  %d번 이어 달리기를 진행했어요</string>
     <string name="relay_no_history">기록이 없어요</string>
     <string name="relay_detail_last_member">%s 학생이 폭탄을 터트렸어요</string>
-    <string name="relay_detail_total_count">지금까지 %d번 이어 달리기를 진행했어요</string>
+    <string name="relay_detail_total_count">%d명 학생이 참여했어요</string>
     <string name="relay_create_topsection">이어 달리기 만들기</string>
     <string name="relay_create_question">다음 친구가 대답할 질문을 작성해 주세요</string>
     <string name="relay_create_question_hint">질문을 작성해 주세요</string>
     <string name="relay_create_create">만들기</string>
     <string name="create_relay_success">새로운\n이어 달리기가 만들어졌습니다!</string>
+    <string name="relay_answer_title">이어 달리기 참여하기</string>
+    <string name="button_next">다음</string>
+    <string name="relay_answer_pre_question">내가 받은 질문</string>
 </resources>

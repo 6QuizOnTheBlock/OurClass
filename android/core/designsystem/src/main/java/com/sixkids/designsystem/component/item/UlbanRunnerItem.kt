@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +45,7 @@ fun UlbanRunnerItem(
     color: Color = Cream
 ) {
     Column(modifier = modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(modifier = Modifier.wrapContentSize()) {
+        Box(modifier = Modifier.wrapContentSize().padding(bottom = 10.dp)) {
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = color
@@ -64,7 +65,8 @@ fun UlbanRunnerItem(
                         model = memberPhoto,
                         placeholder = painterResource(id = R.drawable.student_boy),
                         contentDescription = null,
-                        modifier = Modifier.size(80.dp)
+                        modifier = Modifier.size(80.dp),
+                        contentScale = ContentScale.Crop
                     )
                     Column(
                         modifier = Modifier.padding(start = 16.dp),
@@ -86,7 +88,7 @@ fun UlbanRunnerItem(
                         Text(
                             text = question,
                             style = UlbanTypography.bodyMedium,
-                            maxLines = 1,
+                            maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
                     }

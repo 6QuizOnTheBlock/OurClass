@@ -1,5 +1,6 @@
 package com.sixkids.data.model.response
 
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.RelayQuestion
 import java.time.LocalDateTime
 
@@ -27,4 +28,10 @@ internal fun RunnerResponse.toModel() = RelayQuestion(
     question = question,
     turn = turn,
     endStatus = endStatus,
+)
+
+internal fun MemberSimpleResponse.toModel() = MemberSimple(
+    id = id,
+    name = name,
+    photo = photo,
 )

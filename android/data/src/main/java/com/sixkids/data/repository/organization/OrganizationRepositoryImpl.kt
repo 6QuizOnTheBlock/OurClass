@@ -5,6 +5,7 @@ import com.sixkids.data.repository.organization.local.OrganizationLocalDataSourc
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
 import com.sixkids.model.ClassSummary
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 import javax.inject.Inject
 
@@ -56,5 +57,9 @@ class OrganizationRepositoryImpl @Inject constructor(
 
     override suspend fun loadSelectedOrganizationName(): String {
         return organizationLocalDataSource.getSelectedOrganizationName()
+    }
+    
+    override suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple> {
+        return organizationRemoteDataSource.getOrganizationMembers(orgId)
     }
 }

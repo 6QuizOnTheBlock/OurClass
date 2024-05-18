@@ -6,6 +6,7 @@ import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.model.response.OrganizationInviteCodeResponse
 import com.sixkids.data.model.response.OrganizationNameResponse
+import com.sixkids.data.model.response.OrganizationMemberResponse
 import com.sixkids.data.model.response.OrganizationResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
@@ -43,4 +44,8 @@ interface OrganizationService {
         @Path(value = "id") organizationId: Int
     ): ApiResult<ApiResponse<OrganizationInviteCodeResponse>>
 
+    @GET("organizations/{id}/members")
+    suspend fun getOrganizationMembers(
+        @Path(value = "id") orgId: Int
+    ): ApiResult<ApiResponse<List<OrganizationMemberResponse>>>
 }

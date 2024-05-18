@@ -2,12 +2,18 @@ package com.sixkids.student.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.sixkids.model.GroupType
 import com.sixkids.student.group.create.CreateGroupRoute
 import com.sixkids.student.group.join.JoinGroupRoute
 
-fun NavController.navigateStudentGroupCreate() {
-    navigate(GroupRoute.creatGroupRoute)
+fun NavController.navigateStudentGroupCreate(
+    challengeId: Long,
+    groupType: GroupType
+) {
+    navigate(GroupRoute.createGroupRoute(challengeId, groupType))
 }
 
 fun NavController.navigateStudentGroupJoin() {
@@ -15,17 +21,35 @@ fun NavController.navigateStudentGroupJoin() {
 }
 
 fun NavGraphBuilder.studentGroupNavGraph(
+    navigateToChallengeHistory: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
-    composable(route = GroupRoute.creatGroupRoute) {
-        CreateGroupRoute()
+    composable(
+        route = GroupRoute.creatGroupRoute,
+        arguments = listOf(navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType })
+    ) {
+        CreateGroupRoute(
+            navigateToChallengeHistory = navigateToChallengeHistory,
+            handleException = handleException
+        )
     }
     composable(route = GroupRoute.joinGroupRoute) {
-        JoinGroupRoute()
+        JoinGroupRoute(
+            navigateToChallengeHistory = navigateToChallengeHistory,
+            handleException = handleException
+        )
     }
 }
 
 object GroupRoute {
-    const val creatGroupRoute = "student/group/create"
+
+    const val CHALLENGE_ID_NAME = "challengeId"
+    const val GROUP_TYPE_NAME = "groupType"
+
+    const val creatGroupRoute = "student/group/create?challengeId={$CHALLENGE_ID_NAME}?groupType={$GROUP_TYPE_NAME}"
     const val joinGroupRoute = "student/group/join"
+
+    fun createGroupRoute(challengeId: Long, groupType: GroupType): String {
+        return "student/group/create?challengeId=$challengeId?groupType=$groupType"
+    }
 }

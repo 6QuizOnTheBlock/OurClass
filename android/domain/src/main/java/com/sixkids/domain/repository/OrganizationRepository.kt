@@ -1,6 +1,7 @@
 package com.sixkids.domain.repository
 
 import com.sixkids.model.ClassSummary
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 
 interface OrganizationRepository {
@@ -22,4 +23,6 @@ interface OrganizationRepository {
     suspend fun saveSelectedOrganizationName(organizationName: String)
 
     suspend fun loadSelectedOrganizationName(): String
+  
+    suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple>
 }

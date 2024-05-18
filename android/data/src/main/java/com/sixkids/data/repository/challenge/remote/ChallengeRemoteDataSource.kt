@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.challenge.remote
 
+import com.sixkids.data.model.response.RunningChallengeByStudentResponse
 import com.sixkids.model.AcceptStatus
 import com.sixkids.model.Challenge
 import com.sixkids.model.ChallengeDetail
@@ -10,6 +11,8 @@ import java.time.LocalDateTime
 interface ChallengeRemoteDataSource {
 
     suspend fun getRunningChallenges(organizationId: Int): RunningChallenge
+
+    suspend fun getRunningChallengesByStudent(organizationId: Int): RunningChallengeByStudentResponse
 
     suspend fun createChallenge(
         organizationId: Int,

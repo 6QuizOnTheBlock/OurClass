@@ -3,6 +3,7 @@ package com.sixkids.data.repository.organization.remote
 import com.sixkids.data.model.response.ApiResponse
 import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.network.ApiResult
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.Organization
 import retrofit2.http.Path
 
@@ -18,4 +19,6 @@ interface OrganizationRemoteDataSource {
     suspend fun updateOrganization(organizationId: Int, name: String): String
 
     suspend fun getOrganizationInviteCode(organizationId: Int): String
+  
+    suspend fun getOrganizationMembers(orgId: Int): List<MemberSimple>
 }

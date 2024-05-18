@@ -48,6 +48,7 @@ import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.main.navigation.teacherOrganizationListNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
 import com.sixkids.teacher.managestudent.navigation.manageStudentNavGraph
+import com.sixkids.teacher.relay.navigation.teacherRelayNavGraph
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
@@ -93,6 +94,7 @@ fun MainScreen(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
                 navigateToChallenge = navigator::navigateChallengeHistory,
+                navigateToRelay = navigator::navigateTeacherRelayHistory
             )
 
             boardNavGraph(
@@ -130,6 +132,7 @@ fun MainScreen(
 
             manageStudentNavGraph(
                 padding = innerPadding,
+                navigateToStudentDetail = navigator::navigateManageStudentDetail,
             )
 
             signInNavGraph(
@@ -170,6 +173,7 @@ fun MainScreen(
             )
 
             studentGroupNavGraph(
+                navigateToChallengeHistory = navigator::navigatePopupToStudentGroupHistory,
                 handleException = viewModel::handleException,
             )
 
@@ -183,11 +187,15 @@ fun MainScreen(
             )
 
             studentRelayNavGraph(
+                padding = innerPadding,
                 navigateRelayHistory = navigator::navigateStudentRelayHistory,
                 navigateRelayDetail = navigator::navigateStudentRelayDetail,
                 navigateCreateRelay = navigator::navigateStudentRelayCreate,
                 navigateCreateRelayResult = navigator::navigateStudentRelayCreateResult,
                 navigateJoinRelay = navigator::navigateStudentRelayJoin,
+                navigateAnswerRelay = navigator::navigateStudentRelayAnswer,
+                navigateTaggingSender = navigator::navigateStudentRelayTaggingSender,
+                navigateTaggingReceiver = navigator::navigateStudentRelayTaggingReceiver,
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 handleException = viewModel::handleException
@@ -199,6 +207,13 @@ fun MainScreen(
                 navigateToStudentBoardDetail = navigator::navigateStudentBoardDetail,
                 navigateToStudentBoardWrite = navigator::navigateStudentBoardWrite,
                 navigateBack = navigator::popBackStack,
+            )
+
+            teacherRelayNavGraph(
+                padding = innerPadding,
+                navigateRelayHistory = navigator::navigateTeacherRelayHistory,
+                navigateRelayDetail = navigator::navigateTeacherRelayDetail,
+                handleException = viewModel::handleException
             )
 
         }

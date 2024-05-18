@@ -6,6 +6,7 @@ import com.sixkids.model.Challenge
 import com.sixkids.model.ChallengeDetail
 import com.sixkids.model.GroupSimple
 import com.sixkids.model.RunningChallenge
+import com.sixkids.model.RunningChallengeByStudent
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
@@ -16,6 +17,8 @@ interface ChallengeRepository {
     ): Flow<PagingData<Challenge>>
 
     suspend fun getRunningChallenge(organizationId: Int): RunningChallenge
+
+    suspend fun getRunningChallengesByStudent(organizationId: Int): RunningChallengeByStudent
 
     suspend fun createChallenge(
         organizationId: Int,

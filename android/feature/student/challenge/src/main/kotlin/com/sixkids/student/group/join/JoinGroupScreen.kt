@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,16 +23,23 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
+import com.sixkids.student.group.component.InviteDialog
 import com.sixkids.student.group.component.MemberIcon
+import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.student.group.component.MultiLayeredCircles
 import com.sixkids.ui.extension.collectWithLifecycle
 
 
 @Composable
 fun JoinGroupRoute(
-    viewModel: JoinGroupViewModel = hiltViewModel()
+    viewModel: JoinGroupViewModel = hiltViewModel(),
+    handleException: (Throwable, () -> Unit) -> Unit = { _, _ -> },
+    navigateToChallengeHistory: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var isShowInviteDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(Unit) {
         viewModel.connectSse()
@@ -44,30 +54,63 @@ fun JoinGroupRoute(
         }
     }
 
-    viewModel.sideEffect.collectWithLifecycle {
+    viewModel.sideEffect.collectWithLifecycle { sideEffect ->
+        when (sideEffect) {
+            is JoinGroupEffect.HandleException -> handleException(
+                sideEffect.it,
+                sideEffect.retryAction
+            )
+
+            is JoinGroupEffect.ReceiveInviteRequest -> {
+                isShowInviteDialog = true
+            }
+
+            JoinGroupEffect.CloseInviteDialog -> {
+                isShowInviteDialog = false
+            }
+
+            JoinGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
+
+        }
 
     }
     JoinGroupScreen(uiState)
+
+    if (isShowInviteDialog) {
+        InviteDialog(
+            leader = uiState.leader,
+            onConfirmClick = {
+                viewModel.answerInvite(true)
+            },
+            onCancelClick = {
+                viewModel.answerInvite(false)
+            }
+        )
+    }
 }
 
 @Composable
 fun JoinGroupScreen(
     uiState: JoinGroupState = JoinGroupState()
 ) {
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.waint_invite),
+            text = if(uiState.isJoinedGroup) stringResource(R.string.waiting_group_start) else stringResource(R.string.wait_group_invite),
             style = UlbanTypography.titleSmall,
             modifier = Modifier.padding(top = 32.dp)
         )
         Box(modifier = Modifier.weight(1f)) {
             MultiLayeredCircles(modifier = Modifier.align(Alignment.Center))
-            MemberIcon(member = uiState.member, modifier = Modifier.align(Alignment.Center))
+            MemberIcon(
+                memberIconItem = MemberIconItem(
+                    member = uiState.member,
+                    isActive = true
+                ), modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 

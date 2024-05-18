@@ -5,6 +5,7 @@ import com.sixkids.data.repository.challenge.ChallengeRepositoryImpl
 import com.sixkids.data.repository.chatting.ChattingRepositoryImpl
 import com.sixkids.data.repository.chattingfilter.ChattingFilterRepositoryImpl
 import com.sixkids.data.repository.comment.CommentRepositoryImpl
+import com.sixkids.data.repository.group.GroupRepositoryImpl
 import com.sixkids.data.repository.organization.OrganizationRepositoryImpl
 import com.sixkids.data.repository.post.PostRepositoryImpl
 import com.sixkids.data.repository.relay.RelayRepositoryImpl
@@ -13,6 +14,7 @@ import com.sixkids.domain.repository.ChallengeRepository
 import com.sixkids.domain.repository.ChattingFilterRepository
 import com.sixkids.domain.repository.ChattingRepository
 import com.sixkids.domain.repository.CommentRepository
+import com.sixkids.domain.repository.GroupRepository
 import com.sixkids.domain.repository.OrganizationRepository
 import com.sixkids.domain.repository.PostRepository
 import com.sixkids.domain.repository.RelayRepository
@@ -81,4 +83,11 @@ abstract class RepositoryModule {
     abstract fun bindChattingFilterRepository(
         chattingFilterRepository: ChattingFilterRepositoryImpl
     ): ChattingFilterRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindGroupRepository(
+        groupRepository: GroupRepositoryImpl
+    ): GroupRepository
+
 }

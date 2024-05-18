@@ -18,16 +18,19 @@ import androidx.compose.ui.unit.dp
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.model.GroupType
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
 
 @Composable
 fun GroupWaiting(
     leader: MemberSimple = MemberSimple(),
-    memberList: List<MemberIconItem> = emptyList(),
+    memberList: List<MemberSimple> = emptyList(),
+    waitingMemberList: List<MemberSimple> = emptyList(),
     onDoneClick: () -> Unit = {},
     onRemoveClick: (Long) -> Unit = {},
-    groupSize: Int = 0
+    groupSize: Int = 0,
+    groupType: GroupType = GroupType.FREE
 ) {
     Card(
         modifier = Modifier
@@ -49,38 +52,60 @@ fun GroupWaiting(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                modifier = Modifier.padding(top = 16.dp),
-                text = if(remainingMember != 0) {
-                    stringResource(R.string.friend_waiting_message, remainingMember)
-                } else {
-                    stringResource(R.string.can_create_group)
-                },
-                style = UlbanTypography.bodyMedium
-            )
+            if (groupType == GroupType.FREE) {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = if (remainingMember > 0) {
+                        stringResource(R.string.friend_waiting_message, remainingMember)
+                    } else {
+                        stringResource(R.string.can_create_group)
+                    },
+                    style = UlbanTypography.bodyMedium
+                )
+            } else {
+                Text(
+                    modifier = Modifier.padding(top = 16.dp),
+                    text = if (remainingMember != 0) {
+                        stringResource(R.string.need_to_waiting_friend_message, remainingMember)
+                    } else {
+                        stringResource(R.string.can_create_group)
+                    },
+                    style = UlbanTypography.bodyMedium
+                )
+            }
+
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                if(leader.id != 0L) {
+                if (leader.id != 0L) {
                     item {
                         MemberIcon(
-                            member = leader,
-                            showX = false,
-                            isActive = true,
+                            memberIconItem = MemberIconItem(
+                                member = leader,
+                                showX = false,
+                                isActive = true
+                            ),
                             onRemoveClick = {}
                         )
                     }
                 }
                 items(memberList) { item ->
                     MemberIcon(
-                        member = MemberSimple(
-                            id = item.memberId,
-                            name = item.name,
-                            photo = item.photo
+                        memberIconItem = MemberIconItem(
+                            member = item,
+                            showX = true,
+                            isActive = true,
                         ),
-                        showX = item.showX,
-                        isActive = item.isActive,
                         onRemoveClick = onRemoveClick
+                    )
+                }
+                items(waitingMemberList){
+                    MemberIcon(
+                        memberIconItem = MemberIconItem(
+                            member = it,
+                            showX = false,
+                            isActive = false
+                        )
                     )
                 }
             }
@@ -95,9 +120,7 @@ fun GroupWaiting(
 }
 
 data class MemberIconItem(
-    val memberId: Long,
-    val name: String,
-    val photo: String,
+    val member: MemberSimple = MemberSimple(),
     val showX: Boolean = false,
     val isActive: Boolean = false
 )
@@ -113,12 +136,10 @@ fun GroupWaitingPreview() {
             photo = ""
         ),
         memberList = List(4) {
-            MemberIconItem(
-                memberId = it.toLong(),
-                name = "name$it",
+            MemberSimple(
+                id = it.toLong(),
+                name = "member $it",
                 photo = "",
-                showX = false,
-                isActive = it % 2 == 0
             )
         },
         groupSize = 5
