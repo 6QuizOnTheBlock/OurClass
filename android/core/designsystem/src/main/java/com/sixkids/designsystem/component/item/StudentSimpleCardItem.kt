@@ -81,7 +81,6 @@ fun StudentSimpleCardItem(
 fun StudentSimpleCardItemPreview() {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-
     ) {
         items(25){
             StudentSimpleCardItem(
