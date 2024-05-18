@@ -72,8 +72,8 @@ class ChallengeCreateViewModel @Inject constructor(
             when (step) {
                 ChallengeCreateStep.INFO -> copy(step = ChallengeCreateStep.GROUP_TYPE)
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
-                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.CREATE)
-                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.RESULT)
+                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.MATCHING_SUCCESS)
+                ChallengeCreateStep.MATCHING_SUCCESS -> copy(step = ChallengeCreateStep.RESULT)
                 ChallengeCreateStep.RESULT -> copy(step = ChallengeCreateStep.INFO)
             }
         }
@@ -89,7 +89,7 @@ class ChallengeCreateViewModel @Inject constructor(
 
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.INFO)
                 ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.GROUP_TYPE)
-                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
+                ChallengeCreateStep.MATCHING_SUCCESS -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
                 else -> copy()
             }
         }

@@ -17,6 +17,7 @@ import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.teacher.challenge.create.grouptype.GroupTypeRoute
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
 import com.sixkids.teacher.challenge.create.matching.GroupMatchingSettingRoute
+import com.sixkids.teacher.challenge.create.matching.GroupMatchingSuccessRoute
 import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -123,7 +124,10 @@ fun ChallengeCreateScreen(
                     onShowSnackbar = onShowSnackbar,
                 )
 
-                ChallengeCreateStep.CREATE -> TODO()
+                ChallengeCreateStep.MATCHING_SUCCESS -> GroupMatchingSuccessRoute(
+                    moveNextStep = onMoveNextStep,
+                    onShowSnackbar = onShowSnackbar,
+                )
                 ChallengeCreateStep.RESULT -> TODO()
             }
         }

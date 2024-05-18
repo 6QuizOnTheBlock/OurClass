@@ -26,6 +26,6 @@ enum class ChallengeCreateStep {
     INFO,
     GROUP_TYPE,
     MATCHING_TYPE,
-    CREATE,
+    MATCHING_SUCCESS,
     RESULT,
 }
