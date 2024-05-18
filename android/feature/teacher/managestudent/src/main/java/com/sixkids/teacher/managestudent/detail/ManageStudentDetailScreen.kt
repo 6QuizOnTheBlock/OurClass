@@ -1,10 +1,12 @@
 package com.sixkids.teacher.managestudent.detail
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,6 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,16 +57,21 @@ fun ManageStudentDetailRoute(
         viewModel.initData()
     }
 
-
     ManageStudentDetailScreen(
         uiState = uiState
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ManageStudentDetailScreen(
     uiState: ManageStudentDetailState = ManageStudentDetailState(),
 ) {
+    val pagerState =
+        rememberPagerState(pageCount = {
+            if (uiState.studentList.size % 3 == 0) uiState.studentList.size / 3
+            else uiState.studentList.size / 3 + 1
+        })
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,14 +101,17 @@ fun ManageStudentDetailScreen(
             Spacer(modifier = Modifier.size(5.dp))
 
             BestFriendsSection(
+                pagerState = pagerState,
                 uiState.studentList,
                 onFriendClick = { /*TODO*/ }
             )
 
             Spacer(modifier = Modifier.size(20.dp))
 
-            Text(text = "활동 내역", style = UlbanTypography.titleSmall,
-                modifier = Modifier.padding(start = 10.dp))
+            Text(
+                text = "활동 내역", style = UlbanTypography.titleSmall,
+                modifier = Modifier.padding(start = 10.dp)
+            )
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -135,22 +149,43 @@ fun UserInfoSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BestFriendsSection(
+    pagerState: PagerState,
     bestFriends: List<MemberSimpleWithScore>,
     onFriendClick: (Long) -> Unit
 ) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        bestFriends.forEach {
-            StudentSimpleCardItem(
-                modifier = Modifier.weight(1f),
-                name = it.memberSimple.name,
-                photo = it.memberSimple.photo,
-                score = it.relationPoint,
-                onClick = onFriendClick
-            )
-        }
 
+    val itemSpacing = 16.dp
+
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxWidth()
+    ) { page ->
+        val startIndex = page * 3
+        val endIndex = minOf(startIndex + 3, bestFriends.size)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            for (i in startIndex until endIndex) {
+                val item = bestFriends[i]
+                StudentSimpleCardItem(
+                    name = item.memberSimple.name,
+                    photo = item.memberSimple.photo,
+                    score = item.relationPoint,
+                    onClick = onFriendClick,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            if (page == (bestFriends.size + 2) / 3 - 1) {
+                for (i in endIndex until startIndex + 3) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+        }
     }
 }
 
@@ -207,21 +242,27 @@ fun StatisticsSection(
 
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(10.dp),
                 ) {
 
                     Text(
                         text = "내보내기",
                         style = UlbanTypography.titleSmall,
-                        modifier = Modifier.padding(vertical = 10.dp).padding(top = 10.dp, start = 15.dp)
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .padding(top = 10.dp, start = 15.dp)
                     )
 
                     AsyncImage(
                         model = DesignR.drawable.quit,
                         placeholder = painterResource(id = DesignR.drawable.quit),
                         contentDescription = "img",
-                        modifier = Modifier.size(200.dp).align(Alignment.End).offset(x = 40.dp, y = -10.dp)
+                        modifier = Modifier
+                            .size(200.dp)
+                            .align(Alignment.End)
+                            .offset(x = 40.dp, y = -10.dp)
                     )
 
                 }
