@@ -1,6 +1,5 @@
 package com.sixkids.teacher.challenge.create.info
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -66,19 +65,15 @@ fun InfoContentRoute(
 
     val context = LocalContext.current
 
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     LaunchedEffect(key1 = Unit) {
         viewModel.setInitVisibility()
+        val startTime = LocalDateTime.of(uiState.startDate, uiState.startTime)
+        val endTime = LocalDateTime.of(uiState.endDate, uiState.endTime)
+        updateStartTime(startTime)
+        updateEndTime(endTime)
     }
 
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(key1 = uiState.startTime, key2 = uiState.startDate) {
-        Log.d(TAG, "LaunchedEffect: start : ${uiState.startDate} ${uiState.startTime}")
-    }
-
-    LaunchedEffect(key1 = uiState.endTime, key2 = uiState.endDate) {
-        Log.d(TAG, "LaunchedEffect: end : ${uiState.endDate} ${uiState.endTime}")
-    }
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {

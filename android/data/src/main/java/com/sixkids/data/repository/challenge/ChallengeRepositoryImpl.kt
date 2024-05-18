@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.challenge
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -42,8 +43,12 @@ class ChallengeRepositoryImpl @Inject constructor(
 
     override suspend fun getRunningChallengesByStudent(
         organizationId: Int
-    ): RunningChallengeByStudent =
-        challengeRemoteDataSourceImpl.getRunningChallengesByStudent(organizationId).toModel()
+    ): RunningChallengeByStudent {
+        val a = challengeRemoteDataSourceImpl.getRunningChallengesByStudent(organizationId)
+        Log.d("ttt", "getRunningChallengesByStudent: $a")
+        Log.d("ttt", "getRunningChallengesByStudent: ${a.toModel()}")
+        return a.toModel()
+    }
 
     override suspend fun createChallenge(
         organizationId: Int,

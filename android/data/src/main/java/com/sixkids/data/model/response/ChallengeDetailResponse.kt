@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 
 data class ChallengeDetailResponse(
     @Json(name = "challengeSimpleDTO")
-    val  challenge: ChallengeResponse,
+    val challenge: ChallengeResponse,
     val reports: List<ReportResponse>
 )
 
@@ -15,7 +15,7 @@ internal fun ChallengeDetailResponse.toModel() = ChallengeDetail(
     content = challenge.content,
     startTime = challenge.startTime,
     endTime = challenge.endTime,
-    headCount = challenge.headCount,
+    headCount = reports.fold(0) { headCount, report -> headCount + report.group.headCount },
     teamCount = reports.size,
     reportList = reports.map { it.toModel() }
 )

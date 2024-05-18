@@ -20,6 +20,8 @@ import com.sixkids.student.challenge.BuildConfig
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -47,6 +49,8 @@ class CreateGroupViewModel @Inject constructor(
     private val createGroupUseCase: CreateGroupUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
+
+    private var showUserJob: Job? = null
 
     private val challengeId: Long = savedStateHandle.get<Long>("challengeId") ?: 0L
 
@@ -146,6 +150,7 @@ class CreateGroupViewModel @Inject constructor(
             bluetoothScanner.foundDevices.collect { memberIds ->
                 if (memberIds.isEmpty()) return@collect
                 val newMembers = mutableListOf<MemberSimple>()
+                Log.d(TAG, "startScan: $memberIds")
                 for (memberId in memberIds) {
                     getMemberSimpleUseCase(memberId).onSuccess { member ->
                         newMembers.add(member)
@@ -156,9 +161,7 @@ class CreateGroupViewModel @Inject constructor(
                         })
                     }
                 }
-                intent {
-                    copy(foundMembers = newMembers)
-                }
+                updateMembers(newMembers)
             }
         }
     }
@@ -166,6 +169,35 @@ class CreateGroupViewModel @Inject constructor(
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun stopScan() {
         bluetoothScanner.stopScanning()
+    }
+
+    private fun updateMembers(newMembers: List<MemberSimple>) {
+        showUserJob?.cancel()
+        showUserJob = viewModelScope.launch {
+            val showingMembers = uiState.value.showMembers.map { it?.copy() }.toTypedArray()
+            newMembers.forEach { newMember ->
+                if(showingMembers.any { it?.id == newMember.id }) return@forEach
+                if(uiState.value.selectedMembers.any { it.id == newMember.id }) return@forEach
+                if(uiState.value.waitingMembers.any { it.id == newMember.id }) return@forEach
+                var added = false
+                while (!added) {
+                    showingMembers.indexOfFirst { it == null }.let { index ->
+                        if (index != -1) {
+                            showingMembers[index] = newMember
+                            added = true
+                        } else {
+                            delay(1000L)  // 1초 후 다시 시도
+                        }
+                    }
+                }
+                intent {
+                    copy(
+                        foundMembers = uiState.value.foundMembers + newMember,
+                        showMembers = showingMembers
+                    )
+                }
+            }
+        }
     }
 
     fun connectSse() = viewModelScope.launch {
@@ -203,6 +235,8 @@ class CreateGroupViewModel @Inject constructor(
     fun selectMember(member: MemberSimple) {
         viewModelScope.launch {
             inviteFriendUseCase(uiState.value.roomKey, member.id).onSuccess {
+                val showingIdx = uiState.value.showMembers.indexOfFirst { member.id == it?.id }
+                uiState.value.showMembers[showingIdx] = null
                 intent {
                     copy(
                         foundMembers = foundMembers.toMutableList().apply {

@@ -28,13 +28,12 @@ class ChallengeCreateViewModel @Inject constructor(
 
             getSelectedOrganizationIdUseCase().onSuccess {
                 intent {
-                    copy(organizationId = organizationId)
+                    copy(organizationId = it)
                 }
             }.onFailure {
                 postSideEffect(ChallengeCreateEffect.HandleException(it) { initData() })
             }
         }
-
     }
 
     private var title: String = ""
@@ -49,8 +48,7 @@ class ChallengeCreateViewModel @Inject constructor(
     fun createChallenge() {
         viewModelScope.launch {
             createChallengeUseCase(
-                //TODO 그룹 아이디 지정 하기
-                organizationId = 1,
+                organizationId = uiState.value.organizationId,
                 title = title,
                 content = content,
                 startTime = startTime,

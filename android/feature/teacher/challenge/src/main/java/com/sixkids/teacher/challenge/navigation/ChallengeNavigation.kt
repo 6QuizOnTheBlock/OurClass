@@ -44,7 +44,6 @@ fun NavController.navigateChallengeCreatedResult(challengeId: Long, title: Strin
             inclusive = false
         }
     }
-    navigate(ChallengeRoute.resultRoute(challengeId, title))
 }
 
 fun NavGraphBuilder.challengeNavGraph(
@@ -114,7 +113,7 @@ object ChallengeRoute {
     const val defaultRoute = "challenge-history"
     const val createRoute = "challenge-create"
     const val detailRoute = "challenge-detail?challengeId={$CHALLENGE_ID_NAME}&groupId={${GROUP_ID_NAME}}"
-    const val resultRoute = "challenge-create-result?challengeId?={$CHALLENGE_ID_NAME}&title={$CHALLENGE_TITLE_NAME}"
+    const val resultRoute = "challenge-create-result?challengeId={$CHALLENGE_ID_NAME}&title={$CHALLENGE_TITLE_NAME}"
     fun detailRoute(challengeId: Long, groupId: Long? = null) = "challenge-detail?challengeId=$challengeId&groupId=$groupId"
     fun resultRoute(challengeId: Long, title: String) = "challenge-create-result?challengeId=$challengeId&title=$title"
 }

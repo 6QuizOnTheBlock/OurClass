@@ -7,6 +7,7 @@ data class ChallengeHistoryResponse(
     val page: Int,
     val size: Int,
     val last: Boolean,
+    val totalCount : Int,
     val challenges: List<ChallengeResponse>
 )
 
@@ -19,11 +20,12 @@ data class ChallengeResponse(
     val endTime: LocalDateTime = LocalDateTime.now(),
 )
 
-internal fun ChallengeResponse.toModel() = Challenge(
+internal fun ChallengeResponse.toModel(totalCount: Int = 0) = Challenge(
     id = id,
     title = title,
     content = content,
     headCount = headCount,
     startTime = startTime,
-    endTime = endTime
+    endTime = endTime,
+    totalCount = totalCount
 )
