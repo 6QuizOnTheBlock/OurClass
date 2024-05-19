@@ -37,13 +37,7 @@ class OrganizationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getOrganizationSummary(organizationId: Int): ClassSummary {
-        organizationRemoteDataSource.getOrganizationSummary(organizationId).let {
-            return ClassSummary(
-                it.challengeCounts.map { challengeCount -> challengeCount.toModel() },
-                it.relayCounts.map { challengeCount -> challengeCount.toModel() },
-                it.postsCounts.map { challengeCount -> challengeCount.toModel() },
-            )
-        }
+        return organizationRemoteDataSource.getOrganizationSummary(organizationId)
     }
 
     override suspend fun updateOrganization(organizationId: Int, name: String): String {

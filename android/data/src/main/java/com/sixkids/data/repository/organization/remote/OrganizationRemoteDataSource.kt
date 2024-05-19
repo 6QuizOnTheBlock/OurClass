@@ -1,6 +1,7 @@
 package com.sixkids.data.repository.organization.remote
 
 import com.sixkids.data.model.response.ClassSummaryResponse
+import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
@@ -14,7 +15,7 @@ interface OrganizationRemoteDataSource {
 
     suspend fun joinOrganization(orgId: Int, code: String): Long
 
-    suspend fun getOrganizationSummary(organizationId: Int): ClassSummaryResponse
+    suspend fun getOrganizationSummary(organizationId: Int): ClassSummary
 
     suspend fun updateOrganization(organizationId: Int, name: String): String
 

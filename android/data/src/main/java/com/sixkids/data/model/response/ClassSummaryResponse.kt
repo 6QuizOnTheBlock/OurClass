@@ -1,11 +1,12 @@
 package com.sixkids.data.model.response
 
+import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberSimpleClassSummary
 
 data class ClassSummaryResponse(
     val challengeCounts: List<ClassSummaryMemberResponse>,
     val relayCounts: List<ClassSummaryMemberResponse>,
-    val postsCounts: List<ClassSummaryMemberResponse>,
+    val postCounts: List<ClassSummaryMemberResponse>,
 )
 
 data class ClassSummaryMemberResponse(
@@ -17,5 +18,13 @@ fun ClassSummaryMemberResponse.toModel(): MemberSimpleClassSummary {
     return MemberSimpleClassSummary(
         member.toModel(),
         count
+    )
+}
+
+internal fun ClassSummaryResponse.toModel(): ClassSummary {
+    return com.sixkids.model.ClassSummary(
+        challengeCounts.map { it.toModel() },
+        relayCounts.map { it.toModel() },
+        postCounts.map { it.toModel() }
     )
 }

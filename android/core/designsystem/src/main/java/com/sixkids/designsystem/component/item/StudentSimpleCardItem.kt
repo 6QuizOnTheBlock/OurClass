@@ -34,7 +34,8 @@ fun StudentSimpleCardItem(
     name: String = "",
     photo: String = "",
     score: Int? = null,
-    onClick: (Long) -> Unit = {}
+    onClick: (Long) -> Unit = {},
+    isCount: Boolean = false
 ) {
     Card(
         modifier = modifier,
@@ -69,7 +70,7 @@ fun StudentSimpleCardItem(
             )
             if (score != null) {
                 Text(
-                    text = "${score}점",
+                    text = if (isCount)"${score}회" else "${score}점",
                     style = UlbanTypography.bodySmall
                 )
             }
