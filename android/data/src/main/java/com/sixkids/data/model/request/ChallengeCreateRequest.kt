@@ -15,6 +15,6 @@ data class ChallengeCreateRequest(
 
 data class GroupRequest(
     val headCount: Int,
-    val leaderId: Int,
+    val leaderId: Long,
     val students: List<Long>
 )

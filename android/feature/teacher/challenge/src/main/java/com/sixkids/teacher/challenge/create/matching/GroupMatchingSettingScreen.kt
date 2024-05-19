@@ -15,13 +15,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
-import com.sixkids.designsystem.component.checkbox.TextCheckBox
+import com.sixkids.designsystem.component.checkbox.TextRadioButton
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Gray
@@ -30,18 +36,59 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.challenge.R
 import com.sixkids.teacher.challenge.create.matching.component.MemberIcon
 import com.sixkids.teacher.challenge.create.matching.component.MemberIconItem
+import com.sixkids.ui.SnackbarToken
+import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
-fun GroupMatchingSettingRoute() {
+fun GroupMatchingSettingRoute(
+    modifier: Modifier = Modifier,
+    viewModel: GroupMatchingSettingViewModel = hiltViewModel(),
+    moveNextStep: () -> Unit,
+    onUpdateMatchingMemberList: (List<Long>) -> Unit,
+    onUpdateMatchingType: (MatchingType) -> Unit,
+    onShowSnackbar: (SnackbarToken) -> Unit
+) {
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is GroupMatchingSettingEffect.ShowSnackbar -> {
+                onShowSnackbar(SnackbarToken(it.message))
+            }
+
+            is GroupMatchingSettingEffect.MoveToMatchingSuccessStep -> {
+                onUpdateMatchingType(it.matchingType)
+                onUpdateMatchingMemberList(it.matchingMemberList)
+                moveNextStep()
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initData()
+    }
+
+    GroupMatchingSettingScreen(
+        modifier = modifier,
+        state = uiState,
+        onNextButtonClick = viewModel::moveNextStep,
+        removeMember = viewModel::removeStudent,
+        selectMatchingType = viewModel::selectMatchingType
+    )
 }
 
 @Composable
 fun GroupMatchingSettingScreen(
     modifier: Modifier = Modifier,
     state: GroupMatchingSettingState = GroupMatchingSettingState(),
+    removeMember: (Long) -> Unit = {},
+    selectMatchingType: (MatchingType) -> Unit = {},
     onNextButtonClick: () -> Unit = {}
 ) {
+    val radioOptions = MatchingType.entries
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -52,21 +99,18 @@ fun GroupMatchingSettingScreen(
             style = UlbanTypography.titleSmall
         )
         Spacer(modifier = Modifier.height(20.dp))
-        TextCheckBox(
-            checked = state.isFriendly,
-            text = stringResource(id = R.string.matching_friendly_type)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        TextCheckBox(
-            checked = state.isUnfriendly,
-            text = stringResource(id = R.string.matching_unfriendly_type)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        TextCheckBox(
-            checked = state.isRandom,
-            text = stringResource(id = R.string.matching_random_type)
-        )
-        Spacer(modifier = Modifier.height(20.dp))
+        radioOptions.forEach { option ->
+            TextRadioButton(
+                selected = selectedOption == option,
+                onClick = {
+                    selectMatchingType(option)
+                    onOptionSelected(option)
+                },
+                text = stringResource(id = option.textRes),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -90,14 +134,14 @@ fun GroupMatchingSettingScreen(
         // 학생 목록
         LazyVerticalGrid(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
+                .weight(1f),
             columns = GridCells.Fixed(4),
-
         ) {
             items(state.studentList.size) { index ->
                 Card(
-                    modifier = Modifier.wrapContentSize().padding(bottom = 8.dp),
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(bottom = 8.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Cream
                     ),
@@ -113,7 +157,10 @@ fun GroupMatchingSettingScreen(
                             member = state.studentList[index],
                             isActive = true,
                             showX = true,
-                        )
+                        ),
+                        onRemoveClick = {
+                            removeMember(it)
+                        },
                     )
                 }
             }
@@ -132,7 +179,6 @@ fun GroupMatchingSettingScreen(
 fun GroupMatchingSettingScreenPreview() {
     GroupMatchingSettingScreen(
         state = GroupMatchingSettingState(
-            isFriendly = true,
             studentList = List(30) {
                 MemberSimple(
                     id = it.toLong(),

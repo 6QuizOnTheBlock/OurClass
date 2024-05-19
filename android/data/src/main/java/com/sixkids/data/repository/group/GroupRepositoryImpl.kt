@@ -22,4 +22,11 @@ class GroupRepositoryImpl @Inject constructor(
         groupDataSource.joinGroup(key, joinStatus)
 
     override suspend fun createGroup(key: String): Long = groupDataSource.createGroup(key)
+
+    override suspend fun getMatchingGroup(
+        organizationId: Long,
+        minCount: Int,
+        matchingType: String,
+        members: List<Long>
+    ) = groupDataSource.getMatchingGroup(organizationId, minCount, matchingType, members).map { it.toModel() }
 }

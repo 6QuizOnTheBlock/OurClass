@@ -3,8 +3,11 @@ package com.sixkids.teacher.challenge.create
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.model.ChallengeGroup
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
+import com.sixkids.teacher.challenge.create.matching.MatchingSource
+import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,8 +45,10 @@ class ChallengeCreateViewModel @Inject constructor(
     private var endTime: LocalDateTime = LocalDateTime.now()
     private var point: String = ""
     private var headCount: String = ""
+    private var matchingMemberList: List<Long> = emptyList()
+    private var groupMatchingType: MatchingType = MatchingType.FRIENDLY
     private var groupType: GroupType = GroupType.FREE
-    private val groupList: List<GroupSimple> = emptyList()
+    private var groupList: List<GroupSimple> = emptyList()
 
     fun createChallenge() {
         viewModelScope.launch {
@@ -69,9 +74,9 @@ class ChallengeCreateViewModel @Inject constructor(
             when (step) {
                 ChallengeCreateStep.INFO -> copy(step = ChallengeCreateStep.GROUP_TYPE)
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
-                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.CREATE)
-                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.RESULT)
-                ChallengeCreateStep.RESULT -> copy(step = ChallengeCreateStep.INFO)
+                ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.MATCHING_SUCCESS)
+                ChallengeCreateStep.MATCHING_SUCCESS -> copy(step = ChallengeCreateStep.RESULT)
+                else -> copy()
             }
         }
     }
@@ -86,7 +91,7 @@ class ChallengeCreateViewModel @Inject constructor(
 
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.INFO)
                 ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.GROUP_TYPE)
-                ChallengeCreateStep.CREATE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
+                ChallengeCreateStep.MATCHING_SUCCESS -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
                 else -> copy()
             }
         }
@@ -125,5 +130,31 @@ class ChallengeCreateViewModel @Inject constructor(
         this.groupType = groupType
     }
 
+    fun updateMatchingMemberList(matchingMemberList: List<Long>) {
+        this.matchingMemberList = matchingMemberList
+    }
+
+    fun updateMatchingType(matchingType: MatchingType) {
+        this.groupMatchingType = matchingType
+    }
+
+    fun getMatchingGroupList(): MatchingSource {
+        return MatchingSource(
+            orgId = uiState.value.organizationId.toLong(),
+            minCount = headCount.toInt(),
+            matchingType = groupMatchingType,
+            members = matchingMemberList
+        )
+    }
+
+    fun updateGroupList(challengeGroups: List<ChallengeGroup>) {
+        this.groupList = challengeGroups.map { group ->
+            GroupSimple(
+                headCount = group.headCount,
+                leaderId = group.memberList.first().id,
+                students = group.memberList.map { it.id }
+            )
+        }
+    }
 
 }
