@@ -1,4 +1,4 @@
-package com.sixkids.teacher.home.rank
+package com.sixkids.student.home.rank
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,16 +21,16 @@ import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.model.MemberRankItem
-import com.sixkids.teacher.home.R
-import com.sixkids.teacher.home.rank.component.RankItem
-import com.sixkids.teacher.home.rank.component.RankViewModel
+import com.sixkids.student.home.R
+import com.sixkids.student.home.rank.component.RankItem
+import com.sixkids.student.home.rank.component.StudentRankViewModel
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
-fun RankRoute(
-    viewModel: RankViewModel = hiltViewModel(),
+fun StudentRankRoute(
+    viewModel: StudentRankViewModel = hiltViewModel(),
     padding: PaddingValues,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
@@ -39,7 +39,7 @@ fun RankRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is RankEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(it.message))
+            is StudentRankEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(it.message))
         }
     }
 
@@ -53,8 +53,8 @@ fun RankRoute(
             .padding(padding)
             .fillMaxSize()
     ) {
-        RankScreen(
-            rankState = uiState
+        StudentRankScreen(
+            studentRankState = uiState
         )
         if (uiState.isLoading) {
             LoadingScreen()
@@ -64,9 +64,9 @@ fun RankRoute(
 }
 
 @Composable
-fun RankScreen(
+fun StudentRankScreen(
     modifier: Modifier = Modifier,
-    rankState: RankState = RankState()
+    studentRankState: StudentRankState = StudentRankState()
 ) {
     Column(
         modifier = modifier
@@ -74,23 +74,23 @@ fun RankScreen(
     ) {
         UlbanDetailAppBar(
             leftIcon = UlbanRes.drawable.rank,
-            title = stringResource(id = R.string.teacher_home_rank),
-            content = stringResource(id = R.string.teacher_home_rank),
+            title = stringResource(id = R.string.student_home_main_rank),
+            content = stringResource(id = R.string.student_home_main_rank),
             topDescription = "",
-            bottomDescription = rankState.classString,
+            bottomDescription = studentRankState.classString,
             color = Yellow
         )
         LazyColumn(
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            items(rankState.rankList.size) { index ->
+            items(studentRankState.rankList.size) { index ->
                 RankItem(
-                    rank = rankState.rankList[index].rank,
-                    name = rankState.rankList[index].name,
-                    exp = rankState.rankList[index].exp
+                    rank = studentRankState.rankList[index].rank,
+                    name = studentRankState.rankList[index].name,
+                    exp = studentRankState.rankList[index].exp
                 )
-                if (index != rankState.rankList.size - 1) {
+                if (index != studentRankState.rankList.size - 1) {
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 4.dp),
                         color = Color.Black,
@@ -106,8 +106,8 @@ fun RankScreen(
 @Preview(showBackground = true)
 @Composable
 fun RankScreenPreview() {
-    RankScreen(
-        rankState = RankState(
+    StudentRankScreen(
+        studentRankState = StudentRankState(
             classString = "구미 초등학교 1학년 1반",
             rankList = listOf(
                 MemberRankItem(

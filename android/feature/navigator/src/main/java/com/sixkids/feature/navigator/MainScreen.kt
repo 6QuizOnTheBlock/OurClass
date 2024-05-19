@@ -96,6 +96,7 @@ fun MainScreen(
                 navigateToChallenge = navigator::navigateChallengeHistory,
                 navigateToRelay = navigator::navigateTeacherRelayHistory,
                 navigateToQuiz = { } ,
+                onShowSnackBar = viewModel::onShowSnackbar,
             )
 
             boardNavGraph(
@@ -161,8 +162,8 @@ fun MainScreen(
                 onShowSnackbar = viewModel::onShowSnackbar,
                 navigateToStudentAnnounceList = navigator::navigateStudentAnnounceList,
                 navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
-                navigateToTagHello = { } ,
-                navigateToRank = {  },
+                navigateToTagHello = { },
+                navigateToRank = navigator::navigateRank,
                 navigateToChatting = navigator::navigateChatting,
                 navigateBack = navigator::popBackStack,
                 navigateToGreetingSender = navigator::navigateGreetingSender,
