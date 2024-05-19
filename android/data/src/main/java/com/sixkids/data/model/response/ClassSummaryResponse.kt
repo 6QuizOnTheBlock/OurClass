@@ -22,7 +22,7 @@ fun ClassSummaryMemberResponse.toModel(): MemberSimpleClassSummary {
 }
 
 internal fun ClassSummaryResponse.toModel(): ClassSummary {
-    return com.sixkids.model.ClassSummary(
+    return ClassSummary(
         challengeCounts.map { it.toModel() },
         relayCounts.map { it.toModel() },
         postCounts.map { it.toModel() }

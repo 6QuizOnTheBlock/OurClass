@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterEffect
 import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterRoute
 import com.sixkids.teacher.manageclass.invite.ClassInviteRoute
 import com.sixkids.teacher.manageclass.main.ManageClassMainRoute

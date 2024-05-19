@@ -5,7 +5,6 @@ import com.sixkids.data.api.OrganizationService
 import com.sixkids.data.model.request.GreetingRequest
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
-import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.model.response.toModel
 import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberDetail

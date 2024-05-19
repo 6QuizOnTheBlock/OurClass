@@ -1,11 +1,10 @@
 package com.sixkids.data.repository.organization
 
-import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.organization.local.OrganizationLocalDataSource
 import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSource
 import com.sixkids.domain.repository.OrganizationRepository
-import com.sixkids.model.MemberDetail
 import com.sixkids.model.ClassSummary
+import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization

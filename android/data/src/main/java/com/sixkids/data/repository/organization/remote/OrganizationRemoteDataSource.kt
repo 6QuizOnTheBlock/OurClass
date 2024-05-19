@@ -1,6 +1,5 @@
 package com.sixkids.data.repository.organization.remote
 
-import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
