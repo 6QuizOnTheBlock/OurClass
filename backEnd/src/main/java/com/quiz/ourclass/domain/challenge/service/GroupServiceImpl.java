@@ -111,8 +111,8 @@ public class GroupServiceImpl implements GroupService {
         }
         long leaderId = getLeaderIdFromKey(key);
         LocalDateTime createTime = LocalDateTime.now();
-        Optional<ChallengeGroup> designGroup = challengeGroupRepository.findByLeaderIdAndCreateTimeIsNull(
-            leaderId);
+        Optional<ChallengeGroup> designGroup = challengeGroupRepository.findByChallengeIdAndLeaderIdAndCreateTimeIsNull(
+            challenge.getId(), leaderId);
         ChallengeGroup group = designGroup.orElseGet(() -> ChallengeGroup.builder()
             .challenge(challenge)
             .leaderId(leaderId)
