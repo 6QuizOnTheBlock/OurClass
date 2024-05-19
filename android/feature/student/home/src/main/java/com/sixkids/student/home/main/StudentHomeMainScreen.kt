@@ -27,10 +27,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.Blue
+import com.sixkids.designsystem.theme.BlueText
 import com.sixkids.designsystem.theme.Orange
+import com.sixkids.designsystem.theme.OrangeText
 import com.sixkids.designsystem.theme.Purple
+import com.sixkids.designsystem.theme.PurpleText
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.designsystem.theme.Yellow
+import com.sixkids.designsystem.theme.YellowText
 import com.sixkids.designsystem.theme.component.card.ContentVerticalCard
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
@@ -112,13 +116,15 @@ fun StudentHomeMainScreen(
             .fillMaxSize()
             .padding(20.dp)
     ) {
+        Spacer(modifier = Modifier.height(10.dp))
+
         StudentMainInfo(
             name = studentHomeMainState.studentName,
             imageUrlString = studentHomeMainState.studentImageUrl,
             classString = studentHomeMainState.studentClass,
             exp = studentHomeMainState.studentExp
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Row {
             ContentVerticalCard(
                 cardModifier = Modifier
@@ -126,6 +132,7 @@ fun StudentHomeMainScreen(
                     .aspectRatio(1f)
                     .padding(end = 10.dp),
                 cardColor = Orange,
+                textColor = OrangeText,
                 imageDrawable = UlbanRes.drawable.announce,
                 text = stringResource(id = R.string.student_home_main_announce),
                 onClick = announceCardOnClick
@@ -136,6 +143,7 @@ fun StudentHomeMainScreen(
                     .aspectRatio(1f)
                     .padding(start = 10.dp),
                 cardColor = Blue,
+                textColor = BlueText,
                 imageDrawable = UlbanRes.drawable.tag_hello,
                 text = stringResource(id = R.string.student_home_main_hi),
                 onClick = showGreetingDialog
@@ -144,7 +152,8 @@ fun StudentHomeMainScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = stringResource(id = R.string.student_home_main_best_friends),
-            style = UlbanTypography.bodyMedium
+            style = UlbanTypography.titleSmall,
+            modifier = Modifier.padding(start = 10.dp)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -174,6 +183,7 @@ fun StudentHomeMainScreen(
                     .aspectRatio(1f)
                     .padding(end = 10.dp),
                 cardColor = Purple,
+                textColor = PurpleText,
                 imageDrawable = UlbanRes.drawable.chat,
                 text = stringResource(id = R.string.student_home_main_chatting),
                 onClick = chattingCardOnClick
@@ -184,11 +194,13 @@ fun StudentHomeMainScreen(
                     .aspectRatio(1f)
                     .padding(start = 10.dp),
                 cardColor = Yellow,
+                textColor = YellowText,
                 imageDrawable = UlbanRes.drawable.rank,
                 text = stringResource(id = R.string.student_home_main_rank),
                 onClick = rankCardOnClick
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
