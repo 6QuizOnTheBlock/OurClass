@@ -8,6 +8,7 @@ import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ClassSummaryResponse
 import com.sixkids.data.model.response.RankResponse
 import com.sixkids.data.model.response.toModel
+import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberDetail
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
@@ -32,8 +33,8 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
             .getOrThrow().data
     }
 
-    override suspend fun getOrganizationSummary(organizationId: Int): ClassSummaryResponse {
-        return organizationService.getOrganizationSummary(organizationId).getOrThrow().data
+    override suspend fun getOrganizationSummary(organizationId: Int): ClassSummary {
+        return organizationService.getOrganizationSummary(organizationId).getOrThrow().data.toModel()
     }
 
     override suspend fun updateOrganization(organizationId: Int, name: String): String {

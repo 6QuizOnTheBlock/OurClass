@@ -67,6 +67,7 @@ import com.sixkids.teacher.manageclass.navigation.navigateChattingFilter
 import com.sixkids.teacher.manageclass.navigation.navigateClassSetting
 import com.sixkids.teacher.manageclass.navigation.navigateInvite
 import com.sixkids.teacher.manageclass.navigation.navigateManageClass
+import com.sixkids.teacher.manageclass.navigation.navigateStatistics
 import com.sixkids.teacher.managestudent.navigation.ManageStudentRoute
 import com.sixkids.teacher.managestudent.navigation.navigateManageStudent
 import com.sixkids.teacher.managestudent.navigation.navigateStudentDetail
@@ -209,6 +210,10 @@ class MainNavigator(
 
     fun navigateClassSetting() {
         navController.navigateClassSetting()
+    }
+
+    fun navigateClassStatistics() {
+        navController.navigateStatistics()
     }
 
     /**
