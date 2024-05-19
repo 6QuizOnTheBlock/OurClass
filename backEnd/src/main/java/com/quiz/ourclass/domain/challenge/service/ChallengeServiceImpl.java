@@ -197,7 +197,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeRepository.findFirstByOrganizationAndEndStatusIsFalse(
                 organization)
             .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_CHALLENGE_NOT_FOUND));
-        Optional<ChallengeGroup> group = challengeGroupRepository.findDistinctChallengeGroupByChallengeAndGroupMembersMemberAndCompleteStatusIsFalse(
+        Optional<ChallengeGroup> group = challengeGroupRepository.findDistinctChallengeGroupByChallengeAndGroupMembersMember(
             challenge, member);
         ChallengeSimpleDTO challengeSimpleDTO = challengeMapper.challengeToChallengeSimpleDTO(
             challenge);
