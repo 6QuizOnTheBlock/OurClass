@@ -1,4 +1,4 @@
-package com.sixkids.student.group.create
+package com.sixkids.student.group.create.free
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut

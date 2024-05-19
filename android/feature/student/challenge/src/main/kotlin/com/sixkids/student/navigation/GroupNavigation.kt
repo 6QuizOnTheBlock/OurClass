@@ -6,8 +6,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sixkids.model.GroupType
-import com.sixkids.student.group.create.CreateGroupRoute
+import com.sixkids.model.MemberSimple
+import com.sixkids.student.group.create.free.CreateGroupRoute
+import com.sixkids.student.group.create.matched.MatchedCreateGroupRoute
 import com.sixkids.student.group.join.JoinGroupRoute
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 fun NavController.navigateStudentGroupCreate(
     challengeId: Long,
@@ -15,6 +19,14 @@ fun NavController.navigateStudentGroupCreate(
 ) {
     navigate(GroupRoute.createGroupRoute(challengeId, groupType))
 }
+
+fun NavController.navigateStudentMatchedGroupCreate(
+    challengeId: Long,
+    members: List<MemberSimple>
+) {
+    navigate(GroupRoute.matchedGroupCreateRoute(challengeId, members))
+}
+
 
 fun NavController.navigateStudentGroupJoin() {
     navigate(GroupRoute.joinGroupRoute)
@@ -39,17 +51,39 @@ fun NavGraphBuilder.studentGroupNavGraph(
             handleException = handleException
         )
     }
+    composable(
+        route = GroupRoute.matchedGroupCreateRoute,
+        arguments = listOf(
+            navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType },
+            navArgument(GroupRoute.MEMBERS_NAME) { type = NavType.StringType }
+        )
+    ) {
+        MatchedCreateGroupRoute(
+            navigateToChallengeHistory = navigateToChallengeHistory,
+            handleException = handleException
+        )
+
+    }
 }
 
 object GroupRoute {
 
     const val CHALLENGE_ID_NAME = "challengeId"
     const val GROUP_TYPE_NAME = "groupType"
+    const val MEMBERS_NAME = "members"
 
-    const val creatGroupRoute = "student/group/create?challengeId={$CHALLENGE_ID_NAME}?groupType={$GROUP_TYPE_NAME}"
+    const val creatGroupRoute =
+        "student/group/create?challengeId={$CHALLENGE_ID_NAME}?groupType={$GROUP_TYPE_NAME}"
+    const val matchedGroupCreateRoute =
+        "student/group/matched-create?challengeId={$CHALLENGE_ID_NAME}?members={$MEMBERS_NAME}"
     const val joinGroupRoute = "student/group/join"
 
     fun createGroupRoute(challengeId: Long, groupType: GroupType): String {
         return "student/group/create?challengeId=$challengeId?groupType=$groupType"
+    }
+
+    fun matchedGroupCreateRoute(challengeId: Long, members: List<MemberSimple>): String {
+        val jsonMembers = Json.encodeToJsonElement(members)
+        return "student/group/matched-create?challengeId=$challengeId?members=$jsonMembers"
     }
 }

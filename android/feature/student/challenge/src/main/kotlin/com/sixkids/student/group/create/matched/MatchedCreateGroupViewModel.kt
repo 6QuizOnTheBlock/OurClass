@@ -1,4 +1,4 @@
-package com.sixkids.student.group.create
+package com.sixkids.student.group.create.matched
 
 import android.Manifest
 import android.util.Log
@@ -17,6 +17,7 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.model.SseData
 import com.sixkids.model.SseEventType
 import com.sixkids.student.challenge.BuildConfig
+import com.sixkids.student.navigation.GroupRoute
 import com.sixkids.ui.base.BaseViewModel
 import com.sixkids.ui.extension.flatMap
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +39,7 @@ import javax.inject.Inject
 private const val TAG = "D107"
 
 @HiltViewModel
-class CreateGroupViewModel @Inject constructor(
+class MatchedCreateGroupViewModel @Inject constructor(
     private val bluetoothScanner: BluetoothScanner,
     private val getMemberSimpleUseCase: GetMemberSimpleUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
@@ -48,11 +49,14 @@ class CreateGroupViewModel @Inject constructor(
     private val deportFriendUseCase: DeportFriendUseCase,
     private val createGroupUseCase: CreateGroupUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<CreateGroupState, CreateGroupEffect>(CreateGroupState()) {
+) : BaseViewModel<MatchedCreateGroupState, MatchedCreateGroupEffect>(MatchedCreateGroupState()) {
 
     private var showUserJob: Job? = null
 
     private val challengeId: Long = savedStateHandle.get<Long>("challengeId") ?: 0L
+
+    private val members: List<MemberSimple> =
+        Json.decodeFromString((savedStateHandle.get<String>(GroupRoute.MEMBERS_NAME) ?: ""))
 
     private var eventSource: EventSource? = null
 
@@ -121,7 +125,7 @@ class CreateGroupViewModel @Inject constructor(
                 intent {
                     copy(
                         roomKey = matchingRoom.dataKey,
-                        groupSize = matchingRoom.minCount,
+                        groupSize = members.size,
                     )
                 }
                 loadUserInfoUseCase()
@@ -132,11 +136,12 @@ class CreateGroupViewModel @Inject constructor(
                             id = member.id.toLong(),
                             name = member.name,
                             photo = member.photo
-                        )
+                        ),
+                        waitingMembers = members.filter { it.id != member.id.toLong()}
                     )
                 }
             }.onFailure {
-                postSideEffect(CreateGroupEffect.HandleException(it) {
+                postSideEffect(MatchedCreateGroupEffect.HandleException(it) {
                     createGroupMatchingRoom()
                 })
             }
@@ -152,11 +157,12 @@ class CreateGroupViewModel @Inject constructor(
                 val newMembers = mutableListOf<MemberSimple>()
                 Log.d(TAG, "startScan: $memberIds")
                 for (memberId in memberIds) {
+                    if(uiState.value.waitingMembers.all { it.id != memberId }) continue
                     getMemberSimpleUseCase(memberId).onSuccess { member ->
                         newMembers.add(member)
                     }.onFailure {
                         stopScan()
-                        postSideEffect(CreateGroupEffect.HandleException(it) {
+                        postSideEffect(MatchedCreateGroupEffect.HandleException(it) {
                             startScan()
                         })
                     }
@@ -178,7 +184,6 @@ class CreateGroupViewModel @Inject constructor(
             newMembers.forEach { newMember ->
                 if(showingMembers.any { it?.id == newMember.id }) return@forEach
                 if(uiState.value.selectedMembers.any { it.id == newMember.id }) return@forEach
-                if(uiState.value.waitingMembers.any { it.id == newMember.id }) return@forEach
                 var added = false
                 while (!added) {
                     showingMembers.indexOfFirst { it == null }.let { index ->
@@ -217,19 +222,16 @@ class CreateGroupViewModel @Inject constructor(
                 copy(
                     selectedMembers = selectedMembers.toMutableList().apply {
                         add(member)
+                    },
+                    waitingMembers = waitingMembers.toMutableList().apply {
+                        remove(member)
                     }
                 )
             }
         } else {
             bluetoothScanner.removeDevice(memberId)
         }
-        intent {
-            copy(
-                waitingMembers = waitingMembers.toMutableList().apply {
-                    removeIf { it.id == memberId }
-                },
-            )
-        }
+
     }
 
     fun selectMember(member: MemberSimple) {
@@ -242,13 +244,10 @@ class CreateGroupViewModel @Inject constructor(
                         foundMembers = foundMembers.toMutableList().apply {
                             remove(member)
                         },
-                        waitingMembers = waitingMembers.toMutableList().apply {
-                            add(member)
-                        }
                     )
                 }
             }.onFailure {
-                postSideEffect(CreateGroupEffect.HandleException(it) {
+                postSideEffect(MatchedCreateGroupEffect.HandleException(it) {
                     selectMember(member)
                 })
             }
@@ -270,7 +269,7 @@ class CreateGroupViewModel @Inject constructor(
                     )
                 }
             }.onFailure {
-                postSideEffect(CreateGroupEffect.HandleException(it) {
+                postSideEffect(MatchedCreateGroupEffect.HandleException(it) {
                     removeMember(memberId)
                 })
             }
@@ -281,9 +280,9 @@ class CreateGroupViewModel @Inject constructor(
     fun createGroup() {
         viewModelScope.launch {
             createGroupUseCase(uiState.value.roomKey).onSuccess {
-                postSideEffect(CreateGroupEffect.NavigateToChallengeHistory)
+                postSideEffect(MatchedCreateGroupEffect.NavigateToChallengeHistory)
             }.onFailure {
-                postSideEffect(CreateGroupEffect.HandleException(it) {
+                postSideEffect(MatchedCreateGroupEffect.HandleException(it) {
                     createGroup()
                 })
             }

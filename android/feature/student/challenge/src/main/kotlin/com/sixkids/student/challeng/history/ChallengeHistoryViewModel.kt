@@ -77,11 +77,29 @@ class ChallengeHistoryViewModel @Inject constructor(
         )
     }
 
+    private fun navigateToMatchedGroupCreate(){
+        val runningChallenge = uiState.value.runningChallenge ?: return
+        postSideEffect(
+            ChallengeHistoryEffect.NavigateToMathedGroupCreate(
+                runningChallenge.challenge.id,
+                runningChallenge.memberNames
+            )
+        )
+    }
+
     fun navigateToJoinGroup() = postSideEffect(
         ChallengeHistoryEffect.NavigateToJoinGroup(organizationId)
     )
 
     fun updateTotalCount(totalCount: Int) {
         intent { copy(totalChallengeCount = totalCount) }
+    }
+
+    fun navigateToCrateOrJoinGroup(leaderStatus: Boolean) {
+        if (leaderStatus) {
+            navigateToMatchedGroupCreate()
+        } else {
+            navigateToJoinGroup()
+        }
     }
 }
