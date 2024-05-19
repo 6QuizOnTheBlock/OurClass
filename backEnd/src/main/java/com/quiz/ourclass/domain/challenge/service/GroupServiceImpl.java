@@ -111,31 +111,35 @@ public class GroupServiceImpl implements GroupService {
         }
         long leaderId = getLeaderIdFromKey(key);
         LocalDateTime createTime = LocalDateTime.now();
-        ChallengeGroup group = ChallengeGroup.builder()
+        Optional<ChallengeGroup> designGroup = challengeGroupRepository.findByLeaderIdAndCreateTimeIsNull(
+            leaderId);
+        ChallengeGroup group = designGroup.orElseGet(() -> ChallengeGroup.builder()
             .challenge(challenge)
             .leaderId(leaderId)
             .groupType(GroupType.FREE)
             .headCount(members.size())
             .completeStatus(false)
-            .createTime(createTime)
-            .build();
+            .build());
+        group.setCreateTime(createTime);
         challengeGroupRepository.save(group);
-        List<GroupMember> groupMembers = members.stream().map(Long::parseLong)
-            .map(memberRepository::findById)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(member -> GroupMember.builder().member(member).challengeGroup(group).build())
-            .toList();
-        groupMembers.forEach(member -> {
+        if (designGroup.isEmpty()) {
+            List<GroupMember> groupMembers = members.stream().map(Long::parseLong)
+                .map(memberRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(member -> GroupMember.builder().member(member).challengeGroup(group).build())
+                .toList();
+            groupMemberRepository.saveAll(groupMembers);
+        }
+        members.forEach(member -> {
             SseDTO sseDTO = SseDTO.builder()
                 .eventType(SseType.CREATE_GROUP)
-                .receiverId(member.getMember().getId())
+                .receiverId(Long.valueOf(member))
                 .time(createTime)
                 .build();
             sseService.send(sseDTO);
         });
-        groupMemberRepository.saveAll(groupMembers);
-        challenge.updateHeadCount(groupMembers.size());
+        challenge.updateHeadCount(members.size());
         updateGroupCount(members, challenge.getOrganization().getId(), group.getGroupType());
         redisUtil.delete(key);
         return group.getId();

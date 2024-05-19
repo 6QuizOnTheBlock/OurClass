@@ -13,4 +13,6 @@ public interface ChallengeGroupRepository extends JpaRepository<ChallengeGroup, 
 
     Optional<ChallengeGroup> findDistinctChallengeGroupByChallengeAndGroupMembersMember(
         Challenge challenge, Member member);
+
+    Optional<ChallengeGroup> findByLeaderIdAndCreateTimeIsNull(long leaderId);
 }
