@@ -35,7 +35,8 @@ import com.sixkids.ui.extension.collectWithLifecycle
 fun GroupMatchingSuccessRoute(
     modifier: Modifier = Modifier,
     viewModel: GroupMatchingSuccessViewModel = hiltViewModel(),
-    moveNextStep: () -> Unit,
+    updateGroupList: (List<ChallengeGroup>) -> Unit,
+    createChallenge: () -> Unit,
     onGetMatchingGroupList: () -> (MatchingSource),
     onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
@@ -51,13 +52,18 @@ fun GroupMatchingSuccessRoute(
             is GroupMatchingSuccessEffect.ShowSnackbar -> {
                 onShowSnackbar(SnackbarToken(it.message))
             }
+
+            GroupMatchingSuccessEffect.CreateChallenge -> {
+                updateGroupList(uiState.groupList)
+                createChallenge()
+            }
         }
     }
 
     GroupMatchingSuccessScreen(
         modifier = modifier,
         groupMatchingSuccessState = uiState,
-        onNextButtonClick = moveNextStep
+        onNextButtonClick = createChallenge
     )
 
 }

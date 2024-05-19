@@ -3,6 +3,7 @@ package com.sixkids.teacher.challenge.create
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.model.ChallengeGroup
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.teacher.challenge.create.matching.MatchingSource
@@ -47,7 +48,7 @@ class ChallengeCreateViewModel @Inject constructor(
     private var matchingMemberList: List<Long> = emptyList()
     private var groupMatchingType: MatchingType = MatchingType.FRIENDLY
     private var groupType: GroupType = GroupType.FREE
-    private val groupList: List<GroupSimple> = emptyList()
+    private var groupList: List<GroupSimple> = emptyList()
 
     fun createChallenge() {
         viewModelScope.launch {
@@ -75,7 +76,7 @@ class ChallengeCreateViewModel @Inject constructor(
                 ChallengeCreateStep.GROUP_TYPE -> copy(step = ChallengeCreateStep.MATCHING_TYPE)
                 ChallengeCreateStep.MATCHING_TYPE -> copy(step = ChallengeCreateStep.MATCHING_SUCCESS)
                 ChallengeCreateStep.MATCHING_SUCCESS -> copy(step = ChallengeCreateStep.RESULT)
-                ChallengeCreateStep.RESULT -> copy(step = ChallengeCreateStep.INFO)
+                else -> copy()
             }
         }
     }
@@ -138,13 +139,22 @@ class ChallengeCreateViewModel @Inject constructor(
     }
 
     fun getMatchingGroupList(): MatchingSource {
-
         return MatchingSource(
             orgId = uiState.value.organizationId.toLong(),
             minCount = headCount.toInt(),
             matchingType = groupMatchingType,
             members = matchingMemberList
         )
+    }
+
+    fun updateGroupList(challengeGroups: List<ChallengeGroup>) {
+        this.groupList = challengeGroups.map { group ->
+            GroupSimple(
+                headCount = group.headCount,
+                leaderId = group.memberList.first().id,
+                students = group.memberList.map { it.id }
+            )
+        }
     }
 
 }

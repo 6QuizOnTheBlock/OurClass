@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.model.ChallengeGroup
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.teacher.challenge.create.grouptype.GroupTypeRoute
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
@@ -60,6 +61,7 @@ fun ChallengeCreateRoute(
         updateMatchingMemberList = viewModel::updateMatchingMemberList,
         updateMatchingType = viewModel::updateMatchingType,
         updateGroupType = viewModel::updateGroupType,
+        updateGroupList = viewModel::updateGroupList,
         onMoveNextStep = viewModel::moveNextStep,
         onMovePrevStep = viewModel::movePrevStep,
         onGetMatchingGroupList = viewModel::getMatchingGroupList,
@@ -81,6 +83,7 @@ fun ChallengeCreateScreen(
     updateMatchingMemberList: (List<Long>) -> Unit = {},
     updateMatchingType: (MatchingType) -> Unit = {},
     updateGroupType: (GroupType) -> Unit = {},
+    updateGroupList: (List<ChallengeGroup>) -> Unit = {},
     onGetMatchingGroupList: () -> (MatchingSource) = { MatchingSource() },
     onMoveNextStep: () -> Unit = {},
     onMovePrevStep: () -> Unit = {},
@@ -128,12 +131,14 @@ fun ChallengeCreateScreen(
                 )
 
                 ChallengeCreateStep.MATCHING_SUCCESS -> GroupMatchingSuccessRoute(
-                    moveNextStep = onMoveNextStep,
                     onShowSnackbar = onShowSnackbar,
+                    createChallenge = createChallenge,
+                    updateGroupList = updateGroupList,
                     onGetMatchingGroupList = onGetMatchingGroupList,
                 )
+                else -> {
 
-                ChallengeCreateStep.RESULT -> TODO()
+                }
             }
         }
 

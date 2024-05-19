@@ -15,6 +15,8 @@ data class GroupMatchingSuccessState(
 ) : UiState
 
 sealed interface GroupMatchingSuccessEffect : SideEffect {
+    data object CreateChallenge : GroupMatchingSuccessEffect
+
     data class ShowSnackbar(val message: String) : GroupMatchingSuccessEffect
 }
 

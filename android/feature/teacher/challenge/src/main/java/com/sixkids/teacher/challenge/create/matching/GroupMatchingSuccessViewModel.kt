@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupMatchingSuccessViewModel @Inject constructor(
-    private val getMatchingGroupUseCase: GetMatchingGroupUseCase
+    private val getMatchingGroupUseCase: GetMatchingGroupUseCase,
 ) : BaseViewModel<GroupMatchingSuccessState, GroupMatchingSuccessEffect>(GroupMatchingSuccessState()) {
 
     fun updateMatchingSource(
@@ -40,6 +40,11 @@ class GroupMatchingSuccessViewModel @Inject constructor(
                 postSideEffect(GroupMatchingSuccessEffect.ShowSnackbar("그룹 만들기 실패"))
             }
         }
+    }
+
+    fun createChallenge() {
+        postSideEffect(GroupMatchingSuccessEffect.CreateChallenge)
+
     }
 
 }
