@@ -92,18 +92,18 @@ class MainNavigator(
     fun navigate(tab: MainNavigationTab) {
         val teacherNavOptions = navOptions {
             popUpTo(HomeRoute.defaultRoute) {
-                saveState = true
+//                saveState = true
             }
             launchSingleTop = true
-            restoreState = true
+//            restoreState = true
         }
 
         val studentNavOptions = navOptions {
             popUpTo(StudentHomeRoute.defaultRoute) {
-                saveState = true
+//                saveState = true
             }
             launchSingleTop = true
-            restoreState = true
+//            restoreState = true
         }
 
         when (tab) {
@@ -308,7 +308,7 @@ class MainNavigator(
      */
     fun navigateStudentRelayHistory() {
         navController.navigate(RelayRoute.defaultRoute) {
-            popUpTo(navController.graph.id) {
+            popUpTo(RelayRoute.defaultRoute) {
                 inclusive = true
             }
         }
