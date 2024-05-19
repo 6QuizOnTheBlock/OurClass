@@ -177,8 +177,11 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeRepository.findFirstByOrganizationAndEndStatusIsFalse(
                 organization)
             .orElseThrow(() -> new GlobalException(ErrorCode.RUNNING_CHALLENGE_NOT_FOUND));
-        int waitingCount = challengeGroupRepository.countByChallengeAndCompleteStatusIsFalse(
+        List<ChallengeGroup> groups = challengeGroupRepository.findByChallengeAndCompleteStatusIsFalse(
             challenge);
+        int waitingCount = (int) groups.stream()
+            .map(reportRepository::existsByChallengeGroupAndAcceptStatusIsFalse)
+            .filter(status -> status).count();
         ChallengeSimpleDTO challengeSimpleDTO = challengeMapper.challengeToChallengeSimpleDTO(
             challenge);
         return RunningChallengeResponse.builder().challengeSimpleDTO(challengeSimpleDTO)
