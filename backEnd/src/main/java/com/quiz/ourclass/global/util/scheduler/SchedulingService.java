@@ -189,11 +189,11 @@ public class SchedulingService {
             relationship.getMember1().getId(), relationship.getMember2().getId()
         );
 
-        return relationship.getFreeGroupCount() * 1.5
-            + relationship.getSocialCount() * 1.0
-            + relationship.getTagGreetingCount() * 0.75
+        return relationship.getFreeGroupCount() * 1.2
+            + relationship.getSocialCount() * 0.8
+            + relationship.getTagGreetingCount() * 0.5
 //            + relationship.getRelayCount() * 0.5
-            + (sendCount + receiveCount) * 0.5
-            + relationship.getDesignGroupCount() * 0.25;
+            + (sendCount + receiveCount) * 0.3
+            + relationship.getDesignGroupCount() * 0.2;
     }
 }

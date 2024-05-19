@@ -28,7 +28,8 @@ public class Relationship {
     Member member1; //memberId가 작은것이 member1
     @ManyToOne(fetch = FetchType.LAZY)
     Member member2;
-    double relationPoint;
+    @Builder.Default
+    double relationPoint = 1.0;
     int tagGreetingCount;
     int designGroupCount;
     int freeGroupCount;
