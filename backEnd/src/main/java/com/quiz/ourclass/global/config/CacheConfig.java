@@ -44,9 +44,9 @@ public class CacheConfig {
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
         return (builder) -> builder
-            .withCacheConfiguration("OICD",
+            .withCacheConfiguration("OIDC",
                 RedisCacheConfiguration.defaultCacheConfig()
-                    .computePrefixWith(cacheName -> "OICD:")
+                    .computePrefixWith(cacheName -> "OIDC:")
                     .entryTtl(Duration.ofDays(7))
                     .disableCachingNullValues()
                     .serializeKeysWith(

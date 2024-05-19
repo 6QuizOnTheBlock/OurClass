@@ -7,6 +7,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.entity.Member;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,5 +32,15 @@ public class MemberRepositoryQuerydslImpl implements MemberRepositoryQuerydsl {
             .on(memberOrganization.member.eq(me))
             .where(memberOrganization.id.eq(orgId))
             .fetchOne();
+    }
+
+    @Override
+    public List<Member> getOrgMembers(long orgId) {
+        return jpaQueryFactory
+            .select(member)
+            .leftJoin(memberOrganization)
+            .on(memberOrganization.member.eq(member))
+            .where(memberOrganization.organization.id.eq(orgId))
+            .fetch();
     }
 }
