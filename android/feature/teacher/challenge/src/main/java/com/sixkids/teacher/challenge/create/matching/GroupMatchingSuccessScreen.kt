@@ -1,27 +1,26 @@
 package com.sixkids.teacher.challenge.create.matching
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.button.UlbanFilledButton
 import com.sixkids.designsystem.component.item.StudentSimpleCardItem
 import com.sixkids.designsystem.theme.Blue
@@ -29,9 +28,43 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.ChallengeGroup
 import com.sixkids.model.MemberSimple
 import com.sixkids.teacher.challenge.R
+import com.sixkids.ui.SnackbarToken
+import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
-fun GroupMatchingSuccessRoute() {
+fun GroupMatchingSuccessRoute(
+    modifier: Modifier = Modifier,
+    viewModel: GroupMatchingSuccessViewModel = hiltViewModel(),
+    updateGroupList: (List<ChallengeGroup>) -> Unit,
+    createChallenge: () -> Unit,
+    onGetMatchingGroupList: () -> (MatchingSource),
+    onShowSnackbar: (SnackbarToken) -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.updateMatchingSource(onGetMatchingGroupList())
+        viewModel.getMatchingGroupList()
+    }
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is GroupMatchingSuccessEffect.ShowSnackbar -> {
+                onShowSnackbar(SnackbarToken(it.message))
+            }
+
+            GroupMatchingSuccessEffect.CreateChallenge -> {
+                updateGroupList(uiState.groupList)
+                createChallenge()
+            }
+        }
+    }
+
+    GroupMatchingSuccessScreen(
+        modifier = modifier,
+        groupMatchingSuccessState = uiState,
+        onNextButtonClick = createChallenge
+    )
 
 }
 

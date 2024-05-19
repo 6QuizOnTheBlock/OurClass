@@ -8,6 +8,7 @@ import com.sixkids.data.model.response.OrganizationInviteCodeResponse
 import com.sixkids.data.model.response.OrganizationNameResponse
 import com.sixkids.data.model.response.OrganizationMemberResponse
 import com.sixkids.data.model.response.OrganizationResponse
+import com.sixkids.data.model.response.RankResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -48,4 +49,9 @@ interface OrganizationService {
     suspend fun getOrganizationMembers(
         @Path(value = "id") orgId: Int
     ): ApiResult<ApiResponse<List<OrganizationMemberResponse>>>
+
+    @GET("organizations/{id}/rank")
+    suspend fun getOrganizationRank(
+        @Path(value = "id") orgId: Int
+    ): ApiResult<ApiResponse<List<RankResponse>>>
 }

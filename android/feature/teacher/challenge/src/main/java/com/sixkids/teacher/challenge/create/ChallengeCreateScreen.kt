@@ -13,9 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.model.ChallengeGroup
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
 import com.sixkids.teacher.challenge.create.grouptype.GroupTypeRoute
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
+import com.sixkids.teacher.challenge.create.matching.GroupMatchingSettingRoute
+import com.sixkids.teacher.challenge.create.matching.GroupMatchingSuccessRoute
+import com.sixkids.teacher.challenge.create.matching.MatchingSource
+import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
 import java.time.LocalDateTime
@@ -53,9 +58,13 @@ fun ChallengeCreateRoute(
         updateEndTime = viewModel::updateEndTime,
         updatePoint = viewModel::updatePoint,
         updateCount = viewModel::updateCount,
+        updateMatchingMemberList = viewModel::updateMatchingMemberList,
+        updateMatchingType = viewModel::updateMatchingType,
         updateGroupType = viewModel::updateGroupType,
+        updateGroupList = viewModel::updateGroupList,
         onMoveNextStep = viewModel::moveNextStep,
         onMovePrevStep = viewModel::movePrevStep,
+        onGetMatchingGroupList = viewModel::getMatchingGroupList,
         onShowSnackbar = viewModel::onShowSnackbar,
         createChallenge = viewModel::createChallenge,
     )
@@ -71,7 +80,11 @@ fun ChallengeCreateScreen(
     updatePoint: (String) -> Unit = {},
     onShowSnackbar: (SnackbarToken) -> Unit = {},
     updateCount: (String) -> Unit = {},
+    updateMatchingMemberList: (List<Long>) -> Unit = {},
+    updateMatchingType: (MatchingType) -> Unit = {},
     updateGroupType: (GroupType) -> Unit = {},
+    updateGroupList: (List<ChallengeGroup>) -> Unit = {},
+    onGetMatchingGroupList: () -> (MatchingSource) = { MatchingSource() },
     onMoveNextStep: () -> Unit = {},
     onMovePrevStep: () -> Unit = {},
     createChallenge: () -> Unit = {},
@@ -105,17 +118,27 @@ fun ChallengeCreateScreen(
                 ChallengeCreateStep.GROUP_TYPE -> GroupTypeRoute(
                     updateMinCount = updateCount,
                     updateGroupType = updateGroupType,
-//                    moveNextStep = onMoveNextStep,
-                    moveNextStep = {
-                        onShowSnackbar(SnackbarToken("그룹 지정 로직은 미구현 입니다."))
-                    },
+                    moveNextStep = onMoveNextStep,
                     createChallenge = createChallenge,
                     onShowSnackbar = onShowSnackbar,
                 )
 
-                ChallengeCreateStep.MATCHING_TYPE -> TODO()
-                ChallengeCreateStep.CREATE -> TODO()
-                ChallengeCreateStep.RESULT -> TODO()
+                ChallengeCreateStep.MATCHING_TYPE -> GroupMatchingSettingRoute(
+                    moveNextStep = onMoveNextStep,
+                    onUpdateMatchingMemberList = updateMatchingMemberList,
+                    onUpdateMatchingType = updateMatchingType,
+                    onShowSnackbar = onShowSnackbar,
+                )
+
+                ChallengeCreateStep.MATCHING_SUCCESS -> GroupMatchingSuccessRoute(
+                    onShowSnackbar = onShowSnackbar,
+                    createChallenge = createChallenge,
+                    updateGroupList = updateGroupList,
+                    onGetMatchingGroupList = onGetMatchingGroupList,
+                )
+                else -> {
+
+                }
             }
         }
 

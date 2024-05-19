@@ -247,6 +247,10 @@ class MainNavigator(
         navController.navigateStudentAnnounceDetail(announceId)
     }
 
+    fun navigateStudentRank() {
+        navController.navigateRank()
+    }
+
     fun navigateGreetingSender(){
         navController.navigateStudentGreetingSender()
     }

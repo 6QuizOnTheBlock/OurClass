@@ -5,6 +5,7 @@ import com.sixkids.data.repository.organization.remote.OrganizationRemoteDataSou
 import com.sixkids.domain.repository.OrganizationRepository
 import com.sixkids.model.ClassSummary
 import com.sixkids.model.MemberDetail
+import com.sixkids.model.MemberRankItem
 import com.sixkids.model.MemberSimple
 import com.sixkids.model.MemberSimpleWithScore
 import com.sixkids.model.Organization
@@ -77,6 +78,10 @@ class OrganizationRepositoryImpl @Inject constructor(
         targetStudentId: Long
     ): StudentRelation {
         return organizationRemoteDataSource.getStudentRelationDetail(orgId, sourceStudentId, targetStudentId)
+    }
+
+    override suspend fun getOrganizationRank(orgId: Int): List<MemberRankItem> {
+        return organizationRemoteDataSource.getOrganizationRank(orgId).toModel()
     }
 
     override suspend fun tagGreeting(orgId: Long, memberId: Long): Int {

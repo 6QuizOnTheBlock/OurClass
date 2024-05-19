@@ -1,6 +1,7 @@
 package com.sixkids.data.api
 
 import com.sixkids.data.model.response.GroupMatchingRoomResponse
+import com.sixkids.data.model.response.GroupMatchingSuccessResponse
 import com.sixkids.data.network.ApiResponse
 import com.sixkids.data.network.ApiResult
 import retrofit2.http.DELETE
@@ -36,4 +37,12 @@ interface GroupService {
     suspend fun createGroup(
         @Query("key") key: String,
     ): ApiResult<ApiResponse<Long>>
+
+    @GET("challenges/groups/matching")
+    suspend fun getMatchingGroup(
+        @Query("organizationId") organizationId: Long,
+        @Query("minCount") minCount: Int,
+        @Query("matchingType") matchingType: String,
+        @Query("members") members: List<Long>,
+    ): ApiResult<ApiResponse<List<GroupMatchingSuccessResponse>>>
 }
