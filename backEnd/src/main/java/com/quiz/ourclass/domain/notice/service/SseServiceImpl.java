@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Service
 public class SseServiceImpl implements SseService {
 
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 5;
+    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 20;
     private static final Long REDIRECT_TIME = 5L * 1000;
     private final SseRepository sseRepository;
     private final UserAccessUtil accessUtil;
