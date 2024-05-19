@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.organization.LoadSelectedOrganizationNameUseCase
 import com.sixkids.domain.usecase.post.GetPostListUseCase
 import com.sixkids.model.Post
 import com.sixkids.model.PostCategory
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AnnounceListViewModel @Inject constructor(
     private val getPostListUseCase: GetPostListUseCase,
-    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase
+    private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val loadSelectedOrganizationNameUseCase: LoadSelectedOrganizationNameUseCase
 ): BaseViewModel<AnnounceListState, AnnounceListEffect>(AnnounceListState()){
     private var organizationId: Int? = null
 
@@ -25,6 +27,12 @@ class AnnounceListViewModel @Inject constructor(
     fun getAnnounceList() {
         viewModelScope.launch {
             intent { copy(isLoding = true) }
+
+            loadSelectedOrganizationNameUseCase().onSuccess {
+                intent { copy(classString = it) }
+            }.onFailure {
+                intent { copy(classString = "") }
+            }
 
             if (organizationId == null){
                 organizationId = getSelectedOrganizationIdUseCase().getOrNull()

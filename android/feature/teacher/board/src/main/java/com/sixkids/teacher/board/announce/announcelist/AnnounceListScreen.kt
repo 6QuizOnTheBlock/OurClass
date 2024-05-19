@@ -24,12 +24,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.OrangeDark
 import com.sixkids.designsystem.theme.UlbanTypography
+import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.post.postlist.component.PostItem
 import com.sixkids.ui.SnackbarToken
@@ -92,12 +94,12 @@ fun AnnounceListScreen(
         Column(
 
         ) {
-            UlbanDetailAppBar(
+
+            UlbanDefaultAppBar(
                 leftIcon = R.drawable.announce,
                 title = stringResource(id = com.sixkids.teacher.board.R.string.board_main_announce),
                 content = stringResource(id = com.sixkids.teacher.board.R.string.board_main_announce),
-                topDescription = "",
-                bottomDescription = announceListState.classString,
+                body = announceListState.classString.replace("\n", " "),
                 color = Orange
             )
 

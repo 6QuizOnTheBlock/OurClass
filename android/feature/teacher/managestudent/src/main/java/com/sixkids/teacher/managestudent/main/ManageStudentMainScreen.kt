@@ -80,11 +80,12 @@ fun ManageStudentMainScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = stringResource(id = R.string.manage_student_title),
-            style = UlbanTypography.titleLarge
+            style = UlbanTypography.titleLarge,
+            modifier = Modifier.padding(bottom = 10.dp)
         )
         Text(
-            text = uiState.classString,
-            style = UlbanTypography.bodySmall
+            text = uiState.classString.replace("\n", " "),
+            style = UlbanTypography.titleSmall
         )
         Spacer(modifier = Modifier.height(20.dp))
 
