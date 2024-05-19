@@ -217,7 +217,7 @@ public class GroupServiceImpl implements GroupService {
         List<Long> group1 = List.of(15L, 10L, 9L);
 
         // 단체에 있는 모든 멤버 ID
-        List<Long> allMembers = List.of(5L, 6L, 7L, 9L, 10L, 11L, 12L, 13L, 14L, 15L);
+        List<Long> allMembers = List.of(5L, 6L, 7L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 16L);
 
         // 하드코딩된 그룹 멤버를 제외한 나머지 멤버들
         List<Long> remainingMembers = new ArrayList<>(allMembers);
