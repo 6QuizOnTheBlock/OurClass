@@ -53,8 +53,9 @@ public class GroupController implements GroupControllerDocs {
     @GetMapping("/groups/matching")
     public ResponseEntity<ResultResponse<?>> getGroupMatching(
         AutoGroupMatchingRequest autoGroupMatchingRequest) {
-        List<AutoGroupMatchingResponse> autoGroupMatchingResponse = groupService.getGroupMatching(
-            autoGroupMatchingRequest);
+        List<AutoGroupMatchingResponse> autoGroupMatchingResponse =
+//            groupService.getGroupMatching(autoGroupMatchingRequest);
+            groupService.testMethod();
         return ResponseEntity.ok(ResultResponse.success(autoGroupMatchingResponse));
     }
 }
