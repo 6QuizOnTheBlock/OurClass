@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,7 +63,7 @@ fun StudentChattingRoute(
     onBackClick: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.sideEffect.collectWithLifecycle { sideEffect ->
         when (sideEffect) {
@@ -106,7 +107,7 @@ fun StudentChattingScreen(
         Column {
             TopSection(
                 uiState.organizationName,
-                uiState.memberCount, onBackClick
+                onBackClick
             )
 
             ChatSection(
@@ -132,7 +133,6 @@ fun StudentChattingScreen(
 @Composable
 fun TopSection(
     organizationName: String = "",
-    memberCount: Int = 0,
     onBackClick: () -> Unit = {}
 ) {
     Row(
@@ -148,15 +148,11 @@ fun TopSection(
         )
 
         Text(
-            text = "구미 초등학교 3학년 1반",
+            text = organizationName.replace("\n", " "),
             style = UlbanTypography.titleSmall,
             modifier = Modifier.padding(10.dp, 0.dp)
         )
 
-        Text(
-            text = "21",
-            style = UlbanTypography.titleSmall.copy(color = Gray),
-        )
     }
 }
 
@@ -323,11 +319,6 @@ fun InputSection(
             .padding(6.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_camera),
-            contentDescription = "photo",
-            modifier = Modifier.size(30.dp)
-        )
 
         UlbanBasicTextField(
             text = msg,

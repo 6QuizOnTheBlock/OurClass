@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sixkids.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.organization.LoadSelectedOrganizationNameUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
 import com.sixkids.model.Chat
@@ -38,6 +39,7 @@ private const val TAG = "D107"
 class StudentChattingViewModel @Inject constructor(
     private val getATKUseCase: GetATKUseCase,
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val loadSelectedOrganizationNameUseCase: LoadSelectedOrganizationNameUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getChattingHistoryUseCase: GetChattingHistoryUseCase
 ) : BaseViewModel<StudentChattingState, StudentChattingSideEffect>(
@@ -58,6 +60,16 @@ class StudentChattingViewModel @Inject constructor(
 
     var originalChatList: Flow<PagingData<Chat>>? = null
 
+    init {
+        viewModelScope.launch {
+            loadSelectedOrganizationNameUseCase().onSuccess {
+                Log.d(TAG, "initStomp1: $it")
+                intent { copy(organizationName = it) }
+            }.onFailure {
+                Log.d(TAG, "initStomp1: $it")
+            }
+        }
+    }
     @SuppressLint("CheckResult")
     fun initStomp() {
         viewModelScope.launch {
@@ -66,8 +78,6 @@ class StudentChattingViewModel @Inject constructor(
 
                 originalChatList =
                     getChattingHistoryUseCase(roomId).cachedIn(viewModelScope)
-
-
 
             } catch (e: Exception) {
                 Log.d(TAG, "initStomp: ${e.message}")

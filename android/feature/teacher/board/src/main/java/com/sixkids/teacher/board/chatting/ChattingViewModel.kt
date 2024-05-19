@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sixkids.domain.usecase.chatting.GetChattingHistoryUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
+import com.sixkids.domain.usecase.organization.LoadSelectedOrganizationNameUseCase
 import com.sixkids.domain.usecase.user.GetATKUseCase
 import com.sixkids.domain.usecase.user.GetUserInfoUseCase
 import com.sixkids.domain.usecase.user.LoadUserInfoUseCase
@@ -40,6 +41,7 @@ private const val TAG = "D107"
 class ChattingViewModel @Inject constructor(
     private val getATKUseCase: GetATKUseCase,
     private val getSelectedOrganizationIdUseCase: GetSelectedOrganizationIdUseCase,
+    private val loadSelectedOrganizationNameUseCase: LoadSelectedOrganizationNameUseCase,
     private val loadUserInfoUseCase: LoadUserInfoUseCase,
     private val getChattingHistoryUseCase: GetChattingHistoryUseCase
 ) : BaseViewModel<ChattingState, ChattingSideEffect>(ChattingState()) {
@@ -58,6 +60,15 @@ class ChattingViewModel @Inject constructor(
 
     var originalChatList: Flow<PagingData<Chat>>? = null
 
+    init {
+        viewModelScope.launch {
+            loadSelectedOrganizationNameUseCase().onSuccess {
+                intent { copy(organizationName = it) }
+            }.onFailure {
+                intent { copy(organizationName = "채팅") }
+            }
+        }
+    }
     @SuppressLint("CheckResult")
     fun initStomp() {
         viewModelScope.launch {

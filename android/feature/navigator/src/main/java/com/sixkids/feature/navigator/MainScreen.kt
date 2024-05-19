@@ -164,7 +164,7 @@ fun MainScreen(
                 navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
                 navigateToTagHello = { },
                 navigateToRank = navigator::navigateRank,
-                navigateToChatting = navigator::navigateChatting,
+                navigateToChatting = navigator::navigateStudentChatting,
                 navigateBack = navigator::popBackStack,
                 navigateToGreetingSender = navigator::navigateGreetingSender,
                 navigateToGreetingReceiver = navigator::navigateGreetingReceiver,
