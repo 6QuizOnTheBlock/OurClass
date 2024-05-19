@@ -60,7 +60,7 @@ fun StudentMainInfo(
                     contentScale = ContentScale.Crop
                 )
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(height),
                 verticalArrangement = Arrangement.Center
@@ -68,24 +68,20 @@ fun StudentMainInfo(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     textAlign = TextAlign.Start,
-                    text = name,
-                    style = UlbanTypography.bodyLarge.copy(
-                        fontSize = 26.sp
-                    )
+                    text = "$name 학생",
+                    style = UlbanTypography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     textAlign = TextAlign.Start,
                     text = classString.replace("\n"," "),
-                    style = UlbanTypography.bodyMedium
+                    style = UlbanTypography.titleSmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     textAlign = TextAlign.Start,
-                    text = "${exp}exp",
-                    style = UlbanTypography.bodyLarge.copy(
-                        fontSize = 18.sp
-                    )
+                    text = "${exp}점",
+                    style = UlbanTypography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }

@@ -150,15 +150,11 @@ fun TopSection(
         )
 
         Text(
-            text = "구미 초등학교 3학년 1반",
+            text = organizationName.replace("\n", " "),
             style = UlbanTypography.titleSmall,
             modifier = Modifier.padding(10.dp, 0.dp)
         )
 
-        Text(
-            text = "21",
-            style = UlbanTypography.titleSmall.copy(color = Gray),
-        )
     }
 }
 
@@ -325,11 +321,6 @@ fun InputSection(
             .padding(6.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_camera),
-            contentDescription = "photo",
-            modifier = Modifier.size(30.dp)
-        )
 
         UlbanBasicTextField(
             text = msg,
