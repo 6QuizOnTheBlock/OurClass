@@ -31,18 +31,18 @@ fun PostItem(
     onClick: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier.padding(bottom = 8.dp).clickable { onClick() }
     ) {
         Text(
             text = title,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = UlbanTypography.titleLarge
+            style = UlbanTypography.titleMedium
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (commentCount > 0){
                 CommentCount(count = commentCount)

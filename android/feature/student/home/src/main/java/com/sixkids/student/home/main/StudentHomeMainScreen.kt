@@ -153,7 +153,7 @@ fun StudentHomeMainScreen(
         Text(
             text = stringResource(id = R.string.student_home_main_best_friends),
             style = UlbanTypography.titleSmall,
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.padding(start = 15.dp)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(

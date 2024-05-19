@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.R as UlbanRes
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
@@ -98,12 +99,11 @@ fun StudentBoardMainScreen(
         Column(
 
         ) {
-            UlbanDetailAppBar(
+            UlbanDefaultAppBar(
                 leftIcon = UlbanRes.drawable.board,
                 title = stringResource(id = R.string.student_board_main_post),
                 content = stringResource(id = R.string.student_board_main_post),
-                topDescription = "",
-                bottomDescription = "",
+                body = postState.classString.replace("\n", " "),
                 color = Blue
             )
 

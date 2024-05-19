@@ -37,12 +37,12 @@ fun PostItem(
             text = title,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = UlbanTypography.titleLarge
+            style = UlbanTypography.titleMedium
         )
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (commentCount > 0){
                 CommentCount(count = commentCount)

@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Orange
@@ -84,15 +85,12 @@ fun StudentAnnounceListScreen(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Column(
-
-        ) {
-            UlbanDetailAppBar(
+        Column {
+            UlbanDefaultAppBar(
                 leftIcon = UlbanRes.drawable.announce,
                 title = stringResource(id = R.string.student_home_main_announce),
                 content = stringResource(id = R.string.student_home_main_announce),
-                topDescription = "",
-                bottomDescription = studentAnnounceListState.classString,
+                body = studentAnnounceListState.classString.replace("\n", " "),
                 color = Orange
             )
 
