@@ -93,7 +93,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                     request);
                 group.setChallenge(challenge);
                 group.setGroupType(GroupType.DESIGN);
-                group.setHeadCount(challengeRequest.groups().size());
+                group.setHeadCount(request.students().size());
                 challengeGroupRepository.save(group);
                 List<Member> members = request.students().stream()
                     .map(memberRepository::findById).filter(Optional::isPresent).map(Optional::get)
