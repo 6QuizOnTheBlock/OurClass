@@ -10,6 +10,8 @@ import com.sixkids.model.MemberSimple
 import com.sixkids.student.group.create.free.CreateGroupRoute
 import com.sixkids.student.group.create.matched.MatchedCreateGroupRoute
 import com.sixkids.student.group.join.JoinGroupRoute
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 
 fun NavController.navigateStudentGroupCreate(
     challengeId: Long,
@@ -49,7 +51,13 @@ fun NavGraphBuilder.studentGroupNavGraph(
             handleException = handleException
         )
     }
-    composable(route = GroupRoute.matchedGroupCreateRoute) {
+    composable(
+        route = GroupRoute.matchedGroupCreateRoute,
+        arguments = listOf(
+            navArgument(GroupRoute.CHALLENGE_ID_NAME) { type = NavType.LongType },
+            navArgument(GroupRoute.MEMBERS_NAME) { type = NavType.StringType }
+        )
+    ) {
         MatchedCreateGroupRoute(
             navigateToChallengeHistory = navigateToChallengeHistory,
             handleException = handleException
@@ -67,7 +75,7 @@ object GroupRoute {
     const val creatGroupRoute =
         "student/group/create?challengeId={$CHALLENGE_ID_NAME}?groupType={$GROUP_TYPE_NAME}"
     const val matchedGroupCreateRoute =
-        "student/group/matched-create?challengeId=$CHALLENGE_ID_NAME?members=$MEMBERS_NAME"
+        "student/group/matched-create?challengeId={$CHALLENGE_ID_NAME}?members={$MEMBERS_NAME}"
     const val joinGroupRoute = "student/group/join"
 
     fun createGroupRoute(challengeId: Long, groupType: GroupType): String {
@@ -75,6 +83,7 @@ object GroupRoute {
     }
 
     fun matchedGroupCreateRoute(challengeId: Long, members: List<MemberSimple>): String {
-        return "student/group/matched-create?challengeId=$challengeId?members=$members"
+        val jsonMembers = Json.encodeToJsonElement(members)
+        return "student/group/matched-create?challengeId=$challengeId?members=$jsonMembers"
     }
 }

@@ -78,11 +78,11 @@ fun UlbanStudentRunningChallengeAppBar(
                     text = teamDescription,
                     style = UlbanTypography.bodySmall
                 )
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = runningTimeDescription,
-                    style = UlbanTypography.titleSmall
-                )
+//                Text(
+//                    modifier = Modifier.padding(top = 12.dp),
+//                    text = runningTimeDescription,
+//                    style = UlbanTypography.titleSmall
+//                )
             }
         },
         color = color,

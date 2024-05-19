@@ -23,7 +23,7 @@ import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.MemberSimple
 import com.sixkids.student.challenge.R
-import com.sixkids.student.group.component.GroupWaiting
+import com.sixkids.student.group.component.MatchedGroupWaiting
 import com.sixkids.student.group.component.MemberIcon
 import com.sixkids.student.group.component.MemberIconItem
 import com.sixkids.student.group.component.MultiLayeredCircles
@@ -54,7 +54,10 @@ fun MatchedCreateGroupRoute(
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is MatchedCreateGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
-            is MatchedCreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
+            is MatchedCreateGroupEffect.HandleException -> handleException(
+                it.throwable,
+                it.retryAction
+            )
         }
     }
     MatchedCreateGroupScreen(
@@ -190,14 +193,11 @@ fun MatchedCreateGroupScreen(
                 }
             }
 
-            GroupWaiting(
+            MatchedGroupWaiting(
                 groupSize = uiState.groupSize,
                 leader = uiState.leader,
                 memberList = uiState.selectedMembers,
                 waitingMemberList = uiState.waitingMembers,
-                onRemoveClick = {
-                    onMemberRemove(it)
-                },
                 onDoneClick = onGroupCreate
             )
         }
