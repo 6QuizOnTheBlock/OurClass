@@ -1,8 +1,16 @@
 package com.quiz.ourclass.domain.challenge.algorithm;
 
+import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
+import com.quiz.ourclass.domain.member.entity.Member;
+import com.quiz.ourclass.domain.member.mapper.MemberMapper;
+import com.quiz.ourclass.domain.member.repository.MemberRepository;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
+import com.quiz.ourclass.global.dto.MemberSimpleDTO;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,19 +31,28 @@ public class FriendlyGroup {
 
     private final RelationshipRepository relationshipRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
+    private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
 
     // 이 메소드는 트랜잭션을 지원하는 설정에서 읽기 전용으로 실행됩니다.
     // 읽기 전용이기 때문에 데이터를 변경할 수 없고,
     // Propagation.SUPPORTS 설정은 현재 진행 중인 트랜잭션이 있을 경우 그 트랜잭션에 참여하며,
     // 없을 경우 비트랜잭션 상태로 실행됩니다.
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public void solveGroupingProblem(long organizationId, int studentsPerGroup) {
-        // 주어진 조직 ID에 해당하는 학생 수를 데이터베이스에서 조회
+    public List<AutoGroupMatchingResponse> makeFriendlyGroup(
+        long organizationId, int studentsPerGroup, List<Long> members) {
+        // 주어진 단체 ID에 해당하는 학생 수를 데이터베이스에서 조회
         int totalStudentCount = memberOrganizationRepository.countByOrganizationId(organizationId);
 
-        // 조직 ID에 따라 모든 관계 데이터를 조회
-        List<Relationship> relationships = relationshipRepository.findAllByOrganizationIdOrderByMember1(
-            organizationId);
+        // 단체 ID, 입력된 멤버 ID에 따라서 모든 관계 데이터를 조회
+        List<Relationship> relationships =
+            relationshipRepository.findAllByOrganizationIdAndMemberIds(
+                organizationId, members
+            );
+
+        if ((relationships.size() % studentsPerGroup) == 1) {
+            throw new GlobalException(ErrorCode.BAD_REQUEST);
+        }
 
         // 학생 ID를 배열 인덱스로 매핑하기 위한 HashMap을 생성
         Map<Long, Integer> studentIdToIndex = new HashMap<>();
@@ -90,6 +107,9 @@ public class FriendlyGroup {
 
         // 결과 출력
         printSolution(x, numGroups, totalStudentCount, studentIdToIndex, relationshipMatrix);
+
+        // 결과 반환
+        return extractSolution(x, numGroups, totalStudentCount, studentIdToIndex);
     }
 
     /**
@@ -192,6 +212,62 @@ public class FriendlyGroup {
     }
 
     /**
+     * 최적화 모델의 결과를 추출하는 함수입니다. 각 그룹의 구성과 그룹별 멤버 정보를 반환하여, 어떻게 학생들이 그룹화되었는지 보여줍니다.
+     *
+     * @param x                 각 학생이 각 그룹에 할당된 여부를 나타내는 변수 배열
+     * @param numGroups         총 그룹의 수
+     * @param totalStudentCount 조직 내의 총 학생 수
+     * @param studentIdToIndex  학생 ID와 이를 배열 인덱스로 매핑하는 맵
+     * @return 그룹 구성과 멤버 정보를 담은 AutoGroupMatchingResponse 리스트
+     */
+    private List<AutoGroupMatchingResponse> extractSolution(
+        Variable[][] x, int numGroups, int totalStudentCount,
+        Map<Long, Integer> studentIdToIndex) {
+
+        // 최종 그룹 구성과 멤버 정보를 담을 리스트를 초기화
+        List<AutoGroupMatchingResponse> groupResponses = new ArrayList<>();
+
+        // 각 그룹에 대해 반복
+        for (int j = 0; j < numGroups; j++) {
+            // 현재 그룹에 속한 멤버들을 저장할 리스트를 초기화
+            List<MemberSimpleDTO> members = new ArrayList<>();
+
+            // 각 학생에 대해 반복
+            for (int i = 0; i < totalStudentCount; i++) {
+                // 학생 i가 그룹 j에 할당된 경우
+                if (x[i][j].getValue().intValue() == 1) {
+                    // 배열 인덱스를 사용해 학생 ID를 조회
+                    Long studentId = getKeyByValue(studentIdToIndex, i);
+
+                    // 학생 ID가 존재하는 경우
+                    if (studentId != null) {
+                        // 학생 ID로 데이터베이스에서 Member 객체를 조회
+                        Member member = memberRepository.findById(studentId).orElse(null);
+
+                        // Member 객체가 존재하는 경우
+                        if (member != null) {
+                            // Member 객체를 MemberSimpleDTO로 변환
+                            MemberSimpleDTO memberDto = memberMapper.memberToMemberSimpleDTO(
+                                member);
+
+                            // 멤버 리스트에 추가
+                            members.add(memberDto);
+                        }
+                    }
+                }
+            }
+            // 현재 그룹의 멤버 정보를 포함한 응답 객체를 생성하여 리스트에 추가
+            groupResponses.add(AutoGroupMatchingResponse.builder()
+                .members(members)
+                .headCount(members.size())
+                .build());
+        }
+        // 최종 그룹 구성과 멤버 정보를 담은 리스트를 반환
+        return groupResponses;
+    }
+
+
+    /**
      * 최적화 모델의 결과를 출력하는 함수입니다. 각 그룹의 구성과 그룹별 친밀도 점수를 출력하여, 어떻게 학생들이 그룹화되었는지 보여줍니다.
      *
      * @param x                  각 학생이 각 그룹에 할당된 여부를 나타내는 변수 배열
@@ -220,7 +296,7 @@ public class FriendlyGroup {
                     for (int k = 0; k < totalStudentCount; k++) {
                         // 다른 학생 k도 같은 그룹에 할당된 경우
                         if (i != k && x[k][j].getValue().intValue() == 1) {
-                            // i와 k의 친밀도 점수를 groupScore에 더함
+                            // i와 k의 친밀도 점수를 groupScore 에 더함
                             groupScore += relationshipMatrix[i][k];
                         }
                     }
@@ -239,8 +315,8 @@ public class FriendlyGroup {
      * @param value 찾고자 하는 값
      * @return 찾은 키, 없으면 null 반환
      */
-    private <T, E> T getKeyByValue(Map<T, E> map, E value) {
-        for (Map.Entry<T, E> entry : map.entrySet()) {
+    private Long getKeyByValue(Map<Long, Integer> map, Integer value) {
+        for (Map.Entry<Long, Integer> entry : map.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
             }

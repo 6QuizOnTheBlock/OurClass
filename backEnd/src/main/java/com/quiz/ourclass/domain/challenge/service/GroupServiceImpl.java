@@ -3,6 +3,7 @@ package com.quiz.ourclass.domain.challenge.service;
 import static com.quiz.ourclass.global.exception.ErrorCode.CHALLENGE_NOT_FOUND;
 import static com.quiz.ourclass.global.exception.ErrorCode.PERMISSION_DENIED;
 
+import com.quiz.ourclass.domain.challenge.algorithm.FriendlyGroup;
 import com.quiz.ourclass.domain.challenge.dto.request.AutoGroupMatchingRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
 import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
@@ -19,6 +20,7 @@ import com.quiz.ourclass.domain.notice.dto.SseDTO;
 import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
+import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
@@ -49,9 +51,11 @@ public class GroupServiceImpl implements GroupService {
     private final ChallengeRepository challengeRepository;
     private final RelationshipRepository relationshipRepository;
     private final OrganizationRepository organizationRepository;
+    private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
+    private final FriendlyGroup friendlyGroup;
     private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
 
     @Transactional
@@ -240,7 +244,21 @@ public class GroupServiceImpl implements GroupService {
 
     private List<AutoGroupMatchingResponse> getFriendlyGroup(
         AutoGroupMatchingRequest autoGroupMatchingRequest) {
-        return null;
+
+        long count = memberOrganizationRepository.countByOrganizationIdAndMemberIdIn(
+            autoGroupMatchingRequest.organizationId(),
+            autoGroupMatchingRequest.members()
+        );
+
+        if (count != autoGroupMatchingRequest.members().size()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
+
+        return friendlyGroup.makeFriendlyGroup(
+            autoGroupMatchingRequest.organizationId(),
+            autoGroupMatchingRequest.minCount(),
+            autoGroupMatchingRequest.members()
+        );
     }
 
     private List<AutoGroupMatchingResponse> getUnfriendlyGroup(
