@@ -1,6 +1,5 @@
 package com.sixkids.student.challeng.history
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sixkids.domain.usecase.challenge.GetChallengeHistoryUseCase
 import com.sixkids.domain.usecase.challenge.GetRunningChallengeByStudentUseCase
@@ -41,18 +40,6 @@ class ChallengeHistoryViewModel @Inject constructor(
             }.onSuccess {
                 intent { copy(isLoading = false, runningChallenge = it) }
             }.onFailure {
-                Log.d("D107", "initData: $it")
-                when (it) {
-                    is NoSuchElementException -> {
-                        intent { copy(isLoading = false, runningChallenge = null) }
-                    }
-
-                    else -> {
-                        postSideEffect(
-                            ChallengeHistoryEffect.HandleException(it, ::initData)
-                        )
-                    }
-                }
             }
         }
 
