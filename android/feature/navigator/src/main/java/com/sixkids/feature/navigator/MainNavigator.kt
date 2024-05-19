@@ -240,6 +240,10 @@ class MainNavigator(
         navController.navigateStudentAnnounceDetail(announceId)
     }
 
+    fun navigateStudentRank() {
+        navController.navigateRank()
+    }
+
     /**
      * Student Group Navigation
      */

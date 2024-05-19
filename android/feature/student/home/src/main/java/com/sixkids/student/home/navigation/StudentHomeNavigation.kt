@@ -12,6 +12,7 @@ import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailRou
 import com.sixkids.student.home.announce.announcelist.StudentAnnounceListRoute
 import com.sixkids.student.home.chatting.StudentChattingRoute
 import com.sixkids.student.home.main.StudentHomeMainRoute
+import com.sixkids.student.home.rank.StudentRankRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateStudentHome(navOptions: NavOptions) {
@@ -28,6 +29,10 @@ fun NavController.navigateStudentAnnounceDetail(announceDetailId: Long) {
 
 fun NavController.navigateStudentChatting() {
     navigate(StudentHomeRoute.chattingRoute)
+}
+
+fun NavController.navigateStudentRank() {
+    navigate(StudentHomeRoute.rankRoute)
 }
 
 fun NavGraphBuilder.studentHomeNavGraph(
@@ -75,6 +80,13 @@ fun NavGraphBuilder.studentHomeNavGraph(
             onShowSnackBar = onShowSnackbar
         )
     }
+
+    composable(route = StudentHomeRoute.rankRoute) {
+        StudentRankRoute(
+            padding = padding,
+            onShowSnackBar = onShowSnackbar
+        )
+    }
 }
 
 object StudentHomeRoute {
@@ -86,6 +98,8 @@ object StudentHomeRoute {
     const val announceDetailRoute = "student_announce_detail/{$announceDetailARG}"
 
     const val chattingRoute = "student_chatting"
+
+    const val rankRoute = "student_rank"
 
     fun announceDetailRoute(announceDetailId: Long) = "student_announce_detail/$announceDetailId"
 }

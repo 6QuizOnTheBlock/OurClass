@@ -162,8 +162,8 @@ fun MainScreen(
                 onShowSnackbar = viewModel::onShowSnackbar,
                 navigateToStudentAnnounceList = navigator::navigateStudentAnnounceList,
                 navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
-                navigateToTagHello = { } ,
-                navigateToRank = {  },
+                navigateToTagHello = { },
+                navigateToRank = navigator::navigateRank,
                 navigateToChatting = navigator::navigateChatting,
                 navigateBack = navigator::popBackStack,
             )
