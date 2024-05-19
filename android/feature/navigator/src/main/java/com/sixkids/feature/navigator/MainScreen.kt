@@ -96,6 +96,7 @@ fun MainScreen(
                 navigateToChallenge = navigator::navigateChallengeHistory,
                 navigateToRelay = navigator::navigateTeacherRelayHistory,
                 navigateToQuiz = { } ,
+                onShowSnackBar = viewModel::onShowSnackbar,
             )
 
             boardNavGraph(

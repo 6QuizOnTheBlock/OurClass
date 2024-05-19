@@ -8,29 +8,57 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
+import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.model.MemberRankItem
 import com.sixkids.teacher.home.R
 import com.sixkids.teacher.home.rank.component.RankItem
+import com.sixkids.teacher.home.rank.component.RankViewModel
+import com.sixkids.ui.SnackbarToken
+import com.sixkids.ui.extension.collectWithLifecycle
 import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun RankRoute(
-    padding: PaddingValues
+    viewModel: RankViewModel = hiltViewModel(),
+    padding: PaddingValues,
+    onShowSnackBar: (SnackbarToken) -> Unit
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.sideEffect.collectWithLifecycle {
+        when (it) {
+            is RankEffect.onShowSnackBar -> onShowSnackBar(SnackbarToken(it.message))
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getOrganizationName()
+        viewModel.getClassRank()
+    }
 
     Box(
         modifier = Modifier
             .padding(padding)
             .fillMaxSize()
     ) {
-        RankScreen()
+        RankScreen(
+            rankState = uiState
+        )
+        if (uiState.isLoading) {
+            LoadingScreen()
+        }
     }
 
 }
@@ -49,7 +77,7 @@ fun RankScreen(
             title = stringResource(id = R.string.teacher_home_rank),
             content = stringResource(id = R.string.teacher_home_rank),
             topDescription = "",
-            bottomDescription = "",
+            bottomDescription = rankState.classString,
             color = Yellow
         )
         LazyColumn(
@@ -80,6 +108,7 @@ fun RankScreen(
 fun RankScreenPreview() {
     RankScreen(
         rankState = RankState(
+            classString = "구미 초등학교 1학년 1반",
             rankList = listOf(
                 MemberRankItem(
                     rank = 1,
