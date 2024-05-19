@@ -158,11 +158,11 @@ fun ContentCard(
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(end = 20.dp)
+                                .weight(1f)
                                 .wrapContentHeight(),
-                            textAlign = TextAlign.Start,
+                            textAlign = TextAlign.Center,
                             style = UlbanTypography.titleLarge.copy(
-                                fontSize = 30.sp,
+                                fontSize = 26.sp,
                                 color = textColor
                             )
                         )
@@ -178,11 +178,12 @@ fun ContentCard(
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp)
+//                                .padding(20.dp)
+                                .weight(1f)
                                 .wrapContentHeight(),
-                            textAlign = TextAlign.Start,
+                            textAlign = TextAlign.Center,
                             style = UlbanTypography.titleLarge.copy(
-                                fontSize = 30.sp,
+                                fontSize = 26.sp,
                                 color = textColor
                             )
                         )
