@@ -6,6 +6,10 @@ server:
       enabled: true
       force: true
     context-path: /api
+  tomcat:
+    threads:
+      max: 200
+    max-connections: 10000
 spring:
   profiles:
     group:
