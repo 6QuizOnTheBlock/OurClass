@@ -48,4 +48,10 @@ class GroupMatchingSettingViewModel @Inject constructor(
         )
     }
 
+    fun selectMatchingType(matchingType: MatchingType) {
+        intent {
+            copy(matchingType = matchingType)
+        }
+    }
+
 }

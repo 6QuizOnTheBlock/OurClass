@@ -18,6 +18,7 @@ import com.sixkids.teacher.challenge.create.grouptype.GroupTypeRoute
 import com.sixkids.teacher.challenge.create.info.InfoContentRoute
 import com.sixkids.teacher.challenge.create.matching.GroupMatchingSettingRoute
 import com.sixkids.teacher.challenge.create.matching.GroupMatchingSuccessRoute
+import com.sixkids.teacher.challenge.create.matching.MatchingSource
 import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.extension.collectWithLifecycle
@@ -61,6 +62,7 @@ fun ChallengeCreateRoute(
         updateGroupType = viewModel::updateGroupType,
         onMoveNextStep = viewModel::moveNextStep,
         onMovePrevStep = viewModel::movePrevStep,
+        onGetMatchingGroupList = viewModel::getMatchingGroupList,
         onShowSnackbar = viewModel::onShowSnackbar,
         createChallenge = viewModel::createChallenge,
     )
@@ -79,6 +81,7 @@ fun ChallengeCreateScreen(
     updateMatchingMemberList: (List<Long>) -> Unit = {},
     updateMatchingType: (MatchingType) -> Unit = {},
     updateGroupType: (GroupType) -> Unit = {},
+    onGetMatchingGroupList: () -> (MatchingSource) = { MatchingSource() },
     onMoveNextStep: () -> Unit = {},
     onMovePrevStep: () -> Unit = {},
     createChallenge: () -> Unit = {},
@@ -127,7 +130,9 @@ fun ChallengeCreateScreen(
                 ChallengeCreateStep.MATCHING_SUCCESS -> GroupMatchingSuccessRoute(
                     moveNextStep = onMoveNextStep,
                     onShowSnackbar = onShowSnackbar,
+                    onGetMatchingGroupList = onGetMatchingGroupList,
                 )
+
                 ChallengeCreateStep.RESULT -> TODO()
             }
         }

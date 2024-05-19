@@ -5,6 +5,7 @@ import com.sixkids.domain.usecase.challenge.CreateChallengeUseCase
 import com.sixkids.domain.usecase.organization.GetSelectedOrganizationIdUseCase
 import com.sixkids.model.GroupSimple
 import com.sixkids.teacher.challenge.create.grouptype.GroupType
+import com.sixkids.teacher.challenge.create.matching.MatchingSource
 import com.sixkids.teacher.challenge.create.matching.MatchingType
 import com.sixkids.ui.SnackbarToken
 import com.sixkids.ui.base.BaseViewModel
@@ -128,7 +129,7 @@ class ChallengeCreateViewModel @Inject constructor(
         this.groupType = groupType
     }
 
-    fun updateMatchingMemberList(matchingMemberList: List<Long> ) {
+    fun updateMatchingMemberList(matchingMemberList: List<Long>) {
         this.matchingMemberList = matchingMemberList
     }
 
@@ -136,5 +137,14 @@ class ChallengeCreateViewModel @Inject constructor(
         this.groupMatchingType = matchingType
     }
 
+    fun getMatchingGroupList(): MatchingSource {
+
+        return MatchingSource(
+            orgId = uiState.value.organizationId.toLong(),
+            minCount = headCount.toInt(),
+            matchingType = groupMatchingType,
+            members = matchingMemberList
+        )
+    }
 
 }

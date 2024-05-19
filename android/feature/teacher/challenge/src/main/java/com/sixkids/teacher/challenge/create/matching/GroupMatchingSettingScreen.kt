@@ -73,7 +73,8 @@ fun GroupMatchingSettingRoute(
         modifier = modifier,
         state = uiState,
         onNextButtonClick = viewModel::moveNextStep,
-        removeMember = viewModel::removeStudent
+        removeMember = viewModel::removeStudent,
+        selectMatchingType = viewModel::selectMatchingType
     )
 }
 
@@ -82,6 +83,7 @@ fun GroupMatchingSettingScreen(
     modifier: Modifier = Modifier,
     state: GroupMatchingSettingState = GroupMatchingSettingState(),
     removeMember: (Long) -> Unit = {},
+    selectMatchingType: (MatchingType) -> Unit = {},
     onNextButtonClick: () -> Unit = {}
 ) {
     val radioOptions = MatchingType.entries
@@ -101,6 +103,7 @@ fun GroupMatchingSettingScreen(
             TextRadioButton(
                 selected = selectedOption == option,
                 onClick = {
+                    selectMatchingType(option)
                     onOptionSelected(option)
                 },
                 text = stringResource(id = option.textRes),

@@ -21,5 +21,5 @@ enum class MatchingType(
 ) {
     FRIENDLY(R.string.matching_friendly_type),
     UNFRIENDLY(R.string.matching_unfriendly_type),
-    RANDOM(R.string.matching_random_type)
+    RAND(R.string.matching_random_type)
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,9 +36,15 @@ fun GroupMatchingSuccessRoute(
     modifier: Modifier = Modifier,
     viewModel: GroupMatchingSuccessViewModel = hiltViewModel(),
     moveNextStep: () -> Unit,
-    onShowSnackbar: (SnackbarToken) -> Unit
+    onGetMatchingGroupList: () -> (MatchingSource),
+    onShowSnackbar: (SnackbarToken) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.updateMatchingSource(onGetMatchingGroupList())
+        viewModel.getMatchingGroupList()
+    }
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
