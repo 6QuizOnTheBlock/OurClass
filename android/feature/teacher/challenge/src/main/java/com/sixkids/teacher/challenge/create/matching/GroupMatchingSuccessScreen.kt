@@ -63,7 +63,7 @@ fun GroupMatchingSuccessRoute(
     GroupMatchingSuccessScreen(
         modifier = modifier,
         groupMatchingSuccessState = uiState,
-        onNextButtonClick = createChallenge
+        onNextButtonClick = viewModel::createChallenge
     )
 
 }
