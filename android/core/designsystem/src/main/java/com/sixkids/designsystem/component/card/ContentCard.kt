@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,7 @@ import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.designsystem.theme.component.progressbar.StudentProgressBar
 import com.sixkids.designsystem.theme.npsFont
@@ -119,6 +121,7 @@ fun ContentCard(
     contentAligment: ContentAligment,
     cardColor: Color,
     contentName: String,
+    textColor: Color = Color.Black,
     @DrawableRes contentImageId: Int,
     runningState: RunningState? = null,
     onclick: () -> Unit = {}
@@ -132,6 +135,7 @@ fun ContentCard(
             defaultElevation = 4.dp,
             pressedElevation = 8.dp
         ),
+        shape = RoundedCornerShape(24.dp),
         onClick = onclick
     ) {
         Column {
@@ -157,9 +161,10 @@ fun ContentCard(
                                 .padding(end = 20.dp)
                                 .wrapContentHeight(),
                             textAlign = TextAlign.Start,
-                            fontSize = 34.sp,
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = npsFont
+                            style = UlbanTypography.titleLarge.copy(
+                                fontSize = 30.sp,
+                                color = textColor
+                            )
                         )
                     } else {
                         RunningText(
@@ -176,9 +181,10 @@ fun ContentCard(
                                 .padding(20.dp)
                                 .wrapContentHeight(),
                             textAlign = TextAlign.Start,
-                            fontSize = 34.sp,
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = npsFont
+                            style = UlbanTypography.titleLarge.copy(
+                                fontSize = 30.sp,
+                                color = textColor
+                            )
                         )
                     } else {
                         RunningText(
@@ -252,6 +258,7 @@ fun RunningText(
 fun ContentVerticalCard(
     cardModifier: Modifier = Modifier,
     cardColor: Color = Yellow,
+    textColor: Color = Color.Black,
     imageDrawable: Int = R.drawable.rank,
     text: String = "랭킹",
     onClick: () -> Unit = {}
@@ -278,11 +285,13 @@ fun ContentVerticalCard(
                 painter = painterResource(id = imageDrawable),
                 contentDescription = null,
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = text,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = npsFont
+                style = UlbanTypography.titleLarge.copy(
+                    color = textColor
+                )
             )
         }
     }
