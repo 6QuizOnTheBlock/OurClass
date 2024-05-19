@@ -68,8 +68,8 @@ const QuizContainer = () => {
        console.log(answer);
        setAnswer(()=>answer);
        toast({
-        title: `${answer.name}님 답변`,
-        description: `${answer.submit} 입니다.`
+        title: `${answer.name}님 답변은`,
+        description: `${answer.submit == answer.ans? "맞았습니다." : "틀렸습니다."}`
        })
     }
 
@@ -93,7 +93,7 @@ const QuizContainer = () => {
                 <Toaster/>
         </>)
       case 'Answer':
-        return <Answer setCurrentScreen={setCurrentScreen} Qid={Qid} answer={questions[currentQuestion].answer} point={questions[currentQuestion].point} />;
+        return <Answer setCurrentScreen={setCurrentScreen} Qid={Qid} answer={answer} point={questions[currentQuestion].point} />;
       case 'Ranking':
         return <RankingScreen currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} nextQuestion={nextQuestion} Qid={Qid}  />;
       default:
