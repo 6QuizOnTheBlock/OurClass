@@ -23,11 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.sixkids.designsystem.component.appbar.UlbanDefaultAppBar
 import com.sixkids.designsystem.component.appbar.UlbanDetailAppBar
 import com.sixkids.designsystem.component.button.EditFAB
 import com.sixkids.designsystem.component.screen.LoadingScreen
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.BlueDark
+import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Post
 import com.sixkids.teacher.board.R
@@ -95,12 +97,11 @@ fun PostScreen(
         Column(
 
         ) {
-            UlbanDetailAppBar(
+            UlbanDefaultAppBar(
                 leftIcon = UlbanRes.drawable.board,
                 title = stringResource(id = R.string.board_main_post),
                 content = stringResource(id = R.string.board_main_post),
-                topDescription = "",
-                bottomDescription = "",
+                body = postState.classString.replace("\n", " "),
                 color = Blue
             )
             
