@@ -2,6 +2,7 @@ package com.sixkids.data.repository.organization.remote
 
 import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.OrganizationService
+import com.sixkids.data.model.request.GreetingRequest
 import com.sixkids.data.model.request.JoinOrganizationRequest
 import com.sixkids.data.model.request.NewOrganizationRequest
 import com.sixkids.data.model.response.ClassSummaryResponse
@@ -70,5 +71,9 @@ class OrganizationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getOrganizationRank(orgId: Int): List<RankResponse> {
         return organizationService.getOrganizationRank(orgId).getOrThrow().data
+    }
+    
+    override suspend fun tagGreeting(orgId: Long, memberId: Long): Int {
+        return memberOrgService.tagGreeting(GreetingRequest(orgId, memberId)).getOrThrow().data
     }
 }

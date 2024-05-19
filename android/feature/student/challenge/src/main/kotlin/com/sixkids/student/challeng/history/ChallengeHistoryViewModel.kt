@@ -80,4 +80,8 @@ class ChallengeHistoryViewModel @Inject constructor(
     fun navigateToJoinGroup() = postSideEffect(
         ChallengeHistoryEffect.NavigateToJoinGroup(organizationId)
     )
+
+    fun updateTotalCount(totalCount: Int) {
+        intent { copy(totalChallengeCount = totalCount) }
+    }
 }

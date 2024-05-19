@@ -133,6 +133,7 @@ fun ChallengeDetailScreen(
                 Spacer(modifier = Modifier.weight(1f))
             } else {
                 LazyColumn(
+                    modifier = Modifier.weight(1f),
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {

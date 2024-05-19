@@ -30,4 +30,6 @@ interface OrganizationRemoteDataSource {
     suspend fun getStudentRelationDetail(orgId: Long, sourceStudentId: Long, targetStudentId: Long): StudentRelation
 
     suspend fun getOrganizationRank(orgId: Int): List<RankResponse>
+
+    suspend fun tagGreeting(orgId: Long, memberId: Long): Int
 }

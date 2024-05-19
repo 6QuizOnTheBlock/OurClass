@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ fun ChallengeCreateRoute(
     onHandleException: (Throwable, () -> Unit) -> Unit,
     onShowSnackbar: (SnackbarToken) -> Unit
 ) {
+
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     viewModel.sideEffect.collectWithLifecycle {
@@ -37,6 +39,10 @@ fun ChallengeCreateRoute(
             ChallengeCreateEffect.NavigateUp -> onNavigateUp()
             is ChallengeCreateEffect.HandleException -> onHandleException(it.throwable, it.retry)
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.initData()
     }
 
     ChallengeCreateScreen(

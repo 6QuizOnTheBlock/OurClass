@@ -90,4 +90,8 @@ class OrganizationRepositoryImpl @Inject constructor(
     override suspend fun getOrganizationRank(orgId: Int): List<MemberRankItem> {
         return organizationRemoteDataSource.getOrganizationRank(orgId).toModel()
     }
+
+    override suspend fun tagGreeting(orgId: Long, memberId: Long): Int {
+        return organizationRemoteDataSource.tagGreeting(orgId, memberId)
+    }
 }

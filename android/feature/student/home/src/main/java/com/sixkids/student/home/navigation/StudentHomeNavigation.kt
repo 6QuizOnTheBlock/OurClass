@@ -7,10 +7,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailEffect
 import com.sixkids.student.home.announce.announcedetail.StudentAnnounceDetailRoute
 import com.sixkids.student.home.announce.announcelist.StudentAnnounceListRoute
 import com.sixkids.student.home.chatting.StudentChattingRoute
+import com.sixkids.student.home.greeting.receiver.GreetingReceiverRoute
+import com.sixkids.student.home.greeting.sender.GreetingSenderRoute
 import com.sixkids.student.home.main.StudentHomeMainRoute
 import com.sixkids.student.home.rank.StudentRankRoute
 import com.sixkids.ui.SnackbarToken
@@ -35,6 +36,14 @@ fun NavController.navigateStudentRank() {
     navigate(StudentHomeRoute.rankRoute)
 }
 
+fun NavController.navigateStudentGreetingSender() {
+    navigate(StudentHomeRoute.greetingSenderRoute)
+}
+
+fun NavController.navigateStudentGreetingReceiver() {
+    navigate(StudentHomeRoute.greetingReceiverRoute)
+}
+
 fun NavGraphBuilder.studentHomeNavGraph(
     padding: PaddingValues,
     onShowSnackbar: (SnackbarToken) -> Unit,
@@ -44,6 +53,9 @@ fun NavGraphBuilder.studentHomeNavGraph(
     navigateToTagHello: () -> Unit,
     navigateToRank: () -> Unit,
     navigateToChatting: () -> Unit,
+    navigateToGreetingSender: () -> Unit,
+    navigateToGreetingReceiver: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     composable(route = StudentHomeRoute.defaultRoute) {
         StudentHomeMainRoute(
@@ -52,6 +64,8 @@ fun NavGraphBuilder.studentHomeNavGraph(
             navigateToTagHello = navigateToTagHello,
             navigateToRank = navigateToRank,
             navigateToChatting = navigateToChatting,
+            navigateToGreetingSender = navigateToGreetingSender,
+            navigateToGreetingReceiver = navigateToGreetingReceiver,
             onShowSnackBar = onShowSnackbar
         )
     }
@@ -85,6 +99,18 @@ fun NavGraphBuilder.studentHomeNavGraph(
         StudentRankRoute(
             padding = padding,
             onShowSnackBar = onShowSnackbar
+          )
+    }
+    
+    composable(route = StudentHomeRoute.greetingSenderRoute) {
+        GreetingSenderRoute(
+            onBackClick = navigateBack,
+        )
+    }
+
+    composable(route = StudentHomeRoute.greetingReceiverRoute) {
+        GreetingReceiverRoute(
+            onBackClick = navigateBack,
         )
     }
 }
@@ -100,6 +126,9 @@ object StudentHomeRoute {
     const val chattingRoute = "student_chatting"
 
     const val rankRoute = "student_rank"
+
+    const val greetingSenderRoute = "student_greeting_sender"
+    const val greetingReceiverRoute = "student_greeting_receiver"
 
     fun announceDetailRoute(announceDetailId: Long) = "student_announce_detail/$announceDetailId"
 }

@@ -37,4 +37,6 @@ interface OrganizationRepository {
     suspend fun getStudentRelationDetail(orgId: Long, sourceStudentId: Long, targetStudentId: Long): StudentRelation
 
     suspend fun getOrganizationRank(orgId: Int): List<MemberRankItem>
+
+    suspend fun tagGreeting(orgId: Long, memberId: Long): Int
 }

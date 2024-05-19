@@ -10,4 +10,5 @@ data class Challenge(
     val reward: Int = 0,
     val startTime: LocalDateTime = LocalDateTime.now(),
     val endTime: LocalDateTime = LocalDateTime.now(),
+    val totalCount: Int = 0
 )

@@ -113,7 +113,7 @@ fun GroupWaiting(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.done),
                 onClick = onDoneClick,
-                enabled = remainingMember == 0
+                enabled = remainingMember <= 0
             )
         }
     }

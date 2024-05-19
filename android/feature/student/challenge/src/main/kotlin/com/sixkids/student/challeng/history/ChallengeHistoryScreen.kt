@@ -87,6 +87,7 @@ fun ChallengeRoute(
 
     ChallengeHistoryScreen(
         uiState = uiState,
+        updateTotalCount = viewModel::updateTotalCount,
         navigateToDetail = viewModel::navigateChallengeDetail,
         showDialog = viewModel::showGroupDialog,
     )
@@ -103,6 +104,7 @@ fun ChallengeRoute(
 @Composable
 fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
+    updateTotalCount: (Int) -> Unit = {},
     navigateToDetail: (Long) -> Unit = {},
     showDialog: () -> Unit = {},
 ) {
@@ -136,15 +138,23 @@ fun ChallengeHistoryScreen(
                 topDescription = "${runningChallenge.startTime.formatToMonthDayTime()} ~ ${runningChallenge.endTime.formatToMonthDayTime()}",
                 bottomDescription = runningChallenge.content,
                 color = Red,
-                onClick = showDialog,
-                onReportEnable = uiState.runningChallenge.endStatus?.not() ?: false,
+                onClick = if (uiState.runningChallenge.createTime == null) {
+                    showDialog
+                } else {
+                    {}
+                },
+                onReportEnable = (uiState.runningChallenge.leaderStatus == true && uiState.runningChallenge.endStatus?.not() ?: false),
                 onReportClick = {
                     //TODO 과제 제출로 이동
                 },
-                teamDescription = if(uiState.runningChallenge.type == GroupType.DESIGN) {
+                teamDescription = if (uiState.runningChallenge.type == GroupType.DESIGN) {
                     uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
                 } else {
-                    stringResource(R.string.free_group_matching)
+                    if (uiState.runningChallenge.memberNames.isNotEmpty()) {
+                        uiState.runningChallenge.memberNames.joinToString(", ") { it.name }
+                    } else {
+                        stringResource(R.string.free_group_matching)
+                    }
                 },
                 runningTimeDescription = "과제 참여 후 진행시간 표시하기",
                 expanded = !isScrolled
@@ -167,7 +177,7 @@ fun ChallengeHistoryScreen(
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
 
-            if (challengeItems == null) {
+            if (challengeItems == null || challengeItems.itemCount == 0) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     modifier = Modifier
@@ -188,6 +198,9 @@ fun ChallengeHistoryScreen(
                 ) {
                     items(challengeItems.itemCount) { index ->
                         challengeItems[index]?.let { challenge ->
+                            if (index == 0) {
+                                updateTotalCount(challenge.totalCount)
+                            }
                             UlbanChallengeItem(
                                 title = challenge.title,
                                 description = challenge.content,

@@ -35,19 +35,19 @@ fun RelayTaggingReceiverRoute(
     val activity = context as Activity
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val bleAdapter: NfcAdapter = NfcAdapter.getDefaultAdapter(context)
+    val nfcAdapter: NfcAdapter = NfcAdapter.getDefaultAdapter(context)
 
     DisposableEffect(key1 = Unit) {
         viewModel.init()
 
         onDispose {
-            bleAdapter.disableReaderMode(activity)
+            nfcAdapter.disableReaderMode(activity)
         }
     }
 
-    if (uiState.relayId != -1L && bleAdapter.isEnabled) {
+    if (uiState.relayId != -1L && nfcAdapter.isEnabled) {
         Log.d(TAG, "RelayTaggingReceiverRoute: Ready!")
-        bleAdapter.enableReaderMode(activity, { tag : Tag? ->
+        nfcAdapter.enableReaderMode(activity, { tag : Tag? ->
             tag?.let {
                 val isoDep = IsoDep.get(it)
                 isoDep.use { iso ->
