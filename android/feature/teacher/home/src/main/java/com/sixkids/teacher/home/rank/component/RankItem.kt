@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
@@ -28,7 +29,7 @@ fun RankItem(
 ) {
     val rankHeight = 40
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(vertical = 8.dp),
     ) {
         // Rank
         when (rank) {
@@ -75,8 +76,8 @@ fun RankItem(
         // Exp
         Text(
             modifier = Modifier.align(Alignment.CenterEnd),
-            text = "${exp}exp",
-            style = UlbanTypography.titleMedium,
+            text = "${exp}점",
+            style = UlbanTypography.titleSmall,
             maxLines = 1,
 
         )
