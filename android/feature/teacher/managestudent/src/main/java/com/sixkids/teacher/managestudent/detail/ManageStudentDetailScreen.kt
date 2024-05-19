@@ -90,7 +90,7 @@ fun ManageStudentDetailScreen(
             Spacer(modifier = Modifier.size(20.dp))
 
             Text(
-                text = "소외도 ${uiState.memberDetail.isolationPoint}점",
+                text = "인싸 랭킹 ${uiState.memberDetail.isolationRank}등",
                 style = UlbanTypography.titleSmall,
                 modifier = Modifier.padding(start = 10.dp)
             )
