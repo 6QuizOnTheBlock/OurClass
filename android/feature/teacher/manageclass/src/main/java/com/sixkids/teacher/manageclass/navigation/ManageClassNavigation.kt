@@ -10,6 +10,7 @@ import com.sixkids.teacher.manageclass.chattingfilter.ChattingFilterRoute
 import com.sixkids.teacher.manageclass.invite.ClassInviteRoute
 import com.sixkids.teacher.manageclass.main.ManageClassMainRoute
 import com.sixkids.teacher.manageclass.setting.ClassSettingRoute
+import com.sixkids.teacher.manageclass.statistics.StatisticsRoute
 import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateManageClass(navOptions: NavOptions) {
@@ -26,6 +27,10 @@ fun NavController.navigateInvite() {
 
 fun NavController.navigateClassSetting() {
     navigate(ManageClassRoute.settingRoute)
+}
+
+fun NavController.navigateStatistics(){
+    navigate(ManageClassRoute.summaryRoute)
 }
 
 fun NavGraphBuilder.manageClassNavGraph(
@@ -66,6 +71,10 @@ fun NavGraphBuilder.manageClassNavGraph(
             onShowSnackBar = onShowSnackBar,
             navigateBack = navigateBack
         )
+    }
+
+    composable(ManageClassRoute.summaryRoute){
+        StatisticsRoute()
     }
 }
 
