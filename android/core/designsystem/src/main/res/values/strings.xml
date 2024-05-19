@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hifive_user_count">%d명 참여</string>
-    <string name="point_postfix">" POINT"</string>
+    <string name="point_postfix">" 점"</string>
     <string name="people_postfix">명</string>
     <string name="grade_postfix">" 학년"</string>
     <string name="class_postfix">" 반"</string>
