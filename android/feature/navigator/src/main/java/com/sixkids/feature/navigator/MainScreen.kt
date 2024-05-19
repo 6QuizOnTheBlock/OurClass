@@ -174,6 +174,7 @@ fun MainScreen(
             studentChallengeNavGraph(
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateToCreateGroup = navigator::navigateStudentGroupCreate,
+                navigateToMatchedGroupCreate = navigator::navigateStudentGroupMatchedCreate,
                 navigateToJoinGroup = navigator::navigateStudentGroupJoin,
                 handleException = viewModel::handleException,
             )

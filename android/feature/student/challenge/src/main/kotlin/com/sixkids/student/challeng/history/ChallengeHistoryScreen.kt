@@ -34,6 +34,7 @@ import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.GroupType
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.challeng.history.component.GroupParticipationDialog
 import com.sixkids.student.challeng.history.component.UlbanStudentRunningChallengeAppBar
 import com.sixkids.student.challenge.R
@@ -45,6 +46,7 @@ fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
     navigateToDetail: (Long, Long?) -> Unit,
     navigateToCreateGroup: (Long, GroupType) -> Unit,
+    navigateToMatchedGroupCreate: (Long, List<MemberSimple>) -> Unit,
     navigateToJoinGroup: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -81,6 +83,10 @@ fun ChallengeRoute(
                 )
 
                 is ChallengeHistoryEffect.NavigateToJoinGroup -> navigateToJoinGroup(sideEffect.challengeId)
+                is ChallengeHistoryEffect.NavigateToMathedGroupCreate -> navigateToMatchedGroupCreate(
+                    sideEffect.challengeId,
+                    sideEffect.members
+                )
             }
         }
     }
@@ -89,6 +95,7 @@ fun ChallengeRoute(
         uiState = uiState,
         updateTotalCount = viewModel::updateTotalCount,
         navigateToDetail = viewModel::navigateChallengeDetail,
+        navigateToMatchedGroupCrateOrJoin = viewModel::navigateToCrateOrJoinGroup,
         showDialog = viewModel::showGroupDialog,
     )
 
@@ -106,6 +113,7 @@ fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
     updateTotalCount: (Int) -> Unit = {},
     navigateToDetail: (Long) -> Unit = {},
+    navigateToMatchedGroupCrateOrJoin: (Boolean) -> Unit = {},
     showDialog: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
@@ -139,7 +147,15 @@ fun ChallengeHistoryScreen(
                 bottomDescription = runningChallenge.content,
                 color = Red,
                 onClick = if (uiState.runningChallenge.createTime == null) {
-                    showDialog
+                    if (uiState.runningChallenge.type == GroupType.FREE) {
+                        showDialog
+                    } else {
+                        {
+                            navigateToMatchedGroupCrateOrJoin(
+                                uiState.runningChallenge.leaderStatus ?: false
+                            )
+                        }
+                    }
                 } else {
                     {}
                 },

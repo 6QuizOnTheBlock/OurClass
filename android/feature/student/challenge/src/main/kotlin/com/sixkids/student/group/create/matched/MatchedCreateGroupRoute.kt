@@ -1,4 +1,4 @@
-package com.sixkids.student.group.create
+package com.sixkids.student.group.create.matched
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -30,8 +30,8 @@ import com.sixkids.student.group.component.MultiLayeredCircles
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
-fun CreateGroupRoute(
-    viewModel: CreateGroupViewModel = hiltViewModel(),
+fun MatchedCreateGroupRoute(
+    viewModel: MatchedCreateGroupViewModel = hiltViewModel(),
     navigateToChallengeHistory: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit,
 ) {
@@ -53,11 +53,11 @@ fun CreateGroupRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is CreateGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
-            is CreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
+            is MatchedCreateGroupEffect.NavigateToChallengeHistory -> navigateToChallengeHistory()
+            is MatchedCreateGroupEffect.HandleException -> handleException(it.throwable, it.retryAction)
         }
     }
-    CreateGroupScreen(
+    MatchedCreateGroupScreen(
         uiState = uiState,
         onMemberSelect = viewModel::selectMember,
         onMemberRemove = viewModel::removeMember,
@@ -66,8 +66,8 @@ fun CreateGroupRoute(
 }
 
 @Composable
-fun CreateGroupScreen(
-    uiState: CreateGroupState = CreateGroupState(),
+fun MatchedCreateGroupScreen(
+    uiState: MatchedCreateGroupState = MatchedCreateGroupState(),
     onMemberSelect: (MemberSimple) -> Unit = { },
     onMemberRemove: (Long) -> Unit = { },
     onGroupCreate: () -> Unit = { }
@@ -208,6 +208,6 @@ fun CreateGroupScreen(
 @Composable
 fun CreateGroupScreenPreview() {
     UlbanTheme {
-        CreateGroupScreen()
+        MatchedCreateGroupScreen()
     }
 }

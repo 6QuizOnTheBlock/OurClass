@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sixkids.model.GroupType
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.challeng.history.ChallengeRoute
 
 fun NavController.navigateStudentChallengeHistory(navOptions: NavOptions) {
@@ -23,6 +24,7 @@ fun NavController.navigatePopupToStudentChallengeHistory() {
 fun NavGraphBuilder.studentChallengeNavGraph(
     navigateChallengeDetail: (Long, Long?) -> Unit,
     navigateToCreateGroup: (Long, GroupType) -> Unit,
+    navigateToMatchedGroupCreate: (Long, List<MemberSimple>) -> Unit,
     navigateToJoinGroup: (Long) -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
@@ -32,6 +34,7 @@ fun NavGraphBuilder.studentChallengeNavGraph(
                 navigateChallengeDetail(challengeId, groupId)
             },
             navigateToCreateGroup = navigateToCreateGroup,
+            navigateToMatchedGroupCreate = navigateToMatchedGroupCreate,
             navigateToJoinGroup = navigateToJoinGroup,
             handleException = handleException
         )

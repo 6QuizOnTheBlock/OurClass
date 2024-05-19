@@ -1,4 +1,4 @@
-package com.sixkids.student.group.create
+package com.sixkids.student.group.create.free
 
 import com.sixkids.model.MemberSimple
 import com.sixkids.ui.base.SideEffect

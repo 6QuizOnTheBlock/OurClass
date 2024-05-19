@@ -15,6 +15,7 @@ import com.sixkids.feature.signin.navigation.navigateSignIn
 import com.sixkids.feature.signin.navigation.navigateSignUp
 import com.sixkids.feature.signin.navigation.navigateSignUpPhoto
 import com.sixkids.model.GroupType
+import com.sixkids.model.MemberSimple
 import com.sixkids.student.board.navigation.StudentBoardRoute
 import com.sixkids.student.board.navigation.navigateStudentBoard
 import com.sixkids.student.board.navigation.navigateStudentBoardDetail
@@ -33,6 +34,7 @@ import com.sixkids.student.navigation.navigatePopupToStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentChallengeHistory
 import com.sixkids.student.navigation.navigateStudentGroupCreate
 import com.sixkids.student.navigation.navigateStudentGroupJoin
+import com.sixkids.student.navigation.navigateStudentMatchedGroupCreate
 import com.sixkids.student.relay.navigation.RelayRoute
 import com.sixkids.student.relay.navigation.navigateStudentRelayAnswer
 import com.sixkids.student.relay.navigation.navigateStudentRelayCreate
@@ -272,6 +274,13 @@ class MainNavigator(
         navController.navigateStudentGroupCreate(
             challengeId = challengeId,
             groupType = groupType
+        )
+    }
+
+    fun navigateStudentMatchedGroupCreate(challengeId: Long, members: List<MemberSimple>) {
+        navController.navigateStudentMatchedGroupCreate(
+            challengeId = challengeId,
+            members = members
         )
     }
 
