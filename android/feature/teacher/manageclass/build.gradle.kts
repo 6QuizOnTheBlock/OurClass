@@ -7,4 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designsystem)
+
+    implementation(libs.bundles.paging)
 }

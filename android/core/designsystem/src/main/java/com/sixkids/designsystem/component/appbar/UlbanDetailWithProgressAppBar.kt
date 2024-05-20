@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sixkids.designsystem.theme.RedDark
 import com.sixkids.designsystem.theme.component.progressbar.StudentProgressBar
 
 @Composable
@@ -19,30 +20,34 @@ fun UlbanDetailWithProgressAppBar(
     content: String,
     topDescription: String,
     bottomDescription: String,
+    badgeCount: Int = 0,
+    totalCnt: Int,
+    successCnt: Int,
     color: Color,
+    progressBarColor: Color = RedDark,
     expanded: Boolean = true,
     onclick: () -> Unit,
-    totalCnt: Int,
-    successCnt: Int
 ) {
     BasicAppBar(
         modifier = modifier,
         leftIcon = leftIcon,
         title = title,
         content = {
-            Column (
+            Column(
                 modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.Start
-            ){
+            ) {
                 AppBarDetailInfo(
                     title = content,
                     topDescription = topDescription,
-                    bottomDescription = bottomDescription
+                    bottomDescription = bottomDescription,
+                    badgeCount = badgeCount
                 )
                 StudentProgressBar(
-                    modifier = modifier.padding(top= 8.dp , end = 16.dp),
+                    modifier = modifier.padding(top = 8.dp, end = 16.dp),
                     totalStudentCount = totalCnt,
-                    successStudentCount = successCnt
+                    successStudentCount = successCnt,
+                    progressBarColor = progressBarColor
                 )
             }
         },

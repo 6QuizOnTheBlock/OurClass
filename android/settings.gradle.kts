@@ -19,6 +19,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = uri("https://jitpack.io"))
+        maven (url ="https://devrepo.kakao.com/nexus/content/groups/public/")
     }
 }
 
@@ -29,6 +31,7 @@ include(":data")
 include(":core:ui")
 include(":core:model")
 include(":core:designsystem")
+include(":core:nfc")
 include(":feature:navigator")
 include(":feature:home")
 include(":feature:signin")
@@ -41,3 +44,8 @@ include(":feature:student:home")
 include(":feature:student:board")
 include(":feature:student:challenge")
 include(":feature:student:relay")
+include(":feature:teacher:challenge")
+include(":feature:teacher:main")
+include(":core:bluetooth")
+include(":feature:student:main")
+include(":feature:teacher:relay")

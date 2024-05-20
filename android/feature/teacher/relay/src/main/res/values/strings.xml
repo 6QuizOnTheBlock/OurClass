@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="relay_no">진행 중인\n이어 달리기가\n없습니다</string>
+    <string name="relay_current">이어 달리기가\n진행 중입니다!</string>
+    <string name="relay_current_runner">현재 주자는 %1$s 학생입니다</string>
+    <string name="relay_progress">%1$s번 중 %2$s번 진행 중입니다</string>
+    <string name="relay_relay_count">지금까지  %d번 이어 달리기를 진행했어요</string>
+    <string name="relay_no_history">기록이 없어요</string>
+    <string name="relay">이어 달리기</string>
+    <string name="relay_detail_last_member">%s 학생이 폭탄을 터트렸어요</string>
+    <string name="relay_detail_total_count">%d명 학생이 참여했어요</string>
+</resources>

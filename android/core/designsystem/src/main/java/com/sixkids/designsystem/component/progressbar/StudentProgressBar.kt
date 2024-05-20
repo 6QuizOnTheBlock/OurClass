@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.theme.RedDark
+import com.sixkids.designsystem.theme.UlbanTypography
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFF6F0)
 @Composable
@@ -29,7 +30,8 @@ fun StudentProgressBarPreview() {
 fun StudentProgressBar(
     modifier: Modifier = Modifier,
     totalStudentCount: Int,
-    successStudentCount: Int
+    successStudentCount: Int,
+    progressBarColor: Color = RedDark
 ){
     Column(
         modifier = modifier,
@@ -37,10 +39,11 @@ fun StudentProgressBar(
         LinearProgressIndicator(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 4.dp)
                 .height(4.dp),
             progress = (successStudentCount.toFloat()/totalStudentCount.toFloat()),
             trackColor = Color.White,
-            color = RedDark
+            color = progressBarColor
         )
         Text(
             modifier = Modifier
@@ -48,6 +51,7 @@ fun StudentProgressBar(
             text = "${totalStudentCount}명 중 ${successStudentCount}명이 진행했어요",
             textAlign = TextAlign.End,
             fontSize = 14.sp,
+            style = UlbanTypography.bodySmall
         )
     }
 }

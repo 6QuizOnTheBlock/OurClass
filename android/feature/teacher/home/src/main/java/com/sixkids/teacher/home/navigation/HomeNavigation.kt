@@ -7,9 +7,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sixkids.teacher.home.main.HomeMainRoute
 import com.sixkids.teacher.home.rank.RankRoute
+import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateHome(navOptions: NavOptions) {
-    navigate(HomeRoute.defaultRoute,navOptions)
+    navigate(HomeRoute.defaultRoute, navOptions)
 }
 
 fun NavController.navigateRank() {
@@ -18,20 +19,31 @@ fun NavController.navigateRank() {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
-    navigateToRank: () -> Unit
+    onShowSnackBar: (SnackbarToken) -> Unit,
+    navigateToRank: () -> Unit,
+    navigateToChallenge: () -> Unit,
+    navigateToRelay: () -> Unit,
+    navigateToQuiz: () -> Unit
 ) {
-    composable(route = HomeRoute.defaultRoute){
+    composable(route = HomeRoute.defaultRoute) {
         HomeMainRoute(
-            padding,
-            navigateToRank
+            padding = padding,
+            navigateToRank = navigateToRank,
+            navigateToChallenge = navigateToChallenge,
+            navigateToRelay = navigateToRelay,
+            navigateToQuiz = navigateToQuiz
         )
     }
-    composable(route = HomeRoute.rankRoute){
-        RankRoute(padding)
+    composable(route = HomeRoute.rankRoute) {
+        RankRoute(
+            padding = padding,
+            onShowSnackBar = onShowSnackBar
+        )
     }
 }
 
-object HomeRoute{
+
+object HomeRoute {
     const val defaultRoute = "home"
     const val rankRoute = "rank"
 }

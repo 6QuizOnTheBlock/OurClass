@@ -8,4 +8,5 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.feature.teacher.challenge)
 }

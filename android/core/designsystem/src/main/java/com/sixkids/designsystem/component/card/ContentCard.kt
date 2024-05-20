@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,14 +27,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.R
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
+import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.designsystem.theme.Yellow
 import com.sixkids.designsystem.theme.component.progressbar.StudentProgressBar
+import com.sixkids.designsystem.theme.npsFont
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -94,7 +99,13 @@ fun ContentCardViewPreview() {
 @Composable
 fun RankCardViewPreview() {
     UlbanTheme {
-        RankCard()
+        ContentVerticalCard(
+            cardModifier = Modifier
+                .padding(20.dp)
+                .aspectRatio(1f),
+            imageDrawable = R.drawable.rank,
+            text = "랭킹"
+        )
     }
 }
 
@@ -107,15 +118,18 @@ enum class ContentAligment {
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
+    imageModifier: Modifier = Modifier,
     contentAligment: ContentAligment,
     cardColor: Color,
     contentName: String,
+    textColor: Color = Color.Black,
     @DrawableRes contentImageId: Int,
     runningState: RunningState? = null,
-    onclick: () -> Unit = {}
+    onclick: () -> Unit = {},
+    cardHeight: Dp = 160.dp
 ) {
     Card(
-        modifier = modifier.height(160.dp),
+        modifier = modifier.height(cardHeight),
         colors = CardDefaults.cardColors(
             containerColor = cardColor
         ),
@@ -123,6 +137,7 @@ fun ContentCard(
             defaultElevation = 4.dp,
             pressedElevation = 8.dp
         ),
+        shape = RoundedCornerShape(24.dp),
         onClick = onclick
     ) {
         Column {
@@ -137,17 +152,21 @@ fun ContentCard(
                     Image(
                         painter = painterResource(id = contentImageId),
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = imageModifier
+                            .fillMaxHeight()
                             .aspectRatio(1f)
                     )
                     if (runningState == null) {
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp),
+                                .weight(1f)
+                                .wrapContentHeight(),
                             textAlign = TextAlign.Center,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Black
+                            style = UlbanTypography.titleLarge.copy(
+                                fontSize = 26.sp,
+                                color = textColor
+                            )
                         )
                     } else {
                         RunningText(
@@ -161,10 +180,14 @@ fun ContentCard(
                         Text(
                             text = contentName,
                             modifier = Modifier
-                                .padding(20.dp),
+//                                .padding(20.dp)
+                                .weight(1f)
+                                .wrapContentHeight(),
                             textAlign = TextAlign.Center,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Black
+                            style = UlbanTypography.titleLarge.copy(
+                                fontSize = 26.sp,
+                                color = textColor
+                            )
                         )
                     } else {
                         RunningText(
@@ -175,7 +198,7 @@ fun ContentCard(
                     Image(
                         painter = painterResource(id = contentImageId),
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = imageModifier
                             .fillMaxHeight()
                             .aspectRatio(1f)
                     )
@@ -219,12 +242,14 @@ fun RunningText(
         Text(
             text = boldText,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            fontFamily = npsFont
         )
         Text(
             modifier = Modifier.padding(top = 10.dp),
             text = normalText,
             fontSize = 14.sp,
+            fontFamily = npsFont
         )
     }
 
@@ -233,16 +258,18 @@ fun RunningText(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RankCard(
-    modifier: Modifier = Modifier,
+fun ContentVerticalCard(
+    cardModifier: Modifier = Modifier,
+    cardColor: Color = Yellow,
+    textColor: Color = Color.Black,
+    imageDrawable: Int = R.drawable.rank,
+    text: String = "랭킹",
     onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier
-            .height(160.dp)
-            .aspectRatio(1f),
+        modifier = cardModifier,
         colors = CardDefaults.cardColors(
-            containerColor = Yellow
+            containerColor = cardColor
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
@@ -258,13 +285,16 @@ fun RankCard(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.rank),
+                painter = painterResource(id = imageDrawable),
                 contentDescription = null,
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "랭크",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Black
+                text = text,
+                style = UlbanTypography.titleLarge.copy(
+                    color = textColor
+                )
             )
         }
     }
