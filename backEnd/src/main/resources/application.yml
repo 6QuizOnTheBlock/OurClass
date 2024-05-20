@@ -6,7 +6,10 @@ server:
       enabled: true
       force: true
     context-path: /api
----
+  tomcat:
+    threads:
+      max: 200
+    max-connections: 10000
 spring:
   profiles:
     group:
@@ -17,3 +20,69 @@ spring:
     include:
       - key
       - db
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
+  datasource:
+    hikari:
+      maximum-pool-size: 30
+#springdoc swagger
+springdoc:
+  api-docs:
+    enabled: true
+    path: /swagger-ui/docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    tags-sorter: alpha            # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    operations-sorter: alpha      # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    display-request-duration: true
+
+#aws s3 bucket
+cloud:
+  aws:
+    s3:
+      bucket: ENC(grPEMZ1PJTUMTnbo3+7P3rxncmVEC3Lo)
+    credentials:
+      access-key: ENC(9ss56OYIRmTDqcR1xo9MSNiZK1jjjXav5ObTtGhO68c=)
+      secret-key: ENC(NRYp7JUX0kJXYGbOXUmXeV4dO/jlrrdr9OpRHFCK5MTLgdAxmhvJz5jbveszalqL9WN6elflhLE=)
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+jwt:
+  # HS512 알고리즘을 사용함. 해당 알고리즘은 key 값이 최소 512bit 여야함. 따라서 [secret-key]는  64byte 이상이어야 한다.
+  secret: ENC(FNp9vOQKsWIRx15Fh53WubD4uKv+BvB43vuybNVZfQsppupJA4r+n2wQBnZzyYtlJNvdCLWYJf6TtwDXDydvKe03XrusQWIxwsz1QZXTLSDoeWSUJkWqbt9JaYyiZY2rfMx6FYwOfCtC2cxe2Ebe/cLWJjrXWL16517tRuf0z2S3SW0ji9OHDSCp9DjLIe/n)
+  token:
+    # 접근 토큰 시간: 12시간 (60*60*12*1000 =43200000)
+    access-expiration-time: 43200000
+    #갱신토큰시간: 3일  (60*60*24*3*1000=259200000)
+    refresh-expiration-time: 259200000
+
+oicd:
+  # id-token 발행자
+  iss: ENC(AP4nYWw9KTDrd3gDkroFyXEed8DgS4sp7nglomVpjas=)
+  # id-token 발행을 요청한 서비스 앱의 ID
+  aud: ENC(G4sxMKOTz0fFoO58luWfV6rqCBZTtEhj81DicEx5wBy8ZgUFTGm1HMlgCTVX9XpW)
+
+firebase:
+  path: ENC(gG1P3HSYoou6l49cHkZr2vgFevWbm5rbFncRaN8C2f0=)
+
+kafka:
+  url: ENC(S/qv76amkPMXZ2qL1ncBy/Td9LnfF2VtIxp3WlrB2cQ=)
+  group: ENC(zfETOXpFX/sWRqXNhrk/j+LcLwYFTMfk)
+
+ulvan:
+  url: ENC(XH7Q0qDLHdytJyNWLX19ii1whNZcuR3p/oJUJ2nxG14cwrgzcpt10Q==)
