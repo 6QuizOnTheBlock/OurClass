@@ -4,4 +4,6 @@
     <string name="bottom_navigation_tab_label_board">게시판</string>
     <string name="bottom_navigation_tab_label_manage_student">학생관리</string>
     <string name="bottom_navigation_tab_label_manage_class">학급관리</string>
+    <string name="bottom_navigation_tab_label_challenge">함께달리기</string>
+    <string name="bottom_navigation_tab_label_relay">이어달리기</string>
 </resources>

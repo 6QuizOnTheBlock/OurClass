@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.challenge.remote
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.sixkids.data.api.ChallengeService
@@ -29,7 +30,9 @@ class ChallengeHistoryPagingSource @Inject constructor(
                 page,
                 DEFAULT_SIZE
             )
-            val challengeHistory = response.getOrThrow().data.challenges.map { it.toModel() }
+            val challengeHistory = response.getOrThrow().data.let { challengeResponse ->
+                challengeResponse.challenges.map { it.toModel(challengeResponse.totalCount) }
+            }
 
             LoadResult.Page(
                 data = challengeHistory,

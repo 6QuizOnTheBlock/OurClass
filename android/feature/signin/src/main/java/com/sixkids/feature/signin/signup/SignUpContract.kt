@@ -21,7 +21,8 @@ enum class Role{
 
 sealed interface SignUpPhotoEffect : SideEffect {
     data object NavigateToTeacherOrganizationList : SignUpPhotoEffect
-    data class onShowSnackBar(val tkn : SnackbarToken) : SignUpPhotoEffect
+    data object NavigateToStudentOrganizationList : SignUpPhotoEffect
+    data class OnShowSnackBar(val tkn : SnackbarToken) : SignUpPhotoEffect
 }
 
 data class SignUpPhotoState(

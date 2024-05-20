@@ -1,5 +1,6 @@
 package com.sixkids.data.repository.user.remote
 
+import com.sixkids.data.api.MemberOrgService
 import com.sixkids.data.api.MemberService
 import com.sixkids.data.api.SignInService
 import com.sixkids.data.model.request.FcmRequest
@@ -7,6 +8,7 @@ import com.sixkids.data.model.request.SignInRequest
 import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.model.JwtToken
+import com.sixkids.model.MemberSimple
 import com.sixkids.model.UserInfo
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class UserRemoteDataSourceImpl @Inject constructor(
     private val signInService: SignInService,
     private val memberService: MemberService,
-    private val userLocalDataSource: UserLocalDataSource
+    private val userLocalDataSource: UserLocalDataSource,
+    private val memberOrgService: MemberOrgService
 ) : UserRemoteDataSource{
     override suspend fun signIn(idToken: String): JwtToken {
         val response = signInService.signIn(SignInRequest(idToken))
@@ -75,6 +78,9 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return response.getOrThrow().data.toModel()
     }
 
+    override suspend fun getMemberSimple(id: Long): MemberSimple =
+        memberService.getMemberInfoById(id).getOrThrow().data.toModel()
+
     override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
         val data = HashMap<String, RequestBody>()
 
@@ -107,4 +113,5 @@ class UserRemoteDataSourceImpl @Inject constructor(
         return response.getOrThrow().data.toModel()
     }
 
+    override suspend fun getStudentHomeInfo(organizationId: Long) = memberOrgService.getStudentHomeInfo(organizationId).getOrThrow().data
 }

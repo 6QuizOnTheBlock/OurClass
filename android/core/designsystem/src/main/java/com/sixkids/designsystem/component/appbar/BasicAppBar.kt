@@ -51,7 +51,7 @@ fun BasicAppBar(
     )
 
     val animatedHeight by animateDpAsState(
-        targetValue = if (expanded) 180.dp else 60.dp,
+        targetValue = if (expanded) 210.dp else 60.dp,
         animationSpec = TweenSpec(durationMillis = 300),
         label = "앱바 크기"
     )
@@ -88,7 +88,7 @@ fun BasicAppBar(
                 Icon(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .padding(vertical = 16.dp)
+                        .padding(vertical = 20.dp)
                         .aspectRatio(1f),
                     painter = painterResource(id = leftIcon),
                     contentDescription = "로고",

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Card
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sixkids.designsystem.R
+import com.sixkids.designsystem.theme.Orange
 import com.sixkids.designsystem.theme.Red
 import com.sixkids.designsystem.theme.UlbanTheme
 import com.sixkids.designsystem.theme.UlbanTypography
@@ -81,7 +84,7 @@ fun UlbanMissionCard(
     Box(
         modifier = modifier.clickable {
             onClick()
-        },
+        }
     ) {
         Card(
             shape = customShape,
@@ -89,13 +92,12 @@ fun UlbanMissionCard(
                 containerColor = backGroundColor,
             ),
             modifier = Modifier
+                .padding(40.dp)
                 .width(200.dp)
                 .height(300.dp)
-                .padding(16.dp)
-                .align(Alignment.BottomCenter)
         ) {
             Column {
-                Spacer(modifier = Modifier.height(170.dp))
+                Spacer(modifier = modifier.height(170.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = title,
@@ -118,19 +120,18 @@ fun UlbanMissionCard(
                 }
             }
         }
-        Image(
+        Box(
             modifier = Modifier
-                .padding(bottom = 32.dp, end = 32.dp)
-                .width(250.dp)
-                .height(400.dp)
                 .align(Alignment.TopCenter),
-            painter = painterResource(id = imgRes),
-            contentDescription = null
-        )
-
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                modifier = Modifier.run { size(230.dp).offset(x = -(20.dp), y = -(20.dp)) },
+                painter = painterResource(id = imgRes),
+                contentDescription = null
+            )
+        }
     }
-
-
 }
 
 @Preview(showBackground = true)
@@ -144,4 +145,14 @@ fun UlbanMissionCardPreview() {
             backGroundColor = Red
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun UlbanPreview2(){
+    UlbanMissionCard(
+        imgRes = R.drawable.relay,
+        title = "친구에게 전달해 봐요!",
+        backGroundColor = Orange
+    )
 }

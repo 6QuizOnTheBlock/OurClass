@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sixkids.designsystem.R
@@ -54,4 +55,17 @@ interface DisplayableMember {
     val name: String
     val photo: String
     val isLeader: Boolean
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun MemberSimpleItemPreview() {
+    MemberSimpleItem(
+        member = object : DisplayableMember {
+            override val name: String = "김철수"
+            override val photo: String = ""
+            override val isLeader: Boolean = true
+        }
+    )
 }

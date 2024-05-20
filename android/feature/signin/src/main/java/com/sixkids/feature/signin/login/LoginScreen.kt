@@ -2,7 +2,6 @@ package com.sixkids.feature.signin.login
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
@@ -58,16 +57,12 @@ fun LoginRoute(
     navigateToHome: () -> Unit,
     navigateToSignUp: () -> Unit,
     navigateToTeacherOrganizationList: () -> Unit,
+    navigateToStudentOrganizationList: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit
 ) {
     val context = LocalContext.current
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val transitionState = remember {
-        MutableTransitionState(false).apply {
-            targetState = true
-        }
-    }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.autoSignIn()
@@ -79,6 +74,7 @@ fun LoginRoute(
             LoginEffect.NavigateToHome -> navigateToHome()
             is LoginEffect.OnShowSnackBar -> onShowSnackBar(sideEffect.tkn)
             LoginEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
+            LoginEffect.NavigateToStudentOrganizationList -> navigateToStudentOrganizationList()
         }
     }
 

@@ -3,8 +3,7 @@ package com.sixkids.feature.navigator
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
@@ -37,12 +36,19 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.sixkids.designsystem.component.snackbar.UlbanSnackbar
 import com.sixkids.designsystem.theme.Cream
 import com.sixkids.feature.signin.navigation.signInNavGraph
+import com.sixkids.student.board.navigation.studentBoardNavGraph
+import com.sixkids.student.home.navigation.studentHomeNavGraph
+import com.sixkids.student.main.navigation.studentOrganizationListNavGraph
+import com.sixkids.student.navigation.studentChallengeNavGraph
+import com.sixkids.student.navigation.studentGroupNavGraph
+import com.sixkids.student.relay.navigation.studentRelayNavGraph
 import com.sixkids.teacher.board.navigation.boardNavGraph
 import com.sixkids.teacher.challenge.navigation.challengeNavGraph
 import com.sixkids.teacher.home.navigation.homeNavGraph
 import com.sixkids.teacher.main.navigation.teacherOrganizationListNavGraph
 import com.sixkids.teacher.manageclass.navigation.manageClassNavGraph
 import com.sixkids.teacher.managestudent.navigation.manageStudentNavGraph
+import com.sixkids.teacher.relay.navigation.teacherRelayNavGraph
 import com.sixkids.ui.extension.collectWithLifecycle
 
 @Composable
@@ -62,7 +68,7 @@ fun MainScreen(
         }
     }
 
-    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         RequestNotificationPermission()
     }
 
@@ -73,30 +79,44 @@ fun MainScreen(
                 modifier = Modifier,
                 selectedTab = navigator.currentTab ?: MainNavigationTab.HOME,
                 itemClick = navigator::navigate,
+                bottomTavItems = navigator.bottomTabItems?.value
             )
         }
     ) { innerPadding ->
         NavHost(
             navController = navigator.navController,
             startDestination = navigator.startDestination,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
+            enterTransition = { fadeIn(animationSpec = tween(0)) },
+            exitTransition = { fadeOut(animationSpec = tween(0)) },
         )
         {
             homeNavGraph(
                 padding = innerPadding,
                 navigateToRank = navigator::navigateRank,
                 navigateToChallenge = navigator::navigateChallengeHistory,
+                navigateToRelay = navigator::navigateTeacherRelayHistory,
+                navigateToQuiz = { } ,
+                onShowSnackBar = viewModel::onShowSnackbar,
             )
 
             boardNavGraph(
                 padding = innerPadding,
+                navigateToPost = navigator::navigatePost,
+                navigateToPostDetail = navigator::navigatePostDetail,
+                onBackClick = navigator::popBackStack,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToChatting = navigator::navigateChatting,
+                navigateToPostWrite = navigator::navigatePostWrite,
+                navigateToAnnounceDetail = navigator::navigateAnnounceDetail,
+                navigateToAnnounceWrite = navigator::navigateAnnounceWrite,
+                navigateToAnnounceList = navigator::navigateAnnounce,
             )
 
             challengeNavGraph(
-                padding = innerPadding,
                 navigateChallengeDetail = navigator::navigateChallengeDetail,
                 navigateCreateChallenge = navigator::navigateCreateChallenge,
+                navigateChallengeCreatedResult = navigator::navigateChallengeCreatedResult,
+                navigateChallengeHistory = navigator::navigatePopupToHistory,
                 handleException = viewModel::handleException,
                 showSnackbar = viewModel::onShowSnackbar,
                 navigateUp = navigator::popBackStack,
@@ -104,10 +124,18 @@ fun MainScreen(
 
             manageClassNavGraph(
                 padding = innerPadding,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToClassSummary = navigator::navigateClassStatistics,
+                navigateToClassSetting = navigator::navigateClassSetting,
+                navigateToChattingFilter = navigator::navigateChattingFilter,
+                navigateToInvite = navigator::navigateClassInvite,
+                navigateBack = navigator::popBackStack,
             )
 
             manageStudentNavGraph(
                 padding = innerPadding,
+                navigateToStudentDetail = navigator::navigateManageStudentDetail,
+                handleException = viewModel::handleException,
             )
 
             signInNavGraph(
@@ -117,6 +145,7 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 navigateToTeacherOrganizationList = navigator::navigateTeacherOrganizationList,
+                navigateToStudentOrganizationList = navigator::navigateStudentOrganizationList,
             )
 
             teacherOrganizationListNavGraph(
@@ -126,6 +155,72 @@ fun MainScreen(
                 onShowSnackBar = viewModel::onShowSnackbar,
                 onBackClick = navigator::popBackStack,
                 navigateToSignIn = navigator::navigateSignIn,
+            )
+
+            studentHomeNavGraph(
+                padding = innerPadding,
+                onShowSnackbar = viewModel::onShowSnackbar,
+                navigateToStudentAnnounceList = navigator::navigateStudentAnnounceList,
+                navigateToStudentAnnounceDetail = navigator::navigateStudentAnnounceDetail,
+                navigateToTagHello = { },
+                navigateToRank = navigator::navigateRank,
+                navigateToChatting = navigator::navigateStudentChatting,
+                navigateBack = navigator::popBackStack,
+                navigateToGreetingSender = navigator::navigateGreetingSender,
+                navigateToGreetingReceiver = navigator::navigateGreetingReceiver,
+                onBackClick = navigator::popBackStack,
+            )
+
+            studentChallengeNavGraph(
+                navigateChallengeDetail = navigator::navigateChallengeDetail,
+                navigateToCreateGroup = navigator::navigateStudentGroupCreate,
+                navigateToMatchedGroupCreate = navigator::navigateStudentMatchedGroupCreate,
+                navigateToJoinGroup = navigator::navigateStudentGroupJoin,
+                handleException = viewModel::handleException,
+            )
+
+            studentGroupNavGraph(
+                navigateToChallengeHistory = navigator::navigatePopupToStudentGroupHistory,
+                handleException = viewModel::handleException,
+            )
+
+            studentOrganizationListNavGraph(
+                navigateToJoinOrganization = navigator::navigateJoinOrganization,
+                navigateToProfile = navigator::navigateStudentProfile,
+                navigateToHome = navigator::navigateStudentHome,
+                navigateToSignIn = navigator::navigateSignIn,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
+            )
+
+            studentRelayNavGraph(
+                padding = innerPadding,
+                navigateRelayHistory = navigator::navigateStudentRelayHistory,
+                navigateRelayDetail = navigator::navigateStudentRelayDetail,
+                navigateCreateRelay = navigator::navigateStudentRelayCreate,
+                navigateCreateRelayResult = navigator::navigateStudentRelayCreateResult,
+                navigateJoinRelay = navigator::navigateStudentRelayJoin,
+                navigateAnswerRelay = navigator::navigateStudentRelayAnswer,
+                navigateTaggingSender = navigator::navigateStudentRelayTaggingSender,
+                navigateTaggingReceiver = navigator::navigateStudentRelayTaggingReceiver,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                onBackClick = navigator::popBackStack,
+                handleException = viewModel::handleException
+            )
+
+            studentBoardNavGraph(
+                padding = innerPadding,
+                onShowSnackBar = viewModel::onShowSnackbar,
+                navigateToStudentBoardDetail = navigator::navigateStudentBoardDetail,
+                navigateToStudentBoardWrite = navigator::navigateStudentBoardWrite,
+                navigateBack = navigator::popBackStack,
+            )
+
+            teacherRelayNavGraph(
+                padding = innerPadding,
+                navigateRelayHistory = navigator::navigateTeacherRelayHistory,
+                navigateRelayDetail = navigator::navigateTeacherRelayDetail,
+                handleException = viewModel::handleException
             )
 
         }
@@ -149,6 +244,7 @@ fun BottomNav(
     modifier: Modifier,
     itemClick: (MainNavigationTab) -> Unit = {},
     selectedTab: MainNavigationTab,
+    bottomTavItems: List<MainNavigationTab>? = null
 ) {
     val selectedItem = rememberUpdatedState(newValue = selectedTab)
 
@@ -166,7 +262,7 @@ fun BottomNav(
                 modifier = modifier,
                 containerColor = Cream,
             ) {
-                MainNavigationTab.entries.forEach { item ->
+                bottomTavItems?.forEach { item ->
                     NavigationBarItem(
                         icon = {
                             Icon(
@@ -202,7 +298,7 @@ fun RequestNotificationPermission() {
     )
 
     LaunchedEffect(Unit) {
-        if(notificationPermissionState.status.isGranted.not()) {
+        if (notificationPermissionState.status.isGranted.not()) {
             notificationPermissionState.launchPermissionRequest()
         }
     }

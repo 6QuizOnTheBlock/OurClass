@@ -8,6 +8,7 @@ sealed interface LoginEffect : SideEffect{
     data object NavigateToHome : LoginEffect
     data object NavigateToSignUp : LoginEffect
     data object NavigateToTeacherOrganizationList : LoginEffect
+    data object NavigateToStudentOrganizationList : LoginEffect
     data class OnShowSnackBar(val tkn : SnackbarToken) : LoginEffect
 }
 

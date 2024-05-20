@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.create.info
 
+import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
@@ -46,7 +47,7 @@ class InfoViewModel @Inject constructor(
     fun updateEndDate(endDate: LocalDate) {
         intent {
             val selectedTime = LocalDateTime.of(endDate, endTime)
-            postSideEffect(InfoEffect.UpdateStartTime(selectedTime))
+            postSideEffect(InfoEffect.UpdateEndTime(selectedTime))
             copy(endDate = endDate)
         }
     }
@@ -133,13 +134,20 @@ class InfoViewModel @Inject constructor(
     }
 
     fun moveNextStep() {
+        val startTime = LocalDateTime.of(uiState.value.startDate, uiState.value.startTime)
+        val endTime = LocalDateTime.of(uiState.value.endDate, uiState.value.endTime)
         if (
             uiState.value.title.isEmpty() ||
             uiState.value.content.isEmpty() ||
             uiState.value.point.isEmpty()
         ) {
-            postSideEffect(InfoEffect.ShowInputErrorSnackbar)
-        } else {
+            postSideEffect(InfoEffect.ShowInputErrorSnackbar(R.string.please_input_all_info))
+        } else if (startTime.isAfter(endTime)) {
+            postSideEffect(InfoEffect.ShowInputErrorSnackbar(R.string.end_time_earlier_than_start_time))
+        } else if(startTime.isBefore(LocalDateTime.now())) {
+            postSideEffect(InfoEffect.ShowInputErrorSnackbar(R.string.start_time_earlier_than_now))
+        }
+        else {
             postSideEffect(InfoEffect.MoveGroupTypeStep)
         }
     }

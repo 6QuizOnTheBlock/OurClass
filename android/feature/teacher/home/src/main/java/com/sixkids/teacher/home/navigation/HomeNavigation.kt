@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sixkids.teacher.home.main.HomeMainRoute
 import com.sixkids.teacher.home.rank.RankRoute
+import com.sixkids.ui.SnackbarToken
 
 fun NavController.navigateHome(navOptions: NavOptions) {
     navigate(HomeRoute.defaultRoute, navOptions)
@@ -18,18 +19,26 @@ fun NavController.navigateRank() {
 
 fun NavGraphBuilder.homeNavGraph(
     padding: PaddingValues,
+    onShowSnackBar: (SnackbarToken) -> Unit,
     navigateToRank: () -> Unit,
     navigateToChallenge: () -> Unit,
+    navigateToRelay: () -> Unit,
+    navigateToQuiz: () -> Unit
 ) {
     composable(route = HomeRoute.defaultRoute) {
         HomeMainRoute(
-            padding,
-            navigateToRank,
-            navigateToChallenge
+            padding = padding,
+            navigateToRank = navigateToRank,
+            navigateToChallenge = navigateToChallenge,
+            navigateToRelay = navigateToRelay,
+            navigateToQuiz = navigateToQuiz
         )
     }
     composable(route = HomeRoute.rankRoute) {
-        RankRoute(padding)
+        RankRoute(
+            padding = padding,
+            onShowSnackBar = onShowSnackBar
+        )
     }
 }
 

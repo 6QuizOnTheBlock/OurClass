@@ -164,7 +164,7 @@ fun UlbanUnderLineTextFieldPreview() {
             inputTextType = InputTextType.TEXT
         )
 
-        Text(text = "포인트를 입력해 주세요", style = UlbanTypography.titleSmall)
+        Text(text = "점수를 입력해 주세요", style = UlbanTypography.titleSmall)
         UlbanUnderLineTextField(
             text = point,
             onTextChange = { point = it },

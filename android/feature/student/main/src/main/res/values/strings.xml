@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- OrganizationListScreen -->
+    <string name="student_organization_welcome">%s 학생 환영합니다</string>
+    <string name="student_organization_no_organization">학급이 없습니다</string>
+    <string name="student_organization_join_class">입장</string>
+
+    <!-- ProfileScreen -->
+    <string name="student_profile_welcome">안녕하세요 %s 학생!</string>
+    <string name="profile_done">완료</string>
+    <string name="profile_sign_out">로그아웃</string>
+    <string name="profile_exit">회원 탈퇴</string>
+
+    <!-- NewOrganizationScreen -->
+    <string name="join_organization_title">선생님께 받은 초대코드를 입력하세요</string>
+    <string name="join_organization_id">선생님께 받은 학급 ID를 입력하세요</string>
+    <string name="join_organization_top">학급 가입</string>
+    <string name="join_organization_code_hint">초대 코드</string>
+    <string name="join_organization_id_hint">초대 코드</string>
+</resources>

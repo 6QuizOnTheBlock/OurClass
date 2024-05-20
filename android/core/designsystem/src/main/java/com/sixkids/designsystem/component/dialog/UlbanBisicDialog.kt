@@ -27,8 +27,7 @@ fun UlbanBasicDialog(
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = modifier,
             colors = CardDefaults.cardColors(containerColor = backGroundColor),
             shape = RoundedCornerShape(16.dp)
         ) {

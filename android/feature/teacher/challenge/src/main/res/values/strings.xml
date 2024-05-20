@@ -12,10 +12,25 @@
     <string name="please_input_all_info">모든 항목을 입력해주세요.</string>
     <string name="next">다음</string>
     <string name="confirm">확인</string>
-    <string name="start_time">언제 시작할까요?</string>
-    <string name="end_time">언제 종료할까요?</string>
+    <string name="please_input_start_time">언제 시작할까요?</string>
+    <string name="please_input_end_time">언제 종료할까요?</string>
     <string name="please_input_min_head_count">그룹 최소 인원을 설정해 주세요</string>
     <string name="please_select_group_type">그룹 유형을 선택해 주세요</string>
     <string name="free_group">학생들이 자율적으로 선택할게요</string>
     <string name="matching_group">그룹을 지정할게요</string>
+    <string name="new_challenge_created">새로운\n함께 달리기가 만들어졌습니다.</string>
+    <string name="detail_info">상세 정보</string>
+    <string name="title">제목</string>
+    <string name="content">내용</string>
+    <string name="start_time">시작 시간</string>
+    <string name="end_time">종료 시간</string>
+    <string name="point">포인트</string>
+    <string name="end_time_earlier_than_start_time">종료 시간이 시작 시간보다 빠릅니다.</string>
+    <string name="start_time_earlier_than_now">오늘 이전의 날짜로 시작할 수 없습니다.</string>
+    <string name="matching_choice_type">매칭 유형을 선택해 주세요</string>
+    <string name="matching_random_type">랜덤으로 매칭할게요</string>
+    <string name="matching_friendly_type">친한 친구들끼리 매칭할게요</string>
+    <string name="matching_unfriendly_type">친하지 않은 친구들끼리 매칭할게요</string>
+    <string name="matching_choice_student">포함할 학생들을 선택해 주세요</string>
+    <string name="matching_success">그룹이 매칭됐습니다</string>
 </resources>

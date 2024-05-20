@@ -49,6 +49,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import com.sixkids.designsystem.R as DesignSystemR
 
+private const val TAG = "D107"
+
 @Composable
 fun InfoContentRoute(
     viewModel: InfoViewModel = hiltViewModel(),
@@ -63,11 +65,16 @@ fun InfoContentRoute(
 
     val context = LocalContext.current
 
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     LaunchedEffect(key1 = Unit) {
         viewModel.setInitVisibility()
+        val startTime = LocalDateTime.of(uiState.startDate, uiState.startTime)
+        val endTime = LocalDateTime.of(uiState.endDate, uiState.endTime)
+        updateStartTime(startTime)
+        updateEndTime(endTime)
     }
 
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
             is InfoEffect.UpdateTitle -> updateTitle(it.title)
@@ -77,11 +84,13 @@ fun InfoContentRoute(
             is InfoEffect.UpdatePoint -> updatePoint(it.point)
             is InfoEffect.ShowInputErrorSnackbar -> onShowSnackbar(
                 SnackbarToken(
-                    message = context.getString(R.string.please_input_all_info)
+                    message = context.getString(it.messageRes)
                 )
             )
 
-            InfoEffect.MoveGroupTypeStep -> moveNextStep()
+            InfoEffect.MoveGroupTypeStep -> {
+                moveNextStep()
+            }
         }
     }
 
@@ -133,6 +142,7 @@ fun InfoContent(
             moveNextStep()
         }
     }
+
 
 
     LaunchedEffect(key1 = uiState.step) {
@@ -198,7 +208,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.end_time),
+                        text = stringResource(R.string.please_input_end_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -251,7 +261,7 @@ fun InfoContent(
                 var showTimeDialog by remember { mutableStateOf(false) }
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     Text(
-                        text = stringResource(R.string.start_time),
+                        text = stringResource(R.string.please_input_start_time),
                         style = UlbanTypography.titleSmall
                     )
                     Row(modifier = Modifier.fillMaxWidth()) {

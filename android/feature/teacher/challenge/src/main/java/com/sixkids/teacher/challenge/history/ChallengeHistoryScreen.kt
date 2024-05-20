@@ -1,5 +1,6 @@
 package com.sixkids.teacher.challenge.history
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,26 +37,33 @@ import com.sixkids.designsystem.theme.UlbanTypography
 import com.sixkids.model.Challenge
 import com.sixkids.teacher.challenge.R
 import com.sixkids.ui.util.formatToMonthDayTime
+
 @Composable
 fun ChallengeRoute(
     viewModel: ChallengeHistoryViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit,
+    navigateToDetail: (Long, Long?) -> Unit,
     navigateToCreate: () -> Unit,
     handleException: (Throwable, () -> Unit) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getRunningChallenge()
-        viewModel.getChallengeHistory()
+        viewModel.initData()
     }
 
     LaunchedEffect(key1 = viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(sideEffect.detailId)
+                is ChallengeHistoryEffect.NavigateToChallengeDetail -> navigateToDetail(
+                    sideEffect.challengeId,
+                    sideEffect.groupId
+                )
+
                 ChallengeHistoryEffect.NavigateToCreateChallenge -> navigateToCreate()
-                is ChallengeHistoryEffect.HandleException -> handleException(sideEffect.throwable, sideEffect.retry)
+                is ChallengeHistoryEffect.HandleException -> handleException(
+                    sideEffect.throwable,
+                    sideEffect.retry
+                )
             }
         }
     }
@@ -66,7 +74,8 @@ fun ChallengeRoute(
         navigateToDetail = { challengeId ->
             viewModel.navigateChallengeDetail(challengeId)
         },
-        navigateToCreate = navigateToCreate
+        navigateToCreate = navigateToCreate,
+        updateTotalCount = viewModel::updateTotalCount
     )
 }
 
@@ -74,8 +83,9 @@ fun ChallengeRoute(
 fun ChallengeHistoryScreen(
     uiState: ChallengeHistoryState = ChallengeHistoryState(),
     challengeItems: LazyPagingItems<Challenge>? = null,
-    navigateToDetail: (Int) -> Unit = {},
+    navigateToDetail: (Long) -> Unit = {},
     navigateToCreate: () -> Unit = {},
+    updateTotalCount: (Int) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val isScrolled by remember {
@@ -127,7 +137,7 @@ fun ChallengeHistoryScreen(
                 ),
                 style = UlbanTypography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
-            Divider(modifier = Modifier.padding(vertical = 4.dp))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
             if (challengeItems == null) {
                 Spacer(modifier = Modifier.weight(1f))
@@ -147,8 +157,13 @@ fun ChallengeHistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+                    Log.d("DTEST", "ChallengeHistoryScreen:  challengeItems.itemCount ${challengeItems.itemCount}")
                     items(challengeItems.itemCount) { index ->
                         challengeItems[index]?.let { challenge ->
+                            if(index == 0) {
+                                Log.d("DTEST", "ChallengeHistoryScreen: updateTotalCount ${challenge.totalCount}")
+                                updateTotalCount(challenge.totalCount)
+                            }
                             UlbanChallengeItem(
                                 title = challenge.title,
                                 description = challenge.content,

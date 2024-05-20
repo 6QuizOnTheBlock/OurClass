@@ -26,6 +26,13 @@ val BlueDark = Color(0XFF152B65)
 val GreenDark = Color(0XFF0B4C3D)
 val PurpleDark = Color(0XFF52148E)
 
+val RedText = Color(0xFF52000D)
+val OrangeText = Color(0xFF492800)
+val YellowText = Color(0xFF4E3401)
+val PurpleText = Color(0xFF300153)
+val GrayLight = Color(0XFFF1F1F1)
+val BlueText = Color(0xFF010F3D)
+
 val LoadingBackground = Color(0xA6000000)
 
 

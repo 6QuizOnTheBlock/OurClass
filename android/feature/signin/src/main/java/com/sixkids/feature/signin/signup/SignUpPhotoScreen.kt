@@ -60,6 +60,7 @@ private const val TAG = "D107"
 fun SignUpPhotoRoute(
     viewModel: SignUpPhotoViewModel = hiltViewModel(),
     navigateToTeacherOrganizationList: () -> Unit,
+    navigateToStudentOrganizationList: () -> Unit,
     onShowSnackBar: (SnackbarToken) -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -85,8 +86,9 @@ fun SignUpPhotoRoute(
 
     viewModel.sideEffect.collectWithLifecycle {
         when (it) {
-            is SignUpPhotoEffect.onShowSnackBar -> onShowSnackBar(it.tkn)
+            is SignUpPhotoEffect.OnShowSnackBar -> onShowSnackBar(it.tkn)
             SignUpPhotoEffect.NavigateToTeacherOrganizationList -> navigateToTeacherOrganizationList()
+            SignUpPhotoEffect.NavigateToStudentOrganizationList -> navigateToStudentOrganizationList()
         }
     }
 

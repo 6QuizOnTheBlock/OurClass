@@ -1,10 +1,13 @@
 package com.sixkids.data.repository.user
 
+import com.sixkids.data.model.response.toModel
 import com.sixkids.data.repository.user.local.UserLocalDataSource
 import com.sixkids.data.repository.user.remote.UserRemoteDataSource
 import com.sixkids.domain.repository.TokenRepository
 import com.sixkids.domain.repository.UserRepository
 import com.sixkids.model.JwtToken
+import com.sixkids.model.MemberSimple
+import com.sixkids.model.StudentHomeInfo
 import com.sixkids.model.UserInfo
 import java.io.File
 import javax.inject.Inject
@@ -56,6 +59,10 @@ class UserRepositoryImpl @Inject constructor(
         return userRemoteDataSource.getMemberInfo()
     }
 
+    override suspend fun getMemberSimpleInfo(id: Long): MemberSimple {
+        return userRemoteDataSource.getMemberSimple(id)
+    }
+
     override suspend fun updateMemberProfilePhoto(file: File?, defaultImage: Int): String {
         return userRemoteDataSource.updateMemberProfilePhoto(file, defaultImage)
     }
@@ -78,5 +85,13 @@ class UserRepositoryImpl @Inject constructor(
         }catch (e: Exception){
             throw e
         }
+    }
+
+    override suspend fun loadUserInfo(): UserInfo {
+        return userLocalDataSource.getUserInfo()
+    }
+
+    override suspend fun getStudentHomeInfo(organizationId: Long): StudentHomeInfo {
+        return userRemoteDataSource.getStudentHomeInfo(organizationId).toModel()
     }
 }

@@ -16,11 +16,15 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sixkids.designsystem.theme.Blue
 import com.sixkids.designsystem.theme.Green
 import com.sixkids.designsystem.theme.Orange
@@ -34,69 +38,100 @@ import com.sixkids.designsystem.R as UlbanRes
 
 @Composable
 fun ManageClassMainRoute(
-    padding: PaddingValues
+    padding: PaddingValues,
+    viewModel: ManageClassMainViewModel = hiltViewModel(),
+    navigateToClassSummary: () -> Unit,
+    navigateToClassSetting: () -> Unit,
+    navigateToChattingFilter: () -> Unit,
+    navigateToInvite: () -> Unit,
 ) {
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.initData()
+    }
     Box(
         modifier = Modifier.padding(padding)
     ) {
-        ManageClassMainScreen()
+        ManageClassMainScreen(
+            manageClassMainState = uiState,
+            summaryCardOnClick = navigateToClassSummary,
+            settingCardOnClick = navigateToClassSetting,
+            chattingFilterCardOnClick = navigateToChattingFilter,
+            inviteCardOnClick = navigateToInvite
+        )
     }
 }
 
 @Composable
 fun ManageClassMainScreen(
     modifier: Modifier = Modifier,
-    manageClassMainState: ManageClassMainState = ManageClassMainState()
+    manageClassMainState: ManageClassMainState = ManageClassMainState(),
+    summaryCardOnClick: () -> Unit = {},
+    settingCardOnClick: () -> Unit = {},
+    chattingFilterCardOnClick: () -> Unit = {},
+    inviteCardOnClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
             .wrapContentHeight()
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .verticalScroll(ScrollState(0))
+            .fillMaxSize()
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp)
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = stringResource(id = R.string.manage_class_title),
-            style = UlbanTypography.titleLarge
+            style = UlbanTypography.titleLarge,
+            modifier = Modifier.padding(bottom = 10.dp)
         )
         Text(
-            text = manageClassMainState.classString,
-            style = UlbanTypography.bodySmall
+            text = manageClassMainState.classString.replace("\n", " "),
+            style = UlbanTypography.titleSmall
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
+            cardHeight = 130.dp,
             modifier = Modifier.padding(start = 40.dp),
-            imageModifier = Modifier.rotate(60f),
+            imageModifier = Modifier.rotate(60f).padding(10.dp),
             contentName = stringResource(id = R.string.manage_class_statistics),
             contentImageId = UlbanRes.drawable.statistics,
             cardColor = Blue,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = summaryCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
+            cardHeight = 130.dp,
             modifier = Modifier.padding(end = 40.dp),
+            imageModifier = Modifier.padding(15.dp),
             contentName = stringResource(id = R.string.manage_class_setting),
             contentImageId = UlbanRes.drawable.setting,
             cardColor = Red,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = settingCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
+            cardHeight = 130.dp,
             modifier = Modifier.padding(start = 40.dp),
+            imageModifier = Modifier.padding(15.dp),
             contentName = stringResource(id = R.string.manage_class_filter_chat),
             contentImageId = UlbanRes.drawable.chat_filter,
             cardColor = Yellow,
-            contentAligment = ContentAligment.ImageStart_TextEnd
+            contentAligment = ContentAligment.ImageStart_TextEnd,
+            onclick = chattingFilterCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
         ContentCard(
+            cardHeight = 130.dp,
             modifier = Modifier.padding(end = 40.dp),
+            imageModifier = Modifier.padding(15.dp),
             contentName = stringResource(id = R.string.manage_class_invite),
             contentImageId = UlbanRes.drawable.invite,
             cardColor = Green   ,
-            contentAligment = ContentAligment.ImageEnd_TextStart
+            contentAligment = ContentAligment.ImageEnd_TextStart,
+            onclick = inviteCardOnClick
         )
         Spacer(modifier = Modifier.height(20.dp))
     }
