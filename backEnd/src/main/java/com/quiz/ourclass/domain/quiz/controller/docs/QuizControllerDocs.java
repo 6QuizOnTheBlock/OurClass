@@ -55,4 +55,13 @@ public interface QuizControllerDocs {
     @GetMapping("/code/{quizGameId}")
     public ResponseEntity<ResultResponse<?>> getQuizUrl(
         @PathVariable("quizGameId") long quizGameId);
+
+    @Operation(summary = "퀴즈 게임 실시간 랭킹 보기",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "(message : \"Success\")",
+                content = @Content),
+            @ApiResponse(responseCode = "400", description = "(message : \"해당 퀴즈는 종료되었습니다.\")")
+        })
+    public ResponseEntity<ResultResponse<?>> getRanking(
+        @PathVariable("quizGameId") long quizGameId);
 }
