@@ -236,13 +236,9 @@ public class GroupServiceImpl implements GroupService {
         int start = 0;
         for (int i = 0; i < groupCount; i++) {
             int size = groupSize;
-            if (i < left) {
-                if (left >= addCount) {
-                    size += left;
-                } else {
-                    size += addCount;
-                    left -= addCount;
-                }
+            if (left > 0) {
+                size += Math.min(left, addCount);
+                left -= addCount;
             }
             groups.add(members.subList(start, start + size));
             start += size;
@@ -278,13 +274,9 @@ public class GroupServiceImpl implements GroupService {
         int start = 0;
         for (int i = 0; i < groupCount; i++) {
             int size = groupSize;
-            if (i < left) {
-                if (left >= addCount) {
-                    size += left;
-                } else {
-                    size += addCount;
-                    left -= addCount;
-                }
+            if (left > 0) {
+                size += Math.min(left, addCount);
+                left -= addCount;
             }
             groups.add(members.subList(start, start + size));
             start += size;
