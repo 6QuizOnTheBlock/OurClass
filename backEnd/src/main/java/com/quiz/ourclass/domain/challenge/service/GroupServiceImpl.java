@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -216,56 +215,50 @@ public class GroupServiceImpl implements GroupService {
     // TODO : 테스트 끝나고 해당 코드 지우기
     // 테스트를 위해서 강제 그룹 형성
     // 차성원(15), 홍유준(10), 정철주(9)
-    public List<AutoGroupMatchingResponse> testMethod() {
+    public List<AutoGroupMatchingResponse> testMethod(
+        AutoGroupMatchingRequest autoGroupMatchingRequest) {
         // 하드코딩된 멤버들을 포함하는 그룹을 생성
         List<Long> group1 = List.of(15L, 10L, 9L);
 
-        // 단체에 있는 모든 멤버 ID
-        List<Long> allMembers = List.of(5L, 6L, 7L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 16L);
-
-        // 하드코딩된 그룹 멤버를 제외한 나머지 멤버들
-        List<Long> remainingMembers = new ArrayList<>(allMembers);
-        remainingMembers.removeAll(group1);
-
-        // 나머지 멤버들을 균등하게 그룹화
-        List<List<Long>> groups = new ArrayList<>();
-        groups.add(group1); // 하드코딩된 그룹 추가
-
-        // 임의의 그룹으로 나머지 멤버들 배분
-        int groupSize = 3; // 그룹당 최대 인원수 설정
-        List<Long> currentGroup = new ArrayList<>();
-        for (Long member : remainingMembers) {
-            if (currentGroup.size() < groupSize) {
-                currentGroup.add(member);
-            } else {
-                groups.add(new ArrayList<>(currentGroup));
-                currentGroup.clear();
-                currentGroup.add(member);
+        List<MemberSimpleDTO> members = autoGroupMatchingRequest.members().stream()
+            .map(memberRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(member -> !group1.contains(member.getId()))
+            .map(memberMapper::memberToMemberSimpleDTO)
+            .collect(Collectors.toList());
+        Collections.shuffle(members);
+        List<List<MemberSimpleDTO>> groups = new ArrayList<>();
+        int groupSize = autoGroupMatchingRequest.minCount();
+        int groupCount = members.size() / groupSize;
+        int left = members.size() % groupSize;
+        int addCount = left / groupCount;
+        int start = 0;
+        for (int i = 0; i < groupCount; i++) {
+            int size = groupSize;
+            if (i < left) {
+                if (left >= addCount) {
+                    size += left;
+                } else {
+                    size += addCount;
+                    left -= addCount;
+                }
             }
+            groups.add(members.subList(start, start + size));
+            start += size;
         }
-        if (!currentGroup.isEmpty()) {
-            groups.add(currentGroup);
-        }
-
-        // 그룹 정보를 AutoGroupMatchingResponse로 변환
-        List<AutoGroupMatchingResponse> responses = new ArrayList<>();
-        for (List<Long> group : groups) {
-            List<MemberSimpleDTO> members = group.stream()
-                .map(memberId -> memberRepository.findById(memberId)
-                    .map(memberMapper::memberToMemberSimpleDTO)
-                    .orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-            AutoGroupMatchingResponse response = AutoGroupMatchingResponse.builder()
-                .members(members)
-                .headCount(members.size())
-                .build();
-
-            responses.add(response);
-        }
-
-        return responses;
+        List<MemberSimpleDTO> testGroup = group1.stream()
+            .map(memberRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(memberMapper::memberToMemberSimpleDTO)
+            .collect(Collectors.toList());
+        groups.add(testGroup);
+        return groups.stream().map(group -> AutoGroupMatchingResponse.builder()
+                .members(group)
+                .headCount(group.size())
+                .build())
+            .toList();
     }
 
     private List<AutoGroupMatchingResponse> getRandomGroup(

@@ -20,5 +20,5 @@ public interface GroupService {
     List<AutoGroupMatchingResponse> getGroupMatching(
         AutoGroupMatchingRequest autoGroupMatchingRequest);
 
-    List<AutoGroupMatchingResponse> testMethod();
+    List<AutoGroupMatchingResponse> testMethod(AutoGroupMatchingRequest autoGroupMatchingRequest);
 }
