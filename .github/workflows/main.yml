@@ -19,8 +19,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "차성원"
-          git config user.email "sungwon4728@naver.com"
+          git config user.name "전수민"
+          git config user.email "wjsaos2081@gmail.com"
 
       - name: Push to GitLab
         env:
