@@ -152,7 +152,8 @@ public class PostServiceImpl implements PostService {
 
         //이미지 관련 처리 부분
         Image image = post.getImage();
-        if (request.imageDelete() && image != null) { //이미지를 삭제하는 경우
+        boolean imageDelete = request.imageDelete();
+        if (imageDelete && image != null) { //이미지를 삭제하는 경우
             awsS3ObjectStorage.deleteFile(image.getPath());
             imageRepository.delete(image);
             post.setImage(null);
