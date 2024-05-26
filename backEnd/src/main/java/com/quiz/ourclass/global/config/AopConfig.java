@@ -54,8 +54,18 @@ public class AopConfig {
             , pjp.getSignature().getDeclaringTypeName()
             , pjp.getSignature().getName()
             , logMsg);
+        
         // 결과 확인
-        ResponseEntity<ResultResponse<?>> result = (ResponseEntity<ResultResponse<?>>) pjp.proceed();
+        ResponseEntity<ResultResponse<?>> result = null;
+
+        try {
+            result = (ResponseEntity<ResultResponse<?>>) pjp.proceed();
+        } catch (Exception e) {
+            log.error("다음의 메소드 실행 중 에러가 발생함: {}({})",
+                pjp.getSignature().getDeclaringTypeName(),
+                pjp.getSignature().getName(), e);
+        }
+
         // 끝시간 check
         afterTime = System.currentTimeMillis();
         if (result != null && result.getBody() != null) {
