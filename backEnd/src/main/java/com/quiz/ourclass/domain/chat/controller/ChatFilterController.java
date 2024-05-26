@@ -24,7 +24,7 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     private final ChatFilterService chatFilterService;
 
     @PostMapping("/{organizationId}")
-    public ResponseEntity<ResultResponse<?>> register(
+    public ResponseEntity<ResultResponse<Long>> register(
         @PathVariable(value = "organizationId") Long organizationId,
         @RequestBody ChatFilterRequest request
     ) {
@@ -33,7 +33,7 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     }
 
     @PatchMapping("/{organizationId}/{id}")
-    public ResponseEntity<ResultResponse<?>> modify(
+    public ResponseEntity<ResultResponse<Boolean>> modify(
         @PathVariable(value = "organizationId") Long organizationId,
         @PathVariable(value = "id") Long id,
         @RequestBody ChatFilterRequest request
@@ -43,7 +43,7 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> delete(
+    public ResponseEntity<ResultResponse<Boolean>> delete(
         @PathVariable(value = "id") Long id
     ) {
         Boolean isDelete = chatFilterService.delete(id);
@@ -51,7 +51,7 @@ public class ChatFilterController implements ChatFilterControllerDocs {
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> select(
+    public ResponseEntity<ResultResponse<ChatFilterResponse>> select(
         ChatFilterSliceRequest request
     ) {
         ChatFilterResponse response = chatFilterService.select(request);
