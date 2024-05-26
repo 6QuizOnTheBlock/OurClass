@@ -208,7 +208,7 @@ public class RelayServiceImpl implements RelayService {
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    protected void relayClosingReload() {
+    public void relayClosingReload() {
         List<Relay> relays = relayRepository.findAllByEndStatusIsFalse();
         relays.forEach(relay -> {
             RelayMember lastRunner = relay.getLastRunner();
