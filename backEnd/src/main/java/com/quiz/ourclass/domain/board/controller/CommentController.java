@@ -22,14 +22,14 @@ public class CommentController implements CommentControllerDocs {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ResultResponse<Long>> write(
+    public ResponseEntity<ResultResponse<Long>> commentWrite(
         @RequestBody CommentRequest request) {
         Long commentId = commentService.write(request);
         return ResponseEntity.ok(ResultResponse.success(commentId));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResultResponse<Long>> modify(
+    public ResponseEntity<ResultResponse<Long>> commentModify(
         @PathVariable(value = "id") Long id,
         @RequestBody UpdateCommentRequest request) {
         Long commentId = commentService.modify(id, request);
@@ -37,14 +37,14 @@ public class CommentController implements CommentControllerDocs {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResultResponse<Boolean>> delete(
+    public ResponseEntity<ResultResponse<Boolean>> commentDelete(
         @PathVariable(value = "id") Long id) {
         Boolean isDelete = commentService.delete(id);
         return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
 
     @PostMapping("/{id}/report")
-    public ResponseEntity<ResultResponse<Boolean>> report(
+    public ResponseEntity<ResultResponse<Boolean>> commentReport(
         @PathVariable(value = "id") Long id) {
         Boolean isReport = commentService.report(id);
         return ResponseEntity.ok(ResultResponse.success(isReport));
