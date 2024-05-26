@@ -22,6 +22,8 @@ public abstract class ConstantUtil {
     public static final Long DEFAULT_TIMEOUT = 60L * 1000 * 20;
     public static final Long REDIRECT_TIME = 5L * 1000;
 
+    public static final String EXCEPTION_ATTRIBUTE = "exception";
+
     // 인스턴스화 방지
     private ConstantUtil() {
         throw new UnsupportedOperationException(
