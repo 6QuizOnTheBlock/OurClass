@@ -12,6 +12,8 @@ import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.notice.entity.Notice;
 import com.quiz.ourclass.domain.notice.entity.NoticeType;
 import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.FcmDTO;
@@ -21,6 +23,7 @@ import com.quiz.ourclass.global.util.FcmType;
 import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,9 +101,13 @@ public class CommentServiceImpl implements CommentService {
                 throw new GlobalException(ErrorCode.COMMENT_DELETE_STUDENT_PERMISSION_DENIED);
             }
         } else if (requesterRole == Role.TEACHER) {
-            Long orgId = comment.getPost().getOrganization().getId();
-            userAccessUtil.isOrganizationManager(member, orgId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            Optional<Organization> organization =
+                userAccessUtil.isOrganizationManager(
+                    member, comment.getPost().getOrganization().getId());
+
+            if (organization.isEmpty()) {
+                throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+            }
         }
 
         //자식 댓글 삭제하기
@@ -124,8 +131,12 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, comment.getPost().getOrganization().getId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        Optional<MemberOrganization> memberOrganization =
+            userAccessUtil.isMemberOfOrganization(
+                member, comment.getPost().getOrganization().getId());
+        if (memberOrganization.isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
 
         String reportMember = member.getName();
         String authorMember = comment.getPost().getAuthor().getName();
