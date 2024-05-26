@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long write(Long organizationId, MultipartFile file, PostRequest request) {
+    public Long postWrite(Long organizationId, MultipartFile file, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember()
@@ -140,7 +140,7 @@ public class PostServiceImpl implements PostService {
      * */
     @Transactional
     @Override
-    public Long modify(Long postId, MultipartFile file, UpdatePostRequest request) {
+    public Long postModify(Long postId, MultipartFile file, UpdatePostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버 존재 여부 확인
         Member member = userAccessUtil.getMember()
@@ -186,7 +186,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Boolean delete(Long postId) {
+    public Boolean postDelete(Long postId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -209,7 +209,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailResponse detailView(Long postId) {
+    public PostDetailResponse postDetailView(Long postId) {
         //게시글 조회
         Post post = postRepository.fetchPostWithDetails(postId);
         if (post == null) { //게시글 없으면 예외처리
@@ -225,7 +225,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Boolean report(Long postId) {
+    public Boolean postReport(Long postId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -282,7 +282,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostListResponse listView(PostSliceRequest request) {
+    public PostListResponse postListView(PostSliceRequest request) {
         return postRepository.getPostList(request);
     }
 }

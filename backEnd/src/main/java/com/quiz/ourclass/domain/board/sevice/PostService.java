@@ -10,15 +10,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PostService {
 
-    Long write(Long organizationId, MultipartFile file, PostRequest request);
+    Long postWrite(Long organizationId, MultipartFile file, PostRequest request);
 
-    Long modify(Long postId, MultipartFile file, UpdatePostRequest request);
+    Long postModify(Long postId, MultipartFile file, UpdatePostRequest request);
 
-    Boolean delete(Long postId);
+    Boolean postDelete(Long postId);
 
-    PostDetailResponse detailView(Long postId);
+    PostDetailResponse postDetailView(Long postId);
 
-    Boolean report(Long postId);
+    Boolean postReport(Long postId);
 
-    PostListResponse listView(PostSliceRequest request);
+    PostListResponse postListView(PostSliceRequest request);
 }

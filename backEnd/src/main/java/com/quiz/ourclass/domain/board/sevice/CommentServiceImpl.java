@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Long write(CommentRequest request) {
+    public Long commentWrite(CommentRequest request) {
         Member commentWriter = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         //게시글 찾기
@@ -93,7 +93,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Long modify(Long commentId, UpdateCommentRequest request) {
+    public Long commentModify(Long commentId, UpdateCommentRequest request) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -119,7 +119,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Transactional
     @Override
-    public Boolean delete(Long commentId) {
+    public Boolean commentDelete(Long commentId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -147,7 +147,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Boolean report(Long commentId) {
+    public Boolean commentReport(Long commentId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 

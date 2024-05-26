@@ -33,7 +33,7 @@ public class PostController implements PostControllerDocs {
         @RequestParam("organizationId") Long organizationId,
         @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
-        Long postId = postService.write(organizationId, file, request);
+        Long postId = postService.postWrite(organizationId, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
@@ -42,34 +42,34 @@ public class PostController implements PostControllerDocs {
         @PathVariable(value = "id") Long id,
         @RequestPart(value = "request") UpdatePostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
-        Long postId = postService.modify(id, file, request);
+        Long postId = postService.postModify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
     @DeleteMapping(value = "{id}")
     public ResponseEntity<ResultResponse<Boolean>> postDelete(@PathVariable(value = "id") Long id) {
-        Boolean isDelete = postService.delete(id);
+        Boolean isDelete = postService.postDelete(id);
         return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ResultResponse<PostDetailResponse>> postDetailView(
         @PathVariable(value = "id") Long id) {
-        PostDetailResponse response = postService.detailView(id);
+        PostDetailResponse response = postService.postDetailView(id);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
 
     @PostMapping(value = "/{id}/report")
     public ResponseEntity<ResultResponse<Boolean>> postReport(
         @PathVariable(value = "id") Long id) {
-        boolean isReport = postService.report(id);
+        boolean isReport = postService.postReport(id);
         return ResponseEntity.ok(ResultResponse.success(isReport));
     }
 
     @GetMapping
     public ResponseEntity<ResultResponse<PostListResponse>> postListView(
         PostSliceRequest request) {
-        PostListResponse response = postService.listView(request);
+        PostListResponse response = postService.postListView(request);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
 }
