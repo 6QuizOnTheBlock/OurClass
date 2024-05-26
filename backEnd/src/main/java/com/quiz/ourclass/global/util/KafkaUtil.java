@@ -55,7 +55,11 @@ public class KafkaUtil {
         try {
             future.get();
             log.info("Topic {} 가 성공적으로 삭제 되었습니다.", topicName);
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException e) {
+            // 마찬가지의 이유로 interrupt 를 한번 더 던진다.
+            Thread.currentThread().interrupt();
+            throw new GlobalException(ErrorCode.CANT_LOAD_KAFKA);
+        } catch (ExecutionException e) {
             throw new GlobalException(ErrorCode.CANT_LOAD_KAFKA);
         }
     }
