@@ -48,10 +48,10 @@ public class ChatHandler implements ChannelInterceptor {
                 }
                 connectToChatRoom(accessor, memberId);
                 break;
-            case SUBSCRIBE:
-            case SEND:
+            case SUBSCRIBE, SEND:
                 verifyAccessToken(getAccessToken(accessor));
                 break;
+            default:
         }
     }
 

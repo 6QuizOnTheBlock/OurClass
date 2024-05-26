@@ -58,33 +58,6 @@ public class FcmUtil {
         } catch (FirebaseMessagingException e) {
             log.error("fcm send error");
         }
-//        int attempt = 0;
-//        long backoff = ConstantUtil.INITIAL_BACKOFF;
-//
-//        while (attempt < ConstantUtil.MAX_RETRIES) { //지수 백오프 전략
-//            try {
-//                FirebaseMessaging.getInstance().send(message);
-//                log.info("FCM Send Success");
-//                break;  // 성공 시 루프 종료
-//            } catch (FirebaseMessagingException e) {
-//                log.error("FCM Send Error: {}", e.getMessage());
-//                attempt++;
-//                if (attempt >= ConstantUtil.MAX_RETRIES) {
-//                    // 최대 재시도 횟수 도달 시 루프 종료
-//                    // 다른 메시지 시스템으로 알림을 전송하는 방법을 고려해볼 수 있음
-//                    log.error("Reached Maximum Retry Attempts");
-//                    break;
-//                }
-//                try {
-//                    Thread.sleep(backoff);  // 지수 백오프를 위한 대기
-//                } catch (InterruptedException ie) {
-//                    Thread.currentThread().interrupt();
-//                    log.error("Interrupted While Waiting For Retry");
-//                    break;  // 인터럽트 발생 시 루프 종료
-//                }
-//                backoff *= 2;
-//            }
-//        }
     }
 
     public FcmDTO makeFcmDTO(String title, String body) {

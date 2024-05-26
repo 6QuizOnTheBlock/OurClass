@@ -52,7 +52,7 @@ public interface ChatControllerDocs {
         }
     )
     @GetMapping
-    ResponseEntity<ResultResponse<?>> chatListView(
+    ResponseEntity<ResultResponse<MessageResponse>> chatListView(
         MessageSliceRequest request
     );
 }
