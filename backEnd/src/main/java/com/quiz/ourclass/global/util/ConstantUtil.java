@@ -21,6 +21,8 @@ public abstract class ConstantUtil {
     public static final String RANKING = "ranking";
     public static final String QUIZ_ANSWER = "answer";
 
+    public static final String AUTHORIZATION = "Authorization";
+
     // 인스턴스화 방지
     private ConstantUtil() {
         throw new UnsupportedOperationException(

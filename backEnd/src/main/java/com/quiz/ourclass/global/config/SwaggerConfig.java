@@ -1,5 +1,6 @@
 package com.quiz.ourclass.global.config;
 
+import com.quiz.ourclass.global.util.ConstantUtil;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -15,34 +16,10 @@ import org.springframework.http.HttpHeaders;
 public class SwaggerConfig {
 
     @Bean
-    public GroupedOpenApi Api() {
+    public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
             .group("all-api")
             .pathsToMatch("/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi memberApi() {
-        return GroupedOpenApi.builder()
-            .group("member-api")
-            .pathsToMatch("/members/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi boardApi() {
-        return GroupedOpenApi.builder()
-            .group("board-api")
-            .pathsToMatch("/board/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi ChallengeApi() {
-        return GroupedOpenApi.builder()
-            .group("challenge-api")
-            .pathsToMatch("/challenge/**")
             .build();
     }
 
@@ -56,16 +33,16 @@ public class SwaggerConfig {
         SecurityScheme bearer = new SecurityScheme()
             .type(SecurityScheme.Type.HTTP)
             .scheme("bearer")
-            .bearerFormat("Authorization")
+            .bearerFormat(ConstantUtil.AUTHORIZATION)
             .in(SecurityScheme.In.HEADER)
             .name(HttpHeaders.AUTHORIZATION);
 
         // Security 요청 설정
         SecurityRequirement addSecurityItem = new SecurityRequirement();
-        addSecurityItem.addList("Authorization");
+        addSecurityItem.addList(ConstantUtil.AUTHORIZATION);
 
         Components components = new Components()
-            .addSecuritySchemes("Authorization", bearer);
+            .addSecuritySchemes(ConstantUtil.AUTHORIZATION, bearer);
 
         return new OpenAPI()
             .components(components)
