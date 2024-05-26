@@ -24,8 +24,10 @@ import com.quiz.ourclass.global.util.FcmType;
 import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import com.quiz.ourclass.global.util.scheduler.SchedulingService;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -44,6 +46,7 @@ public class RelayServiceImpl implements RelayService {
     private final UserAccessUtil accessUtil;
     private final SchedulingService schedulingService;
     private final FcmUtil fcmUtil;
+    private final Random random = new SecureRandom();
 
 
     @Transactional
@@ -54,7 +57,7 @@ public class RelayServiceImpl implements RelayService {
         Organization organization = organizationRepository.findById(relayRequest.organizationId())
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
         int randomCount = organization.getMemberCount() / 2;
-        int totalCount = (int) (Math.random() * (randomCount + 1) + randomCount);
+        int totalCount = random.nextInt() * (randomCount + 1) + randomCount;
         if (relayRepository.existsByOrganizationAndEndStatusIsFalse(organization)) {
             throw new GlobalException(ErrorCode.EXIST_PROGRESS_RELAY);
         }
@@ -208,7 +211,7 @@ public class RelayServiceImpl implements RelayService {
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    protected void relayClosingReload() {
+    public void relayClosingReload() {
         List<Relay> relays = relayRepository.findAllByEndStatusIsFalse();
         relays.forEach(relay -> {
             RelayMember lastRunner = relay.getLastRunner();

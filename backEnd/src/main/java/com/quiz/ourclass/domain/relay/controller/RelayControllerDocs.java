@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.relay.dto.request.RelayRequest;
 import com.quiz.ourclass.domain.relay.dto.request.RelaySliceRequest;
 import com.quiz.ourclass.domain.relay.dto.response.ReceiveRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RelayResponse;
+import com.quiz.ourclass.domain.relay.dto.response.RelaySliceResponse;
 import com.quiz.ourclass.domain.relay.dto.response.RunningRelayResponse;
 import com.quiz.ourclass.domain.relay.dto.response.SendRelayResponse;
 import com.quiz.ourclass.global.dto.ResultResponse;
@@ -38,7 +39,7 @@ public interface RelayControllerDocs {
                 """, content = @Content)
         })
     @PostMapping
-    ResponseEntity<ResultResponse<?>> createRelay(
+    ResponseEntity<ResultResponse<Long>> createRelay(
         @RequestBody
         RelayRequest relayRequest
     );
@@ -50,7 +51,7 @@ public interface RelayControllerDocs {
                 content = @Content(schema = @Schema(implementation = RelaySliceRequest.class)))
         })
     @GetMapping
-    ResponseEntity<ResultResponse<?>> getRelays(RelaySliceRequest relaySliceRequest
+    ResponseEntity<ResultResponse<RelaySliceResponse>> getRelays(RelaySliceRequest relaySliceRequest
     );
 
     @Operation(summary = "이어달리기 상세 조회",
@@ -60,7 +61,7 @@ public interface RelayControllerDocs {
                 content = @Content(schema = @Schema(implementation = RelayResponse.class)))
         })
     @GetMapping("/{id}")
-    ResponseEntity<ResultResponse<?>> getRelayDetail(
+    ResponseEntity<ResultResponse<RelayResponse>> getRelayDetail(
         @PathVariable
         @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
         long id
@@ -78,8 +79,8 @@ public interface RelayControllerDocs {
                 """, content = @Content)
         })
     @GetMapping("/running")
-    ResponseEntity<ResultResponse<?>> getRunningRelay(
-        @RequestParam(required = true)
+    ResponseEntity<ResultResponse<RunningRelayResponse>> getRunningRelay(
+        @RequestParam
         @Parameter(description = "학급 id", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
@@ -95,7 +96,7 @@ public interface RelayControllerDocs {
                 """, content = @Content)
         })
     @PostMapping("/{id}/receive")
-    ResponseEntity<ResultResponse<?>> receiveRelay(
+    ResponseEntity<ResultResponse<ReceiveRelayResponse>> receiveRelay(
         @PathVariable
         @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
         long id,
@@ -116,7 +117,7 @@ public interface RelayControllerDocs {
                 """, content = @Content)
         })
     @PostMapping("/{id}/send")
-    ResponseEntity<ResultResponse<?>> sendRelay(
+    ResponseEntity<ResultResponse<SendRelayResponse>> sendRelay(
         @PathVariable
         @Parameter(description = "이어달리기 id", required = true, in = ParameterIn.PATH)
         long id
@@ -135,7 +136,7 @@ public interface RelayControllerDocs {
                 """, content = @Content)
         })
     @GetMapping("/{id}/question")
-    ResponseEntity<ResultResponse<?>> getRelayQuestion(
+    ResponseEntity<ResultResponse<String>> getRelayQuestion(
         @PathVariable
         long id
     );

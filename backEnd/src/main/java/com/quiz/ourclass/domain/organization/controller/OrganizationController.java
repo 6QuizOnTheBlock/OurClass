@@ -29,39 +29,42 @@ public class OrganizationController implements OrganizationControllerDocs {
     private final OrganizationService organizationService;
 
     @PostMapping
-    public ResponseEntity<ResultResponse<?>> createOrganization(
+    public ResponseEntity<ResultResponse<Long>> createOrganization(
         @RequestBody OrganizationRequest organizationRequest) {
         Long organizationId = organizationService.createOrganization(organizationRequest);
         return ResponseEntity.ok(ResultResponse.success(organizationId));
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> getOrganizations() {
+    public ResponseEntity<ResultResponse<List<OrganizationResponse>>> getOrganizations() {
         List<OrganizationResponse> organizations = organizationService.getOrganizations();
         return ResponseEntity.ok(ResultResponse.success(organizations));
     }
 
     @GetMapping("/{id}/code")
-    public ResponseEntity<ResultResponse<?>> getOrganizationCode(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<InviteCodeDTO>> getOrganizationCode(
+        @PathVariable long id) {
         InviteCodeDTO code = organizationService.getOrganizationCode(id);
         return ResponseEntity.ok(ResultResponse.success(code));
     }
 
     @PostMapping("/{id}/join")
-    public ResponseEntity<ResultResponse<?>> joinOrganization(@PathVariable long id,
+    public ResponseEntity<ResultResponse<Long>> joinOrganization(@PathVariable long id,
         @RequestBody InviteCodeDTO inviteCodeDTO) {
         Long organizationId = organizationService.joinOrganization(id, inviteCodeDTO);
         return ResponseEntity.ok(ResultResponse.success(organizationId));
     }
 
     @GetMapping("/{id}/members")
-    public ResponseEntity<ResultResponse<?>> getOrganizationMembers(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<List<MemberSimpleDTO>>> getOrganizationMembers(
+        @PathVariable long id) {
         List<MemberSimpleDTO> members = organizationService.getOrganizationMembers(id);
         return ResponseEntity.ok(ResultResponse.success(members));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> updateOrganizationName(@PathVariable long id,
+    public ResponseEntity<ResultResponse<UpdateOrganizationResponse>> updateOrganizationName(
+        @PathVariable long id,
         @RequestBody UpdateOrganizationRequest updateOrganizationRequest) {
         UpdateOrganizationResponse updateOrganizationResponse = organizationService.updateOrganizationName(
             id, updateOrganizationRequest);
@@ -69,13 +72,14 @@ public class OrganizationController implements OrganizationControllerDocs {
     }
 
     @GetMapping("/{id}/rank")
-    public ResponseEntity<ResultResponse<?>> getRanking(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<List<MemberRankPoint>>> getRanking(@PathVariable long id) {
         List<MemberRankPoint> memberRankPoints = organizationService.getRanking(id);
         return ResponseEntity.ok(ResultResponse.success(memberRankPoints));
     }
 
     @GetMapping("/{id}/summary")
-    public ResponseEntity<ResultResponse<?>> getSummary(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<OrganizationSummaryResponse>> getSummary(
+        @PathVariable long id) {
         OrganizationSummaryResponse summaryResponse = organizationService.getSummary(id);
         return ResponseEntity.ok(ResultResponse.success(summaryResponse));
     }

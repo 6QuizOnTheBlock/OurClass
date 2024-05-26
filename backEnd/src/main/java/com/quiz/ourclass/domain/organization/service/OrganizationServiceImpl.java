@@ -26,6 +26,7 @@ import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -48,6 +49,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final MemberMapper memberMapper;
     private final RedisUtil redisUtil;
     private final UserAccessUtil accessUtil;
+    private final Random rand = new SecureRandom();
 
     @Transactional
     @Override
@@ -98,8 +100,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         String redisKey = ConstantUtil.REDIS_ORG_KEY + id;
         String code = redisUtil.valueGet(redisKey);
         if (code == null || code.isEmpty()) {
-            Random random = new Random();
-            code = String.valueOf(random.nextInt(1000000));
+            code = String.valueOf(rand.nextInt(1000000));
             redisUtil.valueSet(redisKey, code,
                 Duration.ofMinutes(ConstantUtil.REDIS_ORG_ALIVE_MINUTE));
         }

@@ -142,8 +142,7 @@ public class MemberOrgServiceImpl implements MemberOrgService {
         TagGreeting tagGreeting = TagGreeting.builder()
             .relationship(relationship).date(LocalDateTime.now()).build();
         tagGreetingRepository.save(tagGreeting);
-        int tagGreetingCount = relationship.updateTagGreetingCount();
-        return tagGreetingCount;
+        return relationship.updateTagGreetingCount();
     }
 
     private List<RelationSimpleResponse> getFriendlyResponse(long organizationId, long memberId,

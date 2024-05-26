@@ -32,7 +32,7 @@ public class MemberOrgController implements MemberOrgControllerDocs {
     private final MemberOrgService memberOrgService;
 
     @PatchMapping("/{id}/point")
-    public ResponseEntity<ResultResponse<?>> updateMemberExp(@PathVariable long id,
+    public ResponseEntity<ResultResponse<UpdateExpResponse>> updateMemberExp(@PathVariable long id,
         @RequestBody UpdateExpRequest updateExpRequest) {
         UpdateExpResponse updateExpResponse = memberOrgService.updateMemberExp(
             id, updateExpRequest);
@@ -40,7 +40,7 @@ public class MemberOrgController implements MemberOrgControllerDocs {
     }
 
     @GetMapping("/{id}/relation")
-    public ResponseEntity<ResultResponse<?>> getMemberRelation(
+    public ResponseEntity<ResultResponse<RelationResponse>> getMemberRelation(
         @PathVariable long id, RelationRequest relationRequest) {
         RelationResponse relationResponse = memberOrgService.getMemberRelation(
             id, relationRequest);
@@ -48,14 +48,14 @@ public class MemberOrgController implements MemberOrgControllerDocs {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> getMemberDetail(
+    public ResponseEntity<ResultResponse<MemberDetailResponse>> getMemberDetail(
         @PathVariable long id, long memberId) {
         MemberDetailResponse memberDetail = memberOrgService.getMemberDetail(id, memberId);
         return ResponseEntity.ok(ResultResponse.success(memberDetail));
     }
 
     @GetMapping("/{id}/relations")
-    public ResponseEntity<ResultResponse<?>> getMemberRelations(
+    public ResponseEntity<ResultResponse<List<RelationSimpleResponse>>> getMemberRelations(
         @PathVariable long id, long memberId, @RequestParam(required = false) Long limit) {
         List<RelationSimpleResponse> relations = memberOrgService.getMemberRelations(
             id, memberId, limit);
@@ -63,13 +63,14 @@ public class MemberOrgController implements MemberOrgControllerDocs {
     }
 
     @GetMapping("/{id}/home")
-    public ResponseEntity<ResultResponse<?>> getOrganizationHome(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<OrganizationHomeResponse>> getOrganizationHome(
+        @PathVariable long id) {
         OrganizationHomeResponse homeResponse = memberOrgService.getOrganizationHome(id);
         return ResponseEntity.ok(ResultResponse.success(homeResponse));
     }
 
     @PostMapping("/tag")
-    public ResponseEntity<ResultResponse<?>> tagGreet(
+    public ResponseEntity<ResultResponse<Integer>> tagGreet(
         @RequestBody TagGreetingRequest tagGreetingRequest) {
         int tagGreetingCount = memberOrgService.tagGreeting(tagGreetingRequest);
         return ResponseEntity.ok(ResultResponse.success(tagGreetingCount));

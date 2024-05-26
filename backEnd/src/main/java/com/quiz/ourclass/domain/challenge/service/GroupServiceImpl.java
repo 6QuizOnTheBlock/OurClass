@@ -21,11 +21,11 @@ import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
-import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
@@ -50,25 +50,23 @@ public class GroupServiceImpl implements GroupService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
     private final RelationshipRepository relationshipRepository;
-    private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
     private final FriendlyGroup friendlyGroup;
-    private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
 
     @Transactional
     @Override
     public MatchingRoomResponse createMatchingRoom(long challengeId) {
-        long MemberId = accessUtil.getMember()
+        long memberId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
-        String dataKey = makeGroupKey(challengeId, MemberId);
+        String dataKey = makeGroupKey(challengeId, memberId);
         Set<String> redisMembers = redisUtil.setMembers(dataKey);
         if (redisMembers != null && !redisMembers.isEmpty()) {
             redisUtil.delete(dataKey);
         }
-        redisUtil.setAdd(dataKey, String.valueOf(MemberId));
+        redisUtil.setAdd(dataKey, String.valueOf(memberId));
         Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
         int minCount = challenge.getMinCount();
@@ -209,7 +207,7 @@ public class GroupServiceImpl implements GroupService {
                 return getUnfriendlyGroup(autoGroupMatchingRequest);
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
     // TODO : 테스트 끝나고 해당 코드 지우기
@@ -248,7 +246,7 @@ public class GroupServiceImpl implements GroupService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(memberMapper::memberToMemberSimpleDTO)
-            .collect(Collectors.toList());
+            .toList();
         groups.add(testGroup);
         return groups.stream().map(group -> AutoGroupMatchingResponse.builder()
                 .members(group)
@@ -312,8 +310,8 @@ public class GroupServiceImpl implements GroupService {
         return null;
     }
 
-    private static String makeGroupKey(long challengeId, long MemberId) {
-        return REDIS_GROUP_KEY + challengeId + "_" + MemberId;
+    private static String makeGroupKey(long challengeId, long memberId) {
+        return ConstantUtil.REDIS_GROUP_KEY + challengeId + "_" + memberId;
     }
 
     private static long getChallengeIdFromKey(String key) {
