@@ -21,7 +21,7 @@ public interface CommentMapper {
     CommentDTO commentToCommentDTOWithChildren(Comment comment, List<CommentChildrenDTO> children);
 
     @Mapping(source = "boardId", target = "post.id")
-    Comment CommentRequestTocomment(CommentRequest commentRequest);
+    Comment commentRequestTocomment(CommentRequest commentRequest);
 
     void updateCommentFromRequest(UpdateCommentRequest request, @MappingTarget Comment comment);
 

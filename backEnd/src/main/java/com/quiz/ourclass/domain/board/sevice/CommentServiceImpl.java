@@ -83,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         //게시글 댓글 저장 (부모 댓글이면 0L로 저장됩니다.)
-        Comment comment = commentMapper.CommentRequestTocomment(request);
+        Comment comment = commentMapper.commentRequestTocomment(request);
         comment.setCreateTime(LocalDateTime.now());
         comment.setMember(commentWriter);
         comment.setPost(post);
