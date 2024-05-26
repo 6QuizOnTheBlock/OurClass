@@ -18,6 +18,9 @@ public abstract class ConstantUtil {
     public static final String RANKING = "ranking";
     public static final String QUIZ_ANSWER = "answer";
     public static final String AUTHORIZATION = "Authorization";
+    public static final String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
+    public static final Long DEFAULT_TIMEOUT = 60L * 1000 * 20;
+    public static final Long REDIRECT_TIME = 5L * 1000;
 
     // 인스턴스화 방지
     private ConstantUtil() {

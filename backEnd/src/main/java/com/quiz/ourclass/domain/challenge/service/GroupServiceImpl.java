@@ -26,6 +26,7 @@ import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
@@ -56,7 +57,6 @@ public class GroupServiceImpl implements GroupService {
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
     private final FriendlyGroup friendlyGroup;
-    private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
 
     @Transactional
     @Override
@@ -313,7 +313,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     private static String makeGroupKey(long challengeId, long MemberId) {
-        return REDIS_GROUP_KEY + challengeId + "_" + MemberId;
+        return ConstantUtil.REDIS_GROUP_KEY + challengeId + "_" + MemberId;
     }
 
     private static long getChallengeIdFromKey(String key) {
