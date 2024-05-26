@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,7 +36,7 @@ public interface MemberOrgControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급 멤버를 찾을 수 없습니다.\")", content = @Content)
         })
     @PatchMapping("/{id}/point")
-    ResponseEntity<ResultResponse<?>> updateMemberExp(
+    ResponseEntity<ResultResponse<UpdateExpResponse>> updateMemberExp(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -50,7 +51,7 @@ public interface MemberOrgControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"두 멤버간의 관계를 찾을 수 없습니다.\")", content = @Content)
         })
     @GetMapping("/{id}/relation")
-    ResponseEntity<ResultResponse<?>> getMemberRelation(
+    ResponseEntity<ResultResponse<RelationResponse>> getMemberRelation(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -64,7 +65,7 @@ public interface MemberOrgControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급 멤버를 찾을 수 없습니다.\")", content = @Content)
         })
     @GetMapping("/{id}")
-    ResponseEntity<ResultResponse<?>> getMemberDetail(
+    ResponseEntity<ResultResponse<MemberDetailResponse>> getMemberDetail(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -79,7 +80,7 @@ public interface MemberOrgControllerDocs {
                 content = @Content(schema = @Schema(implementation = RelationSimpleResponse.class)))
         })
     @GetMapping("/{id}/relations")
-    ResponseEntity<ResultResponse<?>> getMemberRelations(
+    ResponseEntity<ResultResponse<List<RelationSimpleResponse>>> getMemberRelations(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -97,7 +98,7 @@ public interface MemberOrgControllerDocs {
                 content = @Content(schema = @Schema(implementation = OrganizationHomeResponse.class)))
         })
     @GetMapping("/{id}/home")
-    ResponseEntity<ResultResponse<?>> getOrganizationHome(
+    ResponseEntity<ResultResponse<OrganizationHomeResponse>> getOrganizationHome(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id
@@ -110,7 +111,7 @@ public interface MemberOrgControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"두 멤버간의 관계를 찾을 수 없습니다.\")", content = @Content)
         })
     @PostMapping("/tag")
-    ResponseEntity<ResultResponse<?>> tagGreet(
+    ResponseEntity<ResultResponse<Integer>> tagGreet(
         @RequestBody
         TagGreetingRequest tagGreetingRequest
     );

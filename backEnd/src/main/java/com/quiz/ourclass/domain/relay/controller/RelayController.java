@@ -28,25 +28,27 @@ public class RelayController implements RelayControllerDocs {
     private final RelayService relayService;
 
     @PostMapping
-    public ResponseEntity<ResultResponse<?>> createRelay(@RequestBody RelayRequest relayRequest) {
+    public ResponseEntity<ResultResponse<Long>> createRelay(
+        @RequestBody RelayRequest relayRequest) {
         long relayId = relayService.createRelay(relayRequest);
         return ResponseEntity.ok(ResultResponse.success(relayId));
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> getRelays(RelaySliceRequest relaySliceRequest) {
+    public ResponseEntity<ResultResponse<RelaySliceResponse>> getRelays(
+        RelaySliceRequest relaySliceRequest) {
         RelaySliceResponse relays = relayService.getRelays(relaySliceRequest);
         return ResponseEntity.ok(ResultResponse.success(relays));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> getRelayDetail(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<RelayResponse>> getRelayDetail(@PathVariable long id) {
         RelayResponse relay = relayService.getRelayDetail(id);
         return ResponseEntity.ok(ResultResponse.success(relay));
     }
 
     @GetMapping("/running")
-    public ResponseEntity<ResultResponse<?>> getRunningRelay(
+    public ResponseEntity<ResultResponse<RunningRelayResponse>> getRunningRelay(
         @RequestParam(required = true) long organizationId) {
         RunningRelayResponse runningChallengeResponse = relayService.getRunningRelay(
             organizationId);
@@ -54,7 +56,7 @@ public class RelayController implements RelayControllerDocs {
     }
 
     @PostMapping("/{id}/receive")
-    public ResponseEntity<ResultResponse<?>> receiveRelay(@PathVariable long id,
+    public ResponseEntity<ResultResponse<ReceiveRelayResponse>> receiveRelay(@PathVariable long id,
         @RequestBody ReceiveRelayRequest receiveRelayRequest) {
         ReceiveRelayResponse receiveRelayResponse = relayService.receiveRelay(
             id, receiveRelayRequest);
@@ -62,13 +64,13 @@ public class RelayController implements RelayControllerDocs {
     }
 
     @PostMapping("/{id}/send")
-    public ResponseEntity<ResultResponse<?>> sendRelay(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<SendRelayResponse>> sendRelay(@PathVariable long id) {
         SendRelayResponse sendRelayResponse = relayService.sendRelay(id);
         return ResponseEntity.ok(ResultResponse.success(sendRelayResponse));
     }
 
     @GetMapping("/{id}/question")
-    public ResponseEntity<ResultResponse<?>> getRelayQuestion(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<String>> getRelayQuestion(@PathVariable long id) {
         String question = relayService.getRelayQuestion(id);
         return ResponseEntity.ok(ResultResponse.success(question));
     }
