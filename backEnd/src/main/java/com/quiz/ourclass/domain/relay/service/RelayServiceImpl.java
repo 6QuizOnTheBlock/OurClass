@@ -57,7 +57,7 @@ public class RelayServiceImpl implements RelayService {
         Organization organization = organizationRepository.findById(relayRequest.organizationId())
             .orElseThrow(() -> new GlobalException(ErrorCode.ORGANIZATION_NOT_FOUND));
         int randomCount = organization.getMemberCount() / 2;
-        int totalCount = (int) (random.nextInt() * (randomCount + 1) + randomCount);
+        int totalCount = random.nextInt() * (randomCount + 1) + randomCount;
         if (relayRepository.existsByOrganizationAndEndStatusIsFalse(organization)) {
             throw new GlobalException(ErrorCode.EXIST_PROGRESS_RELAY);
         }
