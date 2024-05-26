@@ -1,9 +1,12 @@
 package com.quiz.ourclass.domain.quiz.controller;
 
 import com.quiz.ourclass.domain.quiz.controller.docs.QuizControllerDocs;
+import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
+import com.quiz.ourclass.domain.quiz.dto.QuizGameDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.MakingQuizRequest;
 import com.quiz.ourclass.domain.quiz.service.QuizServiceImpl;
 import com.quiz.ourclass.global.dto.ResultResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,24 +26,25 @@ public class QuizController implements QuizControllerDocs {
     public final QuizServiceImpl quizService;
 
     @PutMapping("")
-    public ResponseEntity<ResultResponse<?>> makingQuiz(@RequestBody MakingQuizRequest request) {
+    public ResponseEntity<ResultResponse<Void>> makingQuiz(@RequestBody MakingQuizRequest request) {
         quizService.makingQuiz(request);
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 
     @GetMapping("/{orgId}")
-    public ResponseEntity<ResultResponse<?>> getQuizList(@PathVariable("orgId") long orgId) {
+    public ResponseEntity<ResultResponse<List<QuizGameDTO>>> getQuizList(
+        @PathVariable("orgId") long orgId) {
         return ResponseEntity.ok(ResultResponse.success(quizService.getQuizList(orgId)));
     }
 
     @GetMapping("/code/{quizGameId}")
-    public ResponseEntity<ResultResponse<?>> getQuizUrl(
+    public ResponseEntity<ResultResponse<String>> getQuizUrl(
         @PathVariable("quizGameId") long quizGameId) {
         return ResponseEntity.ok(ResultResponse.success(quizService.getQuizUrl(quizGameId)));
     }
 
     @GetMapping("/ranking/{quizGameId}")
-    public ResponseEntity<ResultResponse<?>> getRanking(
+    public ResponseEntity<ResultResponse<List<GamerDTO>>> getRanking(
         @PathVariable("quizGameId") long quizGameId) {
         return ResponseEntity.ok(ResultResponse.success(quizService.getRanking(quizGameId)));
     }
