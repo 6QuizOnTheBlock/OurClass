@@ -248,7 +248,7 @@ public class GroupServiceImpl implements GroupService {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(memberMapper::memberToMemberSimpleDTO)
-            .collect(Collectors.toList());
+            .toList();
         groups.add(testGroup);
         return groups.stream().map(group -> AutoGroupMatchingResponse.builder()
                 .members(group)
