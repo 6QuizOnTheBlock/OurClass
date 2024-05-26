@@ -46,7 +46,7 @@ public class SchedulingService {
 
     @Transactional
     @Scheduled(cron = "0 0 3 * * *")
-    protected void relationShipScore() {
+    public void relationShipScore() {
         List<Organization> organizations =
             organizationRepository.findAll();
 
@@ -64,7 +64,7 @@ public class SchedulingService {
 
     @Transactional
     @Scheduled(cron = "0 15 3 * * *")
-    protected void isolationScore() {
+    public void isolationScore() {
         List<Organization> organizations = organizationRepository.findAll();
 
         for (Organization organization : organizations) {
