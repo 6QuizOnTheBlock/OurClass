@@ -29,7 +29,7 @@ public class AopConfig {
     private double afterTime = 0L;
 
     @Pointcut("execution(* com..controller..*(..))")
-    public void ControllerMethod() {
+    public void controllerMethod() {
     }
 
     // 컨트롤러 내의 모든 매소드에 대하여 Logging을 실행한다. 다만 어노테이션이 붙은 매소드는 실행하지 않는다.
@@ -54,7 +54,7 @@ public class AopConfig {
             , pjp.getSignature().getDeclaringTypeName()
             , pjp.getSignature().getName()
             , logMsg);
-        
+
         // 결과 확인
         ResponseEntity<ResultResponse<?>> result = null;
 
