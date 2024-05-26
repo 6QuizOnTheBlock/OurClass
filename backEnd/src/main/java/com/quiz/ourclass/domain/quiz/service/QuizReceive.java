@@ -63,11 +63,12 @@ public class QuizReceive {
     @KafkaListener(topics = ConstantUtil.QUIZ_ANSWER, containerFactory = "answerResponseContainerFactory")
     public void receivedAnswer(AnswerResponse response) {
         log.info("보내줘야할 답 상세={}", response.toString());
-
-        if (response.submit().replaceAll(" ", "").equals(response.ans().replaceAll(" ", ""))) {
+        // replaceAll 은 항상 정규 표현식을 컴파일하므로 성능 오버헤드가 발생할 수 있음
+        // replaceAll 은 정규 표현식을 사용하여 문자열을 대체하지만, replace는 정규 표현식을 사용하지 않고 단순히 문자열을 대체
+        if (response.submit().replace(" ", "").equals(response.ans().replaceAll(" ", ""))) {
 
             log.info(String.valueOf(
-                response.submit().replaceAll(" ", "").equals(response.ans().replaceAll(" ", ""))));
+                response.submit().replace(" ", "").equals(response.ans().replaceAll(" ", ""))));
 
             int score =
                 redisUtil
