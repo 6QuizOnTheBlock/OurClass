@@ -46,7 +46,7 @@ public class RelayRepositoryQuerydslImpl implements RelayRepositoryQuerydsl {
             .join(relay.relayRunners, relayMember)
             .where(relayCondition)
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1)
+            .limit(pageable.getPageSize() + 1L)
             .orderBy(relay.id.desc())
             .fetch();
 
