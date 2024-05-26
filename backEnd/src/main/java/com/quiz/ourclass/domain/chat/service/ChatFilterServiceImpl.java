@@ -34,7 +34,7 @@ public class ChatFilterServiceImpl implements ChatFilterService {
         duplicateWordCheck(organization, request.badWord());
 
         return chatFilterRepository.save(
-            chatFilterMapper.RequestToChatFilter(organization, request.badWord())
+            chatFilterMapper.requestToChatFilter(organization, request.badWord())
         ).getId();
     }
 
