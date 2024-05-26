@@ -7,5 +7,5 @@ public interface SseService {
 
     SseEmitter subscribe(String lastEventId);
 
-    void send(SseDTO SseDto);
+    void send(SseDTO sseDto);
 }

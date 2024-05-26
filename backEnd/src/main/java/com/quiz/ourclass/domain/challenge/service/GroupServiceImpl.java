@@ -312,8 +312,8 @@ public class GroupServiceImpl implements GroupService {
         return null;
     }
 
-    private static String makeGroupKey(long challengeId, long MemberId) {
-        return ConstantUtil.REDIS_GROUP_KEY + challengeId + "_" + MemberId;
+    private static String makeGroupKey(long challengeId, long memberId) {
+        return ConstantUtil.REDIS_GROUP_KEY + challengeId + "_" + memberId;
     }
 
     private static long getChallengeIdFromKey(String key) {
