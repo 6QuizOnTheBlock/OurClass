@@ -21,7 +21,6 @@ import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
-import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
@@ -51,7 +50,6 @@ public class GroupServiceImpl implements GroupService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
     private final RelationshipRepository relationshipRepository;
-    private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
