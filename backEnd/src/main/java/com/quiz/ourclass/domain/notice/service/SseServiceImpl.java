@@ -89,15 +89,9 @@ public class SseServiceImpl implements SseService {
 
     //종료 상태
     private void checkEmitterStatus(SseEmitter emitter, String emitterId) {
-        emitter.onCompletion(() -> {
-            sseRepository.deleteById(emitterId);
-        });
-        emitter.onTimeout(() -> {
-            sseRepository.deleteById(emitterId);
-        });
-        emitter.onError(e -> {
-            sseRepository.deleteById(emitterId);
-        });
+        emitter.onCompletion(() -> sseRepository.deleteById(emitterId));
+        emitter.onTimeout(() -> sseRepository.deleteById(emitterId));
+        emitter.onError(e -> sseRepository.deleteById(emitterId));
     }
 
     private void sendLostData(String lastEventId, String userId, String emitterId,
