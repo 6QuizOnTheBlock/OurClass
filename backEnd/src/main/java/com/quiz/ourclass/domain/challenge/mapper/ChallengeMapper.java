@@ -25,7 +25,6 @@ public interface ChallengeMapper {
     @Mapping(target = "createTime", source = "challengeGroup.createTime")
     @Mapping(target = "endStatus", source = "challengeGroup.completeStatus")
     @Mapping(target = "memberNames", source = "challengeGroup.groupMembers")
-//, qualifiedByName = "MemberToString")
     RunningMemberChallengeResponse groupToRunningMember(ChallengeSimpleDTO challengeSimpleDTO,
         ChallengeGroup challengeGroup, boolean leaderStatus);
 
@@ -33,13 +32,4 @@ public interface ChallengeMapper {
     @Mapping(target = "name", source = "member.name")
     @Mapping(target = "photo", source = "member.profileImage")
     MemberSimpleDTO groupMemberToMemberSimpleDTO(GroupMember groupMember);
-
-//    @Named("MemberToString")
-//    static List<String> memberToString(List<GroupMember> groupMembers) {
-//        return groupMembers.stream()
-//            .map(groupMember -> {
-//                MemberSimpleDTO
-//            })
-//            .collect(Collectors.toList());
-//    }
 }
