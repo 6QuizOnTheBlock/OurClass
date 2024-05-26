@@ -61,14 +61,14 @@ public class GroupServiceImpl implements GroupService {
     @Transactional
     @Override
     public MatchingRoomResponse createMatchingRoom(long challengeId) {
-        long MemberId = accessUtil.getMember()
+        long memberId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
-        String dataKey = makeGroupKey(challengeId, MemberId);
+        String dataKey = makeGroupKey(challengeId, memberId);
         Set<String> redisMembers = redisUtil.setMembers(dataKey);
         if (redisMembers != null && !redisMembers.isEmpty()) {
             redisUtil.delete(dataKey);
         }
-        redisUtil.setAdd(dataKey, String.valueOf(MemberId));
+        redisUtil.setAdd(dataKey, String.valueOf(memberId));
         Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
         int minCount = challenge.getMinCount();
