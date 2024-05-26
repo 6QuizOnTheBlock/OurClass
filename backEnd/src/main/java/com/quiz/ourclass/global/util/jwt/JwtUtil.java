@@ -45,8 +45,8 @@ public class JwtUtil {
      *
      * (3) signatureAlgorithm: JWT의 전자서명 파트를 만들 때 쓰이는 알고리즘이다.
      *
-     * (4) ACCESS_TOKEN_TIME: 접근 토큰 수명
-     * (5) REFRESH_TOKEN_TIME: 갱신 토큰 수명
+     * (4) accessTokenTime: 접근 토큰 수명
+     * (5) refreshTokenTime: 갱신 토큰 수명
      * (6) Bearer Token Prefix
      * */
 
@@ -54,13 +54,18 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String ingredient;
     private Key key;
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
+
+    // final 필드를 static으로 선언하지 않으면, 클래스의 각 인스턴스 마다 해당 필드의 값이 복사됨.
+    // 이는 불필요하게 메모리가 사용된다.
+    // static 없이 final로 선언된 필드는 각 인스턴스가 고유한 값을 가질 수 있다는 의미를 내포
+    // static으로 선언하면 클래스 수준에서 값을 공유한다는 의도가 명확해짐
+    private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
     @Value("#{new Integer('${jwt.token.access-expiration-time}')}")
-    private Integer ACCESS_TOKEN_TIME;
+    private Integer accessTokenTime;
 
     @Value("#{new Integer('${jwt.token.refresh-expiration-time}')}")
-    private Integer REFRESH_TOKEN_TIME;
+    private Integer refreshTokenTime;
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -101,7 +106,7 @@ public class JwtUtil {
             .claim("ROLE", role)
             .setIssuedAt(new Date(now.getTime()))
             .setExpiration(
-                new Date(now.getTime() + (isAccess ? ACCESS_TOKEN_TIME : REFRESH_TOKEN_TIME)))
+                new Date(now.getTime() + (isAccess ? accessTokenTime : refreshTokenTime)))
             .signWith(key, signatureAlgorithm)
             .compact();
 
@@ -178,7 +183,7 @@ public class JwtUtil {
 
     public void saveRefresh(long memberId, String accessToken, String refreshToken) {
         refreshRepository.save(
-            Refresh.of(memberId, accessToken, refreshToken, REFRESH_TOKEN_TIME / 1000));
+            Refresh.of(memberId, accessToken, refreshToken, refreshTokenTime / 1000));
     }
 
     /*
