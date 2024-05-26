@@ -50,7 +50,7 @@ public class PostRepositoryQuerydslImpl implements PostRepositoryQuerydsl {
             .leftJoin(post.comments, comment)
             .groupBy(post.id)
             .where(postCondition)
-            .limit(pageable.getPageSize() + 1)
+            .limit(pageable.getPageSize() + 1L)
             .offset(pageable.getOffset())
             .orderBy(post.id.desc())
             .fetch();
