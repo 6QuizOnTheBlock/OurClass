@@ -209,7 +209,7 @@ public class GroupServiceImpl implements GroupService {
                 return getUnfriendlyGroup(autoGroupMatchingRequest);
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
     // TODO : 테스트 끝나고 해당 코드 지우기
