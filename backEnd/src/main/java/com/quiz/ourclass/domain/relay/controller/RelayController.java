@@ -49,7 +49,7 @@ public class RelayController implements RelayControllerDocs {
 
     @GetMapping("/running")
     public ResponseEntity<ResultResponse<RunningRelayResponse>> getRunningRelay(
-        @RequestParam(required = true) long organizationId) {
+        @RequestParam long organizationId) {
         RunningRelayResponse runningChallengeResponse = relayService.getRunningRelay(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));

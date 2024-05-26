@@ -87,7 +87,7 @@ public interface MemberOrgControllerDocs {
         @Parameter(description = "멤버 ID", required = true, in = ParameterIn.QUERY)
         long memberId,
         @RequestParam(required = false)
-        @Parameter(description = "상위 n개만 조회 시 추가", required = false, in = ParameterIn.QUERY)
+        @Parameter(description = "상위 n개만 조회 시 추가", in = ParameterIn.QUERY)
         Long limit
     );
 

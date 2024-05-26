@@ -63,7 +63,7 @@ public class ChallengeController implements ChallengeControllerDocs {
 
     @GetMapping("/running")
     public ResponseEntity<ResultResponse<RunningChallengeResponse>> getRunningChallenge(
-        @RequestParam(required = true) long organizationId) {
+        @RequestParam long organizationId) {
         RunningChallengeResponse runningChallengeResponse = challengeService.getRunningChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
@@ -71,7 +71,7 @@ public class ChallengeController implements ChallengeControllerDocs {
 
     @GetMapping("/running/member")
     public ResponseEntity<ResultResponse<RunningMemberChallengeResponse>> getRunningMemberChallenge(
-        @RequestParam(required = true) long organizationId) {
+        @RequestParam long organizationId) {
         RunningMemberChallengeResponse runningMemberChallenge = challengeService.getRunningMemberChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningMemberChallenge));

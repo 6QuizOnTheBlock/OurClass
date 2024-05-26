@@ -80,7 +80,7 @@ public interface RelayControllerDocs {
         })
     @GetMapping("/running")
     ResponseEntity<ResultResponse<RunningRelayResponse>> getRunningRelay(
-        @RequestParam(required = true)
+        @RequestParam
         @Parameter(description = "학급 id", required = true, in = ParameterIn.QUERY)
         long organizationId
     );

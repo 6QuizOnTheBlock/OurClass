@@ -51,7 +51,7 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content)
         })
     @PostMapping
-    public ResponseEntity<ResultResponse<Long>> createChallenge(
+    ResponseEntity<ResultResponse<Long>> createChallenge(
         @RequestBody
         ChallengeRequest challengeRequest
     );
@@ -102,8 +102,8 @@ public interface ChallengeControllerDocs {
                 """, content = @Content)
         })
     @GetMapping("/running")
-    public ResponseEntity<ResultResponse<RunningChallengeResponse>> getRunningChallenge(
-        @RequestParam(required = true)
+    ResponseEntity<ResultResponse<RunningChallengeResponse>> getRunningChallenge(
+        @RequestParam
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
@@ -126,7 +126,7 @@ public interface ChallengeControllerDocs {
         })
     @GetMapping("/running/member")
     ResponseEntity<ResultResponse<RunningMemberChallengeResponse>> getRunningMemberChallenge(
-        @RequestParam(required = true)
+        @RequestParam
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
@@ -139,12 +139,12 @@ public interface ChallengeControllerDocs {
                 content = @Content(schema = @Schema(implementation = ChallengeResponse.class)))
         })
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<ChallengeResponse>> getChallengeDetail(
+    ResponseEntity<ResultResponse<ChallengeResponse>> getChallengeDetail(
         @PathVariable
         @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.PATH)
         long id,
         @RequestParam(required = false)
-        @Parameter(description = "그룹 ID", required = false, in = ParameterIn.QUERY)
+        @Parameter(description = "그룹 ID", in = ParameterIn.QUERY)
         Long groupId);
 
     @Operation(summary = "함께달리기 요약 조회",
