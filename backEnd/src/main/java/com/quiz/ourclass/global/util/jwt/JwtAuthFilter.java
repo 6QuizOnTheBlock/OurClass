@@ -2,6 +2,7 @@ package com.quiz.ourclass.global.util.jwt;
 
 import com.quiz.ourclass.global.dto.FilterResponse;
 import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,13 +43,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // 토큰 유효성 체크 -> 통과 못하면 바로 다음 filter 로 넘어간다.
         switch (jwtUtil.validateToken(token)) {
             case -1:
-                request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
+                request.setAttribute(ConstantUtil.EXCEPTION_ATTRIBUTE, ErrorCode.EXPIRED_TOKEN);
                 filterChain.doFilter(request, response);
                 return;
             case -2:
             case -3:
             case -4:
-                request.setAttribute("exception", ErrorCode.INVALID_TOKEN);
+                request.setAttribute(ConstantUtil.EXCEPTION_ATTRIBUTE, ErrorCode.INVALID_TOKEN);
                 filterChain.doFilter(request, response);
                 return;
             case -5:
@@ -65,7 +66,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             setAuthentication(info.getSubject());
         } catch (UsernameNotFoundException e) {
-            request.setAttribute("exception", ErrorCode.NOT_FOUND_MEMBER.getMessage());
+            request.setAttribute(ConstantUtil.EXCEPTION_ATTRIBUTE,
+                ErrorCode.NOT_FOUND_MEMBER.getMessage());
             log.error("관련 에러: {}", e.getMessage());
         }
 

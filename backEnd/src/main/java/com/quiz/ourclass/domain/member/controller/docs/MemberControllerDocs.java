@@ -1,12 +1,16 @@
 package com.quiz.ourclass.domain.member.controller.docs;
 
+import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
+import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
 import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
 import com.quiz.ourclass.domain.quiz.dto.request.QuizStartRequest;
+import com.quiz.ourclass.domain.quiz.dto.response.QuizStartResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +44,7 @@ public interface MemberControllerDocs {
                 description = "OIDC 토큰 인증에 실패했습니다.")
         })
     @PostMapping
-    ResponseEntity<ResultResponse<?>> signUp(MemberSignUpRequest request);
+    ResponseEntity<ResultResponse<TokenDTO>> signUp(MemberSignUpRequest request);
 
 
     @Operation(summary = "로그인",
@@ -55,7 +59,7 @@ public interface MemberControllerDocs {
                 description = "OIDC 토큰 인증에 실패했습니다.")
         })
     @PostMapping
-    ResponseEntity<ResultResponse<?>> signIn(MemberSignInRequest request);
+    ResponseEntity<ResultResponse<TokenDTO>> signIn(MemberSignInRequest request);
 
     @Operation(summary = "FCM 토큰 저장 및 갱신",
         description = "입력으로 들어오는 FCM 토큰을 저장 및 갱신 합니다.",
@@ -74,8 +78,17 @@ public interface MemberControllerDocs {
                 description = "기본 이미지 조회에 성공하였습니다."
             )
         })
+    @GetMapping("/default-image")
+    public ResponseEntity<ResultResponse<DefaultImagesResponse>> getDefaultImages();
+
+    @Operation(summary = "기본 이미지 정보 수정",
+        responses = {
+            @ApiResponse(responseCode = "200",
+                description = "기본 이미지 수정에 성공하였습니다."
+            )
+        })
     @PatchMapping("/default-image")
-    public ResponseEntity<ResultResponse<?>> updateDefaultImage(
+    public ResponseEntity<ResultResponse<String>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request);
 
     @Operation(summary = "현 유저의 회원정보 가져오기",
@@ -84,7 +97,7 @@ public interface MemberControllerDocs {
                 description = "유저 정보 확인에 성공하였습니다.")
         })
     @GetMapping("/")
-    public ResponseEntity<ResultResponse<?>> rememberMe();
+    public ResponseEntity<ResultResponse<MemberMeResponse>> rememberMe();
 
     @Operation(summary = "프로필 이미지 수정",
         responses = {
@@ -94,7 +107,8 @@ public interface MemberControllerDocs {
     )
 
     @PatchMapping("/photo")
-    public ResponseEntity<ResultResponse<?>> updateProfile(MemberUpdateRequest request);
+    public ResponseEntity<ResultResponse<MemberUpdateResponse>> updateProfile(
+        MemberUpdateRequest request);
 
     @Operation(summary = "멤버 조회", description = "ID 값에 해당하는 멤버 Simple 정보(id, name, iamgeUrl)를 조회합니다.",
         responses = {
@@ -104,14 +118,15 @@ public interface MemberControllerDocs {
         }
     )
     @GetMapping("{id}")
-    ResponseEntity<ResultResponse<?>> select(
+    ResponseEntity<ResultResponse<MemberSimpleDTO>> select(
 
         @PathVariable(value = "id") Long id
     );
 
     @PostMapping("/start")
-    public ResponseEntity<ResultResponse<?>> certificatingUser(QuizStartRequest request);
+    public ResponseEntity<ResultResponse<QuizStartResponse>> certificatingUser(
+        QuizStartRequest request);
 
     @DeleteMapping("/")
-    public ResponseEntity<ResultResponse<?>> deleteMe();
+    public ResponseEntity<ResultResponse<Void>> deleteMe();
 }

@@ -1,6 +1,5 @@
 package com.quiz.ourclass.domain.member.dto.request;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
