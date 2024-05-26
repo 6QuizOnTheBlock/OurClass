@@ -95,7 +95,7 @@ public class SseServiceImpl implements SseService {
         emitter.onTimeout(() -> {
             sseRepository.deleteById(emitterId);
         });
-        emitter.onError((e) -> {
+        emitter.onError(e -> {
             sseRepository.deleteById(emitterId);
         });
     }
