@@ -58,10 +58,21 @@ public class AopConfig {
         ResponseEntity<ResultResponse<?>> result = (ResponseEntity<ResultResponse<?>>) pjp.proceed();
         // 끝시간 check
         afterTime = System.currentTimeMillis();
-        if (result != null) {
+        if (result != null && result.getBody() != null) {
             log.info("-----------> RESPONSE : {}({}) = {} ({}ms)"
                 , pjp.getSignature().getDeclaringTypeName(), pjp.getSignature().getName(),
                 result.getBody().getData(),
+                (afterTime - beforeTime) / 1000.0);
+        } else if (result != null) {
+            log.warn("-----------> RESPONSE : {}({}) = BODY 없음 ({}ms)",
+                pjp.getSignature().getDeclaringTypeName(),
+                pjp.getSignature().getName(),
+                (afterTime - beforeTime) / 1000.0);
+        } else {
+            // 어떠한 에러로 인해 Pjp 실행이 끝난 후 ResponseEntity 자체가 생성되지 않은 상황을 의미
+            log.warn("-----------> RESPONSE : {}({}) = 에러로 인해 결과 반환 안됨. ({}ms)",
+                pjp.getSignature().getDeclaringTypeName(),
+                pjp.getSignature().getName(),
                 (afterTime - beforeTime) / 1000.0);
         }
         return result;
