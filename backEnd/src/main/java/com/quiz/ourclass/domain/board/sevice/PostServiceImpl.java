@@ -34,6 +34,7 @@ import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -200,8 +201,11 @@ public class PostServiceImpl implements PostService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = post.getOrganization().getId();
-            userAccessUtil.isOrganizationManager(member, orgId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            Optional<Organization> organization =
+                userAccessUtil.isOrganizationManager(member, orgId);
+            if (organization.isEmpty()) {
+                throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+            }
         }
         commentRepository.deleteByPostId(post.getId());
         postRepository.delete(post);
@@ -236,8 +240,11 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        Optional<MemberOrganization> memberOrganization =
+            userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId());
+        if (memberOrganization.isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
 
         String reportMember = member.getName();
         String authorMember = post.getAuthor().getName();

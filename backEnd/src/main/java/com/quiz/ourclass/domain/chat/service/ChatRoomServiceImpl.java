@@ -11,6 +11,7 @@ import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,8 +61,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
             }
         } else if (member.getRole() == Role.TEACHER) {
-            userAccessUtil.isOrganizationManager(member, chatRoomId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            Optional<Organization> organization =
+                userAccessUtil.isOrganizationManager(member, chatRoomId);
+            if (organization.isEmpty()) {
+                throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+            }
         }
     }
 }
