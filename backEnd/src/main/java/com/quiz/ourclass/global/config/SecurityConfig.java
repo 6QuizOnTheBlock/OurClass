@@ -86,7 +86,7 @@ public class SecurityConfig {
                 (corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource())));
 
         http
-            .headers((headers) -> headers.frameOptions(
+            .headers(headers -> headers.frameOptions(
                 HeadersConfigurer.FrameOptionsConfig::sameOrigin
             ));                                                 // (5)
 
@@ -98,13 +98,13 @@ public class SecurityConfig {
         );
 
         http
-            .sessionManagement((sessionManagement) ->
+            .sessionManagement(sessionManagement ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             );                                                  // (7)
 
         http
             .authorizeHttpRequests(
-                (auth) ->
+                auth ->
                     auth                                        // (8)
                         .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
