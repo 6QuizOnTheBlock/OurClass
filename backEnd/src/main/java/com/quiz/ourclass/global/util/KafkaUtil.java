@@ -32,7 +32,17 @@ public class KafkaUtil {
             descriptions.forEach((name, description) -> {
                 log.info("Topic: {} \nPartitions: {}", name, description.partitions().size());
             });
-        } catch (InterruptedException | ExecutionException e) {
+            // 현재 쓰레드가 인터럽트 되면, 발생하는 예외
+            // 인터럽트 되었다 => 다른 쓰레드가 현재 쓰레드에게 작업을 중단하고 가능한 빨리 종료하라는 신호를 보냈다.
+            // 지금은 InterruptedException 예외를 잡아서 서버 자체 예외만 던지고, 쓰레드 처리에 대한 조치를 하지 않고 있다.
+            // 이렇게 되면, 쓰레드가 정상 종료되지 않아 문제가 된다.
+            // 따라서 정상 종료 절차를 수행하고, 원래대로 우리 식의 예외를 수행해야 한다.
+        } catch (InterruptedException e) {
+            // InterruptedException 이 발생하면, 현재 쓰레드를 다시 인터럽트 시킨다.
+            // InterruptedException 으로 인터럽트를 캐치하면, 현재 쓰레드가 인터럽트 되었다는 정보를 잃기 때문이다.
+            Thread.currentThread().interrupt();
+            throw new GlobalException(ErrorCode.CANT_LOAD_KAFKA);
+        } catch (ExecutionException e) {
             throw new GlobalException(ErrorCode.CANT_LOAD_KAFKA);
         }
     }
