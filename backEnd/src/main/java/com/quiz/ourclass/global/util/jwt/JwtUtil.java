@@ -142,20 +142,20 @@ public class JwtUtil {
             return 0;
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.");
-            log.error("관련에러: {}", e.getMessage());
+            log.error(e.getMessage());
             return -1;
         } catch (io.jsonwebtoken.security.SignatureException | SecurityException |
                  MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            log.error("관련에러: {}", e.getMessage());
+            log.error(e.getMessage());
             return -2;
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-            log.error("관련에러: {}", e.getMessage());
+            log.error(e.getMessage());
             return -3;
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            log.error("관련에러: {}", e.getMessage());
+            log.error(e.getMessage());
             return -4;
         }
     }
@@ -220,6 +220,5 @@ public class JwtUtil {
         // 2. Redis에서 Refresh Token 지우기
         refreshRepository.deleteById(member.getId());
     }
-
 
 }
