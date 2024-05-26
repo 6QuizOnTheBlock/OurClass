@@ -1,6 +1,8 @@
 package com.quiz.ourclass.global.config;
 
 import com.quiz.ourclass.global.dto.ResultResponse;
+import com.quiz.ourclass.global.exception.ErrorCode;
+import com.quiz.ourclass.global.exception.GlobalException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -99,16 +101,13 @@ public class AopConfig {
             if (Modifier.isPrivate(modifiers) && Modifier.isFinal(modifiers)) {
                 continue;
             }
-            // 멤버 변수가 접근 가능한지 체크한다.
+            // private 멤버 변수도 접근 할 수 있도록 허용
+            field.setAccessible(true);
             try {
-                // 만약 접근이 가능하다면 값을 가져온다.
-                if (field.trySetAccessible()) {
-                    details.append(field.getName()).append("=").append(field.get(arg)).append(", ");
-                }
-                // 만약 private 접근 제어자여서 접근이 불가하면 해당 로그를 띄운다.
+                details.append((field.getName())).append("=");
+                details.append((field.get(arg))).append(", ");
             } catch (IllegalAccessException e) {
-                log.warn("Failed to access field: {} of class: {}", field.getName(),
-                    arg.getClass().getName(), e);
+                throw new GlobalException(ErrorCode.FAILED_TO_ACCESS_VARIABLE);
             }
         }
 
