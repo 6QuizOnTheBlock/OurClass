@@ -5,11 +5,11 @@ import com.quiz.ourclass.domain.board.dto.request.UpdateCommentRequest;
 
 public interface CommentService {
 
-    Long write(CommentRequest request);
+    Long commentWrite(CommentRequest request);
 
-    Long modify(Long commentId, UpdateCommentRequest request);
+    Long commentModify(Long commentId, UpdateCommentRequest request);
 
-    Boolean delete(Long commentId);
-    
-    Boolean report(Long commentId);
+    Boolean commentDelete(Long commentId);
+
+    Boolean commentReport(Long commentId);
 }

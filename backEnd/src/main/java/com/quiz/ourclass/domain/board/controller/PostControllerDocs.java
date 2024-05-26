@@ -39,7 +39,7 @@ public interface PostControllerDocs {
             @ApiResponse(responseCode = "500", description = "(message : \"첨부한 파일이 S3에 업로드 되지 않았습니다.\")", content = @Content)
         })
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ResultResponse<?>> write(
+    ResponseEntity<ResultResponse<Long>> postWrite(
         @Parameter(name = "organizationId", description = "단체 PK 값", required = true, in = ParameterIn.QUERY)
         @RequestParam("organizationId") Long classId,
         @Parameter(name = "request", description = "게시글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
@@ -60,7 +60,7 @@ public interface PostControllerDocs {
         }
     )
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ResultResponse<?>> modify(
+    ResponseEntity<ResultResponse<Long>> postModify(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id,
         @Parameter(name = "request", description = "게시글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
@@ -80,7 +80,7 @@ public interface PostControllerDocs {
         }
     )
     @DeleteMapping(value = "{id}")
-    ResponseEntity<ResultResponse<?>> delete(
+    ResponseEntity<ResultResponse<Boolean>> postDelete(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );
@@ -99,7 +99,7 @@ public interface PostControllerDocs {
         }
     )
     @GetMapping(value = "/{id}")
-    ResponseEntity<ResultResponse<?>> detailView(
+    ResponseEntity<ResultResponse<PostDetailResponse>> postDetailView(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );
@@ -123,7 +123,7 @@ public interface PostControllerDocs {
         }
     )
     @PostMapping(value = "/{id}/report")
-    ResponseEntity<ResultResponse<?>> report(
+    ResponseEntity<ResultResponse<Boolean>> postReport(
         @Parameter(name = "id", description = "게시글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );
@@ -138,7 +138,7 @@ public interface PostControllerDocs {
         }
     )
     @GetMapping
-    ResponseEntity<ResultResponse<?>> listView(
+    ResponseEntity<ResultResponse<PostListResponse>> postListView(
         PostSliceRequest request
     );
 }

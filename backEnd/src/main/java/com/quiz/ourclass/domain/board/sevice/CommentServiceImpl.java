@@ -12,6 +12,8 @@ import com.quiz.ourclass.domain.member.entity.Role;
 import com.quiz.ourclass.domain.notice.entity.Notice;
 import com.quiz.ourclass.domain.notice.entity.NoticeType;
 import com.quiz.ourclass.domain.notice.repository.NoticeRepository;
+import com.quiz.ourclass.domain.organization.entity.MemberOrganization;
+import com.quiz.ourclass.domain.organization.entity.Organization;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.FcmDTO;
@@ -21,6 +23,7 @@ import com.quiz.ourclass.global.util.FcmType;
 import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,51 +42,17 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Long write(CommentRequest request) {
+    public Long commentWrite(CommentRequest request) {
         Member commentWriter = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
-        //게시글 찾기
         Post post = postRepository.findById(request.boardId())
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        long orgId = post.getOrganization().getId();
+        validateOrganizationAccess(commentWriter, post);
+        handleCommentInteractions(request, commentWriter, post);
 
-        //게시글을 작성한 사용자 단체와 댓글 작성자의 단체가 같은지 확인
-        if (commentWriter.getRole() == Role.STUDENT) {
-            boolean isSameOrganization = post.getOrganization().getMemberOrganizations().stream()
-                .anyMatch(p -> p.getMember().getId() == commentWriter.getId());
-
-            if (!isSameOrganization) {
-                throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
-            }
-        } else if (commentWriter.getRole() == Role.TEACHER) {
-            userAccessUtil.isOrganizationManager(commentWriter, post.getOrganization().getId())
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
-        }
-
-        if (post.getAuthor().getId() != commentWriter.getId() &&
-            post.getAuthor().getRole() == Role.STUDENT) {
-            //해당 게시글에 반응(댓글 작성)을 하였는지 확인
-            boolean isFirstComment = request.parentId() == 0L
-                && !commentRepository.existsByPostAndMember(post, commentWriter);
-            if (isFirstComment) {
-                Member member1 = post.getAuthor().getId() < commentWriter.getId() ?
-                    post.getAuthor() : commentWriter;
-                Member member2 = post.getAuthor().getId() < commentWriter.getId() ?
-                    commentWriter : post.getAuthor();
-
-                updateSocialCount(orgId, member1, member2);
-            }
-            //해당 댓글에 반응(대댓글 작성)을 하였는지 확인
-            if (request.parentId() > 0L) {
-                Comment parentComment = commentRepository.findById(request.parentId())
-                    .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
-                checkAndUpdateFirstResponse(post, commentWriter, parentComment);
-            }
-        }
-
-        //게시글 댓글 저장 (부모 댓글이면 0L로 저장됩니다.)
-        Comment comment = commentMapper.CommentRequestTocomment(request);
+        // 게시글 댓글 저장
+        Comment comment = commentMapper.commentRequestTocomment(request);
         comment.setCreateTime(LocalDateTime.now());
         comment.setMember(commentWriter);
         comment.setPost(post);
@@ -93,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Long modify(Long commentId, UpdateCommentRequest request) {
+    public Long commentModify(Long commentId, UpdateCommentRequest request) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -119,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Transactional
     @Override
-    public Boolean delete(Long commentId) {
+    public Boolean commentDelete(Long commentId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -132,9 +101,13 @@ public class CommentServiceImpl implements CommentService {
                 throw new GlobalException(ErrorCode.COMMENT_DELETE_STUDENT_PERMISSION_DENIED);
             }
         } else if (requesterRole == Role.TEACHER) {
-            Long orgId = comment.getPost().getOrganization().getId();
-            userAccessUtil.isOrganizationManager(member, orgId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            Optional<Organization> organization =
+                userAccessUtil.isOrganizationManager(
+                    member, comment.getPost().getOrganization().getId());
+
+            if (organization.isEmpty()) {
+                throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+            }
         }
 
         //자식 댓글 삭제하기
@@ -147,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Boolean report(Long commentId) {
+    public Boolean commentReport(Long commentId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -158,8 +131,12 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, comment.getPost().getOrganization().getId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        Optional<MemberOrganization> memberOrganization =
+            userAccessUtil.isMemberOfOrganization(
+                member, comment.getPost().getOrganization().getId());
+        if (memberOrganization.isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
 
         String reportMember = member.getName();
         String authorMember = comment.getPost().getAuthor().getName();
@@ -188,6 +165,18 @@ public class CommentServiceImpl implements CommentService {
         return true;
     }
 
+    private void validateOrganizationAccess(Member commentWriter, Post post) {
+        if (commentWriter.getRole() == Role.STUDENT &&
+            post.getOrganization().getMemberOrganizations().stream()
+                .noneMatch(p -> p.getMember().getId() == commentWriter.getId())) {
+            throw new GlobalException(ErrorCode.COMMENT_EDIT_PERMISSION_DENIED);
+        } else if (commentWriter.getRole() == Role.TEACHER &&
+            userAccessUtil.isOrganizationManager(
+                commentWriter, post.getOrganization().getId()).isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
+    }
+
     /*
      * 부모 댓글 작성자가 게시글 작성자일 때
      * 대댓글 작성자가 게시글에 댓글로 반응을 한 적이 없을 때
@@ -195,23 +184,56 @@ public class CommentServiceImpl implements CommentService {
      * 부모 댓글 작성자가 게시글 작성자랑 다를 떄
      * 대댓글 작성자가 부모 댓글 작성자에게 반응을 하지 않았을 때
      */
-    private void checkAndUpdateFirstResponse(
-        Post post, Member commentWriter, Comment parentComment) {
-        if ((post.getAuthor().getId() == parentComment.getMember().getId() &&
-            !commentRepository.existsByPostAndMember(post, commentWriter))
-            ||
-            (post.getAuthor().getId() != parentComment.getMember().getId() &&
-                !commentRepository.existsByParentIdAndMember(parentComment.getId(),
-                    commentWriter))) {
-            long orgId = post.getOrganization().getId();
+    private void handleCommentInteractions(
+        CommentRequest request, Member commentWriter, Post post) {
+        // 첫 번째 댓글 확인 및 처리
+        checkAndHandleFirstComment(request, commentWriter, post);
 
-            Member member1 = post.getAuthor().getId() < commentWriter.getId() ?
-                post.getAuthor() : commentWriter;
-            Member member2 = post.getAuthor().getId() < commentWriter.getId() ?
-                commentWriter : post.getAuthor();
-
-            updateSocialCount(orgId, member1, member2);
+        // 대댓글 확인 및 처리
+        if (request.parentId() > 0L) {
+            Comment parentComment = commentRepository.findById(request.parentId())
+                .orElseThrow(() -> new GlobalException(ErrorCode.COMMENT_NOT_FOUND));
+            checkAndUpdateFirstResponse(post, commentWriter, parentComment);
         }
+    }
+
+    /*
+     * 첫 댓글인지 확인하고, 게시글 작성자가 학생이며,
+     * 댓글 작성자가 게시글 작성자가 아닌 경우에만 소셜 카운트 업데이트
+     * */
+    private void checkAndHandleFirstComment(CommentRequest request, Member commentWriter,
+        Post post) {
+        // 첫 댓글인지 확인하고, 게시글 작성자가 학생이며, 댓글 작성자가 게시글 작성자가 아닌 경우에만 소셜 카운트 업데이트
+        if (post.getAuthor().getRole() == Role.STUDENT &&
+            post.getAuthor().getId() != commentWriter.getId() &&
+            isFirstComment(request, commentWriter, post)) {
+            updateSocialCount(post.getOrganization().getId(),
+                determineLowerMember(post.getAuthor(), commentWriter),
+                determineHigherMember(post.getAuthor(), commentWriter));
+        }
+    }
+
+    private boolean isFirstComment(CommentRequest request, Member commentWriter, Post post) {
+        return request.parentId() == 0L &&
+            !commentRepository.existsByPostAndMember(post, commentWriter);
+    }
+
+    private void checkAndUpdateFirstResponse(Post post, Member commentWriter,
+        Comment parentComment) {
+        if (post.getAuthor().getId() != parentComment.getMember().getId()
+            && !commentRepository.existsByParentIdAndMember(parentComment.getId(), commentWriter)) {
+            updateSocialCount(post.getOrganization().getId(),
+                determineLowerMember(post.getAuthor(), commentWriter),
+                determineHigherMember(post.getAuthor(), commentWriter));
+        }
+    }
+
+    private Member determineLowerMember(Member member1, Member member2) {
+        return member1.getId() < member2.getId() ? member1 : member2;
+    }
+
+    private Member determineHigherMember(Member member1, Member member2) {
+        return member1.getId() < member2.getId() ? member2 : member1;
     }
 
     private void updateSocialCount(Long orgId, Member member1, Member member2) {
