@@ -101,7 +101,11 @@ dependencies {
     implementation 'org.apache.kafka:kafka-clients'
     implementation 'org.springframework.retry:spring-retry'
 
-    implementation 'org.ojalgo:ojalgo:51.4.1'
+    // K-means 클러스터링 라이브러리
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+
+    // 행렬 연산
+    implementation 'org.ejml:ejml-simple:0.41'
 
 }
 
