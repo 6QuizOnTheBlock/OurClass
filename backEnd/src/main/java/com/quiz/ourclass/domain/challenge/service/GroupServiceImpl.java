@@ -158,7 +158,6 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
-
     @Transactional
     @Override
     public void deleteMatchingMember(String key, Long memberId) {
@@ -208,51 +207,6 @@ public class GroupServiceImpl implements GroupService {
             }
         }
         return new ArrayList<>();
-    }
-
-    // TODO : 테스트 끝나고 해당 코드 지우기
-    // 테스트를 위해서 강제 그룹 형성
-    // 차성원(15), 홍유준(10), 정철주(9)
-    public List<AutoGroupMatchingResponse> testMethod(
-        AutoGroupMatchingRequest autoGroupMatchingRequest) {
-        // 하드코딩된 멤버들을 포함하는 그룹을 생성
-        List<Long> group1 = List.of(15L, 10L, 9L);
-
-        List<MemberSimpleDTO> members = autoGroupMatchingRequest.members().stream()
-            .map(memberRepository::findById)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .filter(member -> !group1.contains(member.getId()))
-            .map(memberMapper::memberToMemberSimpleDTO)
-            .collect(Collectors.toList());
-        Collections.shuffle(members);
-        List<List<MemberSimpleDTO>> groups = new ArrayList<>();
-        int groupSize = autoGroupMatchingRequest.minCount();
-        int groupCount = members.size() / groupSize;
-        int left = members.size() % groupSize;
-        int addCount = left / groupCount;
-        int start = 0;
-        for (int i = 0; i < groupCount; i++) {
-            int size = groupSize;
-            if (left > 0) {
-                size += Math.min(left, addCount);
-                left -= addCount;
-            }
-            groups.add(members.subList(start, start + size));
-            start += size;
-        }
-        List<MemberSimpleDTO> testGroup = group1.stream()
-            .map(memberRepository::findById)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(memberMapper::memberToMemberSimpleDTO)
-            .toList();
-        groups.add(testGroup);
-        return groups.stream().map(group -> AutoGroupMatchingResponse.builder()
-                .members(group)
-                .headCount(group.size())
-                .build())
-            .toList();
     }
 
     private List<AutoGroupMatchingResponse> getRandomGroup(
