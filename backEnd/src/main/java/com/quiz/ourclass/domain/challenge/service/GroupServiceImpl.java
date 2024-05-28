@@ -21,18 +21,17 @@ import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.service.SseService;
 import com.quiz.ourclass.domain.organization.entity.Relationship;
 import com.quiz.ourclass.domain.organization.repository.MemberOrganizationRepository;
-import com.quiz.ourclass.domain.organization.repository.OrganizationRepository;
 import com.quiz.ourclass.domain.organization.repository.RelationshipRepository;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.RedisUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -51,25 +50,23 @@ public class GroupServiceImpl implements GroupService {
     private final MemberRepository memberRepository;
     private final ChallengeRepository challengeRepository;
     private final RelationshipRepository relationshipRepository;
-    private final OrganizationRepository organizationRepository;
     private final MemberOrganizationRepository memberOrganizationRepository;
     private final UserAccessUtil accessUtil;
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
     private final FriendlyGroup friendlyGroup;
-    private final static String REDIS_GROUP_KEY = "CHALLENGE_LEADER:";
 
     @Transactional
     @Override
     public MatchingRoomResponse createMatchingRoom(long challengeId) {
-        long MemberId = accessUtil.getMember()
+        long memberId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
-        String dataKey = makeGroupKey(challengeId, MemberId);
+        String dataKey = makeGroupKey(challengeId, memberId);
         Set<String> redisMembers = redisUtil.setMembers(dataKey);
         if (redisMembers != null && !redisMembers.isEmpty()) {
             redisUtil.delete(dataKey);
         }
-        redisUtil.setAdd(dataKey, String.valueOf(MemberId));
+        redisUtil.setAdd(dataKey, String.valueOf(memberId));
         Challenge challenge = challengeRepository.findById(challengeId)
             .orElseThrow(() -> new GlobalException(CHALLENGE_NOT_FOUND));
         int minCount = challenge.getMinCount();
@@ -161,7 +158,6 @@ public class GroupServiceImpl implements GroupService {
         }
     }
 
-
     @Transactional
     @Override
     public void deleteMatchingMember(String key, Long memberId) {
@@ -210,62 +206,7 @@ public class GroupServiceImpl implements GroupService {
                 return getUnfriendlyGroup(autoGroupMatchingRequest);
             }
         }
-        return null;
-    }
-
-    // TODO : 테스트 끝나고 해당 코드 지우기
-    // 테스트를 위해서 강제 그룹 형성
-    // 차성원(15), 홍유준(10), 정철주(9)
-    public List<AutoGroupMatchingResponse> testMethod() {
-        // 하드코딩된 멤버들을 포함하는 그룹을 생성
-        List<Long> group1 = List.of(15L, 10L, 9L);
-
-        // 단체에 있는 모든 멤버 ID
-        List<Long> allMembers = List.of(5L, 6L, 7L, 9L, 10L, 11L, 12L, 13L, 14L, 15L, 16L);
-
-        // 하드코딩된 그룹 멤버를 제외한 나머지 멤버들
-        List<Long> remainingMembers = new ArrayList<>(allMembers);
-        remainingMembers.removeAll(group1);
-
-        // 나머지 멤버들을 균등하게 그룹화
-        List<List<Long>> groups = new ArrayList<>();
-        groups.add(group1); // 하드코딩된 그룹 추가
-
-        // 임의의 그룹으로 나머지 멤버들 배분
-        int groupSize = 3; // 그룹당 최대 인원수 설정
-        List<Long> currentGroup = new ArrayList<>();
-        for (Long member : remainingMembers) {
-            if (currentGroup.size() < groupSize) {
-                currentGroup.add(member);
-            } else {
-                groups.add(new ArrayList<>(currentGroup));
-                currentGroup.clear();
-                currentGroup.add(member);
-            }
-        }
-        if (!currentGroup.isEmpty()) {
-            groups.add(currentGroup);
-        }
-
-        // 그룹 정보를 AutoGroupMatchingResponse로 변환
-        List<AutoGroupMatchingResponse> responses = new ArrayList<>();
-        for (List<Long> group : groups) {
-            List<MemberSimpleDTO> members = group.stream()
-                .map(memberId -> memberRepository.findById(memberId)
-                    .map(memberMapper::memberToMemberSimpleDTO)
-                    .orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-            AutoGroupMatchingResponse response = AutoGroupMatchingResponse.builder()
-                .members(members)
-                .headCount(members.size())
-                .build();
-
-            responses.add(response);
-        }
-
-        return responses;
+        return new ArrayList<>();
     }
 
     private List<AutoGroupMatchingResponse> getRandomGroup(
@@ -285,13 +226,9 @@ public class GroupServiceImpl implements GroupService {
         int start = 0;
         for (int i = 0; i < groupCount; i++) {
             int size = groupSize;
-            if (i < left) {
-                if (left >= addCount) {
-                    size += left;
-                } else {
-                    size += addCount;
-                    left -= addCount;
-                }
+            if (left > 0) {
+                size += Math.min(left, addCount);
+                left -= addCount;
             }
             groups.add(members.subList(start, start + size));
             start += size;
@@ -327,8 +264,8 @@ public class GroupServiceImpl implements GroupService {
         return null;
     }
 
-    private static String makeGroupKey(long challengeId, long MemberId) {
-        return REDIS_GROUP_KEY + challengeId + "_" + MemberId;
+    private static String makeGroupKey(long challengeId, long memberId) {
+        return ConstantUtil.REDIS_GROUP_KEY + challengeId + "_" + memberId;
     }
 
     private static long getChallengeIdFromKey(String key) {

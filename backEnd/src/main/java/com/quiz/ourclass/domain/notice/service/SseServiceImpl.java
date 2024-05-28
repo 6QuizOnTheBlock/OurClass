@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.notice.dto.SseType;
 import com.quiz.ourclass.domain.notice.repository.SseRepository;
 import com.quiz.ourclass.global.exception.ErrorCode;
 import com.quiz.ourclass.global.exception.GlobalException;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,8 +20,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Service
 public class SseServiceImpl implements SseService {
 
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 20;
-    private static final Long REDIRECT_TIME = 5L * 1000;
     private final SseRepository sseRepository;
     private final UserAccessUtil accessUtil;
 
@@ -29,7 +28,8 @@ public class SseServiceImpl implements SseService {
         long loginUserId = accessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND)).getId();
         String emitterId = makeTimeIncludeId(String.valueOf(loginUserId));
-        SseEmitter emitter = sseRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
+        SseEmitter emitter = sseRepository.save(emitterId,
+            new SseEmitter(ConstantUtil.DEFAULT_TIMEOUT));
 
         // emitter의 상태를 체크함, 완료되었는지 타임아웃이 났는지
         checkEmitterStatus(emitter, emitterId);
@@ -47,7 +47,6 @@ public class SseServiceImpl implements SseService {
         if (lastEventId != null && !lastEventId.isEmpty()) {
             sendLostData(lastEventId, String.valueOf(loginUserId), emitterId, emitter);
         }
-        log.info("SSE연결 요청 : 유저 " + loginUserId + ", 에미터 " + emitterId);
         return emitter;
     }
 
@@ -75,7 +74,7 @@ public class SseServiceImpl implements SseService {
         try {
             emitter.send(SseEmitter.event()
                 .id(eventId)
-                .reconnectTime(REDIRECT_TIME)
+                .reconnectTime(ConstantUtil.REDIRECT_TIME)
                 .name(dto.eventType().toString())
                 .data(dto));
         } catch (IOException exception) {
@@ -90,18 +89,9 @@ public class SseServiceImpl implements SseService {
 
     //종료 상태
     private void checkEmitterStatus(SseEmitter emitter, String emitterId) {
-        emitter.onCompletion(() -> {
-            log.info("SSE연결 해제 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
-            sseRepository.deleteById(emitterId);
-        });
-        emitter.onTimeout(() -> {
-            log.info("SSE연결 타임아웃 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
-            sseRepository.deleteById(emitterId);
-        });
-        emitter.onError((e) -> {
-            log.info("SSE연결 에러 : 에미터 " + emitter.toString() + ", 에미터 " + emitterId);
-            sseRepository.deleteById(emitterId);
-        });
+        emitter.onCompletion(() -> sseRepository.deleteById(emitterId));
+        emitter.onTimeout(() -> sseRepository.deleteById(emitterId));
+        emitter.onError(e -> sseRepository.deleteById(emitterId));
     }
 
     private void sendLostData(String lastEventId, String userId, String emitterId,

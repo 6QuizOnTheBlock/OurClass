@@ -23,7 +23,7 @@ public interface QuizGameMapper {
     @Transactional
     Quiz toQuiz(QuizGame quizGame, QuizDTO quizDTO);
 
-    QuizGameDTO toQuizGameDTO(QuizGame QuizGame);
+    QuizGameDTO toQuizGameDTO(QuizGame quizGame);
 
     FcmDTO toFcmDTO(String title, String body);
 

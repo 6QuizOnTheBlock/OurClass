@@ -39,7 +39,8 @@ public class ChatController implements ChatControllerDocs {
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> chatListView(MessageSliceRequest request) {
+    public ResponseEntity<ResultResponse<MessageResponse>> chatListView(
+        MessageSliceRequest request) {
         MessageResponse messageResponse = chatService.chatListView(request);
         return ResponseEntity.ok(ResultResponse.success(messageResponse));
     }

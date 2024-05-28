@@ -38,7 +38,7 @@ public interface ChallengeControllerDocs {
                 content = @Content(schema = @Schema(implementation = ChallengeSliceResponse.class)))
         })
     @GetMapping
-    ResponseEntity<ResultResponse<?>> getChallenges(
+    ResponseEntity<ResultResponse<ChallengeSliceResponse>> getChallenges(
         ChallengeSliceRequest challengeSliceRequest
     );
 
@@ -51,7 +51,7 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content)
         })
     @PostMapping
-    public ResponseEntity<ResultResponse<?>> createChallenge(
+    ResponseEntity<ResultResponse<Long>> createChallenge(
         @RequestBody
         ChallengeRequest challengeRequest
     );
@@ -65,7 +65,7 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "500", description = "(message : \"AWS 서버 에러입니다.\")", content = @Content)
         })
     @PostMapping(value = "/reports", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ResultResponse<?>> createReport(
+    ResponseEntity<ResultResponse<Long>> createReport(
         @RequestPart
         ReportRequest reportRequest,
         @RequestPart
@@ -79,7 +79,7 @@ public interface ChallengeControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"레포트를 찾을 수 없습니다.\")", content = @Content)
         })
     @PatchMapping(value = "/reports/{id}")
-    public ResponseEntity<ResultResponse<?>> confirmReport(
+    ResponseEntity<ResultResponse<Boolean>> confirmReport(
         @Schema(description = "레포트 id")
         @PathVariable
         long id,
@@ -102,8 +102,8 @@ public interface ChallengeControllerDocs {
                 """, content = @Content)
         })
     @GetMapping("/running")
-    public ResponseEntity<ResultResponse<?>> getRunningChallenge(
-        @RequestParam(required = true)
+    ResponseEntity<ResultResponse<RunningChallengeResponse>> getRunningChallenge(
+        @RequestParam
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
@@ -125,8 +125,8 @@ public interface ChallengeControllerDocs {
                 """, content = @Content)
         })
     @GetMapping("/running/member")
-    ResponseEntity<ResultResponse<?>> getRunningMemberChallenge(
-        @RequestParam(required = true)
+    ResponseEntity<ResultResponse<RunningMemberChallengeResponse>> getRunningMemberChallenge(
+        @RequestParam
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.QUERY)
         long organizationId
     );
@@ -139,12 +139,12 @@ public interface ChallengeControllerDocs {
                 content = @Content(schema = @Schema(implementation = ChallengeResponse.class)))
         })
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> getChallengeDetail(
+    ResponseEntity<ResultResponse<ChallengeResponse>> getChallengeDetail(
         @PathVariable
         @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.PATH)
         long id,
         @RequestParam(required = false)
-        @Parameter(description = "그룹 ID", required = false, in = ParameterIn.QUERY)
+        @Parameter(description = "그룹 ID", in = ParameterIn.QUERY)
         Long groupId);
 
     @Operation(summary = "함께달리기 요약 조회",
@@ -153,7 +153,7 @@ public interface ChallengeControllerDocs {
                 content = @Content(schema = @Schema(implementation = ChallengeSimpleResponse.class)))
         })
     @GetMapping("/{id}/simple")
-    ResponseEntity<ResultResponse<?>> getChallengeSimple(
+    ResponseEntity<ResultResponse<ChallengeSimpleResponse>> getChallengeSimple(
         @PathVariable
         @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.PATH)
         long id

@@ -34,7 +34,7 @@ public interface ChatFilterControllerDocs {
         }
     )
     @PostMapping("/{organizationId}")
-    ResponseEntity<ResultResponse<?>> register(
+    ResponseEntity<ResultResponse<Long>> register(
         @Parameter(name = "organizationId", description = "단체 ID 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "organizationId") Long organizationId,
         @Parameter(name = "request", description = "필터링 단어 DTO", required = true, in = ParameterIn.DEFAULT)
@@ -57,7 +57,7 @@ public interface ChatFilterControllerDocs {
         }
     )
     @PatchMapping("/{organizationId}/{id}")
-    ResponseEntity<ResultResponse<?>> modify(
+    ResponseEntity<ResultResponse<Boolean>> modify(
         @Parameter(name = "organizationId", description = "단체 ID", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "organizationId") Long organizationId,
         @Parameter(name = "id", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
@@ -77,7 +77,7 @@ public interface ChatFilterControllerDocs {
         }
     )
     @DeleteMapping("/{id}")
-    ResponseEntity<ResultResponse<?>> delete(
+    ResponseEntity<ResultResponse<Boolean>> delete(
         @Parameter(name = "id", description = "단어 필터링 ID 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long chatFilterId
     );
@@ -96,7 +96,7 @@ public interface ChatFilterControllerDocs {
         }
     )
     @GetMapping
-    ResponseEntity<ResultResponse<?>> select(
+    ResponseEntity<ResultResponse<ChatFilterResponse>> select(
         ChatFilterSliceRequest request
     );
 }

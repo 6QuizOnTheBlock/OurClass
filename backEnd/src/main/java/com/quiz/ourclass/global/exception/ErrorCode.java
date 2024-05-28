@@ -20,6 +20,7 @@ public enum ErrorCode {
     CANT_LOAD_KAFKA(HttpStatus.INTERNAL_SERVER_ERROR, "카프카 메타 데이터를 조회할 수 없습니다."),
     FAILED_TO_SENDING_MESSAGE(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED,
         "메세지를 카프카로 전송하는데 실패했습니다. 재시도 중..."),
+    FAILED_TO_ACCESS_VARIABLE(HttpStatus.BAD_REQUEST, "특정 필드 접근에 실패했습니다."),
 
 
     //member

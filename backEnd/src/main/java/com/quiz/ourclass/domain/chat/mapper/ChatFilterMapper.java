@@ -15,7 +15,7 @@ import org.mapstruct.ReportingPolicy;
 public interface ChatFilterMapper {
 
     @Mapping(target = "id", ignore = true)
-    ChatFilter RequestToChatFilter(Organization organization, String badWord);
+    ChatFilter requestToChatFilter(Organization organization, String badWord);
 
     ChatFilter updateChatFilterFromRequest(
         ChatFilterRequest request,

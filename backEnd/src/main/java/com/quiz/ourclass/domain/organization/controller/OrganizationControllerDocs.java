@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,7 +34,7 @@ public interface OrganizationControllerDocs {
                 content = @Content(schema = @Schema(implementation = Long.class)))
         })
     @PostMapping
-    ResponseEntity<ResultResponse<?>> createOrganization(
+    ResponseEntity<ResultResponse<Long>> createOrganization(
         @RequestBody
         OrganizationRequest organizationRequest
     );
@@ -44,7 +45,7 @@ public interface OrganizationControllerDocs {
                 content = @Content(schema = @Schema(implementation = OrganizationResponse.class)))
         })
     @GetMapping
-    ResponseEntity<ResultResponse<?>> getOrganizations(
+    ResponseEntity<ResultResponse<List<OrganizationResponse>>> getOrganizations(
     );
 
     @Operation(summary = "학급 가입코드 생성",
@@ -56,7 +57,7 @@ public interface OrganizationControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content)
         })
     @GetMapping("/{id}/code")
-    ResponseEntity<ResultResponse<?>> getOrganizationCode(
+    ResponseEntity<ResultResponse<InviteCodeDTO>> getOrganizationCode(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id
@@ -81,7 +82,7 @@ public interface OrganizationControllerDocs {
                 """, content = @Content)
         })
     @PostMapping("/{id}/join")
-    ResponseEntity<ResultResponse<?>> joinOrganization(
+    ResponseEntity<ResultResponse<Long>> joinOrganization(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -96,7 +97,7 @@ public interface OrganizationControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"학급을 찾을 수 없습니다.\")", content = @Content)
         })
     @GetMapping("/{id}/members")
-    ResponseEntity<ResultResponse<?>> getOrganizationMembers(
+    ResponseEntity<ResultResponse<List<MemberSimpleDTO>>> getOrganizationMembers(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id
@@ -110,7 +111,7 @@ public interface OrganizationControllerDocs {
             @ApiResponse(responseCode = "404", description = "(message : \"멤버가 존재하지 않습니다.\")", content = @Content)
         })
     @PatchMapping("/{id}")
-    ResponseEntity<ResultResponse<?>> updateOrganizationName(
+    ResponseEntity<ResultResponse<UpdateOrganizationResponse>> updateOrganizationName(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id,
@@ -124,7 +125,7 @@ public interface OrganizationControllerDocs {
                 content = @Content(schema = @Schema(implementation = MemberRankPoint.class)))
         })
     @GetMapping("/{id}/rank")
-    ResponseEntity<ResultResponse<?>> getRanking(
+    ResponseEntity<ResultResponse<List<MemberRankPoint>>> getRanking(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id
@@ -136,7 +137,7 @@ public interface OrganizationControllerDocs {
                 content = @Content(schema = @Schema(implementation = OrganizationSummaryResponse.class)))
         })
     @GetMapping("/{id}/summary")
-    ResponseEntity<ResultResponse<?>> getSummary(
+    ResponseEntity<ResultResponse<OrganizationSummaryResponse>> getSummary(
         @PathVariable
         @Parameter(description = "학급 ID", required = true, in = ParameterIn.PATH)
         long id

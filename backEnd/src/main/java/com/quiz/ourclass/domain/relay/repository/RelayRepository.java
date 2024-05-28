@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RelayRepository extends JpaRepository<Relay, Long>, RelayRepositoryQuerydsl {
 
-    Boolean existsByOrganizationAndEndStatusIsFalse(Organization organization);
+    boolean existsByOrganizationAndEndStatusIsFalse(Organization organization);
 
     Optional<Relay> findByOrganizationIdAndEndStatusIsFalse(long organizationId);
 

@@ -52,32 +52,32 @@ public class ProducerConfig {
 
     // Gamer Template -> 총 게이머에 대한 명세(이름, id, 프로필 사진), 게이머의 랭킹
     @Bean
-    public ProducerFactory<String, GamerDTO> GamerProducerFactory() {
+    public ProducerFactory<String, GamerDTO> gamerProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigurations());
     }
 
     @Bean
     public KafkaTemplate<String, GamerDTO> gamerTemplate() {
-        return new KafkaTemplate<>(GamerProducerFactory());
+        return new KafkaTemplate<>(gamerProducerFactory());
     }
 
     @Bean
-    public ProducerFactory<String, QuestionRequest> QuestionProducerFactory() {
+    public ProducerFactory<String, QuestionRequest> questionProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigurations());
     }
 
     @Bean
     public KafkaTemplate<String, QuestionRequest> questionTemplate() {
-        return new KafkaTemplate<>(QuestionProducerFactory());
+        return new KafkaTemplate<>(questionProducerFactory());
     }
 
     @Bean
-    public ProducerFactory<String, AnswerResponse> AnswerProducerFactory() {
+    public ProducerFactory<String, AnswerResponse> answerProducerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigurations());
     }
 
     @Bean
     public KafkaTemplate<String, AnswerResponse> answerTemplate() {
-        return new KafkaTemplate<>(AnswerProducerFactory());
+        return new KafkaTemplate<>(answerProducerFactory());
     }
 }

@@ -40,7 +40,7 @@ public class QuizServiceImpl implements QuizService {
     private final CountdownService countdownService;
 
     @Value("${ulvan.url}")
-    private String UlvanUrl;
+    private String ulvanUrl;
 
 
     @Transactional
@@ -88,7 +88,7 @@ public class QuizServiceImpl implements QuizService {
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
         // 1. [UUID]를 이용해 퀴즈 게임 [URL]을 생성합니다.
         UUID uuid = UUID.randomUUID();
-        String url = UlvanUrl + quizGameId + "/" + uuid;
+        String url = ulvanUrl + quizGameId + "/" + uuid;
         // 2. [URL]을 [REDIS]에 수명을 10분으로 두고 저장합니다. (퀴즈 방 입장할 때 체크용)
         redisUtil.setQuizGame(quizGameId, uuid);
         // 3. [URL]을 요청 당사자는 물론, 단체에 속한 모두에게 전송 합니다.

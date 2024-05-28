@@ -2,6 +2,7 @@ package com.quiz.ourclass.domain.challenge.controller;
 
 import com.quiz.ourclass.domain.challenge.dto.request.AutoGroupMatchingRequest;
 import com.quiz.ourclass.domain.challenge.dto.response.AutoGroupMatchingResponse;
+import com.quiz.ourclass.domain.challenge.dto.response.MatchingRoomResponse;
 import com.quiz.ourclass.domain.challenge.service.GroupService;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import java.util.List;
@@ -21,41 +22,42 @@ public class GroupController implements GroupControllerDocs {
     private final GroupService groupService;
 
     @PostMapping("/groups/matchingroom")
-    public ResponseEntity<ResultResponse<?>> createMatchingRoom(long challengeId) {
+    public ResponseEntity<ResultResponse<MatchingRoomResponse>> createMatchingRoom(
+        long challengeId) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.createMatchingRoom(challengeId)));
     }
 
     @PostMapping("/groups/join")
-    public ResponseEntity<ResultResponse<?>> joinMatchingRoom(String key, boolean joinStatus) {
+    public ResponseEntity<ResultResponse<Boolean>> joinMatchingRoom(String key,
+        boolean joinStatus) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.joinMatchingRoom(key, joinStatus)));
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<ResultResponse<?>> createGroup(String key) {
+    public ResponseEntity<ResultResponse<Long>> createGroup(String key) {
         return ResponseEntity.ok(
             ResultResponse.success(groupService.createGroup(key)));
     }
 
     @DeleteMapping("/groups/matching")
-    public ResponseEntity<ResultResponse<?>> deleteMatchingMember(String key, Long memberId) {
+    public ResponseEntity<ResultResponse<Boolean>> deleteMatchingMember(String key, Long memberId) {
         groupService.deleteMatchingMember(key, memberId);
-        return ResponseEntity.ok(ResultResponse.success(null));
+        return ResponseEntity.ok(ResultResponse.success(true));
     }
 
     @GetMapping("/groups/invite")
-    public ResponseEntity<ResultResponse<?>> inviteMatchingRoom(String key, Long memberId) {
+    public ResponseEntity<ResultResponse<Boolean>> inviteMatchingRoom(String key, Long memberId) {
         groupService.inviteMatchingRoom(key, memberId);
-        return ResponseEntity.ok(ResultResponse.success(null));
+        return ResponseEntity.ok(ResultResponse.success(true));
     }
 
     @GetMapping("/groups/matching")
-    public ResponseEntity<ResultResponse<?>> getGroupMatching(
+    public ResponseEntity<ResultResponse<List<AutoGroupMatchingResponse>>> getGroupMatching(
         AutoGroupMatchingRequest autoGroupMatchingRequest) {
         List<AutoGroupMatchingResponse> autoGroupMatchingResponse =
-//            groupService.getGroupMatching(autoGroupMatchingRequest);
-            groupService.testMethod();
+            groupService.getGroupMatching(autoGroupMatchingRequest);
         return ResponseEntity.ok(ResultResponse.success(autoGroupMatchingResponse));
     }
 }

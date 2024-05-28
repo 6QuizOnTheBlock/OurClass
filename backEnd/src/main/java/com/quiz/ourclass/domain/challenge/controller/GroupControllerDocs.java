@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public interface GroupControllerDocs {
                 content = @Content(schema = @Schema(implementation = MatchingRoomResponse.class)))
         })
     @PostMapping("/groups/matchingroom")
-    ResponseEntity<ResultResponse<?>> createMatchingRoom(
+    ResponseEntity<ResultResponse<MatchingRoomResponse>> createMatchingRoom(
         @Parameter(description = "함께달리기 ID", required = true, in = ParameterIn.QUERY)
         long challengeId
     );
@@ -44,7 +45,7 @@ public interface GroupControllerDocs {
                 content = @Content(schema = @Schema(implementation = Boolean.class, description = "초대 응답")))
         })
     @PostMapping("/groups/join")
-    ResponseEntity<ResultResponse<?>> joinMatchingRoom(
+    ResponseEntity<ResultResponse<Boolean>> joinMatchingRoom(
         @Parameter(description = "그룹 대기방 KEY", required = true, in = ParameterIn.QUERY)
         String key,
         @Parameter(description = "초대 수락 여부", required = true, in = ParameterIn.QUERY)
@@ -61,7 +62,7 @@ public interface GroupControllerDocs {
 
         })
     @PostMapping("/groups")
-    ResponseEntity<ResultResponse<?>> createGroup(
+    ResponseEntity<ResultResponse<Long>> createGroup(
         @Parameter(description = "그룹 대기방 KEY", required = true, in = ParameterIn.QUERY)
         String key
     );
@@ -73,7 +74,7 @@ public interface GroupControllerDocs {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")")
         })
     @DeleteMapping("/groups/matching")
-    ResponseEntity<ResultResponse<?>> deleteMatchingMember(
+    ResponseEntity<ResultResponse<Boolean>> deleteMatchingMember(
         @Parameter(description = "그룹 대기방 KEY", required = true, in = ParameterIn.QUERY)
         String key,
         @Parameter(description = "추방 멤버 ID", required = true, in = ParameterIn.QUERY)
@@ -87,7 +88,7 @@ public interface GroupControllerDocs {
             @ApiResponse(responseCode = "200", description = "(message : \"Success\")")
         })
     @GetMapping("/groups/invite")
-    ResponseEntity<ResultResponse<?>> inviteMatchingRoom(
+    ResponseEntity<ResultResponse<Boolean>> inviteMatchingRoom(
         @Parameter(description = "그룹 대기방 KEY", required = true, in = ParameterIn.QUERY)
         String key,
         @Parameter(description = "초대 멤버 ID", required = true, in = ParameterIn.QUERY)
@@ -101,7 +102,7 @@ public interface GroupControllerDocs {
                 content = @Content(schema = @Schema(implementation = AutoGroupMatchingResponse.class)))
         })
     @GetMapping("/groups/matching")
-    ResponseEntity<ResultResponse<?>> getGroupMatching(
+    ResponseEntity<ResultResponse<List<AutoGroupMatchingResponse>>> getGroupMatching(
         AutoGroupMatchingRequest autoGroupMatchingRequest
     );
 }

@@ -5,6 +5,7 @@ import com.quiz.ourclass.domain.chat.dto.Message;
 import com.quiz.ourclass.domain.quiz.dto.GamerDTO;
 import com.quiz.ourclass.domain.quiz.dto.request.QuestionRequest;
 import com.quiz.ourclass.domain.quiz.dto.response.AnswerResponse;
+import com.quiz.ourclass.global.util.ConstantUtil;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -49,7 +50,7 @@ public class ListenerConfig {
                 .put(ConsumerConfig.GROUP_ID_CONFIG, kafkaGroup)
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
-                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, ConstantUtil.LATEST)
                 .build();
 
         return new DefaultKafkaConsumerFactory<>(
@@ -75,7 +76,7 @@ public class ListenerConfig {
                 .put(ConsumerConfig.GROUP_ID_CONFIG, "group-2")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
-                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, ConstantUtil.LATEST)
                 .build();
 
         return new DefaultKafkaConsumerFactory<>(
@@ -102,7 +103,7 @@ public class ListenerConfig {
                 .put(ConsumerConfig.GROUP_ID_CONFIG, "group-3")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
-                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, ConstantUtil.LATEST)
                 .build();
 
         return new DefaultKafkaConsumerFactory<>(
@@ -128,7 +129,7 @@ public class ListenerConfig {
                 .put(ConsumerConfig.GROUP_ID_CONFIG, "group-4")
                 .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class)
                 .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer)
-                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
+                .put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, ConstantUtil.LATEST)
                 .build();
         return new DefaultKafkaConsumerFactory<>(
             consumerConfigurations, new StringDeserializer(), deserializer

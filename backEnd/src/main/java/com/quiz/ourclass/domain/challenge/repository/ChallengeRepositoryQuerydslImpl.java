@@ -51,7 +51,7 @@ public class ChallengeRepositoryQuerydslImpl implements ChallengeRepositoryQuery
             .from(challenge)
             .where(challengeCondition)
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1)
+            .limit(pageable.getPageSize() + 1L)
             .orderBy(challenge.id.desc())
             .fetch();
 

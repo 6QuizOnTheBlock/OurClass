@@ -43,7 +43,7 @@ public class CacheConfig {
      * */
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-        return (builder) -> builder
+        return builder -> builder
             .withCacheConfiguration("OIDC",
                 RedisCacheConfiguration.defaultCacheConfig()
                     .computePrefixWith(cacheName -> "OIDC:")

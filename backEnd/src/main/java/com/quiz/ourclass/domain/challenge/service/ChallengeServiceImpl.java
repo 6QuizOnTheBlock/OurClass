@@ -233,7 +233,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
-    protected void challengeClosingReload() {
+    public void challengeClosingReload() {
         List<Challenge> challenges = challengeRepository.findAllByEndStatusIsFalse();
         challenges.forEach(challenge -> {
             log.info(challenge.getEndTime().toString());

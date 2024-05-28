@@ -33,7 +33,7 @@ public class ChallengeController implements ChallengeControllerDocs {
     private final ChallengeService challengeService;
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> getChallenges(
+    public ResponseEntity<ResultResponse<ChallengeSliceResponse>> getChallenges(
         ChallengeSliceRequest challengeSliceRequest) {
         ChallengeSliceResponse challengeSliceResponse = challengeService.getChallenges(
             challengeSliceRequest);
@@ -41,51 +41,53 @@ public class ChallengeController implements ChallengeControllerDocs {
     }
 
     @PostMapping
-    public ResponseEntity<ResultResponse<?>> createChallenge(
+    public ResponseEntity<ResultResponse<Long>> createChallenge(
         @RequestBody ChallengeRequest challengeRequest) {
         return ResponseEntity.ok(
             ResultResponse.success(challengeService.createChallenge(challengeRequest)));
     }
 
     @PostMapping(value = "/reports", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResultResponse<?>> createReport(
+    public ResponseEntity<ResultResponse<Long>> createReport(
         @RequestPart ReportRequest reportRequest, @RequestPart MultipartFile file) {
         long reportId = challengeService.createReport(reportRequest, file);
         return ResponseEntity.ok(ResultResponse.success(reportId));
     }
 
     @PatchMapping(value = "/reports/{id}")
-    public ResponseEntity<ResultResponse<?>> confirmReport(@PathVariable long id,
+    public ResponseEntity<ResultResponse<Boolean>> confirmReport(@PathVariable long id,
         ReportType reportType) {
         challengeService.confirmReport(id, reportType);
-        return ResponseEntity.ok(ResultResponse.success(null));
+        return ResponseEntity.ok(ResultResponse.success(true));
     }
 
     @GetMapping("/running")
-    public ResponseEntity<ResultResponse<?>> getRunningChallenge(
-        @RequestParam(required = true) long organizationId) {
+    public ResponseEntity<ResultResponse<RunningChallengeResponse>> getRunningChallenge(
+        @RequestParam long organizationId) {
         RunningChallengeResponse runningChallengeResponse = challengeService.getRunningChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningChallengeResponse));
     }
 
     @GetMapping("/running/member")
-    public ResponseEntity<ResultResponse<?>> getRunningMemberChallenge(
-        @RequestParam(required = true) long organizationId) {
+    public ResponseEntity<ResultResponse<RunningMemberChallengeResponse>> getRunningMemberChallenge(
+        @RequestParam long organizationId) {
         RunningMemberChallengeResponse runningMemberChallenge = challengeService.getRunningMemberChallenge(
             organizationId);
         return ResponseEntity.ok(ResultResponse.success(runningMemberChallenge));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> getChallengeDetail(@PathVariable long id,
+    public ResponseEntity<ResultResponse<ChallengeResponse>> getChallengeDetail(
+        @PathVariable long id,
         @RequestParam(required = false) Long groupId) {
         ChallengeResponse challengeResponse = challengeService.getChallengeDetail(id, groupId);
         return ResponseEntity.ok(ResultResponse.success(challengeResponse));
     }
 
     @GetMapping("/{id}/simple")
-    public ResponseEntity<ResultResponse<?>> getChallengeSimple(@PathVariable long id) {
+    public ResponseEntity<ResultResponse<ChallengeSimpleResponse>> getChallengeSimple(
+        @PathVariable long id) {
         ChallengeSimpleResponse challengeSimple = challengeService.getChallengeSimple(id);
         return ResponseEntity.ok(ResultResponse.success(challengeSimple));
     }

@@ -42,7 +42,7 @@ public interface CommentControllerDocs {
         }
     )
     @PostMapping
-    ResponseEntity<ResultResponse<Long>> write(
+    ResponseEntity<ResultResponse<Long>> commentWrite(
         @Parameter(name = "request", description = "댓글 작성 DTO", required = true, in = ParameterIn.DEFAULT)
         @RequestBody CommentRequest request
     );
@@ -61,7 +61,7 @@ public interface CommentControllerDocs {
         }
     )
     @PatchMapping("/{id}")
-    ResponseEntity<ResultResponse<Long>> modify(
+    ResponseEntity<ResultResponse<Long>> commentModify(
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id,
         @Parameter(name = "request", description = "댓글 수정 DTO", required = true, in = ParameterIn.DEFAULT)
@@ -82,7 +82,7 @@ public interface CommentControllerDocs {
         }
     )
     @DeleteMapping("/{id}")
-    ResponseEntity<ResultResponse<Boolean>> delete(
+    ResponseEntity<ResultResponse<Boolean>> commentDelete(
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );
@@ -106,7 +106,7 @@ public interface CommentControllerDocs {
         }
     )
     @PostMapping("/{id}/report")
-    ResponseEntity<ResultResponse<Boolean>> report(
+    ResponseEntity<ResultResponse<Boolean>> commentReport(
         @Parameter(name = "id", description = "댓글 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     );

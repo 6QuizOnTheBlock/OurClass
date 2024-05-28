@@ -34,6 +34,7 @@ import com.quiz.ourclass.global.util.FcmUtil;
 import com.quiz.ourclass.global.util.UserAccessUtil;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long write(Long organizationId, MultipartFile file, PostRequest request) {
+    public Long postWrite(Long organizationId, MultipartFile file, PostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버가 존재하는지 확인
         Member member = userAccessUtil.getMember()
@@ -140,7 +141,7 @@ public class PostServiceImpl implements PostService {
      * */
     @Transactional
     @Override
-    public Long modify(Long postId, MultipartFile file, UpdatePostRequest request) {
+    public Long postModify(Long postId, MultipartFile file, UpdatePostRequest request) {
         LocalDateTime now = LocalDateTime.now();
         //멤버 존재 여부 확인
         Member member = userAccessUtil.getMember()
@@ -152,7 +153,8 @@ public class PostServiceImpl implements PostService {
 
         //이미지 관련 처리 부분
         Image image = post.getImage();
-        if (request.imageDelete() && image != null) { //이미지를 삭제하는 경우
+        boolean imageDelete = request.imageDelete();
+        if (imageDelete && image != null) { //이미지를 삭제하는 경우
             awsS3ObjectStorage.deleteFile(image.getPath());
             imageRepository.delete(image);
             post.setImage(null);
@@ -186,7 +188,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Boolean delete(Long postId) {
+    public Boolean postDelete(Long postId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -200,8 +202,11 @@ public class PostServiceImpl implements PostService {
             }
         } else if (requesterRole == Role.TEACHER) {
             Long orgId = post.getOrganization().getId();
-            userAccessUtil.isOrganizationManager(member, orgId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+            Optional<Organization> organization =
+                userAccessUtil.isOrganizationManager(member, orgId);
+            if (organization.isEmpty()) {
+                throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+            }
         }
         commentRepository.deleteByPostId(post.getId());
         postRepository.delete(post);
@@ -209,7 +214,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailResponse detailView(Long postId) {
+    public PostDetailResponse postDetailView(Long postId) {
         //게시글 조회
         Post post = postRepository.fetchPostWithDetails(postId);
         if (post == null) { //게시글 없으면 예외처리
@@ -225,7 +230,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Boolean report(Long postId) {
+    public Boolean postReport(Long postId) {
         Member member = userAccessUtil.getMember()
             .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -236,8 +241,11 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new GlobalException(ErrorCode.POST_NOT_FOUND));
 
-        userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId())
-            .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION));
+        Optional<MemberOrganization> memberOrganization =
+            userAccessUtil.isMemberOfOrganization(member, post.getOrganization().getId());
+        if (memberOrganization.isEmpty()) {
+            throw new GlobalException(ErrorCode.MEMBER_NOT_IN_ORGANIZATION);
+        }
 
         String reportMember = member.getName();
         String authorMember = post.getAuthor().getName();
@@ -282,7 +290,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostListResponse listView(PostSliceRequest request) {
+    public PostListResponse postListView(PostSliceRequest request) {
         return postRepository.getPostList(request);
     }
 }

@@ -29,46 +29,47 @@ public class PostController implements PostControllerDocs {
     private final PostService postService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResultResponse<?>> write(
+    public ResponseEntity<ResultResponse<Long>> postWrite(
         @RequestParam("organizationId") Long organizationId,
         @RequestPart(value = "request") PostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
-        Long postId = postService.write(organizationId, file, request);
+        Long postId = postService.postWrite(organizationId, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResultResponse<?>> modify(
+    public ResponseEntity<ResultResponse<Long>> postModify(
         @PathVariable(value = "id") Long id,
         @RequestPart(value = "request") UpdatePostRequest request,
         @RequestPart(value = "file", required = false) MultipartFile file) {
-        Long postId = postService.modify(id, file, request);
+        Long postId = postService.postModify(id, file, request);
         return ResponseEntity.ok(ResultResponse.success(postId));
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<ResultResponse<?>> delete(@PathVariable(value = "id") Long id) {
-        return ResponseEntity.ok(ResultResponse.success(postService.delete(id)));
+    public ResponseEntity<ResultResponse<Boolean>> postDelete(@PathVariable(value = "id") Long id) {
+        Boolean isDelete = postService.postDelete(id);
+        return ResponseEntity.ok(ResultResponse.success(isDelete));
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ResultResponse<?>> detailView(
+    public ResponseEntity<ResultResponse<PostDetailResponse>> postDetailView(
         @PathVariable(value = "id") Long id) {
-        PostDetailResponse response = postService.detailView(id);
+        PostDetailResponse response = postService.postDetailView(id);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
 
     @PostMapping(value = "/{id}/report")
-    public ResponseEntity<ResultResponse<?>> report(
+    public ResponseEntity<ResultResponse<Boolean>> postReport(
         @PathVariable(value = "id") Long id) {
-        boolean isReport = postService.report(id);
+        boolean isReport = postService.postReport(id);
         return ResponseEntity.ok(ResultResponse.success(isReport));
     }
 
     @GetMapping
-    public ResponseEntity<ResultResponse<?>> listView(
+    public ResponseEntity<ResultResponse<PostListResponse>> postListView(
         PostSliceRequest request) {
-        PostListResponse response = postService.listView(request);
+        PostListResponse response = postService.postListView(request);
         return ResponseEntity.ok(ResultResponse.success(response));
     }
 }

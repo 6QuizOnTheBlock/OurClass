@@ -1,15 +1,21 @@
 package com.quiz.ourclass.domain.member.controller;
 
 import com.quiz.ourclass.domain.member.controller.docs.MemberControllerDocs;
+import com.quiz.ourclass.domain.member.dto.TokenDTO;
 import com.quiz.ourclass.domain.member.dto.request.DefaultImageRequest;
 import com.quiz.ourclass.domain.member.dto.request.DeveloperAtRtRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignInRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberSignUpRequest;
 import com.quiz.ourclass.domain.member.dto.request.MemberUpdateRequest;
 import com.quiz.ourclass.domain.member.dto.request.UpdateFcmTokenRequest;
+import com.quiz.ourclass.domain.member.dto.response.DefaultImagesResponse;
+import com.quiz.ourclass.domain.member.dto.response.MemberMeResponse;
+import com.quiz.ourclass.domain.member.dto.response.MemberUpdateResponse;
+import com.quiz.ourclass.domain.member.dto.response.OIDCPublicKeysResponse;
 import com.quiz.ourclass.domain.member.service.MemberService;
 import com.quiz.ourclass.domain.member.service.client.KakaoOicdClient;
 import com.quiz.ourclass.domain.quiz.dto.request.QuizStartRequest;
+import com.quiz.ourclass.domain.quiz.dto.response.QuizStartResponse;
 import com.quiz.ourclass.global.dto.MemberSimpleDTO;
 import com.quiz.ourclass.global.dto.ResultResponse;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,7 +32,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,37 +46,31 @@ public class MemberController implements MemberControllerDocs {
     /*  1. 회원가입   */
     @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResultResponse<?>> signUp(@ModelAttribute MemberSignUpRequest request) {
+    public ResponseEntity<ResultResponse<TokenDTO>> signUp(
+        @ModelAttribute MemberSignUpRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.signUpProcess(request)));
     }
 
     /*  2. 로그인    */
     @PostMapping("/sign-in")
 
-    public ResponseEntity<ResultResponse<?>> signIn(@RequestBody MemberSignInRequest request) {
+    public ResponseEntity<ResultResponse<TokenDTO>> signIn(
+        @RequestBody MemberSignInRequest request) {
 
         return ResponseEntity.ok(ResultResponse.success(memberService.signInProcess(request)));
     }
 
     /* 4. 테스트용  */
     @GetMapping("/kakao-keys")
-    public ResponseEntity<ResultResponse<?>> getKakaoKeys() {
+    public ResponseEntity<ResultResponse<OIDCPublicKeysResponse>> getKakaoKeys() {
 
         return ResponseEntity.ok(ResultResponse.success(kakaoOicdClient.getKakaoOIDCOpenKeys()));
     }
 
-    /* 5. id-Token 받아서 Decoding 하기 */
-    @PostMapping("/decode-id-token")
-    public ResponseEntity<ResultResponse<?>> decodeIdToken(@RequestParam String idToken) {
-        log.info(idToken);
-//        return ResponseEntity.ok(ResultResponse.success(oicdUtil.getUnsignedTokenClaims(idToken,"https://kauth.kakao.com", "edbf10bd8627e6eb676872109e996a9e")));
-        return null;
-    }
-
-
     /* 6 개발자용 Access, RefreshToken 발급 */
     @PostMapping("/developer-At")
-    public ResponseEntity<ResultResponse<?>> getAtRt(@RequestBody DeveloperAtRtRequest request) {
+    public ResponseEntity<ResultResponse<TokenDTO>> getAtRt(
+        @RequestBody DeveloperAtRtRequest request) {
 
         return ResponseEntity.ok(
             ResultResponse.success(memberService.giveDeveloperAccessToken(request)));
@@ -88,7 +87,7 @@ public class MemberController implements MemberControllerDocs {
     /* 8. 기본 이미지 업데이트 */
 
     @PatchMapping("/default-image")
-    public ResponseEntity<ResultResponse<?>> updateDefaultImage(
+    public ResponseEntity<ResultResponse<String>> updateDefaultImage(
         @ModelAttribute DefaultImageRequest request) {
         return ResponseEntity.ok(
             ResultResponse.success(memberService.updateDefaultImage(request).getPhoto()));
@@ -97,13 +96,13 @@ public class MemberController implements MemberControllerDocs {
     /* 8. 기본 이미지 조회 */
 
     @GetMapping("/default-image")
-    public ResponseEntity<ResultResponse<?>> getDefaultImages() {
+    public ResponseEntity<ResultResponse<DefaultImagesResponse>> getDefaultImages() {
         return ResponseEntity.ok(ResultResponse.success(memberService.getDefaultImages()));
     }
 
     /* 9. 현 유저의 회원 정보 주기 */
     @GetMapping("/")
-    public ResponseEntity<ResultResponse<?>> rememberMe() {
+    public ResponseEntity<ResultResponse<MemberMeResponse>> rememberMe() {
 
         return ResponseEntity.ok(
             ResultResponse.success(memberService.rememberMe()));
@@ -111,25 +110,25 @@ public class MemberController implements MemberControllerDocs {
 
     /* 10. 멤버 프로필 이미지 수정 */
     @PatchMapping("/photo")
-    public ResponseEntity<ResultResponse<?>> updateProfile(
+    public ResponseEntity<ResultResponse<MemberUpdateResponse>> updateProfile(
         @ModelAttribute MemberUpdateRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.updateProfile(request)));
     }
 
     @PostMapping("/start")
-    public ResponseEntity<ResultResponse<?>> certificatingUser(
+    public ResponseEntity<ResultResponse<QuizStartResponse>> certificatingUser(
         @RequestBody QuizStartRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberService.certificatingUser(request)));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<ResultResponse<?>> deleteMe() {
+    public ResponseEntity<ResultResponse<Void>> deleteMe() {
         memberService.deleteMe();
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<?>> select(
+    public ResponseEntity<ResultResponse<MemberSimpleDTO>> select(
         @Parameter(name = "id", description = "멤버 PK 값", required = true, in = ParameterIn.PATH)
         @PathVariable(value = "id") Long id
     ) {
