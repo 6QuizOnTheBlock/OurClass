@@ -40,18 +40,18 @@ public class ChatHandler implements ChannelInterceptor {
         StompCommand stompCommand, StompHeaderAccessor accessor
     ) {
         switch (stompCommand) {
-            case CONNECT:
+            case StompCommand.CONNECT -> {
                 String memberId = verifyAccessToken(getAccessToken(accessor));
                 String type = accessor.getFirstNativeHeader("type");
                 if (type != null && type.equals("quiz")) {
                     break;
                 }
                 connectToChatRoom(accessor, memberId);
-                break;
-            case SUBSCRIBE, SEND:
+            }
+            case StompCommand.SUBSCRIBE, StompCommand.SEND ->
                 verifyAccessToken(getAccessToken(accessor));
-                break;
-            default:
+            default -> {
+            }
         }
     }
 
